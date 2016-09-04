@@ -26,7 +26,7 @@ init the db with:
 
     bin/rake db:migrate RAILS_ENV=development
 
-run the server:
+run the server, default port 3000:
 
     bin/rails server
 

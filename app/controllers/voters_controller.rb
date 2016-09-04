@@ -92,9 +92,9 @@ class VotersController < ApplicationController
         end
 
         @grant_submissions_assigned = @grant_submissions.select{|gs| gs.assigned == 1}
-        #@grant_submissions_unassigned = @grant_submissions.select{|gs| gs.assigned == 0}
+        @grant_submissions_unassigned = @grant_submissions.select{|gs| gs.assigned == 0}
 
-        @grant_submissions_unassigned = GrantSubmission.where(grant_id: [1,2])
+        #@grant_submissions_unassigned = GrantSubmission.where(grant_id: [1,2])
         @grant_submissions_unassigned.sort_by {|gs| gs.grant_id}
         
     end
