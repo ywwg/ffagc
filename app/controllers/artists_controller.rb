@@ -42,7 +42,11 @@ class ArtistsController < ApplicationController
   end
 
   def index
-
+    if(!current_artist)
+        return
+    end
+    
+    @grant_submissions = GrantSubmission.where(artist_id: [current_artist.id])
   end
 
 end

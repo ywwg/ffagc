@@ -56,6 +56,7 @@ class VotersController < ApplicationController
             return
         end
 
+        # TODO: fix hardcoded grant ids!
         @grant_submissions = GrantSubmission.where(grant_id: [3,4]) #creativity and legacy
 
         # this is good for lace/temple
@@ -100,6 +101,7 @@ class VotersController < ApplicationController
     end
 
   def vote
+      # TODO: fix hardcoded grant ids!
       @grant_submissions = GrantSubmission.where(grant_id: [1,2]) #temple and ivory
 
       @grant_submissions.each do |gs|

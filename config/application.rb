@@ -1,12 +1,18 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'log4r'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+
 module Ffagc
+  Logger = Log4r::Logger.new self.name
+  Logger.outputters = Log4r::Outputter.stderr
+  Logger.level=Log4r::INFO
+
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

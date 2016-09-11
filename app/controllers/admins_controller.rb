@@ -56,8 +56,15 @@ class AdminsController < ApplicationController
     per = 3
 
     @sv = Hash.new
+    
+    @submissions = []
+    if max == 0
+      # bail if no verified voters??
+      return
+    end
 
-    @submissions = GrantSubmission.where(grant_id: [3,4]) #creativity and legacy only
+    # TODO: fix hard-coded grant ids!
+    @submissions = GrantSubmission.where(grant_id: [3,4])
 
     @submissions.each do |s|
       @sv[s.id] = Hash.new
@@ -79,13 +86,10 @@ class AdminsController < ApplicationController
         if idx >= max
           idx = 0
         end
-
       end
-
     end
 
     redirect_to action: "index"
-
   end
 
 
@@ -94,22 +98,17 @@ class AdminsController < ApplicationController
       return
     end
 
-
     # verified voters
-
-    @verified_voters = Voter.where("verified = 1")
-
+    @verified_voters = Voter.where(verified: 1)
+    
     @verified_voters.each do |vv|
       vv.class_eval do
         attr_accessor :assigned
       end
 
       vv.assigned = Array.new
-
       VoterSubmissionAssignment.where("voter = ?",vv.id).each{|vsa| vv.assigned.push(vsa.grant_submission)}
-
     end
-
 
     vv_arr = @verified_voters.to_ary
     idx = 0
@@ -118,35 +117,34 @@ class AdminsController < ApplicationController
 
     @sv = Hash.new
 
-    @submissions = GrantSubmission.where(grant_id: [3,4]) #creativity and legacy only
-
-    @submissions.each do |s|
-      @sv[s.id] = Hash.new
-
-      @sv[s.id]['id'] = s.id
-      @sv[s.id]['name'] = s.name
-      @sv[s.id]['assigned'] = Array.new(per)
-
-      for i in 0..per-1
-        @sv[s.id]['assigned'][i] = vv_arr[idx].id
-
-        idx=idx+1
-
-        if idx >= max
-          idx = 0
+    @submissions = []
+    if max > 0
+      # TODO: fix hardcoded grant ids!
+      @submissions = GrantSubmission.where(grant_id: [3,4])
+  
+      @submissions.each do |s|
+        @sv[s.id] = Hash.new
+  
+        @sv[s.id]['id'] = s.id
+        @sv[s.id]['name'] = s.name
+        @sv[s.id]['assigned'] = Array.new(per)
+  
+        for i in 0..per-1
+          @sv[s.id]['assigned'][i] = vv_arr[idx].id
+  
+          idx=idx+1
+  
+          if idx >= max
+            idx = 0
+          end
         end
-
       end
-
     end
 
-
-
     # results
-
     @results = Hash.new
 
-    @grant_submissions = GrantSubmission.where(grant_id: [1,2,3,4]) #all grants
+    @grant_submissions = GrantSubmission.all
 
     @grant_submissions.each do |gs|
 

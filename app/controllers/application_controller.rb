@@ -13,15 +13,21 @@ class ApplicationController < ActionController::Base
   def current_artist
     @current_artist ||= Artist.find_by_id(session[:artist_id]) if session[:artist_id]
   end
-
   helper_method :current_artist
 
   private
   def artist_logged_in?
     true if current_artist
   end
-
   helper_method :artist_logged_in?
+  
+  def artist_has_submission?
+    if current_artist
+      return true if GrantSubmission.where(artist_id: session[:artist_id]) != []
+    end
+    return false
+  end
+  helper_method :artist_has_submission?
 
   # /voters
 
