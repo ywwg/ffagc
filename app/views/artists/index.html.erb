@@ -1,4 +1,11 @@
 <div class="container">
+  <% if admin_logged_in? %>
+| <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
+| <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+| <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
+|
+<% end %>
+
 	<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Artists</h1>
 
 	<% if artist_logged_in? %>
