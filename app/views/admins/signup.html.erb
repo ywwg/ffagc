@@ -1,0 +1,77 @@
+<div class="container">
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admin Creation</h1>
+  
+  <% if admin_logged_in? || !admin_exists? %>
+
+    <%= semantic_form_for @admin, :html => { :onsubmit => 'return validate();'} do |f| %>
+  
+      <h2>New Admin Details:</h2>
+      <%= f.inputs do %>
+        <%= f.input :name, :label => "Full Name", :required => true, :validate => true %>
+        <%= f.input :email, :label => "Email Address (this is your login)", :required => true, :validate => true %>
+        <%= f.input :password, :label => "Password", :required => true, :validate => true %>
+        <%= f.input :password_confirmation, :label => "Password Confirmation", :required => true, :validate => true %>
+      <% end %>
+      <br />
+      <fieldset><%= submit_tag("Create", class: "button")%></fieldset>
+    <% end %>
+  <% else %>
+    <p>Must have empty db or be logged in as admin to create another admin.</p>
+  <% end %>
+
+  <script>
+
+  function validate() {
+
+  errors = 0;
+
+  judge.validate(document.getElementById('admin_name'), {
+    valid: function(element) {
+      element.style.border = '1px solid green';
+    },
+    invalid: function(element, messages) {
+      element.style.border = '1px solid red';
+      alert('name error: ' + messages.join(','));
+      errors++;
+    }
+  });
+
+  judge.validate(document.getElementById('admin_email'), {
+    valid: function(element) {
+      element.style.border = '1px solid green';
+    },
+    invalid: function(element, messages) {
+      element.style.border = '1px solid red';
+      alert('email error:' + messages.join(','));
+      errors++;
+    }
+  });
+
+  judge.validate(document.getElementById('admin_password'), {
+    valid: function(element) {
+      element.style.border = '1px solid green';
+    },
+    invalid: function(element, messages) {
+      element.style.border = '1px solid red';
+      alert('password error:' + messages.join(','));
+      errors++;
+    }
+  });
+
+  judge.validate(document.getElementById('admin_password_confirmation'), {
+    valid: function(element) {
+      element.style.border = '1px solid green';
+    },
+    invalid: function(element, messages) {
+      element.style.border = '1px solid red';
+      alert('password_confirmation error:' + messages.join(','));
+      errors++;
+    }
+  });
+
+  return errors===0;
+
+  }
+
+  </script>
+</div>

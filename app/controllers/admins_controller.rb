@@ -1,4 +1,36 @@
 class AdminsController < ApplicationController
+  
+  before_filter :initialize_admin
+    
+  def initialize_admin
+      @admin = Admin.new
+  end
+    
+  include #??
+  
+  def signup
+      
+  end
+  
+  def admin_params
+    params.require(:admin).permit(:name, :password_digest, :password, :password_confirmation, :email)
+  end
+  
+  def create
+      @admin = Admin.new(admin_params)
+      @admin.email = @admin.email.downcase
+      if (Admin.where(email: @admin.email).take)
+        render "signup_exists"
+        return
+      end
+      
+      if @admin.save
+        session[:admin_id] = @admin.id
+        render "signup_success"
+      else
+        render "signup_failure"
+      end
+  end
 
   def reveal
     @grant_submissions = GrantSubmission.all

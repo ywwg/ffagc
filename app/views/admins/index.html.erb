@@ -3,9 +3,8 @@
 
 	<% if admin_logged_in? %>
 
-		You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]
-		<br /><br />
-
+		<p>You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]</p>
+		<p>(<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)</p>
 		<table border="1">
 			<tr>
 				<td>id</td>
@@ -76,8 +75,8 @@
 		<br>
 		<img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">
 
-
-
+<% elsif !admin_exists? %>
+  <%= link_to "Create", :controller => "admins", :action => "signup" %> initial admin account
 <% else %>
 
 		<%= form_tag(controller: 'sessions', action:'create_admin') do %>

@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   get 'voters/signup' => 'voters#signup'
   post 'voters/signup' => 'voters#create'
 
+  get 'admins/signup' => 'admins#signup'
+  post 'admins/signup' => 'admins#create'
+
   post 'artists/login' => 'sessions#create_artist'
   post 'voters/login' => 'sessions#create_voter'
   post 'admins/login' => 'sessions#create_admin'
