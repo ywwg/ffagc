@@ -6,8 +6,6 @@ class AdminsController < ApplicationController
       @admin = Admin.new
   end
     
-  include #??
-  
   def signup
       
   end
@@ -34,7 +32,6 @@ class AdminsController < ApplicationController
 
   def reveal
     @grant_submissions = GrantSubmission.all
-
   end
 
   def assign
@@ -48,7 +45,6 @@ class AdminsController < ApplicationController
     VoterSubmissionAssignment.destroy_all
 
     #undercooked copypasta w/ no sauce
-
     @verified_voters = Voter.where("verified = 1")
     vv_arr = @verified_voters.to_ary
     idx = 0
@@ -116,6 +112,8 @@ class AdminsController < ApplicationController
     per = 3
 
     @sv = Hash.new
+    
+    @grants = Grant.all
 
     @submissions = []
     if max > 0
@@ -203,9 +201,6 @@ class AdminsController < ApplicationController
       end
 
       @results[gs.id]['num_total'] = t_num + c_num + f_num
-
     end
-
-
   end
 end

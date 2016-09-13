@@ -5,14 +5,13 @@
 | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
 |
 <% end %>
-
-
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
 
 	<% if admin_logged_in? %>
-
 		<p>You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]</p>
 		<p>(<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)</p>
+		
+		<h2>Submissions Currently Under Consideration I think</h2>
 		<table border="1">
 			<tr>
 				<td>id</td>
@@ -33,6 +32,7 @@
 
 		<br /><br />
 
+    <h2>Assigned Grants</h2>
 		<table border="1">
 			<tr>
 				<td>id</td>
@@ -48,10 +48,27 @@
 					<td> <%= vv.assigned.join(',').html_safe %></td>
 				</tr>
 			<% end %>
-
 		</table>
+		<br />
+		
+		<h2>Grant Types</h2>
+		<table border=1>
+		  <tr>
+		    <td>id</td>
+  		  <td>Name</td>
+		    <td>Max Funding $</td>
+		  </tr>
+		  <% @grants.each do |g| %>
+		    <tr>
+		      <td><%= g.id %></td>
+		      <td><%= g.name %></td>
+		      <td><%= g.max_funding_dollars %></td>
+		    </tr>
+		  <% end %>
+		</table>
+		<br/>
 
-		<br /><br />
+		<h2>Submitted Grants</h2>
 		<table border="1">
 			<tr>
 				<td>id</td>
