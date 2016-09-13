@@ -44,17 +44,32 @@ class ArtistsController < ApplicationController
     @grant_submissions = GrantSubmission.where(artist_id: [current_artist.id])
   end
   
+  # TODO: unused -- probably need some sort of "require" check?
   def delete_params
     params.require(:grant_id)
   end
   
   def delete_grant
-    @submission = GrantSubmission.find(params[:grant_id])
-    if @submission != nil
-      # Also should delete pdf from filesystem
-      @submission.destroy
+    if !current_artist
+      return
     end
     
+    begin
+      @submission = GrantSubmission.find(params[:grant_id])
+    rescue
+      redirect_to action: "index"
+      return
+    end
+  
+    # TODO: is this enough "security"?
+    if @submission.artist_id != current_artist.id
+      # Log more stuff
+      logger.info "SECURITY WARNING: Attempted to delete grant while not logged in as that artist"
+      redirect_to action: "index"
+      return
+    end
+    # Also should delete pdf from filesystem
+    @submission.destroy
     redirect_to action: "index"
   end
 
