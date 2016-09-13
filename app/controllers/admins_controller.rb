@@ -59,8 +59,7 @@ class AdminsController < ApplicationController
       return
     end
 
-    # TODO: fix hard-coded grant ids!
-    @submissions = GrantSubmission.where(grant_id: [3,4])
+    @submissions = GrantSubmission.where(grant_id: active_grants)
 
     @submissions.each do |s|
       @sv[s.id] = Hash.new
@@ -117,8 +116,7 @@ class AdminsController < ApplicationController
 
     @submissions = []
     if max > 0
-      # TODO: fix hardcoded grant ids!
-      @submissions = GrantSubmission.where(grant_id: [3,4])
+      @submissions = GrantSubmission.where(grant_id: active_grants)
   
       @submissions.each do |s|
         @sv[s.id] = Hash.new

@@ -1,15 +1,11 @@
 class VotersController < ApplicationController
-    
     before_filter :initialize_voter
     
     def initialize_voter
         @voter = Voter.new
     end
     
-    include #??
-    
     def signup
-
     end
     
     def voter_params
@@ -22,7 +18,6 @@ class VotersController < ApplicationController
 
 
     def create
-        
         @voter = Voter.new(voter_params)
         
         @voter.email = @voter.email.downcase
@@ -44,20 +39,16 @@ class VotersController < ApplicationController
             else
             render "signup_failure"
         end
-        
         # render plain: params[:artist].inspect
         # render "signup_success"
-        
     end
     
     def index
-
         if(!current_voter)
             return
         end
 
-        # TODO: fix hardcoded grant ids!
-        @grant_submissions = GrantSubmission.where(grant_id: [3,4]) #creativity and legacy
+        @grant_submissions = GrantSubmission.where(grant_id: active_grants)
 
         # this is good for lace/temple
         # @grant_submissions = @grant_submissions.sort { |a,b| [a.grant_id,a.id] <=> [b.grant_id,b.id] }
@@ -101,8 +92,7 @@ class VotersController < ApplicationController
     end
 
   def vote
-      # TODO: fix hardcoded grant ids!
-      @grant_submissions = GrantSubmission.where(grant_id: [1,2]) #temple and ivory
+      @grant_submissions = GrantSubmission.where(grant_id: active_grants)
 
       @grant_submissions.each do |gs|
           vote = Vote.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
@@ -110,7 +100,6 @@ class VotersController < ApplicationController
           vote.score_c = params['c'][gs.id.to_s]
           vote.score_f = params['f'][gs.id.to_s]
           vote.save
-
       end
 
       redirect_to action: "index"

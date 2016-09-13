@@ -1,4 +1,11 @@
 class ApplicationController < ActionController::Base
+  
+  private
+  # Returns a list of the ids of grants which are currently active.
+  def active_grants
+    return [1,2]
+  end 
+  
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -65,6 +72,4 @@ class ApplicationController < ActionController::Base
     true if Admin.exists?
   end
   helper_method :admin_exists?
-
-  
 end
