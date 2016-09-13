@@ -2,21 +2,20 @@ class VotersController < ApplicationController
     before_filter :initialize_voter
     
     def initialize_voter
-        @voter = Voter.new
+      @voter = Voter.new
     end
     
     def signup
     end
     
     def voter_params
-        params.require(:voter).permit(:name, :password_digest, :password, :password_confirmation, :email)
+      params.require(:voter).permit(:name, :password_digest, :password, :password_confirmation, :email)
     end
 
     def voter_survey_params
-        params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year, :will_read, :will_meet, :has_been_voter, :has_participated_other, :has_received_grant, :has_received_other_grant, :how_many_fireflies)
+      params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year, :will_read, :will_meet, :has_been_voter, :has_participated_other, :has_received_grant, :has_received_other_grant, :how_many_fireflies)
     end
-
-
+    
     def create
         @voter = Voter.new(voter_params)
         
@@ -94,6 +93,8 @@ class VotersController < ApplicationController
   def vote
       @grant_submissions = GrantSubmission.where(grant_id: active_grants)
 
+      # Go through all of the votes and submit all of the values even if they
+      # haven't changed :(
       @grant_submissions.each do |gs|
           vote = Vote.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
           vote.score_t = params['t'][gs.id.to_s]
@@ -103,7 +104,5 @@ class VotersController < ApplicationController
       end
 
       redirect_to action: "index"
-
     end
-    
 end

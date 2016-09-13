@@ -15,18 +15,20 @@
 	    <br /><br />
 	    
 	    <% if artist_has_submission? %>
-	      <h2>Your Existing Submissions:</h2>
+	      <h2>Your Submissions:</h2>
   	    <table border="1" cellpadding="4">
   	      <tr>
   	        <td><h4>Submission Title</h4></td>
   	        <td><h4>Grant Category</h4></td>
   	        <td><h4>Requested Funding Level</h4></td>
+  	        <td><h4>Delete</h4></td>
   	      </tr>
   	    <% @grant_submissions.each do |gs| %>
           <tr>
             <td><%= gs.name %></td>
             <td><%= Grant.where("id = ?",gs.grant_id).take.name + " (" + gs.grant_id.to_s + ")" rescue "Unknown (" + gs.grant_id.to_s + ")" %></td>
             <td><%= gs.requested_funding_dollars %></td>
+            <td><%= link_to "X", :controller => "artists", :action => "delete_grant", :grant_id => gs.id%></td>
           </tr>
         <% end %>
         </table>

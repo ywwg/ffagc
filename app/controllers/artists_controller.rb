@@ -6,10 +6,7 @@ class ArtistsController < ApplicationController
     @artist = Artist.new
   end
 
-  include
-
   def signup
-
   end
 
   def artist_params
@@ -21,7 +18,6 @@ class ArtistsController < ApplicationController
   end
 
   def create
-
     @artist = Artist.new(artist_params)
     @artist.email = @artist.email.downcase
 
@@ -38,7 +34,6 @@ class ArtistsController < ApplicationController
     else
       render "signup_failure"
     end
-
   end
 
   def index
@@ -47,6 +42,20 @@ class ArtistsController < ApplicationController
     end
     
     @grant_submissions = GrantSubmission.where(artist_id: [current_artist.id])
+  end
+  
+  def delete_params
+    params.require(:grant_id)
+  end
+  
+  def delete_grant
+    @submission = GrantSubmission.find(params[:grant_id])
+    if @submission != nil
+      # Also should delete pdf from filesystem
+      @submission.destroy
+    end
+    
+    redirect_to action: "index"
   end
 
 end
