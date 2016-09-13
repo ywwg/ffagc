@@ -51,23 +51,6 @@
 		</table>
 		<br />
 		
-		<h2>Grant Types</h2>
-		<table border=1>
-		  <tr>
-		    <td>id</td>
-  		  <td>Name</td>
-		    <td>Max Funding $</td>
-		  </tr>
-		  <% @grants.each do |g| %>
-		    <tr>
-		      <td><%= g.id %></td>
-		      <td><%= g.name %></td>
-		      <td><%= g.max_funding_dollars %></td>
-		    </tr>
-		  <% end %>
-		</table>
-		<br/>
-
 		<h2>Submitted Grants</h2>
 		<table border="1">
 			<tr>
@@ -99,6 +82,23 @@
 		</table>
 		<br>
 		<img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">
+
+    <h2>Grant Types</h2>
+    <table border=1>
+      <tr>
+        <td>id</td>
+        <td>Name</td>
+        <td>Max Funding $</td>
+      </tr>
+      <% @grants.each do |g| %>
+        <tr>
+          <td><%= g.id %></td>
+          <td><%= g.name %></td>
+          <td><%= g.max_funding_dollars %></td>
+        </tr>
+      <% end %>
+    </table>
+    <br/>
 
 <% elsif !admin_exists? %>
   <%= link_to "Create", :controller => "admins", :action => "signup" %> initial admin account
