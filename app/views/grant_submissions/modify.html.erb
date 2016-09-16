@@ -1,29 +1,32 @@
 <div class="container">
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Submit a Grant Proposal</h1>
 
-  <% if artist_logged_in? && @submissions_open %>
+  <% if artist_logged_in? %>
 
-  <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
-    <fieldset>
-    <%= f.input :name, :label => "Name of Piece", :required => true, :validate => true %>
+    <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
+      <fieldset>
+        <!--f.select :cabinet_id, options_from_collection_for_select(Cabinet.order(:name).all, "id", "name", params[:cabinet_id])-->
+        <%= f.input :name, :label => "Name of Piece", :required => true, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_grant_id">Grant<abbr title="required">*</abbr></label>
           <%= collection_select(:grant_submission, :grant_id, Grant.where(id: [1,2,3,4]), :id, :name, :include_blank => "(select a grant)") %>
+          <!--  f.select :grant_id, options_from_collection_for_select(GrantSubmission.find(:id), "id", "grant_id", params[:grant_id]) -->
         </li>
   
         <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
   
         <li class="string input required stringish" id="grant_submission_name_input">
-            <label class="label" for="grant_submission_proposal">Application PDF<abbr title="required">*</abbr></label>
-            <%= f.file_field :proposal, :required => true, :validate => true, :style => "margin-left:-5px" %>
+          <label class="label" for="grant_submission_proposal">Application PDF<abbr title="required">*</abbr></label>
+          <%= f.file_field :proposal, :required => true, :validate => true, :style => "margin-left:-5px" %>
         </li>
   
         <br /><br />
-        <%= submit_tag("Submit Application", class: "button")%></fieldset>
+        <%= submit_tag("Update Application", class: "button")%>
+      </fieldset>
     <% end %>
-      <br />
-      <%= link_to 'Back', :controller => "artists", :action => "index" %>
-  <% elsif artist_logged_in? %>
+    <br />
+    <%= link_to 'Back', :controller => "artists", :action => "index" %>
+  <!--<% elsif artist_logged_in? %>
     Submissions are now closed
     <br /><br />
     <%= link_to 'Back', :controller => "artists", :action => "index" %>
@@ -31,16 +34,16 @@
     You must be logged in as an artist to submit a grant proposal. (<%= link_to "Log In", :controller => "artists", :action => "index" %>)
     <br />
     <br />
-    <%= link_to 'Back', :back %>
+    <%= link_to 'Back', :back %> -->
   <% end %>
 
   <script>
-      function numericFilter(txb) {
-          txb.value = txb.value.replace(/[^\0-9]/ig, "");
-          if(txb.value > 1000) {
-              txb.value = 1000;
-          }
-      }
+  function numericFilter(txb) {
+    txb.value = txb.value.replace(/[^\0-9]/ig, "");
+    if(txb.value > 1000) {
+      txb.value = 1000;
+    }
+  }
 
   function validate() {
     errors = 0;

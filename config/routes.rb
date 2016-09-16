@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   get 'admins/logout' => 'sessions#delete_admin'
 
   get 'artists/grant_submissions' => 'grant_submissions#index'
-  get 'artists/delete_grant' => 'artists#delete_grant'
+  get 'artists/modify_grant' => 'grant_submissions#modify'
 
   post 'voters/vote' => 'voters#vote'
 

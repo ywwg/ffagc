@@ -45,9 +45,9 @@ class ArtistsController < ApplicationController
   end
   
   # TODO: unused -- probably need some sort of "require" check?
-  def delete_params
-    params.require(:grant_id)
-  end
+  # def modify_params
+    # params.require(:grant_id)
+  # end
   
   def delete_grant
     if !current_artist
