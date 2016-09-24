@@ -23,13 +23,11 @@ class GrantSubmissionsController < ApplicationController
   end
   
   def grant_update_params
-    params.require(:grant_submission).permit(:id, :name, :grant_id, :requested_funding_dollars)
+    params.require(:grant_submission).permit(:id, :name, :grant_id, :requested_funding_dollars, :proposal)
   end
-  
+
   def update
-    logger.debug "HELLO: submissions #{grant_update_params.inspect}"
     @grant_submission = GrantSubmission.find(params[:id])
-    
     
     if @grant_submission.artist_id != current_artist.id
       logger.debug  "artist id mismatch"
@@ -37,13 +35,13 @@ class GrantSubmissionsController < ApplicationController
       return
     end
     
-    logger.debug "look at me we're on the way"
     @grant_submission.name = grant_update_params[:name]
-    @grant_submission.proposal = params[:proposal]
+    if grant_update_params[:proposal] != ""
+      @grant_submission.proposal = grant_update_params[:proposal]
+    end
     @grant_submission.grant_id = grant_update_params[:grant_id]
     @grant_submission.requested_funding_dollars = grant_update_params[:requested_funding_dollars]
  
-    logger.debug "saving now"
     if @grant_submission.save
       render "success"
     else

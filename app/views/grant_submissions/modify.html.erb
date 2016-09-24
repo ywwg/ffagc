@@ -1,23 +1,24 @@
 <div class="container">
-  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Submit a Grant Proposal</h1>
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Modify a Grant Proposal</h1>
 
   <% if artist_logged_in? %>
 
     <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
       <fieldset>
-        <!--f.select :cabinet_id, options_from_collection_for_select(Cabinet.order(:name).all, "id", "name", params[:cabinet_id])-->
-        <%= f.input :name, :label => "Name of Piece", :required => true, :validate => true %>
+        <%= f.input :name, :label => "Name of Piece", :required => false, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
-          <label class="label" for="grant_submission_grant_id">Grant<abbr title="required">*</abbr></label>
+          <label class="label" for="grant_submission_grant_id">Grant</label>
           <%= collection_select(:grant_submission, :grant_id, Grant.where(id: [1,2,3,4]), :id, :name, :include_blank => "(select a grant)") %>
           <!--  f.select :grant_id, options_from_collection_for_select(GrantSubmission.find(:id), "id", "grant_id", params[:grant_id]) -->
         </li>
   
-        <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
+        <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => false, :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
   
         <li class="string input required stringish" id="grant_submission_name_input">
-          <label class="label" for="grant_submission_proposal">Application PDF<abbr title="required">*</abbr></label>
-          <%= f.file_field :proposal, :required => true, :validate => true, :style => "margin-left:-5px" %>
+          <label class="label" for="grant_submission_proposal">Current Application PDF:</label>
+          <input type="test" style="margin-left:-5px" disabled="true" value="<%= @grant_submission.proposal_identifier %>"/><br/><br/>
+          <label class="label" for="grant_submission_proposal">(Optional) Replace PDF:</label>
+          <%= f.file_field :proposal, :required => false, :validate => true, :style => "margin-left:-5px" %>
         </li>
   
         <br /><br />
@@ -26,15 +27,11 @@
     <% end %>
     <br />
     <%= link_to 'Back', :controller => "artists", :action => "index" %>
-  <!--<% elsif artist_logged_in? %>
-    Submissions are now closed
-    <br /><br />
-    <%= link_to 'Back', :controller => "artists", :action => "index" %>
   <% else %>
-    You must be logged in as an artist to submit a grant proposal. (<%= link_to "Log In", :controller => "artists", :action => "index" %>)
+    You must be logged in as an artist to modify a grant proposal. (<%= link_to "Log In", :controller => "artists", :action => "index" %>)
     <br />
     <br />
-    <%= link_to 'Back', :back %> -->
+    <%= link_to 'Back', :back %>
   <% end %>
 
   <script>
@@ -82,14 +79,15 @@
         errors++;
       }
     });
-
-    if(document.getElementById("grant_submission_proposal").value != "") {
+    
+    // TODO: Pretty sure we don't need this
+    /*if(document.getElementById("grant_submission_proposal").value != "") {
       document.getElementById("grant_submission_proposal").style.border = '1px solid green';
     } else {
       errors++;
       alert('error: please select your application PDF!')
       document.getElementById("grant_submission_proposal").style.border = '1px solid red';
-    }
+    }*/
 
     return errors===0;
   }
