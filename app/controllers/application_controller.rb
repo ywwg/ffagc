@@ -1,17 +1,30 @@
 class ApplicationController < ActionController::Base
-  
-  private
-  # Returns a list of the ids of grants which are currently active.
-  def active_grants
-    return [1,2]
-  end 
-  
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
   before_filter :artist_logged_in?, :voter_logged_in? #what does this do?
-
+  
+  private
+  # Returns a list of the ids of grants which are currently active for submitting.
+  def active_submit_grants
+    now = DateTime.current
+    return Grant.where("submit_start <= ?", now).where("submit_end >= ?", now).select(:id)
+  end
+  
+  # Returns a list of the ids of grants which are currently active for voting.
+  def active_vote_grants
+    now = DateTime.current
+    return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:id)
+  end 
+  
+  public
+  def active_vote_names
+    now = DateTime.current
+    return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:name)
+  end
+  helper_method :active_vote_names
+  
   # /artists, /voters, /admins
 
   # /artists

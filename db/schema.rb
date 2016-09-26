@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160926010111) do
+ActiveRecord::Schema.define(version: 20160926034447) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -69,8 +69,10 @@ ActiveRecord::Schema.define(version: 20160926010111) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "max_funding_dollars"
-    t.datetime "start"
-    t.datetime "end"
+    t.datetime "submit_start"
+    t.datetime "submit_end"
+    t.datetime "vote_start"
+    t.datetime "vote_end"
   end
 
 # Could not dump table "voter_submission_assignments" because of following NoMethodError

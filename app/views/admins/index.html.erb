@@ -1,123 +1,132 @@
 <div class="container">
-<% if admin_logged_in? %>
-| <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
-| <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
-| <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
-|
-<% end %>
+  <% if admin_logged_in? %>
+  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
+  | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+  | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
+  |
+  <% end %>
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
 
-	<% if admin_logged_in? %>
-		<p>You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]</p>
-		<p>(<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)</p>
-		
-		<h2>Submissions Currently Under Consideration I think</h2>
-		<table border="1">
-			<tr>
-				<td>id</td>
-				<td>name</td>
-				<td>assigned</td>
-			</tr>
-			<% @submissions.each do |s| %>
-				<tr>
-					<td><%= @sv[s.id]['id'] %></td>
-					<td><%= @sv[s.id]['name'] %></td>
-					<td><%= @sv[s.id]['assigned'].join(',').html_safe %></td>
-					<td><%= link_to "Modify Grant", :controller => "grant_submissions", :action => "modify", :id => @sv[s.id]['id'] %></td>
-				</tr>
-			<% end %>
+  <% if admin_logged_in? %>
+  <p>
+    You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]
+  </p>
+  <p>
+    (<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)
+  </p>
 
-		</table>
+  <h2>Submissions Currently Under Consideration I think</h2>
+  <table border="1">
+    <tr>
+      <td>id</td>
+      <td>name</td>
+      <td>assigned</td>
+    </tr>
+    <% @submissions.each do |s| %>
+    <tr>
+      <td><%= @sv[s.id]['id'] %></td>
+      <td><%= @sv[s.id]['name'] %></td>
+      <td><%= @sv[s.id]['assigned'].join(',').html_safe %></td>
+      <td><%= link_to "Modify Grant", :controller => "grant_submissions", :action => "modify", :id => @sv[s.id]['id'] %></td>
+    </tr>
+    <% end %>
 
-		<%= link_to "Assign!", :controller => "admins", :action => "assign" %>
+  </table>
 
-		<br /><br />
+  <%= link_to "Assign!", :controller => "admins", :action => "assign" %>
 
-    <h2>Assigned Grants</h2>
-		<table border="1">
-			<tr>
-				<td>id</td>
-				<td>name</td>
-				<td>email</td>
-				<td>assigned</td>
-			</tr>
-			<% @verified_voters.each do |vv| %>
-				<tr>
-					<td><%= vv.id %></td>
-					<td><%= vv.name %></td>
-					<td><%= vv.email %></td>
-					<td><%= vv.assigned.join(',').html_safe %></td>
-				</tr>
-			<% end %>
-		</table>
-		<br />
-		
-		<h2>All Submitted Grants</h2>
-		<table border="1">
-			<tr>
-				<td>id</td>
-				<td>name</td>
-				<td>grant</td>
-				<td>$</td>
-				<td>avg_t</td>
-				<td>avg_c</td>
-				<td>avg_f</td>
-				<td>avg_s</td>
-				<td>#</td>
-			</tr>
+  <br />
+  <br />
 
-			<% @grant_submissions.each do |gs| %>
-			    <tr>
-					<td><%= gs.id %></td>
-					<td><%= gs.name %></td>
-					<td><%= Grant.where("id = ?",gs.grant_id).take.name + " (" + gs.grant_id.to_s + ")" rescue "Unknown (" + gs.grant_id.to_s + ")" %></td>
-					<td><%= gs.requested_funding_dollars %></td>
-					<td><%= @results[gs.id]['avg_t'] %></td>
-					<td><%= @results[gs.id]['avg_c'] %></td>
-					<td><%= @results[gs.id]['avg_f'] %></td>
-					<td><%= @results[gs.id]['avg_s'] %></td>
-					<td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
-					<td><%= link_to "Modify Grant", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
-				</tr>
-			<% end %>
+  <h2>Assigned Grants</h2>
+  <table border="1">
+    <tr>
+      <td>id</td>
+      <td>name</td>
+      <td>email</td>
+      <td>assigned</td>
+    </tr>
+    <% @verified_voters.each do |vv| %>
+    <tr>
+      <td><%= vv.id %></td>
+      <td><%= vv.name %></td>
+      <td><%= vv.email %></td>
+      <td><%= vv.assigned.join(',').html_safe %></td>
+    </tr>
+    <% end %>
+  </table>
+  <br />
 
-		</table>
-		<br>
-		<img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">
+  <h2>All Submitted Grants</h2>
+  <table border="1">
+    <tr>
+      <td>id</td>
+      <td>name</td>
+      <td>grant</td>
+      <td>$</td>
+      <td>avg_t</td>
+      <td>avg_c</td>
+      <td>avg_f</td>
+      <td>avg_s</td>
+      <td>#</td>
+    </tr>
 
-    <h2>Grant Types</h2>
-    <table border=1>
-      <tr>
-        <td>id</td>
-        <td>Name</td>
-        <td>Max Funding $</td>
-        <td>Submission Start Date</td>
-        <td>Submission End Date</td>
-      </tr>
-      <% @grants.each do |g| %>
-        <tr>
-          <td><%= g.id %></td>
-          <td><%= g.name %></td>
-          <td><%= g.max_funding_dollars %></td>
-          <td><%= g.start %></td>
-          <td><%= g.end %></td>
-        </tr>
-      <% end %>
-    </table>
-    <%= link_to "Create Grant", :controller => "grants", :action => "index" %>
-    <br/>
-<% elsif !admin_exists? %>
+    <% @grant_submissions.each do |gs| %>
+    <tr>
+      <td><%= gs.id %></td>
+      <td><%= gs.name %></td>
+      <td><%= Grant.where("id = ?",gs.grant_id).take.name + " (" + gs.grant_id.to_s + ")" rescue "Unknown (" + gs.grant_id.to_s + ")" %></td>
+      <td><%= gs.requested_funding_dollars %></td>
+      <td><%= @results[gs.id]['avg_t'] %></td>
+      <td><%= @results[gs.id]['avg_c'] %></td>
+      <td><%= @results[gs.id]['avg_f'] %></td>
+      <td><%= @results[gs.id]['avg_s'] %></td>
+      <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
+      <td><%= link_to "Modify Grant", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
+    </tr>
+    <% end %>
+
+  </table>
+  <br>
+  <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">
+
+  <h2>Grant Types</h2>
+  <table border=1>
+    <tr>
+      <td>id</td>
+      <td>Name</td>
+      <td>Max Funding $</td>
+      <td>Submission Start Date</td>
+      <td>Submission End Date</td>
+      <td>Voting Start Date</td>
+      <td>Voting End Date</td>
+    </tr>
+    <% @grants.each do |g| %>
+    <tr>
+      <td><%= g.id %></td>
+      <td><%= g.name %></td>
+      <td><%= g.max_funding_dollars %></td>
+      <td><%= g.submit_start.strftime("%Y/%m/%d") %></td>
+      <td><%= g.submit_end.strftime("%Y/%m/%d") %></td>
+      <td><%= g.vote_start.strftime("%Y/%m/%d") %></td>
+      <td><%= g.vote_end.strftime("%Y/%m/%d") %></td>
+    </tr>
+    <% end %>
+  </table>
+  <%= link_to "Create Grant", :controller => "grants", :action => "index" %>
+  <br/>
+  <% elsif !admin_exists? %>
   <%= link_to "Create", :controller => "admins", :action => "signup" %> initial admin account
-<% else %>
-		<%= form_tag(controller: 'sessions', action:'create_admin') do %>
-		<h2>Sign in:</h2>
-		<fieldset>
-		  <%= text_field :session, :email, :placeholder => "Email Address" %>
-			<br />
-		  <%= password_field :session, :password, :placeholder => "Password" %>
-			<br />
-		  <%= submit_tag("Sign In", class: "button") %>
-		</formset>
-		<% end %>
-<% end %>
+  <% else %>
+  <%= form_tag(controller: 'sessions', action:'create_admin') do %>
+  <h2>Sign in:</h2>
+  <fieldset>
+    <%= text_field :session, :email, :placeholder => "Email Address" %>
+    <br />
+    <%= password_field :session, :password, :placeholder => "Password" %>
+    <br />
+    <%= submit_tag("Sign In", class: "button") %>
+    </formset>
+    <% end %>
+    <% end %>
 </div>

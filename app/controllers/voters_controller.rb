@@ -47,7 +47,7 @@ class VotersController < ApplicationController
         return
       end
 
-      @grant_submissions = GrantSubmission.where(grant_id: active_grants)
+      @grant_submissions = GrantSubmission.where(grant_id: active_vote_grants)
 
       # this is good for lace/temple
       # @grant_submissions = @grant_submissions.sort { |a,b| [a.grant_id,a.id] <=> [b.grant_id,b.id] }
@@ -89,7 +89,7 @@ class VotersController < ApplicationController
     end
 
   def vote
-    @grant_submissions = GrantSubmission.where(grant_id: active_grants)
+    @grant_submissions = GrantSubmission.where(grant_id: active_vote_grants)
 
     # Go through all of the votes and submit all of the values even if they
     # haven't changed :(

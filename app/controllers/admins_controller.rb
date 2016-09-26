@@ -59,7 +59,7 @@ class AdminsController < ApplicationController
       return
     end
 
-    @submissions = GrantSubmission.where(grant_id: active_grants)
+    @submissions = GrantSubmission.where(grant_id: active_vote_grants)
 
     @submissions.each do |s|
       @sv[s.id] = Hash.new
@@ -116,7 +116,7 @@ class AdminsController < ApplicationController
 
     @submissions = []
     if max > 0
-      @submissions = GrantSubmission.where(grant_id: active_grants)
+      @submissions = GrantSubmission.where(grant_id: active_vote_grants)
   
       @submissions.each do |s|
         @sv[s.id] = Hash.new

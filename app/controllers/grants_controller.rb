@@ -6,7 +6,7 @@ class GrantsController < ApplicationController
   end
   
   def grant_params
-    params.require(:grant).permit(:id, :name, :max_funding_dollars, :start, :end)
+    params.require(:grant).permit(:id, :name, :max_funding_dollars, :submit_start, :submit_end, :vote_start, :vote_end)
   end
   
   def index
