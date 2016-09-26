@@ -7,11 +7,11 @@
         <%= f.input :name, :label => "Name of Grant", :required => true, :validate => true %> 
         <%= f.input :max_funding_dollars, :label => "Max Funding ($)", :required => true, :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
         <li class="string input required stringish" id="grant_submission_name_input">
-          <label class="label" for="grant_start">Submissions Start Date</label>
+          <label class="label" for="grant_start">Submissions Start Date<abbr title="required">*</abbr></label>
           <%= f.date_select :start %>
         </li>
         <li class="string input required stringish" id="grant_submission_name_input">
-          <label class="label" for="grant_end">Submissions End Date</label>
+          <label class="label" for="grant_end">Submissions End Date<abbr title="required">*</abbr></label>
           <%= f.date_select :end %>
         </li>
   
