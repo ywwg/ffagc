@@ -4,7 +4,7 @@
   <% if (artist_logged_in? && @submissions_open) || admin_logged_in? %>
     <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
     <fieldset>
-    <%= f.input :name, :label => "Name of Piece", :required => true, :validate => true %>
+        <%= f.input :name, :label => "Name of Piece", :required => true, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_grant_id">Grant<abbr title="required">*</abbr></label>
           <%= collection_select(:grant_submission, :grant_id, Grant.where(id: [1,2,3,4]), :id, :name, :include_blank => "(select a grant)") %>

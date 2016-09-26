@@ -62,7 +62,11 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def index
-    # TODO: load submissions_open from config or db.
+    # TODO: date test grants in db.
+    now = DateTime.current
+    open_grant = Grant.where("start <= ?", now).where("end >= ?", now)
+    logger.debug "OPEN GRANTS??? #{open_grant.inspect}"
+    # TODO: what if there are multiple open grants?
     @submissions_open = true
   end
   

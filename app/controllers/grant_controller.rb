@@ -1,2 +1,0 @@
-class GrantController < ApplicationController
-end

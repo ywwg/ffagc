@@ -91,6 +91,8 @@
         <td>id</td>
         <td>Name</td>
         <td>Max Funding $</td>
+        <td>Submission Start Date</td>
+        <td>Submission End Date</td>
       </tr>
       <% @grants.each do |g| %>
         <tr>
@@ -102,12 +104,11 @@
         </tr>
       <% end %>
     </table>
+    <%= link_to "Create Grant", :controller => "grants", :action => "index" %>
     <br/>
-
 <% elsif !admin_exists? %>
   <%= link_to "Create", :controller => "admins", :action => "signup" %> initial admin account
 <% else %>
-
 		<%= form_tag(controller: 'sessions', action:'create_admin') do %>
 		<h2>Sign in:</h2>
 		<fieldset>

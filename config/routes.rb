@@ -12,6 +12,9 @@ Rails.application.routes.draw do
 
   get 'admins/signup' => 'admins#signup'
   post 'admins/signup' => 'admins#create'
+  
+  get 'grants/index'
+  post 'grants/index' => 'grants#create'
 
   post 'artists/login' => 'sessions#create_artist'
   post 'voters/login' => 'sessions#create_voter'
@@ -30,7 +33,7 @@ Rails.application.routes.draw do
   get 'admins/reveal' => 'admins#reveal'
 
 
-  resources :artists, :voters, :admins, :grant_submissions
+  resources :artists, :voters, :admins, :grant_submissions, :grants
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
