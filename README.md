@@ -30,20 +30,4 @@ run the server, default port 3000:
 
     bin/rails server
 
-create an admin:
-    bin/rails console
-    irb(main):005:0* class Admin < ActiveRecord::Base
-    irb(main):006:1>   has_secure_password
-    irb(main):007:1> end
-    => nil
-    irb(main):043:0> BCrypt::Password.create("SOMETHING THAT's NOT THIS")
-=> "ABUNCHOFJUNK"
-    irb(main):008:0> admin = Admin.new(:name => "owen", :email => "owen@ywwg.com", :password_digest => "ABUNCHOFJUNK")
-    => #<Admin id: nil, name: "owen", email: "owen@ywwg.com", created_at: nil, updated_at: nil, password_digest: "ABUNCHOFJUNK">
-    irb(main):009:0> admin.save
-       (0.3ms)  begin transaction
-      SQL (0.5ms)  INSERT INTO "admins" ("created_at", "email", "name", "password_digest", "updated_at") VALUES (?, ?, ?, ?, ?)  [["created_at", "2016-08-28 18:03:44.477688"], ["email", "owen@ywwg.com"], ["name", "owen"], ["password_digest", "ABUNCHOFJUNK"], ["updated_at", "2016-08-28 18:03:44.477688"]]
-       (17.2ms)  commit transaction
-    => true
-
-And then I can log in as an admin! amazeballs.
+create an admin right away by going to the admins page.
