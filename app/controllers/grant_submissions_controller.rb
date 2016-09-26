@@ -30,9 +30,13 @@ class GrantSubmissionsController < ApplicationController
     @grant_submission = GrantSubmission.find(params[:id])
     
     if @grant_submission.artist_id != current_artist.id
-      logger.debug  "artist id mismatch"
-      render "failure"
-      return
+      logger.warn "grant modification artist id mismatch: #{@grant_submission.artist_id} != #{current_artist.id}"
+      if admin_logged_in
+        logger.warn "OVERRIDE because admin logged in"
+      else
+        render "failure"
+        return
+      end
     end
     
     @grant_submission.name = grant_update_params[:name]
@@ -41,13 +45,20 @@ class GrantSubmissionsController < ApplicationController
     end
     @grant_submission.grant_id = grant_update_params[:grant_id]
     @grant_submission.requested_funding_dollars = grant_update_params[:requested_funding_dollars]
- 
-    if @grant_submission.save
-      render "success"
-    else
-      render "failure"
-    end
 
+    if @grant_submission.save
+      if admin_logged_in? 
+        render "success_admin"
+      else
+        render "success_modify"
+      end
+    else
+      if admin_logged_in?
+        render "failure_admin"
+      else
+        render "failure_modify"
+      end
+    end
   end
 
   def index

@@ -1,9 +1,8 @@
 <div class="container">
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Submit a Grant Proposal</h1>
 
-  <% if artist_logged_in? && @submissions_open %>
-
-  <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
+  <% if (artist_logged_in? && @submissions_open) || admin_logged_in? %>
+    <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
     <fieldset>
     <%= f.input :name, :label => "Name of Piece", :required => true, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
@@ -28,7 +27,7 @@
     <br /><br />
     <%= link_to 'Back', :controller => "artists", :action => "index" %>
   <% else %>
-    You must be logged in as an artist to submit a grant proposal. (<%= link_to "Log In", :controller => "artists", :action => "index" %>)
+    You must be logged in as an artist to modify a grant proposal. (<%= link_to "Log In", :controller => "artists", :action => "index" %>)
     <br />
     <br />
     <%= link_to 'Back', :back %>

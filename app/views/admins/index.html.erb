@@ -23,6 +23,7 @@
 					<td><%= @sv[s.id]['id'] %></td>
 					<td><%= @sv[s.id]['name'] %></td>
 					<td><%= @sv[s.id]['assigned'].join(',').html_safe %></td>
+					<td><%= link_to "Modify Grant", :controller => "grant_submissions", :action => "modify", :id => @sv[s.id]['id'] %></td>
 				</tr>
 			<% end %>
 
@@ -76,6 +77,7 @@
 					<td><%= @results[gs.id]['avg_f'] %></td>
 					<td><%= @results[gs.id]['avg_s'] %></td>
 					<td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
+					<td><%= link_to "Modify Grant", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
 				</tr>
 			<% end %>
 
@@ -95,6 +97,8 @@
           <td><%= g.id %></td>
           <td><%= g.name %></td>
           <td><%= g.max_funding_dollars %></td>
+          <td><%= g.start %></td>
+          <td><%= g.end %></td>
         </tr>
       <% end %>
     </table>
