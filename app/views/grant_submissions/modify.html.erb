@@ -8,7 +8,11 @@
         <%= f.input :name, :label => "Name of Piece", :required => false, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_grant_id">Grant</label>
-          <%= collection_select(:grant_submission, :grant_id, Grant.where(id: active_submit_grants), :id, :name, :include_blank => "(select a grant)") %>
+          <!-- TODO: this allows the artist to change the grant type to anything, even if it's not open.
+            I think this is ok, because if we say "hey please resubmit for Legacy" they can just change it
+            even if Creativity is already closed.  We could still validate that their new choice is open, though.
+             -->
+          <%= collection_select(:grant_submission, :grant_id, Grant.all, :id, :name, :include_blank => "(select a grant)") %>
           <!--  f.select :grant_id, options_from_collection_for_select(GrantSubmission.find(:id), "id", "grant_id", params[:grant_id]) -->
         </li>
   
@@ -79,6 +83,8 @@
         errors++;
       }
     });
+    
+    // TODO: add validation that the grant selection is in the set of open-submit grants.
     
     return errors===0;
   }

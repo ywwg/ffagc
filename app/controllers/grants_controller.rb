@@ -27,6 +27,11 @@ class GrantsController < ApplicationController
   end
   
   def modify
+    if !admin_logged_in?
+      redirect_to "/"
+      return
+    end
+    
     begin
       @grant = Grant.find(params.permit(:id)[:id])
     rescue

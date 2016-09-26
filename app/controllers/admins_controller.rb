@@ -15,19 +15,25 @@ class AdminsController < ApplicationController
   end
   
   def create
-      @admin = Admin.new(admin_params)
-      @admin.email = @admin.email.downcase
-      if (Admin.where(email: @admin.email).take)
-        render "signup_exists"
-        return
-      end
-      
-      if @admin.save
-        session[:admin_id] = @admin.id
-        render "signup_success"
-      else
-        render "signup_failure"
-      end
+    # if there is no admin, go ahead and create the account (initial config)
+    if admin_exists? && !current_admin
+      redirect_to "/"
+      return
+    end
+    
+    @admin = Admin.new(admin_params)
+    @admin.email = @admin.email.downcase
+    if Admin.where(email: @admin.email).take
+      render "signup_exists"
+      return
+    end
+    
+    if @admin.save
+      session[:admin_id] = @admin.id
+      render "signup_success"
+    else
+      render "signup_failure"
+    end
   end
 
   def reveal
@@ -35,7 +41,8 @@ class AdminsController < ApplicationController
   end
   
   def verify
-    if (!current_admin)
+    if !current_admin
+      redirect_to "/"
       return
     end
     
@@ -47,7 +54,7 @@ class AdminsController < ApplicationController
   end
 
   def assign
-    if (!current_admin)
+    if !current_admin
       return
     end
 
@@ -100,13 +107,12 @@ class AdminsController < ApplicationController
   end
 
   def index
-    if(!current_admin)
+    if !current_admin
       return
     end
 
     # verified voters
     @voters = Voter.all
-    logger.debug "voters! #{@voters.inspect}"
     @verified_voters = Voter.where(verified: 1)
     @verified_voters.each do |vv|
       vv.class_eval do

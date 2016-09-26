@@ -18,6 +18,10 @@ class ArtistsController < ApplicationController
   end
 
   def create
+    if !current_artist
+      return
+    end
+    
     @artist = Artist.new(artist_params)
     @artist.email = @artist.email.downcase
 
@@ -37,17 +41,12 @@ class ArtistsController < ApplicationController
   end
 
   def index
-    if(!current_artist)
+    if !current_artist
         return
     end
     
     @grant_submissions = GrantSubmission.where(artist_id: [current_artist.id])
   end
-  
-  # TODO: unused -- probably need some sort of "require" check?
-  # def modify_params
-    # params.require(:grant_id)
-  # end
   
   def delete_grant
     if !current_artist

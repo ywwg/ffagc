@@ -19,7 +19,6 @@ class ApplicationController < ActionController::Base
     return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:id)
   end 
   
-  public
   def any_submit_open?
     return active_submit_grants.count > 0
   end

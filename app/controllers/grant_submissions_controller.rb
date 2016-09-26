@@ -11,6 +11,10 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def create
+    if !current_artist
+      return
+    end
+
     @grant_submission = GrantSubmission.new(grant_submission_params)
 
     @grant_submission.artist_id = current_artist.id
@@ -62,17 +66,16 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def index
-    # TODO: date test grants in db.
-    # now = DateTime.current
-    # open_grant = Grant.where("start <= ?", now).where("end >= ?", now)
-    # logger.debug "OPEN GRANTS??? #{open_grant.inspect}"
-    # TODO: what if there are multiple open grants?
-    @submissions_open = active_submit_grants.count
   end
   
   def modify
     begin
       @grant_submission = GrantSubmission.find(params.permit(:id)[:id])
+      if @grant_submission.artist_id != current_artist.id
+        logger.warn "grant modification artist id mismatch #{@grant_submission.artist_id} != #{current_artist.id}"
+        redirect_to "/"
+        return
+      end
     rescue
       redirect_to action: "index"
       return
