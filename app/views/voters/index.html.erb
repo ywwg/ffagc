@@ -9,17 +9,18 @@
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Voting Committee</h1>
 
 	<% if voter_logged_in? %>
-	    You are logged in as: <%= current_voter.name %> (<%= current_voter.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_voter" %>]
-	    <br /><br />
-	    The voting process for <b>Ivory</b> and <b>Temple</b> grants has begun!
-	    <br /><br />
-	    For your review, here are the submitted applications:
-		<br /><br />
-		<%= form_tag("/voters/vote", method: "post") do %>
+    You are logged in as: <%= current_voter.name %> (<%= current_voter.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_voter" %>]
+    <br /><br />
+    The voting process for <b>Ivory</b> and <b>Temple</b> grants has begun!
+    <br /><br />
+    For your review, here are the submitted applications:
+  	<br /><br />
+  	<!-- TODO: figure out how to do with proper remote:true -->
+	  <%= form_tag("/voters/vote", authenticity_token: true) do %>
 
-			<b><u>Assigned To You</u></b>
-			<br /><br />
-			Please vote on these before the meeting!
+		<b><u>Assigned To You</u></b>
+		<br /><br />
+		Please vote on these before the meeting!
 		<br /><br />
 		<table border="1" cellpadding="4">
 			<tr>
@@ -40,7 +41,7 @@
 					<td>$<%= gs.requested_funding_dollars %></td>
 					<td><a href="<%= gs.proposal %>">Download</a></td>
 					<td>
-						<select name="t[<%= gs.id %>]" onchange="submit()">
+						<select name="t[<%= gs.id %>]" onchange="ajax_submit()">
 							<option></option>
 							<option <%= @votes[gs.id].score_t == 0 ? "selected" : "" %>>0</option>
 							<option <%= @votes[gs.id].score_t == 1 ? "selected" : "" %>>1</option>
@@ -48,7 +49,7 @@
 						</select>
 					</td>
 					<td>
-						<select name="c[<%= gs.id %>]" onchange="submit()">
+						<select name="c[<%= gs.id %>]" onchange="ajax_submit()">
 							<option></option>
 							<option <%= @votes[gs.id].score_c == 0 ? "selected" : "" %>>0</option>
 							<option <%= @votes[gs.id].score_c == 1 ? "selected" : "" %>>1</option>
@@ -56,7 +57,7 @@
 						</select>
 					</td>
 					<td>
-						<select name="f[<%= gs.id %>]" onchange="submit()">
+						<select name="f[<%= gs.id %>]" onchange="ajax_submit()">
 							<option></option>
 							<option <%= @votes[gs.id].score_f == 0 ? "selected" : "" %>>0</option>
 							<option <%= @votes[gs.id].score_f == 1 ? "selected" : "" %>>1</option>
@@ -90,21 +91,32 @@
 
 	    
 	<% else %>
-
-	    <%= link_to "Register", :controller => "voters", :action => "signup" %> as a voting member of the voting committee.
-
-
+	  <%= link_to "Register", :controller => "voters", :action => "signup" %> as a voting member of the voting committee.
 		<h2>Sign in:</h2>
 		<fieldset>
-	<%= form_tag(controller: 'sessions', action:'create_voter') do %>
-	  <%= text_field :session, :email, :placeholder => "Email Address" %>
-			<br />
-	  <%= password_field :session, :password, :placeholder => "Password" %>
-			<br />
-	  <%= submit_tag("Sign in", class: "button") %>
-
-	   </fieldset>
+  	<%= form_tag(controller: 'sessions', action:'create_voter') do %>
+  	  <%= text_field :session, :email, :placeholder => "Email Address" %>
+  			<br />
+  	  <%= password_field :session, :password, :placeholder => "Password" %>
+  			<br />
+  	  <%= submit_tag("Sign in", class: "button") %>
+  
+  	   </fieldset>
+  	<% end %>
 	<% end %>
-
-	<% end %>
+	
+	<script>
+	function ajax_submit() {  
+    var valuesToSubmit = $('form').serialize();
+    $.ajax({
+        type: "POST",
+        url: "vote", //submits it to the given url of the form
+        data: valuesToSubmit,
+        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).success(function(json){
+        console.log("success", json);
+    });
+    return false; // prevents normal behaviour
+  }
+	</script>
 </div>

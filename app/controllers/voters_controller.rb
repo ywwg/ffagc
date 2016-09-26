@@ -17,29 +17,29 @@ class VotersController < ApplicationController
     end
     
     def create
-        @voter = Voter.new(voter_params)
-        
-        @voter.email = @voter.email.downcase
+      @voter = Voter.new(voter_params)
+      
+      @voter.email = @voter.email.downcase
 
-        if(Voter.where(email: @voter.email).take)
-            render "signup_exists"
-            return
-        end
-        
-        if @voter.save
-            session[:voter_id] = @voter.id # log in
+      if(Voter.where(email: @voter.email).take)
+          render "signup_exists"
+          return
+      end
+      
+      if @voter.save
+          session[:voter_id] = @voter.id # log in
 
-            # save survey
-            voter_survey = VoterSurvey.new(voter_survey_params)
-            voter_survey.voter_id = @voter.id
-            voter_survey.save
+          # save survey
+          voter_survey = VoterSurvey.new(voter_survey_params)
+          voter_survey.voter_id = @voter.id
+          voter_survey.save
 
-            render "signup_success" 
-            else
-            render "signup_failure"
-        end
-        # render plain: params[:artist].inspect
-        # render "signup_success"
+          render "signup_success" 
+          else
+          render "signup_failure"
+      end
+      # render plain: params[:artist].inspect
+      # render "signup_success"
     end
     
     def index
@@ -91,18 +91,18 @@ class VotersController < ApplicationController
     end
 
   def vote
-      @grant_submissions = GrantSubmission.where(grant_id: active_grants)
+    @grant_submissions = GrantSubmission.where(grant_id: active_grants)
 
-      # Go through all of the votes and submit all of the values even if they
-      # haven't changed :(
-      @grant_submissions.each do |gs|
-          vote = Vote.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
-          vote.score_t = params['t'][gs.id.to_s]
-          vote.score_c = params['c'][gs.id.to_s]
-          vote.score_f = params['f'][gs.id.to_s]
-          vote.save
-      end
-
-      redirect_to action: "index"
+    # Go through all of the votes and submit all of the values even if they
+    # haven't changed :(
+    @grant_submissions.each do |gs|
+        vote = Vote.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
+        vote.score_t = params['t'][gs.id.to_s]
+        vote.score_c = params['c'][gs.id.to_s]
+        vote.score_f = params['f'][gs.id.to_s]
+        vote.save
     end
+
+    redirect_to action: "index"
+  end
 end
