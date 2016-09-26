@@ -33,9 +33,21 @@ class AdminsController < ApplicationController
   def reveal
     @grant_submissions = GrantSubmission.all
   end
+  
+  def verify
+    if (!current_admin)
+      return
+    end
+    
+    voter = Voter.find(params[:id])
+    voter.verified = params[:verify]
+    voter.save    
+    
+    redirect_to action: "index"
+  end
 
   def assign
-    if(!current_admin)
+    if (!current_admin)
       return
     end
 
@@ -87,15 +99,15 @@ class AdminsController < ApplicationController
     redirect_to action: "index"
   end
 
-
   def index
     if(!current_admin)
       return
     end
 
     # verified voters
+    @voters = Voter.all
+    logger.debug "voters! #{@voters.inspect}"
     @verified_voters = Voter.where(verified: 1)
-    
     @verified_voters.each do |vv|
       vv.class_eval do
         attr_accessor :assigned

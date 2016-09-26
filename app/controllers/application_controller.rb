@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
     now = DateTime.current
     return Grant.where("submit_start <= ?", now).where("submit_end >= ?", now).select(:id)
   end
+  helper_method :active_submit_grants
   
   # Returns a list of the ids of grants which are currently active for voting.
   def active_vote_grants
@@ -19,11 +20,22 @@ class ApplicationController < ActionController::Base
   end 
   
   public
+  def any_submit_open?
+    return active_submit_grants.count > 0
+  end
+  helper_method :any_submit_open?
+  
+  def any_vote_open?
+    return active_vote_grants.count > 0
+  end
+  helper_method :any_vote_open?
+  
   def active_vote_names
     now = DateTime.current
     return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:name)
   end
   helper_method :active_vote_names
+  
   
   # /artists, /voters, /admins
 

@@ -1,7 +1,8 @@
 <div class="container">
     <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Success!</h1>
 
-    Grant created<br/>
+    Grant successfully created/modified<br/><br/>
 
+    <%= link_to "Back", :controller => "admins", :action => "index" %> | 
     <%= link_to "Again", :controller => "grants", :action => "index" %>
 </div>

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   
   get 'grants/index'
   post 'grants/index' => 'grants#create'
+  get 'grants/modify_grant' => 'grants#modify'
 
   post 'artists/login' => 'sessions#create_artist'
   post 'voters/login' => 'sessions#create_voter'
@@ -31,6 +32,7 @@ Rails.application.routes.draw do
 
   get 'admins/assign' => 'admins#assign'
   get 'admins/reveal' => 'admins#reveal'
+  get 'admins/verify' => 'admins#verify'
 
 
   resources :artists, :voters, :admins, :grant_submissions, :grants

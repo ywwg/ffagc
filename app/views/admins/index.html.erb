@@ -14,7 +14,7 @@
   <p>
     (<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)
   </p>
-
+  
   <h2>Submissions Currently Under Consideration I think</h2>
   <table border="1">
     <tr>
@@ -32,11 +32,30 @@
     <% end %>
 
   </table>
+  <%= link_to "Assign", :controller => "admins", :action => "assign" %>
 
-  <%= link_to "Assign!", :controller => "admins", :action => "assign" %>
-
-  <br />
-  <br />
+  <h2>Voters</h2>
+  <table border="1">
+    <tr>
+      <td>name</td>
+      <td>email</td>
+      <td>verified</td>
+      <td></td>
+    </tr>
+    <% @voters.each do |v| %>
+    <tr>
+      <td><%= v['name'] %></td>
+      <td><%= v['email'] %></td>
+      <td><%= v['verified'] %></td>
+      <td>
+        <% if v['verified'] %>
+          <%= link_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %></td>
+        <% else %>
+          <%= link_to "Verify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 1 %></td>
+        <% end %>  
+    </tr>
+    <% end %>
+  </table>
 
   <h2>Assigned Grants</h2>
   <table border="1">
@@ -110,6 +129,7 @@
       <td><%= g.submit_end.strftime("%Y/%m/%d") %></td>
       <td><%= g.vote_start.strftime("%Y/%m/%d") %></td>
       <td><%= g.vote_end.strftime("%Y/%m/%d") %></td>
+      <td><%= link_to "Modify", :controller => "grants", :action => "modify", :id => g.id %></td>
     </tr>
     <% end %>
   </table>

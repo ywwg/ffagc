@@ -11,10 +11,14 @@
 	<% if voter_logged_in? %>
     You are logged in as: <%= current_voter.name %> (<%= current_voter.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_voter" %>]
     <br /><br />
-    The voting process has begun for <% active_vote_names.each_with_index do |g, i| %>
-    <% if i > 0 %> and<% end %>
-    <b><%= g.name %></b> 
-    <% end %>!
+    <% if any_vote_open? %>
+      The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
+      <% if i > 0 %> and<% end %>
+      <b><%= g.name %></b> 
+      <% end %>!
+    <% else %>
+      <b>Voting is not open at this time, relax.</b>
+    <% end %>
     <br /><br />
     For your review, here are the submitted applications:
   	<br /><br />
@@ -113,7 +117,7 @@
     var valuesToSubmit = $('form').serialize();
     $.ajax({
         type: "POST",
-        url: "vote", //submits it to the given url of the form
+        url: "/voters/vote", //submits it to the given url of the form
         data: valuesToSubmit,
         dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(json){

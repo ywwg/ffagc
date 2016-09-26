@@ -7,7 +7,7 @@
         <%= f.input :name, :label => "Name of Piece", :required => true, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_grant_id">Grant<abbr title="required">*</abbr></label>
-          <%= collection_select(:grant_submission, :grant_id, Grant.where(id: [1,2,3,4]), :id, :name, :include_blank => "(select a grant)") %>
+          <%= collection_select(:grant_submission, :grant_id, Grant.where(id: active_submit_grants), :id, :name, :include_blank => "(select a grant)") %>
         </li>
   
         <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
@@ -64,7 +64,7 @@
       document.getElementById("grant_submission_grant_id").style.border = '1px solid green';
     } else {
       errors++;
-      alert('error: please select a grant to apply for!')
+      alert('error: please select a grant to apply for')
       document.getElementById("grant_submission_grant_id").style.border = '1px solid red';
     }
 
@@ -83,7 +83,7 @@
       document.getElementById("grant_submission_proposal").style.border = '1px solid green';
     } else {
       errors++;
-      alert('error: please select your application PDF!')
+      alert('error: please select your application PDF')
       document.getElementById("grant_submission_proposal").style.border = '1px solid red';
     }
 

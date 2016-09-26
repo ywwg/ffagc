@@ -25,4 +25,31 @@ class GrantsController < ApplicationController
       render "failure"
     end
   end
+  
+  def modify
+    begin
+      @grant = Grant.find(params.permit(:id)[:id])
+    rescue
+      redirect_to action: "index"
+      return
+    end
+    
+    render "modify"
+  end
+  
+  def update
+    if !admin_logged_in?
+      logger.warn "grant type modification without admin login"
+      render "failure"
+      return
+    end
+    
+    @grant = Grant.find(params[:id])
+    @grant.attributes = grant_params
+    if @grant.save
+      render "success"
+    else
+      render "failure"
+    end
+  end
 end

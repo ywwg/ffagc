@@ -33,10 +33,18 @@
         <% end %>
         </table>
         <br/>
-        <%= link_to "Submit another Grant Proposal", :controller => "grant_submissions", :action => "index" %>
+        <% if any_submit_open? %>
+          <%= link_to "Submit another Grant Proposal", :controller => "grant_submissions", :action => "index" %>
+        <% else %>
+          <p>No submissions open at this time.</p>
+        <% end %>
       <% else %>
         <h5>You have not submitted any proposals</h5>
-  	    <%= link_to "Submit a Grant Proposal", :controller => "grant_submissions", :action => "index" %>
+        <% if any_submit_open? %>
+  	     <%= link_to "Submit a Grant Proposal", :controller => "grant_submissions", :action => "index" %>
+  	    <% else %>
+          <p><b>No grant submissions open at this time.</b></p>
+        <% end %> 
       <% end %>
 
 
