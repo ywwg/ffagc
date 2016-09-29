@@ -18,10 +18,6 @@ class ArtistsController < ApplicationController
   end
 
   def create
-    if !current_artist
-      return
-    end
-    
     @artist = Artist.new(artist_params)
     @artist.email = @artist.email.downcase
 
