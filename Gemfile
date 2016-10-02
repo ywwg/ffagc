@@ -53,4 +53,5 @@ gem 'judge', '~> 2.0.5'
 
 gem 'carrierwave'
 
+gem 'prawn'
 

@@ -1,3 +1,5 @@
+require 'grant_contract'
+
 class GrantSubmissionsController < ApplicationController
 
   before_filter :initialize_grant_submission
@@ -82,5 +84,18 @@ class GrantSubmissionsController < ApplicationController
     end
     
     render "modify"
+  end
+  
+  def show
+    @grant_submission = GrantSubmission.find(1)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = GrantContract.new("Creatibity", "Nevermore", "Owen", 1000)
+        send_data pdf.render, filename: 
+          "nevermore_contract_todaysdate.pdf",
+          type: "application/pdf"
+      end
+    end
   end
 end
