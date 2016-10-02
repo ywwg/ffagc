@@ -29,8 +29,8 @@
             <td><%= gs.name %></td>
             <td><%= Grant.where("id = ?",gs.grant_id).take.name + " (" + gs.grant_id.to_s + ")" rescue "Unknown (" + gs.grant_id.to_s + ")" %></td>
             <td><%= gs.requested_funding_dollars %></td>
-            <td><%= link_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id%></td>
-            <td><%= link_to "Generate Contract", :controller => "grant_submissions", :action => "generate_contract", :id => gs.id, :format => "pdf" %></td>
+            <td><%= link_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
+            <td><%= link_to "Generate Contract", :controller => "grant_submissions", :action => "generate_contract", :format => "pdf", :submission_id => gs.id %></td>
           </tr>
         <% end %>
         </table>

@@ -86,14 +86,31 @@ class GrantSubmissionsController < ApplicationController
     render "modify"
   end
   
+  def grant_contract_params
+    params.permit(:id, :format, :submission_id)
+  end
+  
   def show
-    @grant_submission = GrantSubmission.find(1)
+    begin
+      submission = GrantSubmission.find(grant_contract_params[:submission_id])
+    rescue
+      redirect_to "/"
+      return  
+    end
+    if submission.artist_id != current_artist.id && !admin_logged_in
+      logger.warn "grant modification artist id mismatch #{@grant_submission.artist_id} != #{current_artist.id}"
+      redirect_to "/"
+      return
+    end
+    grant_name = Grant.find(submission.grant_id).name
+    artist_name = Artist.find(submission.artist_id).name
+    
     respond_to do |format|
       format.html
       format.pdf do
-        pdf = GrantContract.new("Creatibity", "Nevermore", "Owen", 1000)
+        pdf = GrantContract.new(grant_name, submission.name, artist_name, submission.requested_funding_dollars)
         send_data pdf.render, filename: 
-          "nevermore_contract_todaysdate.pdf",
+          "#{submission.name}_#{grant_name}_Contract_#{DateTime.current.strftime("%Y%m%d")}.pdf",
           type: "application/pdf"
       end
     end

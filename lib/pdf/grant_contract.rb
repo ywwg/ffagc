@@ -7,6 +7,6 @@ class GrantContract < Prawn::Document
 	@artist = artist
 	@amount = amount
 	
-	text "wow that was hard: #{@artist}"
+	text "wow that was hard: #{@grant}, #{@project}, #{@artist}, #{@amount}"
   end
 end
