@@ -15,9 +15,9 @@
   
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_proposal">Current Application PDF:</label>
-          <input type="test" style="margin-left:-5px" disabled="true" value="<%= @grant_submission.proposal_identifier %>"/><br/><br/>
+          <input type="test" disabled="true" value="<%= @grant_submission.proposal_identifier %>"/><br/><br/>
           <label class="label" for="grant_submission_proposal">(Optional) Replace PDF:</label>
-          <%= f.file_field :proposal, :required => false, :validate => true, :style => "margin-left:-5px" %>
+          <%= f.file_field :proposal, :required => false, :validate => true %>
         </li>
         
         <% if admin_logged_in?%>

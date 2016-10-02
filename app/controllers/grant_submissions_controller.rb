@@ -98,7 +98,7 @@ class GrantSubmissionsController < ApplicationController
   end
   
   def grant_contract_params
-    params.permit(:id, :format, :submission_id)
+    params.permit(:id, :format, :submission_id, :authenticity_token)
   end
   
   def generate_contract

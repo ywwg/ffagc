@@ -17,7 +17,8 @@ class GrantContract < Prawn::Document
   	begin
   	  # XXX hardcoding alert! Template filename must be the same as the grant name,
   	  # except all lowercase.
-      template = File.open("./lib/pdf/#{@grant.downcase}.tmpl", "rb").read
+  	  filename = "#{Rails.root}/app/assets/contract_templates/#{@grant.downcase}.erb"
+      template = File.open(filename, "rb").read
       template.each_line do |line|
         write_templated_line line
       end
@@ -32,7 +33,7 @@ class GrantContract < Prawn::Document
     # keywords are in the if/else chain below
     # A comma must follow the token, and then the text follows, like this:
     # [[TITLE]],This Is My Title
-    # Leading spaces (including spaces after the comma following a token
+    # Leading spaces (including spaces after the comma following a token)
     # are converted to indentation.  More spaces, more indents.
     # Lines beginning with '#' are comments
     

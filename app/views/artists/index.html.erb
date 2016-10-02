@@ -35,7 +35,7 @@
   	    <% @grant_submissions.each do |gs| %>
           <tr>
             <td><%= gs.name %></td>
-            <td><%= Grant.where("id = ?",gs.grant_id).take.name + " (" + gs.grant_id.to_s + ")" rescue "Unknown (" + gs.grant_id.to_s + ")" %></td>
+            <td><%= Grant.where("id = ?",gs.grant_id).take.name %> Grant</td>
             <td><%= gs.requested_funding_dollars %></td>
             <% if grant_submission_funded?(gs.id)%>
               <td><%= gs.granted_funding_dollars %></td>
