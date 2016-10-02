@@ -29,7 +29,13 @@ class GrantSubmissionsController < ApplicationController
   end
   
   def grant_update_params
-    params.require(:grant_submission).permit(:id, :name, :grant_id, :requested_funding_dollars, :proposal)
+    if admin_logged_in?
+      params.require(:grant_submission).permit(:id, :name, :grant_id, 
+          :requested_funding_dollars, :proposal, :granted_funding_dollars,
+          :funded)
+    else
+      params.require(:grant_submission).permit(:id, :name, :grant_id, :requested_funding_dollars, :proposal)
+    end
   end
 
   def update
@@ -51,6 +57,11 @@ class GrantSubmissionsController < ApplicationController
     end
     @grant_submission.grant_id = grant_update_params[:grant_id]
     @grant_submission.requested_funding_dollars = grant_update_params[:requested_funding_dollars]
+    
+    if admin_logged_in?
+      @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
+      @grant_submission.funded = grant_update_params[:funded]
+    end
 
     if @grant_submission.save
       if admin_logged_in? 
@@ -90,16 +101,7 @@ class GrantSubmissionsController < ApplicationController
     params.permit(:id, :format, :submission_id)
   end
   
-  def show
-    if params[:id] == "generate_contract"
-      show_contract
-    else
-      logger.warn "Asked to show something we don't understand"
-      redirect_to "/"
-    end
-  end
-  
-  def show_contract
+  def generate_contract
     begin
       submission = GrantSubmission.find(grant_contract_params[:submission_id])
     rescue

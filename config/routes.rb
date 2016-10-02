@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   
   get 'grants/index'
   post 'grants/index' => 'grants#create'
-  get 'grants/modify_grant' => 'grants#modify'
+  post 'grants/modify_grant' => 'grants#modify'
 
   post 'artists/login' => 'sessions#create_artist'
   post 'voters/login' => 'sessions#create_voter'
@@ -26,14 +26,14 @@ Rails.application.routes.draw do
   get 'admins/logout' => 'sessions#delete_admin'
 
   get 'artists/grant_submissions' => 'grant_submissions#index'
-  get 'artists/modify_grant' => 'grant_submissions#modify'
+  post 'artists/modify_grant' => 'grant_submissions#modify'
   post 'grant_submissions/generate_contract' => 'grant_submissions#generate_contract'
 
   post 'voters/vote' => 'voters#vote'
 
-  get 'admins/assign' => 'admins#assign'
+  post 'admins/assign' => 'admins#assign'
   get 'admins/reveal' => 'admins#reveal'
-  get 'admins/verify' => 'admins#verify'
+  post 'admins/verify' => 'admins#verify'
 
 
   resources :artists, :voters, :admins, :grant_submissions, :grants

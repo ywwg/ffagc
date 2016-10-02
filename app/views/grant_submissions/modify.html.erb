@@ -8,12 +8,7 @@
         <%= f.input :name, :label => "Name of Piece", :required => false, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_grant_id">Grant</label>
-          <!-- TODO: this allows the artist to change the grant type to anything, even if it's not open.
-            I think this is ok, because if we say "hey please resubmit for Legacy" they can just change it
-            even if Creativity is already closed.  We could still validate that their new choice is open, though.
-             -->
           <%= collection_select(:grant_submission, :grant_id, Grant.all, :id, :name, :include_blank => "(select a grant)") %>
-          <!--  f.select :grant_id, options_from_collection_for_select(GrantSubmission.find(:id), "id", "grant_id", params[:grant_id]) -->
         </li>
   
         <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => false, :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
@@ -24,6 +19,11 @@
           <label class="label" for="grant_submission_proposal">(Optional) Replace PDF:</label>
           <%= f.file_field :proposal, :required => false, :validate => true, :style => "margin-left:-5px" %>
         </li>
+        
+        <% if admin_logged_in?%>
+          <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
+          <%= f.input :funded, :label => "Confirm Funding", :style => "border:all" %>
+        <% end %>
   
         <br /><br />
         <%= submit_tag("Update Application", class: "button")%>

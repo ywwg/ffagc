@@ -18,29 +18,29 @@
   <h2>Submissions Currently Under Consideration I think</h2>
   <table border="1">
     <tr>
-      <td>id</td>
-      <td>name</td>
-      <td>assigned</td>
+      <th>id</th>
+      <th>name</th>
+      <th>assigned</th>
     </tr>
     <% @submissions.each do |s| %>
     <tr>
       <td><%= @sv[s.id]['id'] %></td>
       <td><%= @sv[s.id]['name'] %></td>
       <td><%= @sv[s.id]['assigned'].join(',').html_safe %></td>
-      <td><%= link_to "Modify Grant", :controller => "grant_submissions", :action => "modify", :id => @sv[s.id]['id'] %></td>
+      <td><%= button_to "Modify/Fund", :controller => "grant_submissions", :action => "modify", :id => @sv[s.id]['id'] %></td>
     </tr>
     <% end %>
 
   </table>
-  <%= link_to "Assign", :controller => "admins", :action => "assign" %>
+  <%= button_to "Assign", :controller => "admins", :action => "assign" %>
 
   <h2>Voters</h2>
   <table border="1">
     <tr>
-      <td>name</td>
-      <td>email</td>
-      <td>verified</td>
-      <td></td>
+      <th>name</th>
+      <th>email</th>
+      <th>verified</th>
+      <th></th>
     </tr>
     <% @voters.each do |v| %>
     <tr>
@@ -49,9 +49,9 @@
       <td><%= v['verified'] %></td>
       <td>
         <% if v['verified'] %>
-          <%= link_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %></td>
+          <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %></td>
         <% else %>
-          <%= link_to "Verify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 1 %></td>
+          <%= button_to "Verify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 1 %></td>
         <% end %>  
     </tr>
     <% end %>
@@ -60,10 +60,10 @@
   <h2>Assigned Grants</h2>
   <table border="1">
     <tr>
-      <td>id</td>
-      <td>name</td>
-      <td>email</td>
-      <td>assigned</td>
+      <th>id</th>
+      <th>name</th>
+      <th>email</th>
+      <th>assigned</th>
     </tr>
     <% @verified_voters.each do |vv| %>
     <tr>
@@ -79,15 +79,17 @@
   <h2>All Submitted Grants</h2>
   <table border="1">
     <tr>
-      <td>id</td>
-      <td>name</td>
-      <td>grant</td>
-      <td>$</td>
-      <td>avg_t</td>
-      <td>avg_c</td>
-      <td>avg_f</td>
-      <td>avg_s</td>
-      <td>#</td>
+      <th>id</th>
+      <th>name</th>
+      <th>grant</th>
+      <th>$</th>
+      <th>avg_t</th>
+      <th>avg_c</th>
+      <th>avg_f</th>
+      <th>avg_s</th>
+      <th>#</th>
+      <th>Funded</th>
+      <th></th>
     </tr>
 
     <% @grant_submissions.each do |gs| %>
@@ -101,7 +103,8 @@
       <td><%= @results[gs.id]['avg_f'] %></td>
       <td><%= @results[gs.id]['avg_s'] %></td>
       <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
-      <td><%= link_to "Modify Grant", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
+      <td><%= gs.funded %></td>
+      <td><%= button_to "Modify/Fund", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
     </tr>
     <% end %>
 
@@ -112,13 +115,13 @@
   <h2>Grant Types</h2>
   <table border=1>
     <tr>
-      <td>id</td>
-      <td>Name</td>
-      <td>Max Funding $</td>
-      <td>Submission Start Date</td>
-      <td>Submission End Date</td>
-      <td>Voting Start Date</td>
-      <td>Voting End Date</td>
+      <th>id</th>
+      <th>Name</th>
+      <th>Max Funding $</th>
+      <th>Submission Start Date</th>
+      <th>Submission End Date</th>
+      <th>Voting Start Date</th>
+      <th>Voting End Date</th>
     </tr>
     <% @grants.each do |g| %>
     <tr>
@@ -129,7 +132,7 @@
       <td><%= g.submit_end.strftime("%Y/%m/%d") %></td>
       <td><%= g.vote_start.strftime("%Y/%m/%d") %></td>
       <td><%= g.vote_end.strftime("%Y/%m/%d") %></td>
-      <td><%= link_to "Modify", :controller => "grants", :action => "modify", :id => g.id %></td>
+      <td><%= button_to "Modify", :controller => "grants", :action => "modify", :id => g.id %></td>
     </tr>
     <% end %>
   </table>

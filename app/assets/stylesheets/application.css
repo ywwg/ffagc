@@ -61,16 +61,16 @@ form label {
 }
 
 input, textarea {
-	padding: 10px;
+	padding: 3px;
+	margin: 3px;
 	font-size: 17px;
-	width: 350px;
-	border: 0;
-	background-color: #fff;
+	border: all;
+	background-color: #f6f6f6;
 	color: #9E1E4C;
 }
 
-.button {
-	width: 370px;
+textarea {
+  width: 350px;
 }
 
 checkbox {
@@ -80,4 +80,19 @@ checkbox {
 textarea {
 	margin-top: 10px;
 	width: 650px;
+}
+
+table {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+th {
+  border: 2px solid black;
+  padding: 2pt;
+}
+
+td {
+  border: 2px solid black;
+  padding: 2pt;
 }

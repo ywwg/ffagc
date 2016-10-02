@@ -33,16 +33,16 @@
     		<br /><br />
     		<table border="1" cellpadding="4">
     			<tr>
-    				<td>ID</td>
-    				<td>Name</td>
-    				<td>Grant</td>
-    				<td>Requested</td>
-    				<td>Submission</td>
-    				<td>T</td>
-    				<td>C</td>
-    				<td>F</td>
+    				<th>ID</th>
+    				<th>Name</th>
+    				<th>Grant</th>
+    				<th>Requested</th>
+    				<th>Submission</th>
+    				<th>T</th>
+    				<th>C</th>
+    				<th>F</th>
     			</tr>
-    			<% @grant_submissions_unassigned.each do |gs| %>
+    			<% @grant_submissions_assigned.each do |gs| %>
     				<tr>
     					<td><%= gs.id %></td>
     					<td><%= gs.name %></td>

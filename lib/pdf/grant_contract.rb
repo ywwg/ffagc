@@ -28,12 +28,13 @@ class GrantContract < Prawn::Document
   
   def write_templated_line(line)
     # This is a super simple templating system based on ERB and keywords.
-    # First, if a line begins with [[ it's a formatting token.  I just support
-    # TITLE, HEADING, SUBHEADING, and SIGNATURES as seen below.
+    # First, if a line begins with [[ it's a formatting token.  The supported
+    # keywords are in the if/else chain below
     # A comma must follow the token, and then the text follows, like this:
     # [[TITLE]],This Is My Title
     # Leading spaces (including spaces after the comma following a token
     # are converted to indentation.  More spaces, more indents.
+    # Lines beginning with '#' are comments
     
     # Defaults:
     align = :left
@@ -41,6 +42,10 @@ class GrantContract < Prawn::Document
     style = :normal 
     indent_amount = 0
     
+    # Comments.
+    if line.start_with? "#"
+      return
+    end
     # Process token and strip it
     if line.start_with? "[["
       tok = line.split(",", 2)
@@ -57,6 +62,9 @@ class GrantContract < Prawn::Document
       elsif tok[0] == "[[SIGNATURES]]"
         puts "so we're here"
         write_signatures
+        return
+      elsif tok[0] == "[[PAGEBREAK]]"
+        start_new_page
         return
       end
       line = tok[1]
