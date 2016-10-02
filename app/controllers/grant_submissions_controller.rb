@@ -91,6 +91,15 @@ class GrantSubmissionsController < ApplicationController
   end
   
   def show
+    if params[:id] == "generate_contract"
+      show_contract
+    else
+      logger.warn "Asked to show something we don't understand"
+      redirect_to "/"
+    end
+  end
+  
+  def show_contract
     begin
       submission = GrantSubmission.find(grant_contract_params[:submission_id])
     rescue

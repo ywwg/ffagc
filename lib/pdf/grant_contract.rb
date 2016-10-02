@@ -9,7 +9,10 @@ class GrantContract < Prawn::Document
   	@artist = artist
   	@amount = amount
   	@date = DateTime.current.strftime("%Y-%m-%d")
+  	
+  	# TODO: These values may need to live elsewhere...
   	@year = "2017"
+  	@install_day = "Friday, July 7, 2017"
   	
   	begin
   	  # XXX hardcoding alert! Template filename must be the same as the grant name,
@@ -26,7 +29,7 @@ class GrantContract < Prawn::Document
   def write_templated_line(line)
     # This is a super simple templating system based on ERB and keywords.
     # First, if a line begins with [[ it's a formatting token.  I just support
-    # TITLE, HEADING, SUBHEADING, and SIGNATURES as seen below.  Except for signatures,
+    # TITLE, HEADING, SUBHEADING, and SIGNATURES as seen below.
     # A comma must follow the token, and then the text follows, like this:
     # [[TITLE]],This Is My Title
     # Leading spaces (including spaces after the comma following a token
