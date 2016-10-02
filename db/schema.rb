@@ -116,8 +116,8 @@ ActiveRecord::Schema.define(version: 20161002170354) do
     t.integer  "score_f"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "voter_id_id"
-    t.integer  "grant_submission_id_id"
+    t.integer  "voter_id"
+    t.integer  "grant_submission_id"
   end
 
 end

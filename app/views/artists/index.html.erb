@@ -22,7 +22,9 @@
   	        <td><h4>Grant Category</h4></td>
   	        <td><h4>Requested Funding Level</h4></td>
   	        <td></td>
+  	        <% if any_grant_submission_funded?(current_artist.id)%>
   	        <td></td>
+  	        <% end %>
   	      </tr>
   	    <% @grant_submissions.each do |gs| %>
           <tr>
@@ -30,7 +32,9 @@
             <td><%= Grant.where("id = ?",gs.grant_id).take.name + " (" + gs.grant_id.to_s + ")" rescue "Unknown (" + gs.grant_id.to_s + ")" %></td>
             <td><%= gs.requested_funding_dollars %></td>
             <td><%= link_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
+            <% if grant_submission_funded?(gs.id)%>
             <td><%= link_to "Generate Contract", :controller => "grant_submissions", :action => "generate_contract", :format => "pdf", :submission_id => gs.id %></td>
+            <% end %>
           </tr>
         <% end %>
         </table>

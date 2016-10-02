@@ -64,7 +64,7 @@ class AdminsController < ApplicationController
     VoterSubmissionAssignment.destroy_all
 
     #undercooked copypasta w/ no sauce
-    @verified_voters = Voter.where("verified = 1")
+    @verified_voters = Voter.where(verified: true)
     vv_arr = @verified_voters.to_ary
     idx = 0
     max = vv_arr.size
@@ -75,6 +75,8 @@ class AdminsController < ApplicationController
     @submissions = []
     if max == 0
       # bail if no verified voters??
+      logger.warn "WARNING: no verified voters"
+      redirect_to action: "index"
       return
     end
 
@@ -91,8 +93,8 @@ class AdminsController < ApplicationController
         @sv[s.id]['assigned'][i] = vv_arr[idx].id
 
         vsa = VoterSubmissionAssignment.new
-        vsa.voter = vv_arr[idx].id
-        vsa.grant_submission = s.id
+        vsa.voter_id = vv_arr[idx].id
+        vsa.grant_submission_id = s.id
         vsa.save
 
         idx=idx+1
@@ -113,14 +115,14 @@ class AdminsController < ApplicationController
 
     # verified voters
     @voters = Voter.all
-    @verified_voters = Voter.where(verified: 1)
+    @verified_voters = Voter.where(verified: true)
     @verified_voters.each do |vv|
       vv.class_eval do
         attr_accessor :assigned
       end
 
       vv.assigned = Array.new
-      VoterSubmissionAssignment.where("voter = ?",vv.id).each{|vsa| vv.assigned.push(vsa.grant_submission)}
+      VoterSubmissionAssignment.where("voter_id = ?",vv.id).each{|vsa| vv.assigned.push(vsa.grant_submission_id)}
     end
 
     vv_arr = @verified_voters.to_ary

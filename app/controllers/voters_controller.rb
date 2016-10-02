@@ -73,7 +73,7 @@ class VotersController < ApplicationController
         @votes[gs.id] = vote
 
         #assignments
-        vsa = VoterSubmissionAssignment.where("voter = ? AND grant_submission = ?", current_voter.id, gs.id).take
+        vsa = VoterSubmissionAssignment.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
         if(vsa)
           gs.assigned = 1
         else

@@ -111,6 +111,10 @@ class GrantSubmissionsController < ApplicationController
       redirect_to "/"
       return
     end
+    if !submission.funded 
+      logger.warn "tried to generate contract for non-funded grant"
+      redirect to "/"
+    end
     grant_name = Grant.find(submission.grant_id).name
     artist_name = Artist.find(submission.artist_id).name
     

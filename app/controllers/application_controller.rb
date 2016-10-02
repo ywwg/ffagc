@@ -35,6 +35,22 @@ class ApplicationController < ActionController::Base
   end
   helper_method :active_vote_names
   
+  def any_grant_submission_funded?(artist_id)
+    return GrantSubmission.where("artist_id = ? AND funded = 1", artist_id).count > 0 
+  end
+  helper_method :any_grant_submission_funded?
+  
+  def grant_submission_funded?(id)
+    g = GrantSubmission.find(id)
+    return g.funded
+  end
+  helper_method :grant_submission_funded?
+  
+  def voter_verified?(id)
+    return Voter.find(id).verified
+  end
+  helper_method :voter_verified?
+  
   
   # /artists, /voters, /admins
 
