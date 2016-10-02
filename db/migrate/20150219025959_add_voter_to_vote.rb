@@ -1,5 +1,5 @@
 class AddVoterToVote < ActiveRecord::Migration
   def change
-    add_column :votes, :voter_id, :reference
+    add_reference :votes, :voter_id
   end
 end

@@ -1,5 +1,5 @@
 class AddGrantSubmissionToVote < ActiveRecord::Migration
   def change
-    add_column :votes, :grant_submission_id, :reference
+    add_reference :votes, :grant_submission_id
   end
 end

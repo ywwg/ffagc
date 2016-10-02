@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160926034447) do
+ActiveRecord::Schema.define(version: 20161002170354) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -59,6 +59,8 @@ ActiveRecord::Schema.define(version: 20160926034447) do
     t.integer  "artist_id"
     t.string   "proposal"
     t.integer  "requested_funding_dollars"
+    t.integer  "granted_funding_dollars"
+    t.boolean  "funded"
   end
 
   add_index "grant_submissions", ["artist_id"], name: "index_grant_submissions_on_artist_id"
@@ -75,8 +77,12 @@ ActiveRecord::Schema.define(version: 20160926034447) do
     t.datetime "vote_end"
   end
 
-# Could not dump table "voter_submission_assignments" because of following NoMethodError
-#   undefined method `[]' for nil:NilClass
+  create_table "voter_submission_assignments", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "voter_id"
+    t.integer  "grant_submission_id"
+  end
 
   create_table "voter_surveys", force: true do |t|
     t.boolean  "has_attended_firefly"
@@ -104,7 +110,14 @@ ActiveRecord::Schema.define(version: 20160926034447) do
     t.boolean  "verified"
   end
 
-# Could not dump table "votes" because of following NoMethodError
-#   undefined method `[]' for nil:NilClass
+  create_table "votes", force: true do |t|
+    t.integer  "score_t"
+    t.integer  "score_c"
+    t.integer  "score_f"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "voter_id_id"
+    t.integer  "grant_submission_id_id"
+  end
 
 end
