@@ -42,6 +42,7 @@ class GrantSubmissionsController < ApplicationController
   def update
     @grant_submission = GrantSubmission.find(params[:id])
     
+    # Check admin login first, because current_artist might be nil
     if !admin_logged_in? && @grant_submission.artist_id != current_artist.id
       logger.warn "grant modification artist id mismatch: #{@grant_submission.artist_id} != #{current_artist.id}"
       if admin_logged_in?
@@ -85,6 +86,7 @@ class GrantSubmissionsController < ApplicationController
   def modify
     begin
       @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
+      # Check admin login first, because current_artist might be nil
       if !admin_logged_in? && @grant_submission.artist_id != current_artist.id
         logger.warn "grant modification artist id mismatch #{@grant_submission.artist_id} != #{current_artist.id}"
         redirect_to "/"
@@ -109,6 +111,7 @@ class GrantSubmissionsController < ApplicationController
       redirect_to "/"
       return  
     end
+    # Check admin login first, because current_artist might be nil
     if !admin_logged_in? && submission.artist_id != current_artist.id
       logger.warn "grant modification artist id mismatch #{@grant_submission.artist_id} != #{current_artist.id}"
       redirect_to "/"
