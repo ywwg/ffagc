@@ -36,11 +36,10 @@ class GrantProposalUploader < CarrierWave::Uploader::Base
   #   process :scale => [50, 50]
   # end
 
-  # Add a white list of extensions which are allowed to be uploaded.
-  # For images you might use something like this:
-  # def extension_white_list
-  #   %w(jpg jpeg gif png)
-  # end
+  # NOTE: keep in sync with grant_submissions views index and modify
+  def extension_white_list
+    %w(pdf doc docx txt md)
+  end
 
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
