@@ -21,7 +21,7 @@ class VotersController < ApplicationController
       
       @voter.email = @voter.email.downcase
 
-      if(Voter.where(email: @voter.email).take)
+      if Voter.where(email: @voter.email).take
         render "signup_exists"
         return
       end
@@ -43,7 +43,7 @@ class VotersController < ApplicationController
     end
     
     def index
-      if(!current_voter)
+      if !voter_logged_in?
         return
       end
 
@@ -63,7 +63,7 @@ class VotersController < ApplicationController
 
         vote = Vote.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
 
-        if(!vote)
+        if !vote
           vote = Vote.new
           vote.voter_id = current_voter.id
           vote.grant_submission_id = gs.id
@@ -74,7 +74,7 @@ class VotersController < ApplicationController
 
         #assignments
         vsa = VoterSubmissionAssignment.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
-        if(vsa)
+        if vsa
           gs.assigned = 1
         else
           gs.assigned = 0

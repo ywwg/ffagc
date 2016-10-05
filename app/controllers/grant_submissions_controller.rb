@@ -7,13 +7,13 @@ class GrantSubmissionsController < ApplicationController
   def initialize_grant_submission
     @grant_submission = GrantSubmission.new
   end
-
+  
   def grant_submission_params
     params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars)
   end
 
   def create
-    if !current_artist
+    if !artist_logged_in?
       return
     end
 
@@ -38,19 +38,29 @@ class GrantSubmissionsController < ApplicationController
           :requested_funding_dollars, :proposal, :authenticity_token)
     end
   end
+  
+  def modify_grant_ok?(submission)
+    if admin_logged_in?
+      logger.warn "admin logged in, allowing submission modification"
+      return true
+    end
+    if !artist_logged_in?
+      logger.warn "no admin or artist logged in, not allowing submission modification"
+      return false
+    end
+    if current_artist.id != submission.artist_id
+      logger.warn "grant modification artist id mismatch: #{@grant_submission.artist_id} != #{current_artist.id}, not allowing submission modification"
+      return false
+    end
+    return true
+  end
 
   def update
     @grant_submission = GrantSubmission.find(params[:id])
     
-    # Check admin login first, because current_artist might be nil
-    if !admin_logged_in? && @grant_submission.artist_id != current_artist.id
-      logger.warn "grant modification artist id mismatch: #{@grant_submission.artist_id} != #{current_artist.id}"
-      if admin_logged_in?
-        logger.warn "OVERRIDE because admin logged in"
-      else
-        render "failure"
-        return
-      end
+    if !modify_grant_ok?(@grant_submission)
+      redirect_to "/"
+      return
     end
     
     @grant_submission.name = grant_update_params[:name]
@@ -86,9 +96,7 @@ class GrantSubmissionsController < ApplicationController
   def modify
     begin
       @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
-      # Check admin login first, because current_artist might be nil
-      if !admin_logged_in? && @grant_submission.artist_id != current_artist.id
-        logger.warn "grant modification artist id mismatch #{@grant_submission.artist_id} != #{current_artist.id}"
+      if !modify_grant_ok?(@grant_submission)
         redirect_to "/"
         return
       end
@@ -111,15 +119,13 @@ class GrantSubmissionsController < ApplicationController
       redirect_to "/"
       return  
     end
-    # Check admin login first, because current_artist might be nil
-    if !admin_logged_in? && submission.artist_id != current_artist.id
-      logger.warn "grant modification artist id mismatch #{@grant_submission.artist_id} != #{current_artist.id}"
+    if modify_grant_ok?(submission)
       redirect_to "/"
       return
     end
     if !submission.funded 
       logger.warn "tried to generate contract for non-funded grant"
-      redirect to "/"
+      redirect_to "/"
     end
     grant_name = Grant.find(submission.grant_id).name
     artist_name = Artist.find(submission.artist_id).name

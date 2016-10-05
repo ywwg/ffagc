@@ -37,7 +37,7 @@ class ArtistsController < ApplicationController
   end
 
   def index
-    if !current_artist
+    if !artist_logged_in?
         return
     end
     
@@ -45,7 +45,7 @@ class ArtistsController < ApplicationController
   end
   
   def delete_grant
-    if !current_artist
+    if !artist_logged_in?
       return
     end
     
