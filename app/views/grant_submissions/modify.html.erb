@@ -1,7 +1,7 @@
 <div class="container">
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Modify a Grant Proposal</h1>
 
-  <% if artist_logged_in? %>
+  <% if artist_logged_in? || admin_logged_in? %>
 
     <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
       <fieldset>

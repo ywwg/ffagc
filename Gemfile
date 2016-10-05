@@ -55,3 +55,5 @@ gem 'carrierwave'
 
 gem 'prawn'
 
+gem 'log4r'
+

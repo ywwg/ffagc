@@ -32,18 +32,19 @@ class GrantSubmissionsController < ApplicationController
     if admin_logged_in?
       params.require(:grant_submission).permit(:id, :name, :grant_id, 
           :requested_funding_dollars, :proposal, :granted_funding_dollars,
-          :funded)
+          :funded, :authenticity_token)
     else
-      params.require(:grant_submission).permit(:id, :name, :grant_id, :requested_funding_dollars, :proposal)
+      params.require(:grant_submission).permit(:id, :name, :grant_id, 
+          :requested_funding_dollars, :proposal, :authenticity_token)
     end
   end
 
   def update
     @grant_submission = GrantSubmission.find(params[:id])
     
-    if @grant_submission.artist_id != current_artist.id
+    if !admin_logged_in? && @grant_submission.artist_id != current_artist.id
       logger.warn "grant modification artist id mismatch: #{@grant_submission.artist_id} != #{current_artist.id}"
-      if admin_logged_in
+      if admin_logged_in?
         logger.warn "OVERRIDE because admin logged in"
       else
         render "failure"
@@ -83,14 +84,14 @@ class GrantSubmissionsController < ApplicationController
   
   def modify
     begin
-      @grant_submission = GrantSubmission.find(params.permit(:id)[:id])
-      if @grant_submission.artist_id != current_artist.id
+      @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
+      if !admin_logged_in? && @grant_submission.artist_id != current_artist.id
         logger.warn "grant modification artist id mismatch #{@grant_submission.artist_id} != #{current_artist.id}"
         redirect_to "/"
         return
       end
     rescue
-      redirect_to action: "index"
+      redirect_to "/"
       return
     end
     
@@ -108,7 +109,7 @@ class GrantSubmissionsController < ApplicationController
       redirect_to "/"
       return  
     end
-    if submission.artist_id != current_artist.id && !admin_logged_in
+    if !admin_logged_in? && submission.artist_id != current_artist.id
       logger.warn "grant modification artist id mismatch #{@grant_submission.artist_id} != #{current_artist.id}"
       redirect_to "/"
       return
