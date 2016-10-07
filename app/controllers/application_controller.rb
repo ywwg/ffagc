@@ -112,4 +112,15 @@ class ApplicationController < ActionController::Base
     true if Admin.exists?
   end
   helper_method :admin_exists?
+  
+  public
+  
+  # Password token generation helpers
+  def self.new_token
+    SecureRandom.urlsafe_base64
+  end
+  
+  def self.digest(secret)
+    return BCrypt::Password.create(secret)
+  end
 end

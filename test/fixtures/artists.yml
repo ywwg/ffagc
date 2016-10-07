@@ -1,5 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+michael:
+  name: Michael Example
+  email: michael@example.com
+  password_digest: <%= ApplicationController.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
+
+
 one:
   name: MyString
   email: MyString

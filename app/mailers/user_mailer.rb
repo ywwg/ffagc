@@ -1,0 +1,27 @@
+class UserMailer < ActionMailer::Base
+  default from: "grants@fireflyartscollective.org"
+
+  # Subject can be set in your I18n file at config/locales/en.yml
+  # with the following lookup:
+  #
+  #   en.user_mailer.account_activation.subject
+  #
+  def account_activation(user)
+    @user = user
+    @greeting = "Hi"
+
+    mail to: "to@example.org", subject: "Firefly Art Grant Account Activation"
+  end
+
+  # Subject can be set in your I18n file at config/locales/en.yml
+  # with the following lookup:
+  #
+  #   en.user_mailer.password_reset.subject
+  #
+  def password_reset(user)
+    @user = user
+    @greeting = "Hi"
+
+    mail to: "to@example.org", subject: "Firefly Art Grant Password Reset"
+  end
+end
