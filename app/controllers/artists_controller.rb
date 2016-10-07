@@ -22,13 +22,16 @@ class ArtistsController < ApplicationController
     @artist.email = @artist.email.downcase
 
     if @artist.save
-      # log in
-      session[:artist_id] = @artist.id
+      # do not log in, not activated yet
+      #session[:artist_id] = @artist.id
 
       # save optional survey
       artist_survey = ArtistSurvey.new(artist_survey_params)
       artist_survey.artist_id = @artist.id
       artist_survey.save
+      
+      # Send email!
+      UserMailer.account_activation(@artist).deliver
 
       render "signup_success"
     else

@@ -8,7 +8,9 @@ class UserMailerTest < ActionMailer::TestCase
     assert_equal "Firefly Art Grant Account Activation", mail.subject
     assert_equal ["to@example.org"], mail.to
     assert_equal ["grants@fireflyartscollective.org"], mail.from
-    assert_match "Hi", mail.body.encoded
+    assert_match user.name,               mail.body.encoded
+    assert_match user.activation_token,   mail.body.encoded
+    assert_match CGI.escape(user.email),  mail.body.encoded
   end
 
   test "password_reset" do
@@ -18,7 +20,9 @@ class UserMailerTest < ActionMailer::TestCase
     assert_equal "Firefly Art Grant Password Reset", mail.subject
     assert_equal ["to@example.org"], mail.to
     assert_equal ["grants@fireflyartscollective.org"], mail.from
-    assert_match "Hi", mail.body.encoded
+    # assert_match user.name,               mail.body.encoded
+    # assert_match user.activation_token,   mail.body.encoded
+    # assert_match CGI.escape(user.email),  mail.body.encoded
   end
 
 end

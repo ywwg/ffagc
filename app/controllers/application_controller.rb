@@ -114,7 +114,6 @@ class ApplicationController < ActionController::Base
   helper_method :admin_exists?
   
   public
-  
   # Password token generation helpers
   def self.new_token
     SecureRandom.urlsafe_base64
@@ -123,4 +122,10 @@ class ApplicationController < ActionController::Base
   def self.digest(secret)
     return BCrypt::Password.create(secret)
   end
+  
+  def self.activate_succeed?(user, token)
+    logger.debug "comparing: #{user.activation_digest} and #{digest(token)}"
+    BCrypt::Password.new(user.activation_digest).is_password?(token)
+  end
+  
 end
