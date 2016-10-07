@@ -124,8 +124,6 @@ class ApplicationController < ActionController::Base
   end
   
   def self.activate_succeed?(user, token)
-    logger.debug "comparing: #{user.activation_digest} and #{digest(token)}"
     BCrypt::Password.new(user.activation_digest).is_password?(token)
   end
-  
 end

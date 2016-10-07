@@ -3,5 +3,5 @@
 <p>Hi <%= @user.name %>, Click below to activate your account!</p>
 
 <%= link_to "Activate", edit_account_activation_url(@user.activation_token,
-                                                    type: "artist",
+                                                    type: @type,
                                                     email: @user.email) %>

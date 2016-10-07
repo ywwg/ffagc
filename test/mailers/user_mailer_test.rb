@@ -4,9 +4,9 @@ class UserMailerTest < ActionMailer::TestCase
   test "account_activation" do
     user = artists(:michael)
     user.activation_token = ApplicationController.new_token
-    mail = UserMailer.account_activation(user)
+    mail = UserMailer.account_activation("artists", user)
     assert_equal "Firefly Art Grant Account Activation", mail.subject
-    assert_equal ["to@example.org"], mail.to
+    assert_equal ["michael@example.com"], mail.to
     assert_equal ["grants@fireflyartscollective.org"], mail.from
     assert_match user.name,               mail.body.encoded
     assert_match user.activation_token,   mail.body.encoded
@@ -16,9 +16,9 @@ class UserMailerTest < ActionMailer::TestCase
   test "password_reset" do
     user = artists(:michael)
     user.activation_token = ApplicationController.new_token
-    mail = UserMailer.password_reset(user)
+    mail = UserMailer.password_reset("artists", user)
     assert_equal "Firefly Art Grant Password Reset", mail.subject
-    assert_equal ["to@example.org"], mail.to
+    assert_equal ["michael@example.com"], mail.to
     assert_equal ["grants@fireflyartscollective.org"], mail.from
     # assert_match user.name,               mail.body.encoded
     # assert_match user.activation_token,   mail.body.encoded

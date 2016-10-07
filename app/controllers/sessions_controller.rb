@@ -2,10 +2,15 @@ class SessionsController < ApplicationController
   def create_artist
     if(!params[:session][:email].present? || !params[:session][:password].present?)
       render "login_failure"
-    return
+      return
     end
-
+    
     artist = Artist.find_by_email(params[:session][:email])
+    if !artist.activated 
+      render "login_unactivated"
+      return
+    end
+    
     if artist && artist.authenticate(params[:session][:password])
       session[:artist_id] = artist.id
       redirect_to :controller => "artists", :action => "index"

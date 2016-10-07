@@ -31,8 +31,9 @@ class ArtistsController < ApplicationController
       artist_survey.save
       
       # Send email!
-      UserMailer.account_activation(@artist).deliver
+      UserMailer.account_activation("artists", @artist).deliver
 
+      # TODO: update success page to mention checking email
       render "signup_success"
     else
       render "signup_failure"

@@ -5,7 +5,7 @@ class UserMailerPreview < ActionMailer::Preview
   def account_activation
     user = Artist.first
     user.activation_token = ApplicationController.new_token
-    UserMailer.account_activation(user)
+    UserMailer.account_activation("artists", user)
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/user_mailer/password_reset
