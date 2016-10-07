@@ -6,7 +6,6 @@ class UserMailer < ActionMailer::Base
   #
   #   en.user_mailer.account_activation.subject
   #
-  # TODO: add type parameter
   def account_activation(type, user)
     @user = user
     @type = type
@@ -19,7 +18,6 @@ class UserMailer < ActionMailer::Base
   #
   #   en.user_mailer.password_reset.subject
   #
-  # TODO: add type parameter
   def password_reset(type, user)
     @user = user
     @type = type

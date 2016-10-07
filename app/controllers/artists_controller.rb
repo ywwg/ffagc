@@ -33,7 +33,6 @@ class ArtistsController < ApplicationController
       # Send email!
       UserMailer.account_activation("artists", @artist).deliver
 
-      # TODO: update success page to mention checking email
       render "signup_success"
     else
       render "signup_failure"
