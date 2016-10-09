@@ -20,7 +20,7 @@ class PasswordResetsController < ApplicationController
       @user.create_reset_digest
       @user.send_password_reset_email
       flash.now[:info] = "Email sent with password reset instructions"
-      render 'success'
+      render 'sent'
     else
       flash.now[:danger] = "Email address not found"
       render 'failure'
@@ -48,17 +48,9 @@ class PasswordResetsController < ApplicationController
       flash.now[:danger] = "password can't be empty"
       render 'edit', :type => @type, :email => params[:email] 
     elsif @user.update_attributes(user_params(t))
-      if @type == "artists"
-        session[:artist_id] = @user.id
-      elsif @type == "voters"
-        session[:voter_id] = @user.id
-      elsif @type == "admins"
-        session[:admin_id] = @user.id
-      end
-      flash.now[:success] = "Password has been reset."
-      redirect_to "/" + @type
+      render 'success'
     else
-      flash.now[:danger] = "password mismatch or unknown error"
+      flash.now[:danger] = "Password mismatch or unknown error"
       render 'edit', :type => @type, :email => params[:email]
     end
   end
@@ -87,6 +79,7 @@ class PasswordResetsController < ApplicationController
   # TODO: check that this makes sense
   def valid_user
     unless @user && @user.activated?
+      flash.now[:danger] = "Invalid or unactivated user"
       render 'failure'
     end
   end

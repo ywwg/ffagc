@@ -1,0 +1,11 @@
+<div class="container">
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Password Reset Email Sent</h1>
+
+  Check <%= @user.email %> for a link to set your new password. 
+
+  <br /><br />
+  If you don't see the email, please check your spam folder or contact <a href="mailto:grants@fireflyartscollective.org">grants@fireflyartscollective.org</a> for help.
+  <br />
+
+  <%= link_to "Log In", :controller => @type, :action => "index" %>
+</div>

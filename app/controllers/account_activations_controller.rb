@@ -19,11 +19,11 @@ class AccountActivationsController < ApplicationController
         render "failure"
       end
     else
-      # XXX: This can happen if user is already logged in
-      logger.debug "nope"
-      # flash[:danger] = "Invalid activation link"
-      #redirect_to root_url
-      render "failure"
+      if user.activated? 
+        render "success"
+      else
+        render "failure"
+      end
     end
   end
   

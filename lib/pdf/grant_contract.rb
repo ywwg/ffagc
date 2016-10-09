@@ -61,7 +61,6 @@ class GrantContract < Prawn::Document
         size = 12
         style = :bold
       elsif tok[0] == "[[SIGNATURES]]"
-        puts "so we're here"
         write_signatures
         return
       elsif tok[0] == "[[PAGEBREAK]]"

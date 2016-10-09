@@ -1,0 +1,5 @@
+<div class="container">
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Password Reset</h1>
+
+  <%= @user.name %>, your password has been successfully reset.  Go ahead and <%= link_to "Log In!", :controller => @type, :action => "index" %>
+</div>

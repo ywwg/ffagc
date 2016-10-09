@@ -141,15 +141,16 @@
   <% elsif !admin_exists? %>
   <%= link_to "Create", :controller => "admins", :action => "signup" %> initial admin account
   <% else %>
-  <%= form_tag(controller: 'sessions', action:'create_admin') do %>
-  <h2>Sign in:</h2>
-  <fieldset>
-    <%= text_field :session, :email, :placeholder => "Email Address" %>
-    <br />
-    <%= password_field :session, :password, :placeholder => "Password" %>
-    <br />
-    <%= submit_tag("Sign In", class: "button") %>
-    </formset>
-    <% end %>
+    <%= form_tag(controller: 'sessions', action:'create_admin') do %>
+    <h2>Sign in:</h2>
+    <fieldset>
+      <%= text_field :session, :email, :placeholder => "Email Address" %>
+      <br />
+      <%= password_field :session, :password, :placeholder => "Password" %>
+      <br />
+      <%= submit_tag("Sign In", class: "button") %>
+      </formset>
+      <% end %>
+      <%= link_to "(forgot password)", new_password_reset_path(type: "admins") %>
     <% end %>
 </div>
