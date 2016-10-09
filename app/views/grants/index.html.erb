@@ -37,8 +37,8 @@
   <script>
       function numericFilter(txb) {
           txb.value = txb.value.replace(/[^\0-9]/ig, "");
-          if(txb.value > 1000) {
-              txb.value = 1000;
+          if(txb.value > 10000) {
+              txb.value = 10000;
           }
       }
 

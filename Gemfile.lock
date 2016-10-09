@@ -53,6 +53,9 @@ GEM
     coffee-script-source (1.10.0)
     erubis (2.7.0)
     execjs (2.7.0)
+    file_validators (2.1.0)
+      activemodel (>= 3.0)
+      mime-types (>= 1.0)
     formtastic (3.1.4)
       actionpack (>= 3.2.13)
     hike (1.2.3)
@@ -145,6 +148,7 @@ DEPENDENCIES
   carrierwave
   coffee-rails (~> 4.0.0)
   execjs
+  file_validators
   formtastic
   jbuilder (~> 2.0)
   jquery-rails

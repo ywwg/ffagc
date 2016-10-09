@@ -52,8 +52,11 @@ gem 'judge', '~> 2.0.5'
 # gem 'judge-formtastic'
 
 gem 'carrierwave'
-
+# pdf generation
 gem 'prawn'
 
+# logging
 gem 'log4r'
 
+# file upload size validation
+gem 'file_validators'

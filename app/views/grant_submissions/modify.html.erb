@@ -8,6 +8,8 @@
         <%= f.input :name, :label => "Name of Piece", :required => false, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_grant_id">Grant</label>
+          <%# NOTE that we allow all grant types regardless of what is open for voting.  This allows
+              artists to move their grant from one type to another with minimal changes %>
           <%= collection_select(:grant_submission, :grant_id, Grant.all, :id, :name, :include_blank => "(select a grant)") %>
         </li>
   
@@ -17,7 +19,8 @@
           <label class="label" for="grant_submission_proposal">Current Application PDF:</label>
           <input type="test" disabled="true" value="<%= @grant_submission.proposal_identifier %>"/><br/><br/>
           <label class="label" for="grant_submission_proposal">(Optional) Replace PDF:</label>
-          <%= f.file_field :proposal, :required => false, :validate => true %>
+          <%# Keep extensions in sync with uploader %>
+          <%= f.file_field :proposal, :required => false, :validate => true, :accept => ".pdf,.doc,.docx,.txt,.md" %>
         </li>
         
         <% if admin_logged_in?%>

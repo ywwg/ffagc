@@ -14,7 +14,8 @@
   
         <li class="string input required stringish" id="grant_submission_name_input">
             <label class="label" for="grant_submission_proposal">Application PDF<abbr title="required">*</abbr></label>
-            <%= f.file_field :proposal, :required => true, :validate => true, :style => "margin-left:-5px" %>
+            <%# Keep extensions in sync with uploader %>
+            <%= f.file_field :proposal, :required => true, :validate => true, :style => "margin-left:-5px", :accept => ".pdf,.doc,.docx,.txt,.md" %>
         </li>
   
         <br /><br />
