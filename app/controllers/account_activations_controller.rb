@@ -11,7 +11,7 @@ class AccountActivationsController < ApplicationController
     end
     
     if user && !user.activated? && ApplicationController.activate_succeed?(user, params[:id])
-      user.update_attribute(:activated,    true)
+      user.update_attribute(:activated, true)
       user.update_attribute(:activated_at, Time.zone.now)
       if user.save
         render "success"

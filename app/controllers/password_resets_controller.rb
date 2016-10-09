@@ -45,9 +45,11 @@ class PasswordResetsController < ApplicationController
     end
     
     if p[:password].empty?
-      flash.now[:danger] = "password can't be empty"
+      flash.now[:danger] = "Password can't be empty"
       render 'edit', :type => @type, :email => params[:email] 
     elsif @user.update_attributes(user_params(t))
+      # Clear out the reset digest so it can't be used again.
+      @user.update_attribute(:reset_digest, "")
       render 'success'
     else
       flash.now[:danger] = "Password mismatch or unknown error"
@@ -78,9 +80,18 @@ class PasswordResetsController < ApplicationController
   # Confirms a valid user.
   # TODO: check that this makes sense
   def valid_user
-    unless @user && @user.activated?
+    if !@user || !@user.activated?
       flash.now[:danger] = "Invalid or unactivated user"
       render 'failure'
+    end
+    begin
+      if !BCrypt::Password.new(@user.reset_digest).is_password?(params[:id])
+        flash.now[:danger] = "Invalid or already-used reset id."
+        render 'failure'
+      end
+    rescue
+      flash.now[:danger] = "Invalid or already-used reset id."
+        render 'failure'
     end
   end
   
