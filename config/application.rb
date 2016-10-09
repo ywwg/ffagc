@@ -26,5 +26,10 @@ module Ffagc
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.autoload_paths += Dir["#{config.root}/lib/pdf"]
+    
+    # Disable "field_with_errors" magic
+    config.action_view.field_error_proc = Proc.new { |html_tag, instance| 
+      html_tag
+    }
   end
 end
