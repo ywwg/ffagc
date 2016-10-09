@@ -3,14 +3,12 @@ class AccountActivationsController < ApplicationController
     @type = params[:type]
     
     if @type == "artists"
-      user = Artist.find_by(email: params[:email])
+      user = Artist.find_by(email: params[:email].downcase)
     elsif @type == "voters"
-      user = Voter.find_by(email: params[:email])
+      user = Voter.find_by(email: params[:email].downcase)
     elsif @type == "admins"
-      user = Admin.find_by(email: params[:email])
+      user = Admin.find_by(email: params[:email].downcase)
     end
-    
-    logger.debug "here's the user! #{user.inspect}"
     
     if user && !user.activated? && ApplicationController.activate_succeed?(user, params[:id])
       user.update_attribute(:activated,    true)
@@ -20,10 +18,6 @@ class AccountActivationsController < ApplicationController
       else
         render "failure"
       end
-      # flash[:success] = "Account activated!"
-      #redirect_to user
-      
-      # show a success thing
     else
       # XXX: This can happen if user is already logged in
       logger.debug "nope"

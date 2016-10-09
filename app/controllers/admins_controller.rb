@@ -16,17 +16,21 @@ class AdminsController < ApplicationController
   
   def create
     # if there is no admin, go ahead and create the account (initial config)
+    # even if no admin is logged in.
     if admin_exists? && !current_admin
       redirect_to "/"
+      return
+    end
+
+    if Admin.exists?(email: admin_params[:email].downcase)
+      render "signup_exists"
       return
     end
     
     @admin = Admin.new(admin_params)
     @admin.email = @admin.email.downcase
-    if Admin.where(email: @admin.email).take
-      render "signup_exists"
-      return
-    end
+    # Auto-activate admins
+    @admin.activated = true
     
     if @admin.save
       session[:admin_id] = @admin.id

@@ -31,6 +31,11 @@ class SessionsController < ApplicationController
     end
 
     voter = Voter.find_by_email(params[:session][:email])
+    if !voter.activated 
+      render "login_unactivated"
+      return
+    end
+    
     if voter && voter.authenticate(params[:session][:password])
       session[:voter_id] = voter.id
       redirect_to :controller => "voters", :action => "index"
@@ -51,6 +56,14 @@ class SessionsController < ApplicationController
     end
 
     admin = Admin.find_by_email(params[:session][:email])
+    # Although admins are auto-activated, one could unactivate an admin account
+    # to prevent future logins (doesn't protect against admins with persisting
+    # session cookies.)
+    if !admin.activated 
+      render "login_unactivated"
+      return
+    end
+    
     if admin && admin.authenticate(params[:session][:password])
       session[:admin_id] = admin.id
       redirect_to :controller => "admins", :action => "index"

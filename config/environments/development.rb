@@ -35,8 +35,27 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
   
+  # TEST settings
+  # config.action_mailer.raise_delivery_errors = true
+  # config.action_mailer.delivery_method = :test
+  # host = 'localhost:3000' # Don't use this literally; use your local dev host instead
+  # config.action_mailer.default_url_options = { host: host, protocol: 'http' }
+  
+  # ACTUAL DEV EMAIL settings
+  config.log_level = :debug
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :test
-  host = 'localhost:3000' # Don't use this literally; use your local dev host instead
-  config.action_mailer.default_url_options = { host: host, protocol: 'https' }
+  config.action_mailer.perform_deliveries = true
+ 
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address => "newton.cx",
+    :port => "465",
+    :domain => "newton.cx",
+    :user_name => "owen",
+    :password => ENV['password'],
+    :authentication => "login",
+    :ssl => true,
+  } 
 end

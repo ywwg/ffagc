@@ -17,5 +17,4 @@ class Artist < ActiveRecord::Base
     self.activation_token = ApplicationController.new_token
     self.activation_digest = ApplicationController.digest(activation_token)
   end
-  
 end

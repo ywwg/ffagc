@@ -18,20 +18,28 @@ class ArtistsController < ApplicationController
   end
 
   def create
+    if Artist.exists?(email: artist_params[:email].downcase)
+      render "signup_exists"
+      return
+    end
+    
     @artist = Artist.new(artist_params)
     @artist.email = @artist.email.downcase
 
     if @artist.save
-      # do not log in, not activated yet
-      #session[:artist_id] = @artist.id
-
       # save optional survey
       artist_survey = ArtistSurvey.new(artist_survey_params)
       artist_survey.artist_id = @artist.id
       artist_survey.save
       
       # Send email!
-      UserMailer.account_activation("artists", @artist).deliver
+      begin
+        # Will need to be replaced with deliver_now
+        UserMailer.account_activation("artists", @artist).deliver!
+      rescue
+        flash[:notice] = "Error sending email confirmation"
+        return "signup_failure"
+      end
 
       render "signup_success"
     else

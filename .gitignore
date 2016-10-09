@@ -29,3 +29,6 @@ config/secrets.yml
 /vendor/assets/bower_components
 *.bowerrc
 bower.json
+
+# Email passwords (not even working, though)
+config/initializers/smtp_secret.rb

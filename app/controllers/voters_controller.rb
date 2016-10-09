@@ -17,14 +17,14 @@ class VotersController < ApplicationController
     end
     
     def create
-      @voter = Voter.new(voter_params)
-      
-      @voter.email = @voter.email.downcase
-
-      if Voter.where(email: @voter.email).take
+      if Voter.exists?(email: voter_params[:email.downcase])
         render "signup_exists"
         return
       end
+      
+      @voter = Voter.new(voter_params)
+      
+      @voter.email = @voter.email.downcase
       
       if @voter.save
         session[:voter_id] = @voter.id # log in
@@ -33,6 +33,15 @@ class VotersController < ApplicationController
         voter_survey = VoterSurvey.new(voter_survey_params)
         voter_survey.voter_id = @voter.id
         voter_survey.save
+        
+        # Send email
+        begin
+          # Will need to be replaced with deliver_now
+          UserMailer.account_activation("voters", @voter).deliver!
+        rescue
+          flash[:notice] = "Error sending email confirmation"
+          return "signup_failure"
+        end
 
         render "signup_success" 
       else

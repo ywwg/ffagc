@@ -2,7 +2,7 @@
     <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Failure</h1>
     <h1>Signup failed!</h1>
 
-    This email address (<%= @voter.email %>) already exists in our system!
+    This email address (<%= params[:email] %>) already exists in our system!
 
     <br /><br />
 
