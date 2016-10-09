@@ -83,6 +83,7 @@ class PasswordResetsController < ApplicationController
     if !@user || !@user.activated?
       flash.now[:danger] = "Invalid or unactivated user"
       render 'failure'
+      return
     end
     begin
       if !BCrypt::Password.new(@user.reset_digest).is_password?(params[:id])
