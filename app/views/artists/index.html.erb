@@ -66,15 +66,14 @@
 	<% else %>
 		Don't have an account yet?
 	    <%= link_to "Register as an artist", :controller => "artists", :action => "signup" %> to access the grant applications.
-	<h2>Sign in:</h2>
-	<fieldset>
-	<%= form_tag(controller: 'sessions', action:'create_artist') do %>
-	  <%= text_field :session, :email, :placeholder => "Email Address", :style => "margin-bottom: 10px" %><br />
-	  <%= password_field :session, :password, :placeholder => "Password" %>
-	  <br /><br />
-	  <%= submit_tag("Sign in", class: "button")%>
-	<% end %>
-
+  	<h2>Sign in:</h2>
+  	<fieldset>
+  	<%= form_tag(controller: 'sessions', action:'create_artist') do %>
+  	  <%= text_field :session, :email, :placeholder => "Email Address", :style => "margin-bottom: 10px" %><br />
+  	  <%= password_field :session, :password, :placeholder => "Password" %>
+  	  <br /><br />
+  	  <%= submit_tag("Sign in", class: "button")%>
+  	<% end %>
 	<% end %>
 	</fieldset>
 </div>

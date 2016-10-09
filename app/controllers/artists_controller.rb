@@ -48,7 +48,7 @@ class ArtistsController < ApplicationController
       render "signup_failure"
     end
   end
-
+  
   def index
     if !artist_logged_in?
         return
