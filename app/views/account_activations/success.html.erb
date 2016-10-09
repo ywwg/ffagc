@@ -1,7 +1,13 @@
 <div class="container">
-    <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Success!</h1>
+    <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Email Address Confirmed</h1>
 
-    You have successfully activated your account, you may now log in!
+    <% if @type == "voters"%>
+      You have successfully confirmed your email address.  Please wait while we
+      review your application, and then we'll send you an email with further details.
+    <% else %>
+      You have successfully activated your account, you may now log in!
+    <% end %>
+    <br/>
 
     <br /><br />
 

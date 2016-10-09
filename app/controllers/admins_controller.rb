@@ -23,7 +23,8 @@ class AdminsController < ApplicationController
     end
 
     if Admin.exists?(email: admin_params[:email].downcase)
-      render "signup_exists"
+      flash[:notice] = "The email address #{admin_params[:email.downcase]} already exists in our system"
+      render "signup_failure"
       return
     end
     

@@ -54,7 +54,7 @@ Rails.application.configure do
     :port => "465",
     :domain => "newton.cx",
     :user_name => "owen",
-    :password => ENV['password'],
+    :password => ENV['PASSWORD'],
     :authentication => "login",
     :ssl => true,
   } 

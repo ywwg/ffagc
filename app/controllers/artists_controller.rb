@@ -19,7 +19,8 @@ class ArtistsController < ApplicationController
 
   def create
     if Artist.exists?(email: artist_params[:email].downcase)
-      render "signup_exists"
+      flash[:notice] = "The email address #{artist_params[:email.downcase]} already exists in our system"
+      render "signup_failure"
       return
     end
     
@@ -38,7 +39,8 @@ class ArtistsController < ApplicationController
         UserMailer.account_activation("artists", @artist).deliver!
       rescue
         flash[:notice] = "Error sending email confirmation"
-        return "signup_failure"
+        render "signup_failure"
+        return
       end
 
       render "signup_success"

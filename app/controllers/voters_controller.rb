@@ -18,7 +18,8 @@ class VotersController < ApplicationController
     
     def create
       if Voter.exists?(email: voter_params[:email.downcase])
-        render "signup_exists"
+        flash[:notice] = "The email address #{voter_params[:email.downcase]} already exists in our system" 
+        render "signup_failure"
         return
       end
       
@@ -27,8 +28,6 @@ class VotersController < ApplicationController
       @voter.email = @voter.email.downcase
       
       if @voter.save
-        session[:voter_id] = @voter.id # log in
-
         # save survey
         voter_survey = VoterSurvey.new(voter_survey_params)
         voter_survey.voter_id = @voter.id
@@ -40,15 +39,14 @@ class VotersController < ApplicationController
           UserMailer.account_activation("voters", @voter).deliver!
         rescue
           flash[:notice] = "Error sending email confirmation"
-          return "signup_failure"
+          render "signup_failure"
+          return
         end
 
         render "signup_success" 
       else
         render "signup_failure"
       end
-      # render plain: params[:artist].inspect
-      # render "signup_success"
     end
     
     def index
