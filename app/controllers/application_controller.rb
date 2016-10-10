@@ -3,7 +3,10 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_filter :artist_logged_in?, :voter_logged_in? #what does this do?
+  def event_year
+    Rails.configuration.event_year
+  end
+  helper_method :event_year
   
   private
   # Returns a list of the ids of grants which are currently active for submitting.

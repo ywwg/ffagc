@@ -11,7 +11,7 @@ class GrantContract < Prawn::Document
   	@date = DateTime.current.strftime("%Y-%m-%d")
   	
   	# TODO: These values may need to live elsewhere...
-  	@year = "2017"
+  	@year = event_year
   	@install_day = "Friday, July 7, 2017"
   	
   	begin

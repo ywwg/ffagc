@@ -1,7 +1,7 @@
 <div class="container">
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Voting Committee Signup</h1>
 
-If you were on the committee in previous years, thank you for being so awesome! <br /><br /> Also, you <b>will</b> need to sign up again for 2016. 
+If you were on the committee in previous years, thank you for being so awesome! <br /><br /> Also, you <b>will</b> need to sign up again for <%= event_year %>. 
 <br />
 
   <%= semantic_form_for @voter, :html => { :onsubmit => 'return validate();'} do |f| %>
@@ -21,7 +21,7 @@ If you were on the committee in previous years, thank you for being so awesome! 
         <%= f.inputs do %>
             <%= check_box :survey, :has_attended_firefly, :style => "width: 50px;" %> I have attended at least one previous Firefly
             <br /><br />
-            <%= check_box :survey, :not_applying_this_year, :style => "width: 50px;" %> I am NOT applying for a Firefly Art Grant in 2016
+            <%= check_box :survey, :not_applying_this_year, :style => "width: 50px;" %> I am NOT applying for a Firefly Art Grant in <%= event_year %>
             <br /><br />
             <%= check_box :survey, :will_read, :style => "width: 50px;" %> I commit to reading and considering > 35 applications (~4-6 hours of brain time)
             <br /><br />

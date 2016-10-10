@@ -31,5 +31,8 @@ module Ffagc
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| 
       html_tag
     }
+    
+    # The year that the event will take place
+    config.event_year = "2017"
   end
 end
