@@ -92,7 +92,7 @@ class PasswordResetsController < ApplicationController
       end
     rescue
       flash.now[:danger] = "Invalid or already-used reset id."
-        render 'failure'
+      render 'failure'
     end
   end
   

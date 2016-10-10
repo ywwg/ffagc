@@ -19,8 +19,15 @@ need to create config/secrets.yml with the form:
     
     production:
       secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
-  
+      
 use rake secret to generate some hex
+
+if you plan to send email, you'll need to create config/initializers/smtp_secret.rb
+with:
+    ENV['PASSWORD']="your smtp password"
+    
+and edit config/environments/*.rb to include your smtp server information.
+
 
 init the db with:
 
