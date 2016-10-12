@@ -14,5 +14,11 @@ class UserMailerPreview < ActionMailer::Preview
     user.reset_token = ApplicationController.new_token
     UserMailer.password_reset("artists", user)
   end
+  
+  # Preview this email at http://localhost:3000/rails/mailers/user_mailer/voter_verified
+  def voter_verified
+    user = Voter.first
+    UserMailer.voter_verified(user, "2017")
+  end
 
 end

@@ -40,7 +40,9 @@
       <th>name</th>
       <th>email</th>
       <th>verified</th>
-      <th></th>
+      <th><form name="send_email_form">
+          send email when verifying <input type="checkbox" id="send_email_checkbox" checked="true">
+          </form></th>
     </tr>
     <% @voters.each do |v| %>
     <tr>
@@ -49,10 +51,11 @@
       <td><%= v['verified'] %></td>
       <td>
         <% if v['verified'] %>
-          <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %></td>
+          <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %>
         <% else %>
-          <%= button_to "Verify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 1 %></td>
+          <%= button_to "Verify", '#', :onclick => "do_verify(#{v['id']});" %>
         <% end %>  
+      </td>
     </tr>
     <% end %>
   </table>
@@ -151,6 +154,17 @@
       <%= submit_tag("Sign In", class: "button") %>
       </formset>
       <% end %>
-      <%= link_to "(forgot password)", new_password_reset_path(type: "admins") %>
-    <% end %>
+    <%= link_to "(forgot password)", new_password_reset_path(type: "admins") %>
+  <% end %>
+    
+    
+  <script>
+    function do_verify(id) {
+      var send_email = document.getElementById('send_email_checkbox').checked;
+      var admin_js = '<%= raw @admin.to_json %>';
+      $.post("/admins/verify?id=" + id + "&verify=1&send_email=" + send_email, 
+          {"admin": admin_js});
+      return false;
+    }
+  </script>
 </div>

@@ -24,4 +24,11 @@ class UserMailer < ActionMailer::Base
 
     mail to: user.email, subject: "Firefly Art Grant Password Reset"
   end
+  
+  def voter_verified(user, year)
+    @user = user
+    @year = year
+    
+    mail to: @user.email, subject: "Firefly Art Grant Voter Account Verified"
+  end
 end

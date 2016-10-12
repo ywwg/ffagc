@@ -53,7 +53,13 @@ class AdminsController < ApplicationController
     
     voter = Voter.find(params[:id])
     voter.verified = params[:verify]
-    voter.save    
+    if voter.save
+      send_email = params[:send_email] == "true"
+      if send_email
+        # Will need to be replaced with deliver_now
+        UserMailer.voter_verified(voter, event_year).deliver!
+      end
+    end
     
     redirect_to action: "index"
   end

@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   get 'voters/signup' => 'voters#signup'
   post 'voters/signup' => 'voters#create'
 
+  get 'admins/index'
+  post 'admins/index' => 'admins#index'
   get 'admins/signup' => 'admins#signup'
   post 'admins/signup' => 'admins#create'
   
