@@ -125,7 +125,12 @@
       dataType: "JSON", // you want a difference between normal and ajax-calls, and json is standard
     })
     .done(function(){
-      msg = success_messages[Math.floor(Math.random() * success_messages.length)];
+      if (saved_messages_shown < wacky_message_threshold) {
+        msg = "saved";
+        saved_messages_shown++;
+      } else {
+        msg = success_messages[Math.floor(Math.random() * success_messages.length)];
+      }
       flash_element(id, msg);
     })
     .fail(function(){
@@ -154,6 +159,10 @@
     });
   }
   
-  var success_messages = ["saved", "ok", "yup", "good", "sweet", "crushed"];
+  var success_messages = ["saved", "ok", "yup", "love it", "sweet", "crushed",
+                          "right", "swell", "sure"];
+
+  var saved_messages_shown = 0;
+  var wacky_message_threshold = 3;
 	</script>
 </div>
