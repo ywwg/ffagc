@@ -7,10 +7,13 @@
         <%= f.input :name, :label => "Name of Piece", :required => true, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_grant_id">Grant<abbr title="required">*</abbr></label>
-          <%= collection_select(:grant_submission, :grant_id, Grant.where(id: active_submit_grants), :id, :name, :include_blank => "(select a grant)") %>
+          <%= collection_select(:grant_submission, :grant_id,
+                  Grant.where(id: active_submit_grants), :id, :name, 
+                  {:include_blank => "(select a grant)"}, 
+                  { :onchange => "numericFilter();"}) %>
         </li>
   
-        <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
+        <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }  %>
   
         <li class="string input required stringish" id="grant_submission_name_input">
             <label class="label" for="grant_submission_proposal">Application PDF<abbr title="required">*</abbr></label>
@@ -35,61 +38,83 @@
   <% end %>
 
   <script>
-      function numericFilter(txb) {
-          txb.value = txb.value.replace(/[^\0-9]/ig, "");
-          if(txb.value > 1000) {
-              txb.value = 1000;
-          }
+    // http://stackoverflow.com/questions/574941/best-way-to-track-onchange-as-you-type-in-input-type-text/26202266#26202266
+    onload = function () {
+       var e = document.getElementById('grant_submission_requested_funding_dollars');
+       e.oninput = myHandler;
+       e.onpropertychange = e.oninput; // for IE8
+       // e.onchange = e.oninput; // FF needs this in <select><option>...
+    };
+
+    function numericFilter() {
+      var txb = document.getElementById('grant_submission_requested_funding_dollars')
+      var max_fund_json = '<%= raw grant_max_funding_dollars_json %>';
+      var grant_id = document.getElementById("grant_submission_grant_id").value;
+      // If they haven't selected a grant, just go with 1000
+      var max_funding = 1000;
+      if (grant_id !== "") {
+        var max_fund_ob = JSON.parse(max_fund_json);
+        // I am bad at javascript.
+        for (var i = 0; i < max_fund_ob.length; i++) {
+          if (max_fund_ob[i].id == parseInt(grant_id)) {
+            max_funding = max_fund_ob[i].max_funding_dollars;
+            break;
+          } 
+        }
+      } 
+      txb.value = txb.value.replace(/[^\0-9]/ig, "");
+      if(parseInt(txb.value) > max_funding) {
+        txb.value = max_funding;
       }
-
-  function validate() {
-    errors = 0;
-
-    //round decimals in funding amounts -- whole dollars only
-    var requested_funding_dollars = document.getElementById('grant_submission_requested_funding_dollars').value;
-    var requested_funding_dollars_num = parseInt(requested_funding_dollars).toFixed(0);
-    document.getElementById('grant_submission_requested_funding_dollars').value = requested_funding_dollars_num.toString();
-
-    judge.validate(document.getElementById('grant_submission_name'), {
-      valid: function(element) {
-        element.style.border = '1px solid green';
-      },
-      invalid: function(element, messages) {
-        element.style.border = '1px solid red';
-        alert('name error: ' + messages.join(','));
-        errors++;
-      }
-    });
-
-    if(document.getElementById("grant_submission_grant_id").value != "") {
-      document.getElementById("grant_submission_grant_id").style.border = '1px solid green';
-    } else {
-      errors++;
-      alert('error: please select a grant to apply for')
-      document.getElementById("grant_submission_grant_id").style.border = '1px solid red';
     }
 
-    judge.validate(document.getElementById('grant_submission_requested_funding_dollars'), {
-      valid: function(element) {
-        element.style.border = '1px solid green';
-      },
-      invalid: function(element, messages) {
-        element.style.border = '1px solid red';
-        alert('requested funding error: ' + messages.join(','));
+    function validate() {
+      errors = 0;
+  
+      //round decimals in funding amounts -- whole dollars only
+      var requested_funding_dollars = document.getElementById('grant_submission_requested_funding_dollars').value;
+      var requested_funding_dollars_num = parseInt(requested_funding_dollars).toFixed(0);
+      document.getElementById('grant_submission_requested_funding_dollars').value = requested_funding_dollars_num.toString();
+  
+      judge.validate(document.getElementById('grant_submission_name'), {
+        valid: function(element) {
+          element.style.border = '1px solid green';
+        },
+        invalid: function(element, messages) {
+          element.style.border = '1px solid red';
+          alert('name error: ' + messages.join(','));
+          errors++;
+        }
+      });
+  
+      if(document.getElementById("grant_submission_grant_id").value != "") {
+        document.getElementById("grant_submission_grant_id").style.border = '1px solid green';
+      } else {
         errors++;
+        alert('error: please select a grant to apply for')
+        document.getElementById("grant_submission_grant_id").style.border = '1px solid red';
       }
-    });
-
-    if(document.getElementById("grant_submission_proposal").value != "") {
-      document.getElementById("grant_submission_proposal").style.border = '1px solid green';
-    } else {
-      errors++;
-      alert('error: please select your application PDF')
-      document.getElementById("grant_submission_proposal").style.border = '1px solid red';
+  
+      judge.validate(document.getElementById('grant_submission_requested_funding_dollars'), {
+        valid: function(element) {
+          element.style.border = '1px solid green';
+        },
+        invalid: function(element, messages) {
+          element.style.border = '1px solid red';
+          alert('requested funding error: ' + messages.join(','));
+          errors++;
+        }
+      });
+  
+      if(document.getElementById("grant_submission_proposal").value != "") {
+        document.getElementById("grant_submission_proposal").style.border = '1px solid green';
+      } else {
+        errors++;
+        alert('error: please select your application PDF')
+        document.getElementById("grant_submission_proposal").style.border = '1px solid red';
+      }
+  
+      return errors===0;
     }
-
-    return errors===0;
-  }
-
   </script>
 </div>

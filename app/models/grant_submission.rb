@@ -6,8 +6,8 @@ class GrantSubmission < ActiveRecord::Base
 
   validates :grant_id, :presence => true
 
-  #temporary hack : needs to be based on selected grant, not hardcoded here
-  validates :requested_funding_dollars, :presence => true, :numericality => {:greater_than => 0, :less_than => 1001, :only_integer => true}
+  # Max value depends on the grant, so don't constrain here.
+  validates :requested_funding_dollars, :presence => true, :numericality => {:greater_than => 0, :only_integer => true}
 
   # This is supposed to check size before upload but I don't think it does.
   # It does validate after upload, though, so it's not DDOS-proof but it will

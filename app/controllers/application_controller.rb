@@ -49,6 +49,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :grant_submission_funded?
   
+  def grant_max_funding_dollars_json
+    Grant.all.select(:id, :max_funding_dollars).to_json
+  end
+  helper_method :grant_max_funding_dollars_json
+  
   def voter_verified?(id)
     return Voter.find(id).verified
   end
