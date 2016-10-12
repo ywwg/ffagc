@@ -41,6 +41,7 @@
     				<th>T</th>
     				<th>C</th>
     				<th>F</th>
+    				<th></th>
     			</tr>
     			<% @grant_submissions_assigned.each do |gs| %>
     				<tr>
@@ -50,7 +51,7 @@
     					<td>$<%= gs.requested_funding_dollars %></td>
     					<td><a href="<%= gs.proposal %>">Download</a></td>
     					<td>
-    						<select name="t[<%= gs.id %>]" onchange="ajax_submit()">
+    						<select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
     							<option></option>
     							<option <%= @votes[gs.id].score_t == 0 ? "selected" : "" %>>0</option>
     							<option <%= @votes[gs.id].score_t == 1 ? "selected" : "" %>>1</option>
@@ -58,7 +59,7 @@
     						</select>
     					</td>
     					<td>
-    						<select name="c[<%= gs.id %>]" onchange="ajax_submit()">
+    						<select id="c[<%= gs.id %>]" name="c[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
     							<option></option>
     							<option <%= @votes[gs.id].score_c == 0 ? "selected" : "" %>>0</option>
     							<option <%= @votes[gs.id].score_c == 1 ? "selected" : "" %>>1</option>
@@ -66,13 +67,14 @@
     						</select>
     					</td>
     					<td>
-    						<select name="f[<%= gs.id %>]" onchange="ajax_submit()">
+    						<select id="f[<%= gs.id %>]" name="f[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
     							<option></option>
     							<option <%= @votes[gs.id].score_f == 0 ? "selected" : "" %>>0</option>
     							<option <%= @votes[gs.id].score_f == 1 ? "selected" : "" %>>1</option>
     							<option <%= @votes[gs.id].score_f == 2 ? "selected" : "" %>>2</option>
     						</select>
     					</td>
+    					<td><div id="save<%= gs.id %>" style="width: 60px"></div></td>
     				</tr>
     			<% end %>
     		</table>
@@ -114,17 +116,44 @@
 	<% end %>
 	
 	<script>
-	function ajax_submit() {  
+	function ajax_submit(id) {  
     var valuesToSubmit = $('form').serialize();
     $.ajax({
-        type: "POST",
-        url: "/voters/vote", //submits it to the given url of the form
-        data: valuesToSubmit,
-        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-    }).success(function(json){
-        console.log("success", json);
+      type: "POST",
+      url: "/voters/vote", //submits it to the given url of the form
+      data: valuesToSubmit,
+      dataType: "JSON", // you want a difference between normal and ajax-calls, and json is standard
+    })
+    .done(function(){
+      msg = success_messages[Math.floor(Math.random() * success_messages.length)];
+      flash_element(id, msg);
+    })
+    .fail(function(){
+      flash_element(id, "failed");
     });
     return false; // prevents normal behaviour
   }
+  
+  function flash_element(id, msg) {
+    $(id).css({ opacity: 0.0 });
+    $(id).text(msg);
+    $(id).animate({
+      opacity: 1.0,
+    }, {
+      duration: 200,
+      complete: function() {
+        $(id).animate({
+          opacity: 0.0,
+        }, {
+          duration: 200,
+          complete: function() {
+            $(id).text("");
+          }
+        });
+      }
+    });
+  }
+  
+  var success_messages = ["saved", "ok", "yup", "good", "sweet", "crushed"];
 	</script>
 </div>
