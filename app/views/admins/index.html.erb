@@ -41,7 +41,7 @@
       <th>email</th>
       <th>verified</th>
       <th><form name="send_email_form">
-          send email when verifying <input type="checkbox" id="send_email_checkbox" checked="true">
+          send email when verifying <input type="checkbox" id="send_verify_email_checkbox" checked="true">
           </form></th>
     </tr>
     <% @voters.each do |v| %>
@@ -94,7 +94,7 @@
       <th>Decision Finalized</th>
       <th>Amount</th>
       <th></th>
-      <th><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
+      <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
     </tr>
 
     <% @grant_submissions.each do |gs| %>
@@ -117,8 +117,10 @@
     </tr>
     <% end %>
     <tr>
-      <td colspan="12" align="right">Funded / not funded emails will be sent to the selected grants</td>
-      <td><%= button_to "Send Emails", :controller => "admins", :action => "send_fund_emails" %></td>
+      <td colspan="12" align="right"><form name="send_email_form">
+          Send email when confirming <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
+          </form></td>
+      <td align="center"><%= button_to "Confirm", '#', :onclick => "confirm_selected(event);" %></td>
   </table>
   <br>
   <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">
@@ -169,7 +171,7 @@
   <script>
     function do_verify(event, id) {
       event.preventDefault();
-      var send_email = document.getElementById('send_email_checkbox').checked;
+      var send_email = document.getElementById('send_verify_email_checkbox').checked;
       var admin_js = '<%= raw @admin.to_json %>';
       $.post("/admins/verify?id=" + id + "&verify=1&send_email=" + send_email, 
           {"admin": admin_js});
@@ -180,10 +182,29 @@
       event.preventDefault();
       checkboxes = document.getElementsByName('fund_email_checkbox');
       var toggle_to = !checkboxes[0].checked;
-      for(var i=0, n=checkboxes.length;i<n;i++) {
+      for(var i=0, n=checkboxes.length; i<n; i++) {
         checkboxes[i].checked = toggle_to;
       }
       return false;
+    }
+    
+    function confirm_selected(event) {
+      event.preventDefault();
+      checkboxes = document.getElementsByName('fund_email_checkbox');
+      var selected = [];
+      for (var i=0, n=checkboxes.length; i<n; i++) {
+        if (checkboxes[i].checked) {
+          var id = checkboxes[i].id.split("-")[1];
+          selected.push(id);
+        }
+      }
+      if (selected.length == 0) {
+        return false;
+      }
+      var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
+      var admin_js = '<%= raw @admin.to_json %>';
+      $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email, 
+          {"admin": admin_js});
     }
   </script>
 </div>

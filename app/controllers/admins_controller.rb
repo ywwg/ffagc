@@ -70,15 +70,19 @@ class AdminsController < ApplicationController
       return
     end
     
-    @grant_submissions = GrantSubmission.where(funding_decision: true)
+    @grant_submissions = GrantSubmission.where(id: params[:ids])
     @grant_submissions.each do |gs|
-      artist = Artist.where(id: gs.artist_id).take
-      grant = Grant.where(id: gs.grant_id).take
-      if gs.granted_funding_dollars == 0
-        UserMailer.grant_not_funded(gs, artist, grant, event_year).deliver!
-      else
-        UserMailer.grant_funded(gs, artist, grant, event_year).deliver!
+      if params[:send_email] == "true"
+        artist = Artist.where(id: gs.artist_id).take
+        grant = Grant.where(id: gs.grant_id).take
+        if gs.granted_funding_dollars == 0
+          UserMailer.grant_not_funded(gs, artist, grant, event_year).deliver!
+        else
+          UserMailer.grant_funded(gs, artist, grant, event_year).deliver!
+        end
       end
+      gs.funding_decision = true
+      gs.save
     end
     
     redirect_to action: "index"
