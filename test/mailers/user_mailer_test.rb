@@ -24,5 +24,24 @@ class UserMailerTest < ActionMailer::TestCase
     assert_match user.reset_token,   mail.body.encoded
     assert_match CGI.escape(user.email),  mail.body.encoded
   end
+  
+  test "grant_funded" do
+    artist = artists(:michael)
+    submission = grant_submissions(:wall)
+    grant = grants(:creativity)
+    mail = UserMailer.grant_funded(submission, artist, grant, "2020")
+    assert_equal "2020 Firefly Creativity Grant Decision: The Wall", mail.subject
+    assert_match "Congratulations", mail.body.encoded
+    assert_match "$800", mail.body.encoded
+  end
+  
+  test "grant_not_funded" do
+    artist = artists(:michael)
+    submission = grant_submissions(:wall)
+    grant = grants(:creativity)
+    mail = UserMailer.grant_not_funded(submission, artist, grant, "2020")
+    assert_equal "2020 Firefly Creativity Grant Decision: The Wall", mail.subject
+    assert_match "regret", mail.body.encoded
+  end
 
 end

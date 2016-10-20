@@ -31,4 +31,27 @@ class UserMailer < ActionMailer::Base
     
     mail to: @user.email, subject: "Firefly Art Grant Voter Account Verified"
   end
+  
+  def grant_funded(submission, artist, grant, year)
+    @submission = submission
+    @artist = artist
+    @grant = grant
+    @year = year
+    
+    @deadline = "Flurbsday, Smarch 34rd 20167"
+    
+    # TODO: schedule should be something that will render nicely in html or text.
+    @schedule = "TBD"
+    
+    mail to: @artist.email, subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
+  end
+  
+  def grant_not_funded(submission, artist, grant, year)
+    @submission = submission
+    @artist = artist
+    @grant = grant
+    @year = year
+    
+    mail to: @artist.email, subject: "#{@year} Firefly #{@grant.name}  Grant Decision: #{@submission.name}"
+  end
 end

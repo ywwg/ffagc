@@ -20,5 +20,21 @@ class UserMailerPreview < ActionMailer::Preview
     user = Voter.first
     UserMailer.voter_verified(user, "2017")
   end
+  
+  # http://localhost:3000/rails/mailers/user_mailer/grant_funded
+  def grant_funded
+    submission = GrantSubmission.first
+    artist = Artist.first
+    grant = Grant.first
+    UserMailer.grant_funded(submission, artist, grant, "2017")
+  end
+  
+  # http://localhost:3000/rails/mailers/user_mailer/grant_not_funded
+  def grant_not_funded
+    submission = GrantSubmission.first
+    artist = Artist.first
+    grant = Grant.first
+    UserMailer.grant_not_funded(submission, artist, grant, "2017")
+  end
 
 end

@@ -37,12 +37,16 @@
             <td><%= gs.name %></td>
             <td><%= Grant.where("id = ?",gs.grant_id).take.name %> Grant</td>
             <td><%= gs.requested_funding_dollars %></td>
-            <% if grant_submission_funded?(gs.id)%>
-              <td><%= gs.granted_funding_dollars %></td>
+            <% if any_grant_submission_funded?(current_artist.id) %>
+              <td><% if grant_submission_funded?(gs.id) %>
+                  <%= gs.granted_funding_dollars %>
+                  <% end %></td>
             <% end %>
             <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
-            <% if grant_submission_funded?(gs.id)%>
-              <td><%= button_to "Generate Contract", :controller => "grant_submissions", :action => "generate_contract", :format => "pdf", :submission_id => gs.id %></td>
+            <% if any_grant_submission_funded?(current_artist.id)%>
+              <td><% if grant_submission_funded?(gs.id) %>
+                  <%= button_to "Generate Contract", :controller => "grant_submissions", :action => "generate_contract", :format => "pdf", :submission_id => gs.id %>
+                  <% end %></td>
             <% end %>
           </tr>
         <% end %>

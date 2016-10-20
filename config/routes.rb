@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   post 'admins/assign' => 'admins#assign'
   get 'admins/reveal' => 'admins#reveal'
   post 'admins/verify' => 'admins#verify'
+  post 'admins/send_fund_emails' => 'admins#send_fund_emails'
 
 
   resources :artists, :voters, :admins, :grant_submissions, :grants

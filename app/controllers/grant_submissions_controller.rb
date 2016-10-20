@@ -32,7 +32,7 @@ class GrantSubmissionsController < ApplicationController
     if admin_logged_in?
       params.require(:grant_submission).permit(:id, :name, :grant_id, 
           :requested_funding_dollars, :proposal, :granted_funding_dollars,
-          :funded, :authenticity_token)
+          :funding_decision, :authenticity_token)
     else
       params.require(:grant_submission).permit(:id, :name, :grant_id, 
           :requested_funding_dollars, :proposal, :authenticity_token)
@@ -72,7 +72,7 @@ class GrantSubmissionsController < ApplicationController
     
     if admin_logged_in?
       @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
-      @grant_submission.funded = grant_update_params[:funded]
+      @grant_submission.funding_decision = grant_update_params[:funding_decision]
     end
 
     if @grant_submission.save
@@ -123,7 +123,7 @@ class GrantSubmissionsController < ApplicationController
       redirect_to "/"
       return
     end
-    if !submission.funded 
+    if !grant_submission_funded?(:submission_id) 
       logger.warn "tried to generate contract for non-funded grant"
       redirect_to "/"
     end

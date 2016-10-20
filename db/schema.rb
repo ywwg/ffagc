@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161009180659) do
+ActiveRecord::Schema.define(version: 20161020163252) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20161009180659) do
     t.string   "proposal"
     t.integer  "requested_funding_dollars"
     t.integer  "granted_funding_dollars"
-    t.boolean  "funded"
+    t.boolean  "funding_decision"
   end
 
   add_index "grant_submissions", ["artist_id"], name: "index_grant_submissions_on_artist_id"
