@@ -118,9 +118,9 @@
     <% end %>
     <tr>
       <td colspan="12" align="right"><form name="send_email_form">
-          Send email when confirming <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
+          Send email when finalizing <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
           </form></td>
-      <td align="center"><%= button_to "Confirm", '#', :onclick => "confirm_selected(event);" %></td>
+      <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
   </table>
   <br>
   <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">
@@ -205,6 +205,7 @@
       var admin_js = '<%= raw @admin.to_json %>';
       $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email, 
           {"admin": admin_js});
+      return false;
     }
   </script>
 </div>

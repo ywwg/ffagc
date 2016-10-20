@@ -70,8 +70,8 @@ class AdminsController < ApplicationController
       return
     end
     
-    @grant_submissions = GrantSubmission.where(id: params[:ids])
-    @grant_submissions.each do |gs|
+    submissions = GrantSubmission.where(id: params[:ids].split(','))
+    submissions.each do |gs|
       if params[:send_email] == "true"
         artist = Artist.where(id: gs.artist_id).take
         grant = Grant.where(id: gs.grant_id).take
