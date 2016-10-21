@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
   mount Judge::Engine => '/judge'
 
-  get 'password_resets/new'
-  get 'password_resets/edit'
-
-
   get 'home/index'
   root 'home#index'
+
+  get 'password_resets/' => 'password_resets#index'
+  get 'password_resets/new'
+  get 'password_resets/edit'
 
   get 'artists/signup' => 'artists#signup'
   post 'artists/signup' => 'artists#create'
@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   get 'artists/logout' => 'sessions#delete_artist'
   get 'voters/logout' => 'sessions#delete_voter'
   get 'admins/logout' => 'sessions#delete_admin'
+  
+  get 'account_activations/unactivated' => 'account_activations#unactivated'
+  #get 'account_activations/resend_activation' => 'account_activations#resend_activation'
 
   get 'artists/grant_submissions' => 'grant_submissions#index'
   get 'artists/modify_grant' => 'grant_submissions#modify'

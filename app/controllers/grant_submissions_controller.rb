@@ -22,7 +22,7 @@ class GrantSubmissionsController < ApplicationController
     @grant_submission.artist_id = current_artist.id
 
     if @grant_submission.save
-      render "success"
+      redirect_to :controller => "artists", :action => "index"
     else
       render "failure"
     end
@@ -98,9 +98,9 @@ class GrantSubmissionsController < ApplicationController
 
     if @grant_submission.save
       if admin_logged_in? 
-        render "success_admin"
+        redirect_to :controller => "admins", :action => "submissions"
       else
-        render "success_modify"
+        redirect_to :controller => "artists", :action => "index"
       end
     else
       if admin_logged_in?

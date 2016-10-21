@@ -3,8 +3,21 @@ class PasswordResetsController < ApplicationController
   before_action :valid_user, only: [:edit, :update]
   before_action :check_expiration, only: [:edit, :update]
   
+  def index
+    # Without a type specified we don't know what to do...
+  end
+  
   def new
     @type = params[:type]
+    if @type == "artists"
+      @type_name = "Artist"
+    elsif @type == "voters"
+      @type_name = "Voter"
+    elsif @type == "admins"
+      @type_name = "Admin"
+    else
+      redirect_to :action => "index"
+    end
   end
   
   def create
@@ -20,13 +33,13 @@ class PasswordResetsController < ApplicationController
       @user.create_reset_digest
       @user.send_password_reset_email
       flash.now[:info] = "Email sent with password reset instructions"
-      render 'sent'
+      render "sent"
     else
       flash.now[:danger] = "Email address not found"
-      render 'failure'
+      render "failure"
     end
   end
-
+  
   def edit
     @type = params[:type]
   end
@@ -50,10 +63,10 @@ class PasswordResetsController < ApplicationController
     elsif @user.update_attributes(user_params(t))
       # Clear out the reset digest so it can't be used again.
       @user.update_attribute(:reset_digest, "")
-      render 'success'
+      render "success"
     else
       flash.now[:danger] = "Password mismatch or unknown error"
-      render 'edit', :type => @type, :email => params[:email]
+      render "edit", :type => @type, :email => params[:email]
     end
   end
   

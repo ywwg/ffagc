@@ -7,7 +7,8 @@ class SessionsController < ApplicationController
     
     artist = Artist.find_by_email(params[:session][:email])
     if !artist.activated 
-      render "login_unactivated"
+      redirect_to controller: "account_activations", action: "unactivated", 
+          type: "artists", email: params[:session][:email]
       return
     end
     
@@ -32,7 +33,8 @@ class SessionsController < ApplicationController
 
     voter = Voter.find_by_email(params[:session][:email])
     if !voter.activated 
-      render "login_unactivated"
+      redirect_to controller: "account_activations", action: "unactivated", 
+          type: "voters", email: params[:session][:email]
       return
     end
     
@@ -60,7 +62,8 @@ class SessionsController < ApplicationController
     # to prevent future logins (doesn't protect against admins with persisting
     # session cookies.)
     if !admin.activated 
-      render "login_unactivated"
+      redirect_to controller: "account_activations", action: "unactivated",
+          type: "admins", email: params[:session][:email]
       return
     end
     

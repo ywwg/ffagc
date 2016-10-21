@@ -2,6 +2,10 @@ class GrantsController < ApplicationController
   before_filter :initialize_grant
 
   def initialize_grant
+    if !admin_logged_in?
+      redirect_to "/"
+      return
+    end
     @grant = Grant.new
   end
   
@@ -13,25 +17,16 @@ class GrantsController < ApplicationController
   end
   
   def create
-    if !admin_logged_in?
-      redirect_to "/"
-      return
-    end
     @grant = Grant.new(grant_params)
     
     if @grant.save
-      render "success"
+      redirect_to :controller => "admins", :action => "grants"
     else
       render "failure"
     end
   end
   
   def modify
-    if !admin_logged_in?
-      redirect_to "/"
-      return
-    end
-    
     begin
       @grant = Grant.find(params.permit(:id)[:id])
     rescue
@@ -42,17 +37,15 @@ class GrantsController < ApplicationController
     render "modify"
   end
   
+  def show
+    redirect_to :controller => "admins", :action => "grants"
+  end
+  
   def update
-    if !admin_logged_in?
-      logger.warn "grant type modification without admin login"
-      render "failure"
-      return
-    end
-    
     @grant = Grant.find(params[:id])
     @grant.attributes = grant_params
     if @grant.save
-      render "success"
+      redirect_to :controller => "admins", :action => "grants"
     else
       render "failure"
     end
