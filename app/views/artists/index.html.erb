@@ -10,9 +10,10 @@
 
 	<% if artist_logged_in? %>
 
-	    You are logged in as: <%= current_artist.name %> (<%= current_artist.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_artist" %>]
-
-	    <br /><br />
+	    <p>You are logged in as: <%= current_artist.name %> (<%= current_artist.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_artist" %>]</p>
+	    <p><b>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
+          <% if i > 0 %> and<% end %>
+          <%= g.name %><% end %> grants!</b></p>
 	    
 	    <% if artist_has_submission? %>
 	      <h2>Your Submissions:</h2>
@@ -65,8 +66,6 @@
           <p><b>No grant submissions open at this time.</b></p>
         <% end %> 
       <% end %>
-
-
 	<% else %>
 		Don't have an account yet?
 	    <%= link_to "Register as an artist", :controller => "artists", :action => "signup" %> to access the grant applications.

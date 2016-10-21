@@ -1,0 +1,92 @@
+<div class="container">
+  <% if admin_logged_in? %>
+  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
+  | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+  | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
+  |
+  <% end %>
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
+  
+  <% if admin_logged_in? %>
+    <h3>| <%= link_to "Index", :controller => "admins", :action => "index" %>
+    | Submissions
+    | <%= link_to "Voters", :controller => "admins", :action => "voters" %>
+    | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
+    |</h3>
+  <h2>All Submitted Grants</h2>
+  <table border="1">
+    <tr>
+      <th>name</th>
+      <th>grant</th>
+      <th>$</th>
+      <th>avg_t</th>
+      <th>avg_c</th>
+      <th>avg_f</th>
+      <th>avg_s</th>
+      <th>#</th>
+      <th>Decision Finalized</th>
+      <th>Amount</th>
+      <th></th>
+      <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
+    </tr>
+
+    <% @grant_submissions.each do |gs| %>
+    <tr>
+      <td><%= gs.name %></td>
+      <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
+      <td><%= gs.requested_funding_dollars %></td>
+      <td><%= @results[gs.id]['avg_t'] %></td>
+      <td><%= @results[gs.id]['avg_c'] %></td>
+      <td><%= @results[gs.id]['avg_f'] %></td>
+      <td><%= @results[gs.id]['avg_s'] %></td>
+      <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
+      <td><%= gs.funding_decision %></td>
+      <td><%= gs.granted_funding_dollars%></td>
+      <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
+      <td align="center"><form name="fund_email_form-<%= gs.id %>">
+            <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
+          </form></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td colspan="11" align="right"><form name="send_email_form">
+          <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
+          </form></td>
+      <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
+  </table>
+  <br>
+  <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">
+  <% end %>
+</div>
+
+<script>
+function toggle_all_fund_emails(event) {
+  event.preventDefault();
+  checkboxes = document.getElementsByName('fund_email_checkbox');
+  var toggle_to = !checkboxes[0].checked;
+  for(var i=0, n=checkboxes.length; i<n; i++) {
+    checkboxes[i].checked = toggle_to;
+  }
+  return false;
+}
+
+function confirm_selected(event) {
+  event.preventDefault();
+  checkboxes = document.getElementsByName('fund_email_checkbox');
+  var selected = [];
+  for (var i=0, n=checkboxes.length; i<n; i++) {
+    if (checkboxes[i].checked) {
+      var id = checkboxes[i].id.split("-")[1];
+      selected.push(id);
+    }
+  }
+  if (selected.length == 0) {
+    return false;
+  }
+  var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
+  var admin_js = '<%= raw @admin.to_json %>';
+  $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email, 
+      {"admin": admin_js});
+  return false;
+}
+</script>

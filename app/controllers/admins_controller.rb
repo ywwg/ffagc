@@ -1,8 +1,17 @@
 class AdminsController < ApplicationController
   
-  before_filter :initialize_admin
+  before_filter :init_admin
+  before_filter :init_voters
+  before_filter :verify_admin_logged_in, except: [:create, :index]
+  
+  def verify_admin_logged_in
+    if !current_admin
+      redirect_to "/"
+      return
+    end
+  end
     
-  def initialize_admin
+  def init_admin
       @admin = Admin.new
   end
     
@@ -42,15 +51,10 @@ class AdminsController < ApplicationController
   end
 
   def reveal
-    @grant_submissions = GrantSubmission.all
+    init_submissions
   end
   
   def verify
-    if !current_admin
-      redirect_to "/"
-      return
-    end
-    
     voter = Voter.find(params[:id])
     voter.verified = params[:verify]
     if voter.save
@@ -61,15 +65,10 @@ class AdminsController < ApplicationController
       end
     end
     
-    redirect_to action: "index"
+    redirect_to action: "voters"
   end
   
   def send_fund_emails
-    if !current_admin
-      redirect_to "/"
-      return
-    end
-    
     submissions = GrantSubmission.where(id: params[:ids].split(','))
     submissions.each do |gs|
       if params[:send_email] == "true"
@@ -89,10 +88,6 @@ class AdminsController < ApplicationController
   end
 
   def assign
-    if !current_admin
-      return
-    end
-
     # a terrible terrible thing :(
 
     #delete current assignments
@@ -115,7 +110,7 @@ class AdminsController < ApplicationController
       return
     end
 
-    @submissions = GrantSubmission.where(grant_id: active_vote_grants)
+    @submissions = GrantSubmission.where(grant_id: active_vote_grants).order(grant_id: :asc)
 
     @submissions.each do |s|
       @sv[s.id] = Hash.new
@@ -142,12 +137,8 @@ class AdminsController < ApplicationController
 
     redirect_to action: "index"
   end
-
-  def index
-    if !current_admin
-      return
-    end
-
+  
+  def init_voters
     # verified voters
     @voters = Voter.all
     @verified_voters = Voter.where(verified: true)
@@ -159,7 +150,72 @@ class AdminsController < ApplicationController
       vv.assigned = Array.new
       VoterSubmissionAssignment.where("voter_id = ?",vv.id).each{|vsa| vv.assigned.push(vsa.grant_submission_id)}
     end
+  end
+  
+  def init_submissions
+    @results = Hash.new
+    @grant_submissions = GrantSubmission.all.order(grant_id: :asc)
+    logger.debug "sumbmissions! #{@grant_submissions.inspect}"
+    @grant_submissions.each do |gs|
+      votes = Vote.where("grant_submission_id = ?", gs.id)
 
+      t_sum = 0
+      t_num = 0;
+      c_sum = 0;
+      c_num = 0;
+      f_sum = 0;
+      f_num = 0;
+
+      votes.each do |gsv|
+        if gsv.score_t
+          t_sum = t_sum+gsv.score_t
+          t_num = t_num+1
+        end
+
+        if gsv.score_c
+          c_sum = c_sum+gsv.score_c
+          c_num = c_num+1
+        end
+
+        if gsv.score_f
+          f_sum = f_sum+gsv.score_f
+          f_num = f_num+1
+        end
+
+      end
+
+      @results[gs.id] = Hash.new
+
+      @results[gs.id]['num_t'] = t_num
+      @results[gs.id]['sum_t'] = t_sum
+
+      if t_num > 0
+        @results[gs.id]['avg_t'] = t_sum.fdiv(t_num).round(2)
+      end
+
+      @results[gs.id]['num_c'] = c_num
+      @results[gs.id]['sum_c'] = c_sum
+
+      if c_num > 0
+        @results[gs.id]['avg_c'] = c_sum.fdiv(c_num).round(2)
+      end
+
+      @results[gs.id]['num_f'] = f_num
+      @results[gs.id]['sum_f'] = f_sum
+
+      if f_num > 0
+        @results[gs.id]['avg_f'] = f_sum.fdiv(f_num).round(2)
+      end
+
+      if @results[gs.id]['avg_t'] && @results[gs.id]['avg_c'] && @results[gs.id]['avg_f']
+        @results[gs.id]['avg_s'] = ((@results[gs.id]['avg_t'] + @results[gs.id]['avg_c'] + @results[gs.id]['avg_f'])/3.0).round(2)
+      end
+
+      @results[gs.id]['num_total'] = t_num + c_num + f_num
+    end
+  end
+  
+  def index
     vv_arr = @verified_voters.to_ary
     idx = 0
     max = vv_arr.size
@@ -167,11 +223,9 @@ class AdminsController < ApplicationController
 
     @sv = Hash.new
     
-    @grants = Grant.all
-
     @submissions = []
     if max > 0
-      @submissions = GrantSubmission.where(grant_id: active_vote_grants)
+      @submissions = GrantSubmission.where(grant_id: active_vote_grants).order(grant_id: :asc)
   
       @submissions.each do |s|
         @sv[s.id] = Hash.new
@@ -191,69 +245,21 @@ class AdminsController < ApplicationController
         end
       end
     end
-
-    # results
-    @results = Hash.new
-
-    @grant_submissions = GrantSubmission.all
-
-    @grant_submissions.each do |gs|
-
-      votes = Vote.where("grant_submission_id = ?",gs.id)
-
-      t_sum = 0
-      t_num = 0;
-      c_sum = 0;
-      c_num = 0;
-      f_sum = 0;
-      f_num = 0;
-
-      votes.each do |gsv|
-        if(gsv.score_t)
-          t_sum = t_sum+gsv.score_t
-          t_num = t_num+1
-        end
-
-        if(gsv.score_c)
-          c_sum = c_sum+gsv.score_c
-          c_num = c_num+1
-        end
-
-        if(gsv.score_f)
-          f_sum = f_sum+gsv.score_f
-          f_num = f_num+1
-        end
-
-      end
-
-      @results[gs.id] = Hash.new
-
-      @results[gs.id]['num_t'] = t_num
-      @results[gs.id]['sum_t'] = t_sum
-
-      if(t_num > 0)
-        @results[gs.id]['avg_t'] = t_sum.fdiv(t_num).round(2)
-      end
-
-      @results[gs.id]['num_c'] = c_num
-      @results[gs.id]['sum_c'] = c_sum
-
-      if(c_num > 0)
-        @results[gs.id]['avg_c'] = c_sum.fdiv(c_num).round(2)
-      end
-
-      @results[gs.id]['num_f'] = f_num
-      @results[gs.id]['sum_f'] = f_sum
-
-      if(f_num > 0)
-        @results[gs.id]['avg_f'] = f_sum.fdiv(f_num).round(2)
-      end
-
-      if(@results[gs.id]['avg_t'] && @results[gs.id]['avg_c'] && @results[gs.id]['avg_f'])
-        @results[gs.id]['avg_s'] = ((@results[gs.id]['avg_t'] + @results[gs.id]['avg_c'] + @results[gs.id]['avg_f'])/3.0).round(2)
-      end
-
-      @results[gs.id]['num_total'] = t_num + c_num + f_num
+    init_submissions
+  end
+  
+  def voters
+  end
+  
+  def grants
+    if !current_admin
+      redirect_to "/"
+      return
     end
+    @grants = Grant.all
+  end
+  
+  def submissions
+    init_submissions
   end
 end

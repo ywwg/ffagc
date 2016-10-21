@@ -1,0 +1,54 @@
+<div class="container">
+  <% if admin_logged_in? %>
+  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
+  | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+  | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
+  |
+  <% end %>
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
+  
+  <% if admin_logged_in? %>
+    <h3>| <%= link_to "Index", :controller => "admins", :action => "index" %>
+    | <%= link_to "All Submissions", :controller => "admins", :action => "submissions" %>
+    | Voters
+    | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
+    |</h3>
+    <h2>Voters</h2>
+    <table border="1">
+      <tr>
+        <th>name</th>
+        <th>email</th>
+        <th>verified</th>
+        <th><form name="send_email_form">
+            send email when verifying <input type="checkbox" id="send_verify_email_checkbox" checked="true">
+            </form></th>
+      </tr>
+      <% @voters.each do |v| %>
+      <tr>
+        <td><%= v['name'] %></td>
+        <td><%= v['email'] %></td>
+        <td><%= v['verified'] %></td>
+        <td>
+          <% if v['verified'] %>
+            <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %>
+          <% else %>
+            <%= button_to "Verify", '#', :onclick => "do_verify(event, #{v['id']});" %>
+          <% end %>  
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  <% end %>
+</div>
+
+<script>
+function do_verify(event, id) {
+  event.preventDefault();
+  var send_email = document.getElementById('send_verify_email_checkbox').checked;
+  var admin_js = '<%= raw @admin.to_json %>';
+  $.post("/admins/verify?id=" + id + "&verify=1&send_email=" + send_email, 
+      {"admin": admin_js});
+  return false;
+}
+</script>    
+    

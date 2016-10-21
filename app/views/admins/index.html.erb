@@ -14,77 +14,22 @@
   <p>
     (<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)
   </p>
+  <h3>
+  | Index
+  | <%= link_to "Submissions", :controller => "admins", :action => "submissions" %>
+  | <%= link_to "Voters", :controller => "admins", :action => "voters" %>
+  | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
+  |</h3>
   
-  <h2>Submissions Currently Under Consideration I think</h2>
+  <h2>Submissions Under Consideration</h2>
+  <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
+  <% if i > 0 %> and<% end %>
+  <b><%= g.name %></b><% end %></p>
+
   <table border="1">
     <tr>
-      <th>id</th>
-      <th>name</th>
-      <th>assigned</th>
-    </tr>
-    <% @submissions.each do |s| %>
-    <tr>
-      <td><%= @sv[s.id]['id'] %></td>
-      <td><%= @sv[s.id]['name'] %></td>
-      <td><%= @sv[s.id]['assigned'].join(',').html_safe %></td>
-      <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => @sv[s.id]['id'] %></td>
-    </tr>
-    <% end %>
-
-  </table>
-  <%= button_to "Assign", :controller => "admins", :action => "assign" %>
-
-  <h2>Voters</h2>
-  <table border="1">
-    <tr>
-      <th>name</th>
-      <th>email</th>
-      <th>verified</th>
-      <th><form name="send_email_form">
-          send email when verifying <input type="checkbox" id="send_verify_email_checkbox" checked="true">
-          </form></th>
-    </tr>
-    <% @voters.each do |v| %>
-    <tr>
-      <td><%= v['name'] %></td>
-      <td><%= v['email'] %></td>
-      <td><%= v['verified'] %></td>
-      <td>
-        <% if v['verified'] %>
-          <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %>
-        <% else %>
-          <%= button_to "Verify", '#', :onclick => "do_verify(event, #{v['id']});" %>
-        <% end %>  
-      </td>
-    </tr>
-    <% end %>
-  </table>
-
-  <h2>Assigned Grants</h2>
-  <table border="1">
-    <tr>
-      <th>id</th>
-      <th>name</th>
-      <th>email</th>
-      <th>assigned</th>
-    </tr>
-    <% @verified_voters.each do |vv| %>
-    <tr>
-      <td><%= vv.id %></td>
-      <td><%= vv.name %></td>
-      <td><%= vv.email %></td>
-      <td><%= vv.assigned.join(',').html_safe %></td>
-    </tr>
-    <% end %>
-  </table>
-  <br />
-
-  <h2>All Submitted Grants</h2>
-  <table border="1">
-    <tr>
-      <th>id</th>
-      <th>name</th>
       <th>grant</th>
+      <th>name</th>
       <th>$</th>
       <th>avg_t</th>
       <th>avg_c</th>
@@ -97,11 +42,10 @@
       <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
     </tr>
 
-    <% @grant_submissions.each do |gs| %>
+    <% @submissions.each do |gs| %>
     <tr>
-      <td><%= gs.id %></td>
-      <td><%= gs.name %></td>
       <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
+      <td><%= gs.name %></td>
       <td><%= gs.requested_funding_dollars %></td>
       <td><%= @results[gs.id]['avg_t'] %></td>
       <td><%= @results[gs.id]['avg_c'] %></td>
@@ -117,40 +61,29 @@
     </tr>
     <% end %>
     <tr>
-      <td colspan="12" align="right"><form name="send_email_form">
+      <td colspan="11" align="right"><form name="send_email_form">
           <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
           </form></td>
       <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
   </table>
-  <br>
-  <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">
-
-  <h2>Grant Types</h2>
-  <table border=1>
+  <%= button_to "Assign", :controller => "admins", :action => "assign" %>
+  
+  <h2>Assignments</h2>
+  <table border="1">
     <tr>
-      <th>id</th>
-      <th>Name</th>
-      <th>Max Funding $</th>
-      <th>Submission Start Date</th>
-      <th>Submission End Date</th>
-      <th>Voting Start Date</th>
-      <th>Voting End Date</th>
+      <th>name</th>
+      <th>email</th>
+      <th>assigned</th>
     </tr>
-    <% @grants.each do |g| %>
+    <% @verified_voters.each do |vv| %>
     <tr>
-      <td><%= g.id %></td>
-      <td><%= g.name %></td>
-      <td><%= g.max_funding_dollars %></td>
-      <td><%= g.submit_start.strftime("%Y/%m/%d") %></td>
-      <td><%= g.submit_end.strftime("%Y/%m/%d") %></td>
-      <td><%= g.vote_start.strftime("%Y/%m/%d") %></td>
-      <td><%= g.vote_end.strftime("%Y/%m/%d") %></td>
-      <td><%= button_to "Modify", :controller => "grants", :action => "modify", :id => g.id %></td>
+      <td><%= vv.name %></td>
+      <td><%= vv.email %></td>
+      <td><%= vv.assigned.join(',').html_safe %></td>
     </tr>
     <% end %>
   </table>
-  <%= link_to "Create Grant", :controller => "grants", :action => "index" %>
-  <br/>
+
   <% elsif !admin_exists? %>
   <%= link_to "Create", :controller => "admins", :action => "signup" %> initial admin account
   <% else %>
@@ -166,18 +99,7 @@
       <% end %>
     <%= link_to "(forgot password)", new_password_reset_path(type: "admins") %>
   <% end %>
-    
-    
   <script>
-    function do_verify(event, id) {
-      event.preventDefault();
-      var send_email = document.getElementById('send_verify_email_checkbox').checked;
-      var admin_js = '<%= raw @admin.to_json %>';
-      $.post("/admins/verify?id=" + id + "&verify=1&send_email=" + send_email, 
-          {"admin": admin_js});
-      return false;
-    }
-    
     function toggle_all_fund_emails(event) {
       event.preventDefault();
       checkboxes = document.getElementsByName('fund_email_checkbox');

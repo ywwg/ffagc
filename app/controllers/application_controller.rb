@@ -38,6 +38,12 @@ class ApplicationController < ActionController::Base
   end
   helper_method :active_vote_names
   
+  def active_submit_names
+    now = DateTime.current
+    return Grant.where("submit_start <= ?", now).where("submit_end >= ?", now).select(:name)
+  end
+  helper_method :active_submit_names
+  
   def any_grant_submission_funded?(artist_id)
     return GrantSubmission.where("artist_id = ? AND funding_decision = 't' AND granted_funding_dollars > 0", artist_id).count > 0 
   end
