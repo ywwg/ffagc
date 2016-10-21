@@ -8,7 +8,7 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
   end
 
   test "password resets" do
-    get new_password_reset_path
+    get new_password_reset_path(type: "artists")
     assert_template 'password_resets/new'
     # Invalid email
     post password_resets_path, password_reset: { email: "", type:"artists" } 
