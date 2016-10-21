@@ -54,12 +54,33 @@ class GrantSubmissionsController < ApplicationController
     end
     return true
   end
+  
+  def destroy
+    @grant_submission = GrantSubmission.find(params[:id])
+    
+    if !modify_grant_ok?(@grant_submission)
+      redirect_to "/"
+      return
+    end
+    
+    @grant_submission.destroy
+    if admin_logged_in? 
+      redirect_to :controller => "admins", :action => "index"
+    else
+      redirect_to :controller => "artists", :action => "index"
+    end
+  end
 
   def update
     @grant_submission = GrantSubmission.find(params[:id])
     
     if !modify_grant_ok?(@grant_submission)
       redirect_to "/"
+      return
+    end
+    
+    if params[:commit] == "Delete Submission"
+      destroy
       return
     end
     
