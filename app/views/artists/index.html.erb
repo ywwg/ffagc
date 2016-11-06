@@ -11,9 +11,11 @@
 	<% if artist_logged_in? %>
 
 	    <p>You are logged in as: <%= current_artist.name %> (<%= current_artist.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_artist" %>]</p>
-	    <p><b>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
-          <% if i > 0 %> and<% end %>
-          <%= g.name %><% end %> grants!</b></p>
+      <% if any_submit_open? %>
+  	    <p><b>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
+            <% if i > 0 %> and<% end %>
+            <%= g.name %><% end %> grants!</b></p>
+      <% end %>
 	    
 	    <% if artist_has_submission? %>
 	      <h2>Your Submissions:</h2>
