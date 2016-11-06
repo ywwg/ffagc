@@ -48,7 +48,6 @@ function do_verify(event, id) {
   var admin_js = '<%= raw @admin.to_json %>';
   $.post("/admins/verify?id=" + id + "&verify=1&send_email=" + send_email, 
       {"admin": admin_js});
-  location.reload();
   return false;
 }
 </script>    
