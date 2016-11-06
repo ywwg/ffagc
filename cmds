@@ -1,0 +1,3 @@
+# lol! have to move contract_templates asside because they are malformed
+RAILS_ENV=production bundle exec rake assets:precompile
+

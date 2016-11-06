@@ -72,3 +72,10 @@ You should create an admin right away by going to the admins page.
 I had problems with bundle install not working, and I had to do:
 
     bundle install --deployment
+
+If you find that some assets are not updating, like css, they have probably been precompiled
+with a command like:
+
+    RAILS_ENV=production bundle exec rake assets:precompile
+
+
