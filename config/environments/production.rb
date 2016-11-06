@@ -42,7 +42,7 @@ Rails.application.configure do
   # config.force_ssl = true
 
   # Set to :debug to see everything in the log.
-  config.log_level = :info
+  config.log_level = :debug
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -83,14 +83,5 @@ Rails.application.configure do
   # This is the hostname that will be used in links inside emails
   config.action_mailer.default_url_options = { :host => 'grants.fireflyartscollective.org' }
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address => "TBD",
-    :port => "465",
-    :domain => "TBD",
-    :user_name => "TBD",
-    :password => ENV['PASSWORD'],
-    :authentication => "login",
-    :ssl => true,
-  }
+  config.action_mailer.delivery_method = :sendmail
 end
