@@ -1,3 +1,5 @@
+require 'uri'
+
 class PasswordResetsController < ApplicationController
   before_action :get_user, only: [:edit, :update]
   before_action :valid_user, only: [:edit, :update]
@@ -22,12 +24,13 @@ class PasswordResetsController < ApplicationController
   
   def create
     @type = params[:password_reset][:type]
+    email = URI.unescape(params[:password_reset][:email]).downcase
     if @type == "artists"
-      @user = Artist.find_by(email: params[:password_reset][:email].downcase)
+      @user = Artist.find_by(email: email)
     elsif @type == "voters"
-      @user = Voter.find_by(email: params[:password_reset][:email].downcase)
+      @user = Voter.find_by(email: email)
     elsif @type == "admins"
-      @user = Admin.find_by(email: params[:password_reset][:email].downcase)
+      @user = Admin.find_by(email: email)
     end
     if @user
       @user.create_reset_digest
@@ -79,12 +82,13 @@ class PasswordResetsController < ApplicationController
   def get_user
     @type = params[:type]
     
+    email = URI.unescape(params[:email]).downcase
     if @type == "artists"
-      @user = Artist.find_by(email: params[:email].downcase)
+      @user = Artist.find_by(email: email)
     elsif @type == "voters"
-      @user = Voter.find_by(email: params[:email].downcase)
+      @user = Voter.find_by(email: email)
     elsif @type == "admins"
-      @user = Admin.find_by(email: params[:email].downcase)
+      @user = Admin.find_by(email: email)
     else
       logger.error "Did not have a type, couldn't get user!"
     end
