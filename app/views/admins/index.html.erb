@@ -21,68 +21,72 @@
   | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
   |</h3>
   
-  <h2>Submissions Under Consideration</h2>
-  <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
-  <% if i > 0 %> and<% end %>
-  <b><%= g.name %></b><% end %></p>
-
-  <table border="1">
-    <tr>
-      <th>grant</th>
-      <th>name</th>
-      <th>$</th>
-      <th>avg_t</th>
-      <th>avg_c</th>
-      <th>avg_f</th>
-      <th>avg_s</th>
-      <th>#</th>
-      <th>Decision Finalized</th>
-      <th>Amount</th>
-      <th></th>
-      <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
-    </tr>
-
-    <% @submissions.each do |gs| %>
-    <tr>
-      <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
-      <td><%= gs.name %></td>
-      <td><%= gs.requested_funding_dollars %></td>
-      <td><%= @results[gs.id]['avg_t'] %></td>
-      <td><%= @results[gs.id]['avg_c'] %></td>
-      <td><%= @results[gs.id]['avg_f'] %></td>
-      <td><%= @results[gs.id]['avg_s'] %></td>
-      <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
-      <td><%= gs.funding_decision %></td>
-      <td><%= gs.granted_funding_dollars%></td>
-      <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
-      <td align="center"><form name="fund_email_form-<%= gs.id %>">
-            <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
-          </form></td>
-    </tr>
-    <% end %>
-    <tr>
-      <td colspan="11" align="right"><form name="send_email_form">
-          <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
-          </form></td>
-      <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
-  </table>
-  <%= button_to "Assign", :controller => "admins", :action => "assign" %>
+  <% if any_vote_open? %>
+    <h2>Submissions Under Consideration</h2>
+    <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
+    <% if i > 0 %> and<% end %>
+    <b><%= g.name %></b><% end %></p>
   
-  <h2>Assignments</h2>
-  <table border="1">
-    <tr>
-      <th>name</th>
-      <th>email</th>
-      <th>assigned</th>
-    </tr>
-    <% @verified_voters.each do |vv| %>
-    <tr>
-      <td><%= vv.name %></td>
-      <td><%= vv.email %></td>
-      <td><%= vv.assigned.join(',').html_safe %></td>
-    </tr>
-    <% end %>
-  </table>
+    <table border="1">
+      <tr>
+        <th>grant</th>
+        <th>name</th>
+        <th>$</th>
+        <th>avg_t</th>
+        <th>avg_c</th>
+        <th>avg_f</th>
+        <th>avg_s</th>
+        <th>#</th>
+        <th>Decision Finalized</th>
+        <th>Amount</th>
+        <th></th>
+        <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
+      </tr>
+  
+      <% @submissions.each do |gs| %>
+      <tr>
+        <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
+        <td><%= gs.name %></td>
+        <td><%= gs.requested_funding_dollars %></td>
+        <td><%= @results[gs.id]['avg_t'] %></td>
+        <td><%= @results[gs.id]['avg_c'] %></td>
+        <td><%= @results[gs.id]['avg_f'] %></td>
+        <td><%= @results[gs.id]['avg_s'] %></td>
+        <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
+        <td><%= gs.funding_decision %></td>
+        <td><%= gs.granted_funding_dollars%></td>
+        <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
+        <td align="center"><form name="fund_email_form-<%= gs.id %>">
+              <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
+            </form></td>
+      </tr>
+      <% end %>
+      <tr>
+        <td colspan="11" align="right"><form name="send_email_form">
+            <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
+            </form></td>
+        <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
+    </table>
+    <%= button_to "Assign", :controller => "admins", :action => "assign" %>
+  
+    <h2>Assignments</h2>
+    <table border="1">
+      <tr>
+        <th>name</th>
+        <th>email</th>
+        <th>assigned</th>
+      </tr>
+      <% @verified_voters.each do |vv| %>
+      <tr>
+        <td><%= vv.name %></td>
+        <td><%= vv.email %></td>
+        <td><%= vv.assigned.join(',').html_safe %></td>
+      </tr>
+      <% end %>
+    </table>
+  <% else %>
+    <h2> No active grants for vote at this time </h2>
+  <% end %>
 
   <% elsif !admin_exists? %>
   <%= link_to "Create", :controller => "admins", :action => "signup" %> initial admin account

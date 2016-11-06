@@ -14,12 +14,20 @@
     | Grants
     |</h3>
     <h2>Grant Types</h2>
-    <p>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
-    <% if i > 0 %> and<% end %>
-    <b><%= g.name %></b><% end %></p>
-    <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
-    <% if i > 0 %> and<% end %>
-    <b><%= g.name %></b><% end %></p>
+    <% if any_submit_open? %>
+      <p>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
+      <% if i > 0 %> and<% end %>
+      <b><%= g.name %></b><% end %></p>
+    <% else %>
+      <p>No submission process open at this time.</p>
+    <% end %>
+    <% if any_vote_open? %>
+      <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
+      <% if i > 0 %> and<% end %>
+      <b><%= g.name %></b><% end %></p>
+    <% else %>
+      <p>No voting process open at this time.</p>
+    <% end %>
     <table border=1>
       <tr>
         <th>id</th>
