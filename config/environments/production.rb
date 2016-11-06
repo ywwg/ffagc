@@ -75,4 +75,22 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Prod email settings
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+
+  # This is the hostname that will be used in links inside emails
+  config.action_mailer.default_url_options = { :host => 'grants.fireflyartscollective.org' }
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address => "TBD",
+    :port => "465",
+    :domain => "TBD",
+    :user_name => "TBD",
+    :password => ENV['PASSWORD'],
+    :authentication => "login",
+    :ssl => true,
+  }
 end
