@@ -2,7 +2,7 @@ class AdminsController < ApplicationController
   
   before_filter :init_admin
   before_filter :init_voters
-  before_filter :verify_admin_logged_in, except: [:create, :index]
+  before_filter :verify_admin_logged_in, except: [:create, :index, :signup]
   
   def verify_admin_logged_in
     if !current_admin
