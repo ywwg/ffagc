@@ -11,12 +11,12 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     get new_password_reset_path(type: "artists")
     assert_template 'password_resets/new'
     # Invalid email
-    post password_resets_path, password_reset: { email: "", type:"artists" } 
+    post password_resets_path, password_reset: { email: "", type:"artists" }
     assert_not flash.empty?
     assert_template 'password_resets/new'
     # Valid email
     post password_resets_path,
-          password_reset: { email: @user.email, type:"artists"  } 
+          password_reset: { email: @user.email, type:"artists"  }
     assert_not_equal @user.reset_digest, @user.reload.reset_digest
     assert_equal 1, ActionMailer::Base.deliveries.size
     assert_not flash.empty?

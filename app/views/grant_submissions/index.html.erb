@@ -8,19 +8,19 @@
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_grant_id">Grant<abbr title="required">*</abbr></label>
           <%= collection_select(:grant_submission, :grant_id,
-                  Grant.where(id: active_submit_grants), :id, :name, 
-                  {:include_blank => "(select a grant)"}, 
+                  Grant.where(id: active_submit_grants), :id, :name,
+                  {:include_blank => "(select a grant)"},
                   { :onchange => "numericFilter();"}) %>
         </li>
-  
+
         <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }  %>
-  
+
         <li class="string input required stringish" id="grant_submission_name_input">
             <label class="label" for="grant_submission_proposal">Application PDF<abbr title="required">*</abbr></label>
             <%# Keep extensions in sync with uploader %>
             <%= f.file_field :proposal, :required => true, :validate => true, :style => "margin-left:-5px", :accept => ".pdf,.doc,.docx,.txt,.md" %>
         </li>
-  
+
         <br /><br />
         <%= submit_tag("Submit Application", class: "button")%></fieldset>
     <% end %>
@@ -59,9 +59,9 @@
           if (max_fund_ob[i].id == parseInt(grant_id)) {
             max_funding = max_fund_ob[i].max_funding_dollars;
             break;
-          } 
+          }
         }
-      } 
+      }
       txb.value = txb.value.replace(/[^\0-9]/ig, "");
       if(parseInt(txb.value) > max_funding) {
         txb.value = max_funding;
@@ -70,12 +70,12 @@
 
     function validate() {
       errors = 0;
-  
+
       //round decimals in funding amounts -- whole dollars only
       var requested_funding_dollars = document.getElementById('grant_submission_requested_funding_dollars').value;
       var requested_funding_dollars_num = parseInt(requested_funding_dollars).toFixed(0);
       document.getElementById('grant_submission_requested_funding_dollars').value = requested_funding_dollars_num.toString();
-  
+
       judge.validate(document.getElementById('grant_submission_name'), {
         valid: function(element) {
           element.style.border = '1px solid green';
@@ -86,7 +86,7 @@
           errors++;
         }
       });
-  
+
       if(document.getElementById("grant_submission_grant_id").value != "") {
         document.getElementById("grant_submission_grant_id").style.border = '1px solid green';
       } else {
@@ -94,7 +94,7 @@
         alert('error: please select a grant to apply for')
         document.getElementById("grant_submission_grant_id").style.border = '1px solid red';
       }
-  
+
       judge.validate(document.getElementById('grant_submission_requested_funding_dollars'), {
         valid: function(element) {
           element.style.border = '1px solid green';
@@ -105,7 +105,7 @@
           errors++;
         }
       });
-  
+
       if(document.getElementById("grant_submission_proposal").value != "") {
         document.getElementById("grant_submission_proposal").style.border = '1px solid green';
       } else {
@@ -113,7 +113,7 @@
         alert('error: please select your application PDF')
         document.getElementById("grant_submission_proposal").style.border = '1px solid red';
       }
-  
+
       return errors===0;
     }
   </script>

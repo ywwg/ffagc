@@ -6,7 +6,7 @@
   |
   <% end %>
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
-  
+
   <% if admin_logged_in? %>
     <h3>| <%= link_to "Index", :controller => "admins", :action => "index" %>
     | Submissions
@@ -85,7 +85,7 @@ function confirm_selected(event) {
   }
   var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
   var admin_js = '<%= raw @admin.to_json %>';
-  $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email, 
+  $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email,
       {"admin": admin_js});
   return false;
 }

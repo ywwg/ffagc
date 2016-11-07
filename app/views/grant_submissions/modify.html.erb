@@ -11,13 +11,13 @@
           <%# NOTE that we allow all grant types regardless of what is open for voting.  This allows
               artists to move their grant from one type to another with minimal changes %>
           <%= collection_select(:grant_submission, :grant_id,
-                  Grant.where(id: active_submit_grants), :id, :name, 
-                  {:include_blank => "(select a grant)"}, 
+                  Grant.where(id: active_submit_grants), :id, :name,
+                  {:include_blank => "(select a grant)"},
                   { :onchange => "numericFilter();"}) %>
         </li>
-  
+
         <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => false, :validate => true, :input_html => { :onInput => "numericFilter(this);" }  %>
-  
+
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_proposal">Current Application PDF:</label>
           <input type="test" disabled="true" value="<%= @grant_submission.proposal_identifier %>"/><br/><br/>
@@ -25,7 +25,7 @@
           <%# Keep extensions in sync with uploader %>
           <%= f.file_field :proposal, :required => false, :validate => true, :accept => ".pdf,.doc,.docx,.txt,.md" %>
         </li>
-        
+
         <% if admin_logged_in?%>
           <%= f.input :granted_funding_dollars, :label => "Proposed Funding ($)", :validate => true, :input_html => { :onInput => "numericFilter(this);" } %>
           <h6 style="margin-top:-15px; margin-left:50px">(use zero for no funding)</h6>
@@ -34,7 +34,7 @@
             <br>Zero-dollar funding level is always invisible.
             <br>Emails will not be sent when confirming from this page.</h6>
         <% end %>
-  
+
         <br /><br />
         <%= submit_tag("Update Application", class: "button")%><%= submit_tag "Delete Submission", data: { confirm: "Are you sure you want to delete this submission?" }%>
       </fieldset>
@@ -56,7 +56,7 @@
        e.onpropertychange = e.oninput; // for IE8
        // e.onchange = e.oninput; // FF needs this in <select><option>...
     };
-  
+
     function numericFilter() {
       var txb = document.getElementById('grant_submission_requested_funding_dollars')
       var max_fund_json = '<%= raw grant_max_funding_dollars_json %>';
@@ -70,9 +70,9 @@
           if (max_fund_ob[i].id == parseInt(grant_id)) {
             max_funding = max_fund_ob[i].max_funding_dollars;
             break;
-          } 
+          }
         }
-      } 
+      }
       txb.value = txb.value.replace(/[^\0-9]/ig, "");
       if(parseInt(txb.value) > max_funding) {
         txb.value = max_funding;
@@ -81,12 +81,12 @@
 
     function validate() {
       errors = 0;
-  
+
       //round decimals in funding amounts -- whole dollars only
       var requested_funding_dollars = document.getElementById('grant_submission_requested_funding_dollars').value;
       var requested_funding_dollars_num = parseInt(requested_funding_dollars).toFixed(0);
       document.getElementById('grant_submission_requested_funding_dollars').value = requested_funding_dollars_num.toString();
-  
+
       judge.validate(document.getElementById('grant_submission_name'), {
         valid: function(element) {
           element.style.border = '1px solid green';
@@ -97,7 +97,7 @@
           errors++;
         }
       });
-  
+
       if(document.getElementById("grant_submission_grant_id").value != "") {
         document.getElementById("grant_submission_grant_id").style.border = '1px solid green';
       } else {
@@ -105,7 +105,7 @@
         alert('error: please select a grant to apply for')
         document.getElementById("grant_submission_grant_id").style.border = '1px solid red';
       }
-  
+
       judge.validate(document.getElementById('grant_submission_requested_funding_dollars'), {
         valid: function(element) {
           element.style.border = '1px solid green';
@@ -116,9 +116,9 @@
           errors++;
         }
       });
-      
+
       // TODO: add validation that the grant selection is in the set of open-submit grants.
-      
+
       return errors===0;
     }
   </script>

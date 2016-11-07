@@ -23,7 +23,7 @@ class ArtistsController < ApplicationController
       render "signup_failure"
       return
     end
-    
+
     @artist = Artist.new(artist_params)
     @artist.email = @artist.email.downcase
 
@@ -32,7 +32,7 @@ class ArtistsController < ApplicationController
       artist_survey = ArtistSurvey.new(artist_survey_params)
       artist_survey.artist_id = @artist.id
       artist_survey.save
-      
+
       # Send email!
       begin
         # Will need to be replaced with deliver_now
@@ -48,27 +48,27 @@ class ArtistsController < ApplicationController
       render "signup_failure"
     end
   end
-  
+
   def index
     if !artist_logged_in?
         return
     end
-    
+
     @grant_submissions = GrantSubmission.where(artist_id: [current_artist.id])
   end
-  
+
   def delete_grant
     if !artist_logged_in?
       return
     end
-    
+
     begin
       @submission = GrantSubmission.find(params[:grant_id])
     rescue
       redirect_to action: "index"
       return
     end
-  
+
     # TODO: is this enough "security"?
     if @submission.artist_id != current_artist.id
       # Log more stuff

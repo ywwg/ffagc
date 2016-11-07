@@ -6,7 +6,7 @@
   |
   <% end %>
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
-  
+
   <% if admin_logged_in? %>
     <h3>| <%= link_to "Index", :controller => "admins", :action => "index" %>
     | <%= link_to "All Submissions", :controller => "admins", :action => "submissions" %>
@@ -33,7 +33,7 @@
             <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %>
           <% else %>
             <%= button_to "Verify", '#', :onclick => "do_verify(event, #{v['id']});" %>
-          <% end %>  
+          <% end %>
         </td>
       </tr>
       <% end %>
@@ -46,9 +46,9 @@ function do_verify(event, id) {
   event.preventDefault();
   var send_email = document.getElementById('send_verify_email_checkbox').checked;
   var admin_js = '<%= raw @admin.to_json %>';
-  $.post("/admins/verify?id=" + id + "&verify=1&send_email=" + send_email, 
+  $.post("/admins/verify?id=" + id + "&verify=1&send_email=" + send_email,
       {"admin": admin_js});
   return false;
 }
-</script>    
-    
+</script>
+

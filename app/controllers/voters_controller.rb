@@ -1,13 +1,13 @@
 class VotersController < ApplicationController
     before_filter :initialize_voter
-    
+
     def initialize_voter
       @voter = Voter.new
     end
-    
+
     def signup
     end
-    
+
     def voter_params
       params.require(:voter).permit(:name, :password_digest, :password, :password_confirmation, :email)
     end
@@ -15,24 +15,24 @@ class VotersController < ApplicationController
     def voter_survey_params
       params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year, :will_read, :will_meet, :has_been_voter, :has_participated_other, :has_received_grant, :has_received_other_grant, :how_many_fireflies)
     end
-    
+
     def create
       if Voter.exists?(email: voter_params[:email.downcase])
-        flash[:notice] = "The email address #{voter_params[:email.downcase]} already exists in our system" 
+        flash[:notice] = "The email address #{voter_params[:email.downcase]} already exists in our system"
         render "signup_failure"
         return
       end
-      
+
       @voter = Voter.new(voter_params)
-      
+
       @voter.email = @voter.email.downcase
-      
+
       if @voter.save
         # save survey
         voter_survey = VoterSurvey.new(voter_survey_params)
         voter_survey.voter_id = @voter.id
         voter_survey.save
-        
+
         # Send email
         begin
           # Will need to be replaced with deliver_now
@@ -43,12 +43,12 @@ class VotersController < ApplicationController
           return
         end
 
-        render "signup_success" 
+        render "signup_success"
       else
         render "signup_failure"
       end
     end
-    
+
     def index
       if !voter_logged_in?
         return

@@ -14,13 +14,13 @@ class UserMailerPreview < ActionMailer::Preview
     user.reset_token = ApplicationController.new_token
     UserMailer.password_reset("artists", user)
   end
-  
+
   # Preview this email at http://localhost:3000/rails/mailers/user_mailer/voter_verified
   def voter_verified
     user = Voter.first
     UserMailer.voter_verified(user, "2017")
   end
-  
+
   # http://localhost:3000/rails/mailers/user_mailer/grant_funded
   def grant_funded
     submission = GrantSubmission.first
@@ -28,7 +28,7 @@ class UserMailerPreview < ActionMailer::Preview
     grant = Grant.first
     UserMailer.grant_funded(submission, artist, grant, "2017")
   end
-  
+
   # http://localhost:3000/rails/mailers/user_mailer/grant_not_funded
   def grant_not_funded
     submission = GrantSubmission.first

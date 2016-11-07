@@ -6,7 +6,7 @@
   |
   <% end %>
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
-  
+
   <% if admin_logged_in? %>
     <h3>| <%= link_to "Index", :controller => "admins", :action => "index" %>
     | <%= link_to "All Submissions", :controller => "admins", :action => "submissions" %>

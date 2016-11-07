@@ -16,7 +16,7 @@
             <% if i > 0 %> and<% end %>
             <%= g.name %><% end %> grants!</b></p>
       <% end %>
-	    
+
 	    <% if artist_has_submission? %>
 	      <h2>Your Submissions:</h2>
 	      <% if any_grant_submission_funded?(current_artist.id)%>
@@ -66,7 +66,7 @@
   	     <%= link_to "Submit a Grant Proposal", :controller => "grant_submissions", :action => "index" %>
   	    <% else %>
           <p><b>No grant submissions open at this time.</b></p>
-        <% end %> 
+        <% end %>
       <% end %>
 	<% else %>
 		Don't have an account yet?

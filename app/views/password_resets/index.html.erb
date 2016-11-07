@@ -1,7 +1,7 @@
 <% provide(:title, "Forgot password") %>
 <div class="container">
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Forgot password</h1>
-  
+
   <%= link_to "Forgot Artist password", new_password_reset_path(type: "artists") %>
   <br/>
   <%= link_to "Forgot Voter password", new_password_reset_path(type: "voters") %>

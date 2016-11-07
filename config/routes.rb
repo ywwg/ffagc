@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   get 'artists/signup' => 'artists#signup'
   post 'artists/signup' => 'artists#create'
-  
+
   get 'voters/signup' => 'voters#signup'
   post 'voters/signup' => 'voters#create'
 
@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   get 'admins/voters' => 'admins#voters'
   get 'admins/grants' => 'admins#grants'
   get 'admins/submissions' => 'admins#submissions'
-  
+
   get 'grants/index'
   post 'grants/index' => 'grants#create'
   post 'grants/modify_grant' => 'grants#modify'
@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   get 'artists/logout' => 'sessions#delete_artist'
   get 'voters/logout' => 'sessions#delete_voter'
   get 'admins/logout' => 'sessions#delete_admin'
-  
+
   get 'account_activations/unactivated' => 'account_activations#unactivated'
   #get 'account_activations/resend_activation' => 'account_activations#resend_activation'
 
