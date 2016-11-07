@@ -26,12 +26,12 @@ module Ffagc
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.autoload_paths += Dir["#{config.root}/lib/pdf"]
-    
+
     # Disable "field_with_errors" magic
-    config.action_view.field_error_proc = Proc.new { |html_tag, instance| 
+    config.action_view.field_error_proc = Proc.new { |html_tag, instance|
       html_tag
     }
-    
+
     # The year that the event will take place
     config.event_year = "2017"
   end

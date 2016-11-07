@@ -8,10 +8,10 @@ class Voter < ActiveRecord::Base
   validates :password, :length => { :minimum => 4 }, :on => :create
 
   validates_confirmation_of :password, :on => :create
-  
+
   # These really should be private but then the password resetter can't get
   # at them
-  
+
   # Sets the password reset attributes.
   def create_reset_digest
     self.reset_token = ApplicationController.new_token
@@ -23,12 +23,12 @@ class Voter < ActiveRecord::Base
   def send_password_reset_email
     UserMailer.password_reset("voters", self).deliver
   end
-  
+
   # Returns true if a password reset has expired.
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
   end
-  
+
   private
 
   # Creates and assigns the activation token and digest.

@@ -20,13 +20,13 @@
   | <%= link_to "Voters", :controller => "admins", :action => "voters" %>
   | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
   |</h3>
-  
+
   <% if any_vote_open? %>
     <h2>Submissions Under Consideration</h2>
     <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
     <% if i > 0 %> and<% end %>
     <b><%= g.name %></b><% end %></p>
-  
+
     <table border="1">
       <tr>
         <th>grant</th>
@@ -42,7 +42,7 @@
         <th></th>
         <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
       </tr>
-  
+
       <% @submissions.each do |gs| %>
       <tr>
         <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
@@ -68,7 +68,7 @@
         <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
     </table>
     <%= button_to "Assign", :controller => "admins", :action => "assign" %>
-  
+
     <h2>Assignments</h2>
     <table border="1">
       <tr>
@@ -113,7 +113,7 @@
       }
       return false;
     }
-    
+
     function confirm_selected(event) {
       event.preventDefault();
       checkboxes = document.getElementsByName('fund_email_checkbox');
@@ -129,7 +129,7 @@
       }
       var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
       var admin_js = '<%= raw @admin.to_json %>';
-      $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email, 
+      $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email,
           {"admin": admin_js});
       return false;
     }

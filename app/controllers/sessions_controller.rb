@@ -4,19 +4,19 @@ class SessionsController < ApplicationController
       render "login_failure"
       return
     end
-    
+
     artist = Artist.find_by_email(params[:session][:email])
     if !artist
       render "login_failure"
       return
     end
 
-    if !artist.activated 
-      redirect_to controller: "account_activations", action: "unactivated", 
+    if !artist.activated
+      redirect_to controller: "account_activations", action: "unactivated",
           type: "artists", email: params[:session][:email]
       return
     end
-    
+
     if !artist.authenticate(params[:session][:password])
       render "login_failure"
       return
@@ -43,12 +43,12 @@ class SessionsController < ApplicationController
       return
     end
 
-    if !voter.activated 
-      redirect_to controller: "account_activations", action: "unactivated", 
+    if !voter.activated
+      redirect_to controller: "account_activations", action: "unactivated",
           type: "voters", email: params[:session][:email]
       return
     end
-    
+
     if !voter.authenticate(params[:session][:password])
       render "login_failure"
       return
@@ -77,12 +77,12 @@ class SessionsController < ApplicationController
     # Although admins are auto-activated, one could unactivate an admin account
     # to prevent future logins (doesn't protect against admins with persisting
     # session cookies.)
-    if !admin.activated 
+    if !admin.activated
       redirect_to controller: "account_activations", action: "unactivated",
           type: "admins", email: params[:session][:email]
       return
     end
-    
+
     if !admin.authenticate(params[:session][:password])
       render "login_failure"
       return

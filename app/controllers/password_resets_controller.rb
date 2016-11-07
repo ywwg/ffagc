@@ -4,11 +4,11 @@ class PasswordResetsController < ApplicationController
   before_action :get_user, only: [:edit, :update]
   before_action :valid_user, only: [:edit, :update]
   before_action :check_expiration, only: [:edit, :update]
-  
+
   def index
     # Without a type specified we don't know what to do...
   end
-  
+
   def new
     @type = params[:type]
     if @type == "artists"
@@ -21,7 +21,7 @@ class PasswordResetsController < ApplicationController
       redirect_to :action => "index"
     end
   end
-  
+
   def create
     @type = params[:password_reset][:type]
     email = URI.unescape(params[:password_reset][:email]).downcase
@@ -42,11 +42,11 @@ class PasswordResetsController < ApplicationController
       render "failure"
     end
   end
-  
+
   def edit
     @type = params[:type]
   end
-  
+
   def update
     # XXX: Fix ugly conditionals based on @type
     if @type == "artists"
@@ -59,10 +59,10 @@ class PasswordResetsController < ApplicationController
       p = params[:admin]
       t = :admin
     end
-    
+
     if p[:password].empty?
       flash.now[:danger] = "Password can't be empty"
-      render 'edit', :type => @type, :email => params[:email] 
+      render 'edit', :type => @type, :email => params[:email]
     elsif @user.update_attributes(user_params(t))
       # Clear out the reset digest so it can't be used again.
       @user.update_attribute(:reset_digest, "")
@@ -72,16 +72,16 @@ class PasswordResetsController < ApplicationController
       render "edit", :type => @type, :email => params[:email]
     end
   end
-  
+
   private
-  
+
   def user_params(type)
     params.require(type).permit(:password, :password_confirmation)
   end
 
   def get_user
     @type = params[:type]
-    
+
     email = URI.unescape(params[:email]).downcase
     if @type == "artists"
       @user = Artist.find_by(email: email)
@@ -112,7 +112,7 @@ class PasswordResetsController < ApplicationController
       render 'failure'
     end
   end
-  
+
   # Checks expiration of reset token.
   def check_expiration
     if @user.password_reset_expired?

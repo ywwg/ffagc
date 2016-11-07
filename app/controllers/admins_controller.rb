@@ -1,28 +1,28 @@
 class AdminsController < ApplicationController
-  
+
   before_filter :init_admin
   before_filter :init_voters
   before_filter :verify_admin_logged_in, except: [:create, :index, :signup]
-  
+
   def verify_admin_logged_in
     if !current_admin
       redirect_to "/"
       return
     end
   end
-    
+
   def init_admin
       @admin = Admin.new
   end
-    
+
   def signup
-      
+
   end
-  
+
   def admin_params
     params.require(:admin).permit(:name, :password_digest, :password, :password_confirmation, :email)
   end
-  
+
   def create
     # if there is no admin, go ahead and create the account (initial config)
     # even if no admin is logged in.
@@ -30,21 +30,21 @@ class AdminsController < ApplicationController
       redirect_to "/"
       return
     end
-    
+
     if Admin.exists?(email: admin_params[:email].downcase)
       flash[:notice] = "The email address #{admin_params[:email.downcase]} already exists in our system"
       render "signup_failure"
       return
     end
-    
+
     @admin = Admin.new(admin_params)
     @admin.email = @admin.email.downcase
     # Auto-activate admins
     @admin.activated = true
-    
+
     if @admin.save
       # Only assign the session to the new account if it's the first one.
-      if !session[:admin_id]      
+      if !session[:admin_id]
         session[:admin_id] = @admin.id
       end
       render "signup_success"
@@ -56,7 +56,7 @@ class AdminsController < ApplicationController
   def reveal
     init_submissions
   end
-  
+
   def verify
     voter = Voter.find(params[:id])
     voter.verified = params[:verify]
@@ -67,10 +67,10 @@ class AdminsController < ApplicationController
         UserMailer.voter_verified(voter, event_year).deliver!
       end
     end
-    
+
     redirect_to action: "voters"
   end
-  
+
   def send_fund_emails
     submissions = GrantSubmission.where(id: params[:ids].split(','))
     submissions.each do |gs|
@@ -86,7 +86,7 @@ class AdminsController < ApplicationController
       gs.funding_decision = true
       gs.save
     end
-    
+
     redirect_to action: "index"
   end
 
@@ -104,7 +104,7 @@ class AdminsController < ApplicationController
     per = 3
 
     @sv = Hash.new
-    
+
     @submissions = []
     if max == 0
       # bail if no verified voters??
@@ -140,7 +140,7 @@ class AdminsController < ApplicationController
 
     redirect_to action: "index"
   end
-  
+
   def init_voters
     # verified voters
     @voters = Voter.all
@@ -154,7 +154,7 @@ class AdminsController < ApplicationController
       VoterSubmissionAssignment.where("voter_id = ?",vv.id).each{|vsa| vv.assigned.push(vsa.grant_submission_id)}
     end
   end
-  
+
   def init_submissions
     @results = Hash.new
     @grant_submissions = GrantSubmission.all.order(grant_id: :asc)
@@ -217,7 +217,7 @@ class AdminsController < ApplicationController
       @results[gs.id]['num_total'] = t_num + c_num + f_num
     end
   end
-  
+
   def index
     vv_arr = @verified_voters.to_ary
     idx = 0
@@ -225,23 +225,23 @@ class AdminsController < ApplicationController
     per = 3
 
     @sv = Hash.new
-    
+
     @submissions = []
     if max > 0
       @submissions = GrantSubmission.where(grant_id: active_vote_grants).order(grant_id: :asc)
-  
+
       @submissions.each do |s|
         @sv[s.id] = Hash.new
-  
+
         @sv[s.id]['id'] = s.id
         @sv[s.id]['name'] = s.name
         @sv[s.id]['assigned'] = Array.new(per)
-  
+
         for i in 0..per-1
           @sv[s.id]['assigned'][i] = vv_arr[idx].id
-  
+
           idx=idx+1
-  
+
           if idx >= max
             idx = 0
           end
@@ -250,10 +250,10 @@ class AdminsController < ApplicationController
     end
     init_submissions
   end
-  
+
   def voters
   end
-  
+
   def grants
     if !current_admin
       redirect_to "/"
@@ -261,7 +261,7 @@ class AdminsController < ApplicationController
     end
     @grants = Grant.all
   end
-  
+
   def submissions
     init_submissions
   end
