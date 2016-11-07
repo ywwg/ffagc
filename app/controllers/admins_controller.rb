@@ -30,7 +30,7 @@ class AdminsController < ApplicationController
       redirect_to "/"
       return
     end
-
+    
     if Admin.exists?(email: admin_params[:email].downcase)
       flash[:notice] = "The email address #{admin_params[:email.downcase]} already exists in our system"
       render "signup_failure"
@@ -43,7 +43,10 @@ class AdminsController < ApplicationController
     @admin.activated = true
     
     if @admin.save
-      session[:admin_id] = @admin.id
+      # Only assign the session to the new account if it's the first one.
+      if !session[:admin_id]      
+        session[:admin_id] = @admin.id
+      end
       render "signup_success"
     else
       render "signup_failure"
