@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     end
     
     artist = Artist.find_by_email(params[:session][:email])
-    if !artist.activated 
+    if artist && !artist.activated 
       redirect_to controller: "account_activations", action: "unactivated", 
           type: "artists", email: params[:session][:email]
       return
@@ -32,7 +32,7 @@ class SessionsController < ApplicationController
     end
 
     voter = Voter.find_by_email(params[:session][:email])
-    if !voter.activated 
+    if voter && !voter.activated 
       redirect_to controller: "account_activations", action: "unactivated", 
           type: "voters", email: params[:session][:email]
       return
@@ -61,7 +61,7 @@ class SessionsController < ApplicationController
     # Although admins are auto-activated, one could unactivate an admin account
     # to prevent future logins (doesn't protect against admins with persisting
     # session cookies.)
-    if !admin.activated 
+    if admin && !admin.activated 
       redirect_to controller: "account_activations", action: "unactivated",
           type: "admins", email: params[:session][:email]
       return
