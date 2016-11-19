@@ -78,4 +78,4 @@ with a command like:
 
     RAILS_ENV=production bundle exec rake assets:precompile
 
-
+lol! have to move contract_templates aside because they are malformed
