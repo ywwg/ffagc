@@ -10,6 +10,7 @@
   <% if admin_logged_in? %>
     <h3>| <%= link_to "Index", :controller => "admins", :action => "index" %>
     | <%= link_to "All Submissions", :controller => "admins", :action => "submissions" %>
+    | <%= link_to "Artists", :controller => "admins", :action => "artists" %>
     | Voters
     | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
     |</h3>

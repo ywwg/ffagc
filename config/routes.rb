@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   post 'admins/index' => 'admins#index'
   get 'admins/signup' => 'admins#signup'
   post 'admins/signup' => 'admins#create'
+  get 'admins/artists' => 'admins#artists'
   get 'admins/voters' => 'admins#voters'
   get 'admins/grants' => 'admins#grants'
   get 'admins/submissions' => 'admins#submissions'

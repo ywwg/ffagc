@@ -10,11 +10,17 @@ class ArtistsController < ApplicationController
   end
 
   def artist_params
-    params.require(:artist).permit(:name, :password_digest, :password, :password_confirmation, :email, :contact_name, :contact_phone, :contact_street, :contact_city, :contact_state)
+    params.require(:artist).permit(:name, :password_digest, :password,
+        :password_confirmation, :email, :contact_name, :contact_phone,
+        :contact_street, :contact_city, :contact_state, :contact_zipcode,
+        :contact_country)
   end
 
   def artist_survey_params
-    params.require(:survey).permit(:has_attended_firefly, :has_attended_firefly_desc, :has_attended_regional, :has_attended_regional_desc, :has_attended_bm, :has_attended_bm_desc, :can_use_as_example)
+    params.require(:survey).permit(:has_attended_firefly,
+        :has_attended_firefly_desc, :has_attended_regional,
+        :has_attended_regional_desc, :has_attended_bm, :has_attended_bm_desc,
+        :can_use_as_example)
   end
 
   def create
