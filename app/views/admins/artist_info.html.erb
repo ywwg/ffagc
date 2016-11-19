@@ -1,0 +1,32 @@
+<div class="container">
+  <% if admin_logged_in? %>
+  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
+  | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+  | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
+  |
+  <% end %>
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
+
+  <% if admin_logged_in? %>
+    <h2>Artist Information for <%= @artist.name %></h2>
+    <p>Contact: <%= @artist.contact_name%><br/>
+      Email: <%= @artist.email%><br/>
+      Phone: <%= @artist.contact_phone %><br/>
+      Address: <%= @artist.contact_street %><br/>
+      <%= @artist.contact_city %>, <%= @artist.contact_state %>,
+      <%= @artist.contact_zipcode %> <%# Not working yet @artist.contact_country %>
+    </p>
+    <h2>Survey Responses</h2>
+    <% if @artist_survey == nil %><p>Error: could not locate survey responses</p>
+    <% else %>
+      <p>Has attended firefly? <% if @artist_survey.has_attended_firefly %>Yes<% else %>No<%end%><br/>
+        <blockquote><%= @artist_survey.has_attended_firefly_desc %></blockquote></p>
+      <p>Has attended a regional? <% if @artist_survey.has_attended_regional %>Yes<% else %>No<%end%><br/>
+        <blockquote><%= @artist_survey.has_attended_regional_desc %></blockquote></p>
+      <p>Has attended Burning Man? <% if @artist_survey.has_attended_bm %>Yes<% else %>No<%end%><br/>
+        <blockquote><%= @artist_survey.has_attended_bm_desc %></blockquote></p>
+      <p>Permission to use grant as example? <% if @artist_survey.can_use_as_example %>Yes<% else %>No<%end%></p>
+    <% end %>
+    <%= link_to "Back", :controller => "admins", :action => "artists" %>
+  <% end %>
+</div>1

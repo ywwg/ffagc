@@ -259,7 +259,19 @@ class AdminsController < ApplicationController
   def artists
   end
 
+  def artist_info
+    id = params.require(:id)
+    @artist = Artist.find(id)
+    @artist_survey = ArtistSurvey.where(artist_id: id).take
+  end
+
   def voters
+  end
+
+  def voter_info
+    id = params.require(:id)
+    @voter = Voter.find(id)
+    @voter_survey = VoterSurvey.where(voter_id: id).take
   end
 
   def grants

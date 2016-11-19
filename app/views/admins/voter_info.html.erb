@@ -1,0 +1,35 @@
+<div class="container">
+  <% if admin_logged_in? %>
+  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
+  | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+  | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
+  |
+  <% end %>
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
+
+  <% if admin_logged_in? %>
+    <h2>Voter Information for <%= @voter.name %></h2>
+    <p>Email: <%= @voter.email %><br/>
+    Verified: <b><% if @voter.verified %>Yes<% else %>No<% end %></b><br/>
+    </p>
+    <% if @voter_survey == nil %><p>Error: could not locate survey responses</p>
+    <% else %>
+      <h2>Required Responses</h2>
+      <p>
+        Has attended firefly? <% if @voter_survey.has_attended_firefly %>Yes<% else %>No<%end%><br/>
+        <b>Not</b> applying for a grant this year? <% if @voter_survey.not_applying_this_year %>Yes<% else %>No<%end%><br/>
+        Will commit to reading proposals? <% if @voter_survey.will_read %>Yes<% else %>No<%end%><br/>
+        Will commit to coming to meetings? <% if @voter_survey.will_meet %>Yes<% else %>No<%end%><br/>
+      </p>
+      <h2>Survey Responses</h2>
+      <p>
+        Has been a voter? <% if @voter_survey.has_been_voter %>Yes<% else %>No<%end%><br/>
+        Has been a voter for another institution? <% if @voter_survey.has_participated_other %>Yes<% else %>No<%end%><br/>
+        Have been awarded a grant? <% if @voter_survey.has_received_grant %>Yes<% else %>No<%end%><br/>
+        Have been awarded a grant by another institution? <% if @voter_survey.has_received_other_grant %>Yes<% else %>No<%end%><br/>
+        Fireflies attended? <%= @voter_survey.how_many_fireflies %>
+      </p>
+    <% end %>
+    <%= link_to "Back", :controller => "admins", :action => "voters" %>
+  <% end %>
+</div>1

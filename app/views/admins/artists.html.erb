@@ -22,7 +22,7 @@
       </tr>
       <% @artists.each do |v| %>
       <tr>
-        <td><%= v['name'] %></td>
+        <td><%= link_to v['name'], :controller => "admins", :action => "artist_info", :id => v['id']%></td>
         <td><%= v['email'] %></td>
       </tr>
       <% end %>
