@@ -10,7 +10,7 @@ class UserMailer < ActionMailer::Base
     @user = user
     @type = type
 
-    mail to: user.email, subject: "Firefly Art Grant Account Activation"
+    mail to: @user.email, subject: "Firefly Art Grant Account Activation"
   end
 
   # Subject can be set in your I18n file at config/locales/en.yml
@@ -22,7 +22,7 @@ class UserMailer < ActionMailer::Base
     @user = user
     @type = type
 
-    mail to: user.email, subject: "Firefly Art Grant Password Reset"
+    mail to: @user.email, subject: "Firefly Art Grant Password Reset"
   end
 
   def voter_verified(user, year)
@@ -43,7 +43,7 @@ class UserMailer < ActionMailer::Base
     # TODO: schedule should be something that will render nicely in html or text.
     @schedule = "TBD"
 
-    mail to: @artist.email, subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
+    mail to: @artist.email, cc: "grants@fireflyartscollective.org", subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
   end
 
   def grant_not_funded(submission, artist, grant, year)
@@ -52,6 +52,6 @@ class UserMailer < ActionMailer::Base
     @grant = grant
     @year = year
 
-    mail to: @artist.email, subject: "#{@year} Firefly #{@grant.name}  Grant Decision: #{@submission.name}"
+    mail to: @artist.email, cc: "grants@fireflyartscollective.org", subject: "#{@year} Firefly #{@grant.name}  Grant Decision: #{@submission.name}"
   end
 end
