@@ -1,6 +1,7 @@
 class AdminsController < ApplicationController
 
   before_filter :init_admin
+  before_filter :init_artists
   before_filter :init_voters
   before_filter :verify_admin_logged_in, except: [:create, :index, :signup]
 
@@ -141,6 +142,10 @@ class AdminsController < ApplicationController
     redirect_to action: "index"
   end
 
+  def init_artists
+    @artists = Artist.all
+  end
+
   def init_voters
     # verified voters
     @voters = Voter.all
@@ -251,7 +256,22 @@ class AdminsController < ApplicationController
     init_submissions
   end
 
+  def artists
+  end
+
+  def artist_info
+    id = params.require(:id)
+    @artist = Artist.find(id)
+    @artist_survey = ArtistSurvey.where(artist_id: id).take
+  end
+
   def voters
+  end
+
+  def voter_info
+    id = params.require(:id)
+    @voter = Voter.find(id)
+    @voter_survey = VoterSurvey.where(voter_id: id).take
   end
 
   def grants

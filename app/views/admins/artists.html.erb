@@ -1,0 +1,32 @@
+<div class="container">
+  <% if admin_logged_in? %>
+  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
+  | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+  | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
+  |
+  <% end %>
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
+
+  <% if admin_logged_in? %>
+    <h3>| <%= link_to "Index", :controller => "admins", :action => "index" %>
+    | <%= link_to "All Submissions", :controller => "admins", :action => "submissions" %>
+    | Artists
+    | <%= link_to "Voters", :controller => "admins", :action => "voters" %>
+    | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
+    |</h3>
+    <h2>Artists</h2>
+    <table border="1">
+      <tr>
+        <th>name</th>
+        <th>email</th>
+      </tr>
+      <% @artists.each do |v| %>
+      <tr>
+        <td><%= link_to v['name'], :controller => "admins", :action => "artist_info", :id => v['id']%></td>
+        <td><%= v['email'] %></td>
+      </tr>
+      <% end %>
+    </table>
+  <% end %>
+</div>
+

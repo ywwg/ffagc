@@ -8,17 +8,21 @@ class ApplicationController < ActionController::Base
   end
   helper_method :event_year
 
+  def timezone_now
+    DateTime.current.in_time_zone(Rails.configuration.event_timezone)
+  end
+
   private
   # Returns a list of the ids of grants which are currently active for submitting.
   def active_submit_grants
-    now = DateTime.current
+    now = timezone_now
     return Grant.where("submit_start <= ?", now).where("submit_end >= ?", now).select(:id)
   end
   helper_method :active_submit_grants
 
   # Returns a list of the ids of grants which are currently active for voting.
   def active_vote_grants
-    now = DateTime.current
+    now = timezone_now
     return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:id)
   end
 
@@ -33,13 +37,13 @@ class ApplicationController < ActionController::Base
   helper_method :any_vote_open?
 
   def active_vote_names
-    now = DateTime.current
+    now = timezone_now
     return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:name)
   end
   helper_method :active_vote_names
 
   def active_submit_names
-    now = DateTime.current
+    now = timezone_now
     return Grant.where("submit_start <= ?", now).where("submit_end >= ?", now).select(:name)
   end
   helper_method :active_submit_names
