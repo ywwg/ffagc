@@ -140,11 +140,11 @@ class GrantSubmissionsController < ApplicationController
       redirect_to "/"
       return
     end
-    if modify_grant_ok?(submission)
+    if !modify_grant_ok?(submission)
       redirect_to "/"
       return
     end
-    if !grant_submission_funded?(:submission_id)
+    if !grant_submission_funded?(submission.id)
       logger.warn "tried to generate contract for non-funded grant"
       redirect_to "/"
     end
