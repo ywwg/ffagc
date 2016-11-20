@@ -17,7 +17,7 @@ class GrantContract < Prawn::Document
   	begin
   	  # XXX hardcoding alert! Template filename must be the same as the grant name,
   	  # except all lowercase.
-  	  filename = "#{Rails.root}/app/assets/contract_templates/#{@grant.downcase}.erb"
+  	  filename = "#{Rails.root}/app/assets/contract_templates/#{@grant.downcase}.tmpl.erb"
       template = File.open(filename, "rb").read
       template.each_line do |line|
         write_templated_line line
