@@ -77,5 +77,3 @@ If you find that some assets are not updating, like css, they have probably been
 with a command like:
 
     RAILS_ENV=production bundle exec rake assets:precompile
-
-lol! have to move contract_templates aside because they are malformed
