@@ -28,7 +28,7 @@
       <tr>
         <td><%= link_to v['name'], :controller => "admins", :action => "voter_info", :id => v['id']%></td>
         <td><%= v['email'] %></td>
-        <td><%= v['verified'] %></td>
+        <td><%if v['verified'] %>Yes<% else %>No<% end %></td>
         <td>
           <% if v['verified'] %>
             <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %>
