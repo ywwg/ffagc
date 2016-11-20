@@ -13,7 +13,7 @@
           <%= collection_select(:grant_submission, :grant_id,
                   Grant.where(id: active_submit_grants), :id, :name,
                   {:include_blank => "(select a grant)"},
-                  { :onchange => "numericFilter();"}) %>
+                  { :onchange => "numericFilter();", :disabled => @grant_change_disable }) %>
         </li>
 
         <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => false, :validate => true, :input_html => { :onInput => "numericFilter(this);" }  %>

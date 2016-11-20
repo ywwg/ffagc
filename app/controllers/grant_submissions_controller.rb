@@ -85,10 +85,12 @@ class GrantSubmissionsController < ApplicationController
     end
 
     @grant_submission.name = grant_update_params[:name]
-    if grant_update_params[:proposal] != ""
+    if grant_update_params[:proposal] != nil && grant_update_params[:proposal] != ""
       @grant_submission.proposal = grant_update_params[:proposal]
     end
-    @grant_submission.grant_id = grant_update_params[:grant_id]
+    if grant_update_params[:grant_id] != nil
+      @grant_submission.grant_id = grant_update_params[:grant_id]
+    end
     @grant_submission.requested_funding_dollars = grant_update_params[:requested_funding_dollars]
 
     if admin_logged_in?
@@ -124,6 +126,13 @@ class GrantSubmissionsController < ApplicationController
     rescue
       redirect_to "/"
       return
+    end
+
+    # Don't allow an artist to decide post-decision that they want a different
+    # grant category.
+    @grant_change_disable = nil
+    if @grant_submission.funding_decision && !admin_logged_in?
+      @grant_change_disable = "disabled"
     end
 
     render "modify"
