@@ -29,12 +29,13 @@ class GrantContract < Prawn::Document
 
   def write_templated_line(line)
     # This is a super simple templating system based on ERB and keywords.
-    # First, if a line begins with [[ it's a formatting token.  The supported
-    # keywords are in the if/else chain below
-    # A comma must follow the token, and then the text follows, like this:
-    # [[TITLE]],This Is My Title
     # Leading spaces (including spaces after the comma following a token)
     # are converted to indentation.  More spaces, more indents.
+    # Then, if a line begins with [[ (after any indentation) it's a formatting
+    # token.  The supported keywords are in the if/else chain below.
+    # A space must follow the token, and then the text follows, like this:
+    # [[TITLE]] This Is My Title
+
     # Lines beginning with '#' are comments
 
     # Defaults:
@@ -47,9 +48,16 @@ class GrantContract < Prawn::Document
     if line.start_with? "#"
       return
     end
+
+    # Do indentation first
+    while line.start_with? " "
+      indent_amount += 5
+      line = line[1..-1]
+    end
+
     # Process token and strip it
     if line.start_with? "[["
-      tok = line.split(",", 2)
+      tok = line.split(" ", 2)
       if tok[0] == "[[TITLE]]"
         align = :center
         size = 16
@@ -70,12 +78,6 @@ class GrantContract < Prawn::Document
       line = tok[1]
     end
     return if line == nil
-
-    # Do indentation
-    while line.start_with? " "
-      indent_amount += 5
-      line = line[1..-1]
-    end
 
     # Render the line
     template = ERB.new line
