@@ -46,12 +46,7 @@ class UserMailer < ActionMailer::Base
     # TODO: schedule should be something that will render nicely in html or text.
     @schedule = "TBD"
 
-    cc = ""
-    if Rails.env.production?
-      cc = "grants@fireflyartscollective.org"
-    end
-
-    mail to: @artist.email, cc: cc, subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
+    mail to: @artist.email, cc: get_cc(), subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
   end
 
   def grant_not_funded(submission, artist, grant, year)
@@ -60,12 +55,7 @@ class UserMailer < ActionMailer::Base
     @grant = grant
     @year = year
 
-    cc = ""
-    if Rails.env.production?
-      cc = "grants@fireflyartscollective.org"
-    end
-
-    mail to: @artist.email, cc: cc, subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
+    mail to: @artist.email, cc: get_cc(), subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
   end
 
   def notify_questions(submission, artist, grant, year)
@@ -77,11 +67,14 @@ class UserMailer < ActionMailer::Base
     # TODO: due_date should also not be set here, because no one will ever find it.
     @due_date = "TBD"
 
-    cc = ""
-    if Rails.env.production?
-      cc = "grants@fireflyartscollective.org"
-    end
+    mail to: @artist.email, cc: get_cc(), subject: "#{@year} Firefly #{@grant.name} Grants: Questions regarding #{@submission.name}"
+  end
 
-    mail to: @artist.email, cc: cc, subject: "#{@year} Firefly #{@grant.name} Grants: Questions regarding #{@submission.name}"
+  private
+  def get_cc()
+    if Rails.env.production?
+      return "grants@fireflyartscollective.org"
+    end
+    return ""
   end
 end
