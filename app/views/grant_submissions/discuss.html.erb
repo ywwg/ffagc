@@ -1,0 +1,33 @@
+<div class="container">
+  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Grant Proposal Discussion</h1>
+
+  <% if artist_logged_in? || admin_logged_in? || verified_voter_logged_in? %>
+    <h2>Discussion for <%= @grant_submission.name %></h2>
+    <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
+      <fieldset>
+        <%= f.input :questions, :as => :text,
+            :label => "Questions from Committee", :required => false,
+            :input_html => { :disabled => @question_edit_disable } %>
+        <%= f.input :answers, :as => :text, :label => "Answers from Artist",
+            :required => false,
+            :input_html => { :disabled => @answer_edit_disable } %>
+        <% if artist_logged_in? || admin_logged_in? %>
+          <%= submit_tag("Update Discussion", class: "button")%>
+        <% end %>
+      </fieldset>
+    <br />
+    <% end %>
+    <% if artist_logged_in? %>
+      <%= link_to 'Back', :controller => "artists", :action => "index" %>
+    <% elsif admin_logged_in? %>
+      <%= link_to 'Back', :controller => "admins", :action => "index" %>
+    <% elsif verified_voter_logged_in? %>
+      <%= link_to 'Back', :controller => "voters", :action => "index" %>
+    <% end %>
+  <% else %>
+    You must be logged in to view discussions. (<%= link_to "Log In", :controller => "home", :action => "index" %>)
+    <br />
+    <br />
+    <%= link_to 'Back', :back %>
+  <% end %>
+</div>
