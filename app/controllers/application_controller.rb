@@ -50,18 +50,24 @@ class ApplicationController < ActionController::Base
 
   def discussion_status(grant_id)
     g = GrantSubmission.find(grant_id)
-    if g.questions.length > 0
-      if g.answers.length > 0
+    if g.questions != nil && !g.questions.empty?
+      if g.answers != nil && !g.answers.empty?
         return "Q&A"
       end
       return "Q"
     end
-    if g.answers.length >0
+    if g.answers != nil && !g.answers.empty?
       return "A"
     end
     return "None"
   end
   helper_method :discussion_status
+
+  def submission_has_questions?(grant_id)
+    g = GrantSubmission.find(grant_id)
+    g.questions != nil && !g.questions.empty?
+  end
+  helper_method :submission_has_questions?
 
   def any_grant_submission_funded?(artist_id)
     return GrantSubmission.where("artist_id = ? AND funding_decision = 't' AND granted_funding_dollars > 0", artist_id).count > 0

@@ -91,6 +91,19 @@ class AdminsController < ApplicationController
     redirect_to action: "index"
   end
 
+  def send_question_emails
+    submissions = GrantSubmission.where(grant_id: active_vote_grants)
+    submissions.each do |gs|
+      if gs.questions != nil && !gs.questions.empty? > 0
+        artist = Artist.where(id: gs.artist_id).take
+        grant = Grant.where(id: gs.grant_id).take
+        UserMailer.notify_questions(gs, artist, grant, event_year).deliver!
+      end
+    end
+
+    redirect_to action: "index"
+  end
+
   def assign
     # a terrible terrible thing :(
 

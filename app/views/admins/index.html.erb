@@ -32,10 +32,10 @@
       <tr>
         <th>grant</th>
         <th>name</th>
-        <th>$</th>
-        <th>Decision Finalized</th>
-        <th>Amount</th>
+        <th>Requested $</th>
         <th>Discussion</th>
+        <th>Decision Finalized</th>
+        <th>Granted $</th>
         <th></th>
         <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
       </tr>
@@ -44,10 +44,10 @@
       <tr>
         <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
         <td><%= gs.name %></td>
-        <td><%= gs.requested_funding_dollars %></td>
-        <td><%= gs.funding_decision %></td>
-        <td><%= gs.granted_funding_dollars%></td>
+        <td>$<%= gs.requested_funding_dollars %></td>
         <td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
+        <td><%= gs.funding_decision %></td>
+        <td>$<%= gs.granted_funding_dollars%></td>
         <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
         <td align="center"><form name="fund_email_form-<%= gs.id %>">
               <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
@@ -55,7 +55,9 @@
       </tr>
       <% end %>
       <tr>
-        <td colspan="7" align="right"><form name="send_email_form">
+        <td colspan="3" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
+        <td><%= button_to "Notify Questions", :controller => "admins", :action => "send_question_emails" %></td>
+        <td colspan="3" align="right"><form name="send_email_form">
             <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
             </form></td>
         <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
