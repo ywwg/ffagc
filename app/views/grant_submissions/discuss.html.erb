@@ -15,8 +15,31 @@
           <%= submit_tag("Update Discussion", class: "button")%>
         <% end %>
       </fieldset>
-    <br />
     <% end %>
+    <% if !@supplements.empty? %>
+      <h2>Supplemental documents</h2>
+      <table style="border:none;">
+      <% @supplements.each do |s| %>
+        <tr><td style="border:none;">
+          <%= form_tag("/proposals/delete", authenticity_token: true, :class => "button_to") do %>
+            <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
+            <%= hidden_field_tag :id, s.id, :name => "proposal[id]" %>
+            <input class="button" name="delete" type="submit" value="Delete" />
+          <% end %>
+        </td>
+        <td style="border:none;"><a href="<%= s.file %>"><%= s.file_identifier %></a></td>
+        </tr>
+      <% end %>
+      </table>
+    <% end %>
+    <br/>
+    <%= semantic_form_for @proposal, :html => { :onsubmit => 'return validate();'} do |f| %>
+      <label class="label" for="proposal_file">Upload Additional Document:</label>
+      <%= f.file_field :file, :required => true, :validate => true, :accept => ".pdf,.doc,.docx,.txt,.md" %>
+      <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
+      <%= submit_tag("Upload", class: "button") %>
+    <% end %>
+    <br />
     <% if artist_logged_in? %>
       <%= link_to 'Back', :controller => "artists", :action => "index" %>
     <% elsif admin_logged_in? %>
@@ -31,3 +54,16 @@
     <%= link_to 'Back', :back %>
   <% end %>
 </div>
+
+<script>
+function validate() {
+  if(document.getElementById("proposal_file").value != "") {
+    document.getElementById("proposal_file").style.border = '1px solid green';
+    return true;
+  } else {
+    alert('error: please select your application PDF')
+    document.getElementById("proposal_file").style.border = '1px solid red';
+    return false;
+  }
+}
+</script>
