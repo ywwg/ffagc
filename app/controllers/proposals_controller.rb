@@ -12,7 +12,7 @@ class ProposalsController < ApplicationController
       return
     end
     begin
-      @grant_submission = GrantSubmission.find(params.permit(:grant_submission_id, :authenticity_token)[:grant_submission_id])
+      @grant_submission = GrantSubmission.find(proposal_params[:grant_submission_id])
     rescue
       redirect_to "/"
       return
