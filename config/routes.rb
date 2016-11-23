@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
   get 'artists/grant_submissions' => 'grant_submissions#index'
   get 'artists/modify_grant' => 'grant_submissions#modify'
+  get 'grant_submissions/discuss' => 'grant_submissions#discuss'
   post 'artists/modify_grant' => 'grant_submissions#modify'
   post 'grant_submissions/delete' => 'grant_submissions#delete'
   post 'grant_submissions/generate_contract' => 'grant_submissions#generate_contract'
@@ -52,6 +53,7 @@ Rails.application.routes.draw do
   get 'admins/reveal' => 'admins#reveal'
   post 'admins/verify' => 'admins#verify'
   post 'admins/send_fund_emails' => 'admins#send_fund_emails'
+  post 'admins/send_question_emails' => 'admins#send_question_emails'
 
 
   resources :artists, :voters, :admins, :grant_submissions, :grants

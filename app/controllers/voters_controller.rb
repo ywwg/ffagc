@@ -92,19 +92,44 @@ class VotersController < ApplicationController
       @grant_submissions_unassigned = @grant_submissions.select{|gs| gs.assigned == 0}
 
       @grant_submissions_unassigned.sort_by {|gs| gs.grant_id}
+
+      @grant_submissions_display = @grant_submissions_assigned
+      @show_all = false
+      if params[:all] == "true"
+        @show_all = true
+        @grant_submissions_display = @grant_submissions
+      end
     end
 
   def vote
     @grant_submissions = GrantSubmission.where(grant_id: active_vote_grants)
 
-    # Go through all of the votes and submit all of the values even if they
-    # haven't changed :(
+    # Realistically, only one var will ever change at a time because the user
+    # can only change one thing at once.  Really the submit function should
+    # just pass the one item that changed.
     @grant_submissions.each do |gs|
       vote = Vote.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
-      vote.score_t = params['t'][gs.id.to_s]
-      vote.score_c = params['c'][gs.id.to_s]
-      vote.score_f = params['f'][gs.id.to_s]
-      vote.save
+      # nil means "was not set".  If the user sets to blank, it will be " ".
+      if params['t'][gs.id.to_s] == nil
+        next
+      end
+
+      changed = false
+      if vote.score_t.to_s != params['t'][gs.id.to_s]
+        vote.score_t = params['t'][gs.id.to_s]
+        changed = true
+      end
+      if vote.score_c.to_s != params['c'][gs.id.to_s]
+        vote.score_c = params['c'][gs.id.to_s]
+        changed = true
+      end
+      if vote.score_f.to_s != params['f'][gs.id.to_s]
+        vote.score_f = params['f'][gs.id.to_s]
+        changed = true
+      end
+      if changed
+        vote.save
+      end
     end
 
     render :json => { }

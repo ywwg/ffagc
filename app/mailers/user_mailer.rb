@@ -38,12 +38,15 @@ class UserMailer < ActionMailer::Base
     @grant = grant
     @year = year
 
+    # TODO: this is not a great place to store this kind of info, but it's too
+    # specific to put in the DB.  Unless I make a key-value store for this kind
+    # of arbitrary string.
     @deadline = "Flurbsday, Smarch 34rd 20167"
 
     # TODO: schedule should be something that will render nicely in html or text.
     @schedule = "TBD"
 
-    mail to: @artist.email, cc: "grants@fireflyartscollective.org", subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
+    mail to: @artist.email, cc: get_cc(), subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
   end
 
   def grant_not_funded(submission, artist, grant, year)
@@ -52,6 +55,26 @@ class UserMailer < ActionMailer::Base
     @grant = grant
     @year = year
 
-    mail to: @artist.email, cc: "grants@fireflyartscollective.org", subject: "#{@year} Firefly #{@grant.name}  Grant Decision: #{@submission.name}"
+    mail to: @artist.email, cc: get_cc(), subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
+  end
+
+  def notify_questions(submission, artist, grant, year)
+    @submission = submission
+    @artist = artist
+    @grant = grant
+    @year = year
+
+    # TODO: due_date should also not be set here, because no one will ever find it.
+    @due_date = "TBD"
+
+    mail to: @artist.email, cc: get_cc(), subject: "#{@year} Firefly #{@grant.name} Grants: Questions regarding #{@submission.name}"
+  end
+
+  private
+  def get_cc()
+    if Rails.env.production?
+      return "grants@fireflyartscollective.org"
+    end
+    return ""
   end
 end

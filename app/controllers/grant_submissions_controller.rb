@@ -32,10 +32,10 @@ class GrantSubmissionsController < ApplicationController
     if admin_logged_in?
       params.require(:grant_submission).permit(:id, :name, :grant_id,
           :requested_funding_dollars, :proposal, :granted_funding_dollars,
-          :funding_decision, :authenticity_token)
+          :funding_decision, :authenticity_token, :questions, :answers)
     else
       params.require(:grant_submission).permit(:id, :name, :grant_id,
-          :requested_funding_dollars, :proposal, :authenticity_token)
+          :requested_funding_dollars, :proposal, :authenticity_token, :answers)
     end
   end
 
@@ -84,23 +84,37 @@ class GrantSubmissionsController < ApplicationController
       return
     end
 
-    @grant_submission.name = grant_update_params[:name]
-    if grant_update_params[:proposal] != nil && grant_update_params[:proposal] != ""
-      @grant_submission.proposal = grant_update_params[:proposal]
-    end
-    if grant_update_params[:grant_id] != nil
-      @grant_submission.grant_id = grant_update_params[:grant_id]
-    end
-    @grant_submission.requested_funding_dollars = grant_update_params[:requested_funding_dollars]
+    if params[:commit] == "Update Discussion"
+      if admin_logged_in?
+        if @grant_submission.questions != grant_update_params[:questions]
+          @grant_submission.questions_updated_at = Time.zone.now
+          @grant_submission.questions = grant_update_params[:questions]
+        end
+      end
+      if @grant_submission.answers != grant_update_params[:answers]
+        @grant_submission.answers_updated_at = Time.zone.now
+        @grant_submission.answers = grant_update_params[:answers]
+      end
+    else
+      # Default grant modify case
+      @grant_submission.name = grant_update_params[:name]
+      if grant_update_params[:proposal] != nil && grant_update_params[:proposal] != ""
+        @grant_submission.proposal = grant_update_params[:proposal]
+      end
+      if grant_update_params[:grant_id] != nil
+        @grant_submission.grant_id = grant_update_params[:grant_id]
+      end
+      @grant_submission.requested_funding_dollars = grant_update_params[:requested_funding_dollars]
 
-    if admin_logged_in?
-      @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
-      @grant_submission.funding_decision = grant_update_params[:funding_decision]
+      if admin_logged_in?
+        @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
+        @grant_submission.funding_decision = grant_update_params[:funding_decision]
+      end
     end
 
     if @grant_submission.save
       if admin_logged_in?
-        redirect_to :controller => "admins", :action => "submissions"
+        redirect_to :controller => "admins", :action => "index"
       else
         redirect_to :controller => "artists", :action => "index"
       end
@@ -130,12 +144,44 @@ class GrantSubmissionsController < ApplicationController
 
     # Don't allow an artist to decide post-decision that they want a different
     # grant category.
-    @grant_change_disable = nil
+    @grant_change_disable = false
     if @grant_submission.funding_decision && !admin_logged_in?
-      @grant_change_disable = "disabled"
+      @grant_change_disable = true
     end
 
     render "modify"
+  end
+
+  def discuss
+    begin
+      @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
+    rescue
+      redirect_to "/"
+      return
+    end
+
+    # Don't show discussions for projects that don't belong to the artist.
+    # Overridden if admin or verified voter is logged in
+    if !admin_logged_in? && !verified_voter_logged_in?
+      # In the case that nobody is logged in, we'll just display an error.
+      # Artists trying to snoop on other people's discussions don't get the
+      # benefit of knowing what they did wrong.
+      if artist_logged_in?
+        if current_artist.id != @grant_submission.artist_id
+          redirect_to "/"
+        end
+      end
+    end
+
+    @question_edit_disable = false
+    if !admin_logged_in?
+      @question_edit_disable = true
+    end
+
+    @answer_edit_disable = false
+    if !artist_logged_in? && !admin_logged_in?
+      @answer_edit_disable = true
+    end
   end
 
   def grant_contract_params
