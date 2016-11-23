@@ -128,8 +128,13 @@ class ApplicationController < ActionController::Base
   def voter_logged_in?
     true if current_voter
   end
-
   helper_method :voter_logged_in?
+
+  def verified_voter_logged_in?
+    true if current_voter && current_voter.verified
+  end
+  helper_method :verified_voter_logged_in?
+
 
   # /admins
 

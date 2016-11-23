@@ -160,6 +160,16 @@ class GrantSubmissionsController < ApplicationController
       return
     end
 
+    # Don't show discussions for projects that don't belong to the artist.
+    # Overridden if admin or verified voter is logged in
+    if !admin_logged_in? && !verified_voter_logged_in?
+      if artist_logged_in?
+        if current_artist.id != @grant_submission.artist_id
+          redirect_to "/"
+        end
+      end
+    end
+
     @question_edit_disable = false
     if !admin_logged_in?
       @question_edit_disable = true
