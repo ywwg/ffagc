@@ -40,8 +40,12 @@ class ProposalsController < ApplicationController
 
   def delete
     @proposal = Proposal.find(proposal_params[:id])
-    @proposal.destroy
-    redirect_to :controller => "grant_submissions", :action => "discuss",
-          :id => proposal_params[:grant_submission_id]
+    begin
+      @proposal.destroy
+      redirect_to :controller => "grant_submissions", :action => "discuss",
+            :id => proposal_params[:grant_submission_id]
+    rescue
+      render "destroy_failure"
+    end
   end
 end
