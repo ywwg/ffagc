@@ -8,7 +8,7 @@
 
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Voting Committee</h1>
 
-	<% if voter_logged_in? %>
+  <% if voter_logged_in? %>
     You are logged in as: <%= current_voter.name %> (<%= current_voter.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_voter" %>]
     <br /><br />
     <% if !voter_verified?(current_voter.id)%>
@@ -19,108 +19,53 @@
         <% if i > 0 %> and<% end %>
         <b><%= g.name %></b>
         <% end %>!
-        <br /><br />
-        For your review, here are the submitted applications:
-      	<br /><br />
-      	<!-- TODO: figure out how to do with proper remote:true -->
-    	  <%= form_tag("/voters/vote", authenticity_token: true, name: "form_assigned") do %>
-      		<b><u>Assigned To You</u></b>
-      		<br /><br />
-      		Please vote on these before the meeting!
-      		<br /><br />
-      		<table border="1" cellpadding="4">
-      			<tr>
-      				<th>ID</th>
-      				<th>Name</th>
-      				<th>Grant</th>
-      				<th>Requested</th>
-      				<th>Submission</th>
-      				<th>Discussion</th>
-      				<th>T</th>
-      				<th>C</th>
-      				<th>F</th>
-      				<th></th>
-      			</tr>
-      			<% @grant_submissions_assigned.each do |gs| %>
-      				<tr>
-      					<td><%= gs.id %></td>
-      					<td><%= gs.name %></td>
-      					<td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
-      					<td>$<%= gs.requested_funding_dollars %></td>
-      					<td><a href="<%= gs.proposal %>">Download</a></td>
-      					<td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
-      					<td>
-      						<select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
-      							<option></option>
-      							<option <%= @votes[gs.id].score_t == 0 ? "selected" : "" %>>0</option>
-      							<option <%= @votes[gs.id].score_t == 1 ? "selected" : "" %>>1</option>
-      							<option <%= @votes[gs.id].score_t == 2 ? "selected" : "" %>>2</option>
-      						</select>
-      					</td>
-      					<td>
-      						<select id="c[<%= gs.id %>]" name="c[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
-      							<option></option>
-      							<option <%= @votes[gs.id].score_c == 0 ? "selected" : "" %>>0</option>
-      							<option <%= @votes[gs.id].score_c == 1 ? "selected" : "" %>>1</option>
-      							<option <%= @votes[gs.id].score_c == 2 ? "selected" : "" %>>2</option>
-      						</select>
-      					</td>
-      					<td>
-      						<select id="f[<%= gs.id %>]" name="f[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
-      							<option></option>
-      							<option <%= @votes[gs.id].score_f == 0 ? "selected" : "" %>>0</option>
-      							<option <%= @votes[gs.id].score_f == 1 ? "selected" : "" %>>1</option>
-      							<option <%= @votes[gs.id].score_f == 2 ? "selected" : "" %>>2</option>
-      						</select>
-      					</td>
-      					<td><div id="save<%= gs.id %>" style="width: 60px"></div></td>
-      				</tr>
-      			<% end %>
-      		</table>
-        <% end %>
-
-        <%= form_tag("/voters/vote", authenticity_token: true, name: "form_all") do %>
-          <b><u>All Submissions</u></b>
-          <br /><br />
+        <br />
+        <!-- TODO: figure out how to do with proper remote:true -->
+        <%= form_tag("/voters/vote", authenticity_token: true, name: "vote_form") do %>
+          <p>| <% if @show_all %><%= link_to "Assigned To You", :controller => "voters", :action => "index" %><% else %><b>Assigned To You</b><% end %>
+             | <% if @show_all %><b>All Submissions</b><% else %><%= link_to "All Submissions", :controller => "voters", :action => "index", :all => "true" %><% end %>
+          |</p>
+          <% if !@show_all %>
+          <p>Please vote on these before the meeting!</p>
+          <% end %>
+          <br />
           <table border="1" cellpadding="4">
             <tr>
-              <th>ID</th>
-              <th>Name</th>
+              <th>Project Name</th>
               <th>Grant</th>
               <th>Requested</th>
-              <th>Submission</th>
+              <th>Proposal Document</th>
               <th>Discussion</th>
               <th>T</th>
               <th>C</th>
               <th>F</th>
               <th></th>
             </tr>
-            <% @grant_submissions.each do |gs| %>
+            <% @grant_submissions_display.each do |gs| %>
               <tr>
-                <td><%= gs.id %></td>
                 <td><%= gs.name %></td>
                 <td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
                 <td>$<%= gs.requested_funding_dollars %></td>
                 <td><a href="<%= gs.proposal %>">Download</a></td>
                 <td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
-                <td>
-                  <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
+                <td align="center">
+                  <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
                     <option></option>
                     <option <%= @votes[gs.id].score_t == 0 ? "selected" : "" %>>0</option>
                     <option <%= @votes[gs.id].score_t == 1 ? "selected" : "" %>>1</option>
                     <option <%= @votes[gs.id].score_t == 2 ? "selected" : "" %>>2</option>
                   </select>
                 </td>
-                <td>
-                  <select id="c[<%= gs.id %>]" name="c[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
+                <td align="center">
+                  <select id="c[<%= gs.id %>]" name="c[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
                     <option></option>
                     <option <%= @votes[gs.id].score_c == 0 ? "selected" : "" %>>0</option>
                     <option <%= @votes[gs.id].score_c == 1 ? "selected" : "" %>>1</option>
                     <option <%= @votes[gs.id].score_c == 2 ? "selected" : "" %>>2</option>
                   </select>
                 </td>
-                <td>
-                  <select id="f[<%= gs.id %>]" name="f[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
+                <td align="center">
+                  <select id="f[<%= gs.id %>]" name="f[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
                     <option></option>
                     <option <%= @votes[gs.id].score_f == 0 ? "selected" : "" %>>0</option>
                     <option <%= @votes[gs.id].score_f == 1 ? "selected" : "" %>>1</option>
@@ -133,47 +78,49 @@
           </table>
         <% end %>
 
-    		<br />
-    		<u>Voting</u>
-    		<br /><br />
-    		<b>T</b> = Thoughtfulness
-    		<br />
-    		<b>C</b> = Creativity
-    		<br />
-    		<b>F</b> = Feasibility
-    		<br /><br />
-    		<b>0</b> = Fails to meet criteria
-    		<br />
-    		<b>1</b> = Meets criteria
-    		<br />
-    		<b>2</b> = Exceeds criteria
-    		<br />
+        <br />
+        <u>Voting</u>
+        <br /><br />
+        <b>T</b> = Thoughtfulness
+        <br />
+        <b>C</b> = Creativity
+        <br />
+        <b>F</b> = Feasibility
+        <br /><br />
+        <b>0</b> = Fails to meet criteria
+        <br />
+        <b>1</b> = Meets criteria
+        <br />
+        <b>2</b> = Exceeds criteria
+        <br />
 
       <% else %>
         <b>Voting is not open at this time, relax.</b>
       <% end %>
 
 
-	  <% end %>
-	<% else %>
-	  <%= link_to "Register", :controller => "voters", :action => "signup" %> as a voting member of the voting committee.
-		<h2>Sign in:</h2>
-		<fieldset>
-  	<%= form_tag(controller: 'sessions', action:'create_voter') do %>
-  	  <%= text_field :session, :email, :placeholder => "Email Address" %>
-  			<br />
-  	  <%= password_field :session, :password, :placeholder => "Password" %>
-  			<br />
-  	  <%= submit_tag("Sign in", class: "button") %>
+    <% end %>
+  <% else %>
+    <%= link_to "Register", :controller => "voters", :action => "signup" %> as a voting member of the voting committee.
+    <h2>Sign in:</h2>
+    <fieldset>
+    <%= form_tag(controller: 'sessions', action:'create_voter') do %>
+      <%= text_field :session, :email, :placeholder => "Email Address" %>
+        <br />
+      <%= password_field :session, :password, :placeholder => "Password" %>
+        <br />
+      <%= submit_tag("Sign in", class: "button") %>
 
-  	   </fieldset>
-  	<% end %>
-  	<%= link_to "(forgot password)", new_password_reset_path(type: "voters") %>
-	<% end %>
+       </fieldset>
+    <% end %>
+    <%= link_to "(forgot password)", new_password_reset_path(type: "voters") %>
+  <% end %>
 
-	<script>
-	function ajax_submit(id) {
-    var valuesToSubmit = $('form').serialize();
+  <script>
+  // TODO: make this take a form element name and just submit that
+  //       single thing instead of the whole form.
+  function ajax_submit(id, form_name) {
+    var valuesToSubmit = $('form[name=' + form_name + ']').serialize();
     $.ajax({
       type: "POST",
       url: "/voters/vote", //submits it to the given url of the form
@@ -220,5 +167,5 @@
 
   var saved_messages_shown = 0;
   var wacky_message_threshold = 3;
-	</script>
+  </script>
 </div>
