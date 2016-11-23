@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
   get 'artists/grant_submissions' => 'grant_submissions#index'
   get 'artists/modify_grant' => 'grant_submissions#modify'
+  get 'grant_submissions/discuss' => 'grant_submissions#discuss'
   post 'artists/modify_grant' => 'grant_submissions#modify'
   post 'grant_submissions/delete' => 'grant_submissions#delete'
   post 'grant_submissions/generate_contract' => 'grant_submissions#generate_contract'

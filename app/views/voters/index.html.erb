@@ -35,6 +35,7 @@
       				<th>Grant</th>
       				<th>Requested</th>
       				<th>Submission</th>
+      				<th>Discussion</th>
       				<th>T</th>
       				<th>C</th>
       				<th>F</th>
@@ -47,6 +48,7 @@
       					<td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
       					<td>$<%= gs.requested_funding_dollars %></td>
       					<td><a href="<%= gs.proposal %>">Download</a></td>
+      					<td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
       					<td>
       						<select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>')">
       							<option></option>
