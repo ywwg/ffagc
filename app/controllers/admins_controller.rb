@@ -163,7 +163,6 @@ class AdminsController < ApplicationController
   def init_submissions
     @results = Hash.new
     @grant_submissions = GrantSubmission.all.order(grant_id: :asc)
-    logger.debug "sumbmissions! #{@grant_submissions.inspect}"
     @grant_submissions.each do |gs|
       votes = Vote.where("grant_submission_id = ?", gs.id)
 
