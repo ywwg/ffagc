@@ -182,6 +182,9 @@ class GrantSubmissionsController < ApplicationController
     if !artist_logged_in? && !admin_logged_in?
       @answer_edit_disable = true
     end
+
+    @supplements = Proposal.where(grant_submission_id: @grant_submission.id)
+    @proposal = Proposal.new
   end
 
   def grant_contract_params

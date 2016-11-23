@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123022557) do
+ActiveRecord::Schema.define(version: 20161123174455) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -91,6 +91,13 @@ ActiveRecord::Schema.define(version: 20161123022557) do
     t.datetime "vote_start"
     t.datetime "vote_end"
   end
+
+  create_table "proposals", force: true do |t|
+    t.string  "file"
+    t.integer "grant_submission_id"
+  end
+
+  add_index "proposals", ["grant_submission_id"], name: "index_proposals_on_grant_submission_id"
 
   create_table "voter_submission_assignments", force: true do |t|
     t.datetime "created_at"

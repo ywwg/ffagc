@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   post 'artists/modify_grant' => 'grant_submissions#modify'
   post 'grant_submissions/delete' => 'grant_submissions#delete'
   post 'grant_submissions/generate_contract' => 'grant_submissions#generate_contract'
+  post 'proposals/delete' => 'proposals#delete'
 
   post 'voters/vote' => 'voters#vote'
 
@@ -59,6 +60,7 @@ Rails.application.routes.draw do
   resources :artists, :voters, :admins, :grant_submissions, :grants
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :create, :edit, :update]
+  resources :proposals
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
