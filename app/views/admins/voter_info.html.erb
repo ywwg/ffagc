@@ -30,6 +30,22 @@
         Fireflies attended? <%= @voter_survey.how_many_fireflies %>
       </p>
     <% end %>
+
+    <%= semantic_form_for @voter do |f| %>
+      <%= f.inputs do %>
+        <p>Voter can participate in the voting for the following grants:</p>
+        <ul>
+          <% @grants.each do |g| %>
+            <li><%= check_box :grants_voters, g.id, :checked => participating_checked(@voter.id, g.id) %>
+                <strong><%= g.name %> Grant</strong>
+                (voting period: <%= g.vote_start.strftime("%Y/%m/%d") %> to
+                <%= g.vote_end.strftime("%Y/%m/%d") %>)
+            </li>
+          <% end %>
+        </ul>
+        <%= submit_tag("Update", class: "button")%>
+      <% end %>
+    <% end %>
     <%= link_to "Back", :controller => "admins", :action => "voters" %>
   <% end %>
-</div>1
+</div>

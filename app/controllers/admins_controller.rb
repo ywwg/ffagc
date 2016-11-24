@@ -33,7 +33,7 @@ class AdminsController < ApplicationController
     end
 
     if Admin.exists?(email: admin_params[:email].downcase)
-      flash[:notice] = "The email address #{admin_params[:email.downcase]} already exists in our system"
+      flash[:warning] = "The email address #{admin_params[:email.downcase]} already exists in our system"
       render "signup_failure"
       return
     end
@@ -311,6 +311,7 @@ class AdminsController < ApplicationController
     id = params.require(:id)
     @voter = Voter.find(id)
     @voter_survey = VoterSurvey.where(voter_id: id).take
+    @grants = Grant.all
   end
 
   def grants

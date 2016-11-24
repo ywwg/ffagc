@@ -3,6 +3,7 @@ class VotersController < ApplicationController
 
     def initialize_voter
       @voter = Voter.new
+      @grants = Grant.all
     end
 
     def signup
@@ -16,9 +17,13 @@ class VotersController < ApplicationController
       params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year, :will_read, :will_meet, :has_been_voter, :has_participated_other, :has_received_grant, :has_received_other_grant, :how_many_fireflies)
     end
 
+    def voter_participation_params
+      params.require(:grants_voters)
+    end
+
     def create
       if Voter.exists?(email: voter_params[:email.downcase])
-        flash[:notice] = "The email address #{voter_params[:email.downcase]} already exists in our system"
+        flash[:warning] = "The email address #{voter_params[:email.downcase]} already exists in our system"
         render "signup_failure"
         return
       end
@@ -33,12 +38,27 @@ class VotersController < ApplicationController
         voter_survey.voter_id = @voter.id
         voter_survey.save
 
+        # save participation info
+        voter_participation_params.each do |id, can_do|
+          # sanity check that the grant id is real.
+          if Grant.find(id) == nil
+            next
+          end
+          if can_do == "0"
+            next
+          end
+          grants_voter = GrantsVoter.new
+          grants_voter.voter_id = @voter.id
+          grants_voter.grant_id = id
+          grants_voter.save
+        end
+
         # Send email
         begin
           # Will need to be replaced with deliver_now
           UserMailer.account_activation("voters", @voter).deliver
         rescue
-          flash[:notice] = "Error sending email confirmation"
+          flash[:warning] = "Error sending email confirmation"
           render "signup_failure"
           return
         end
@@ -47,6 +67,35 @@ class VotersController < ApplicationController
       else
         render "signup_failure"
       end
+    end
+
+    def update
+      if !admin_logged_in?
+        redirect_to "/"
+        return
+      end
+
+      @voter = Voter.find(params[:id])
+      voter_participation_params.each do |id, can_do|
+        if Grant.find(id) == nil
+          next
+        end
+        if can_do == "0"
+          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: id)
+            GrantsVoter.find_by(voter_id: @voter.id, grant_id: id).destroy
+          end
+        else
+          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: id)
+            next
+          end
+          grants_voter = GrantsVoter.new
+          grants_voter.voter_id = @voter.id
+          grants_voter.grant_id = id
+          grants_voter.save
+        end
+      end
+
+      redirect_to :controller => "admins", :action => "voters"
     end
 
     def index
