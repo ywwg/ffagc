@@ -18,11 +18,13 @@
     <table border="1">
       <tr>
         <th>name</th>
+        <th>contact</th>
         <th>email</th>
       </tr>
       <% @artists.each do |v| %>
       <tr>
-        <td><%= link_to v['name'], :controller => "admins", :action => "artist_info", :id => v['id']%></td>
+        <td><%= v['name']%></td>
+        <td><%= link_to v['contact_name'], :controller => "admins", :action => "artist_info", :id => v['id']%></td>
         <td><%= v['email'] %></td>
       </tr>
       <% end %>

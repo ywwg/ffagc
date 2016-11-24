@@ -1,6 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 wall:
+  id: 1
   name: The Wall
   funding_decision: true
   granted_funding_dollars: 800
@@ -8,4 +9,9 @@ wall:
   grant_id: 1
 
 two:
+  id: 2
   name: MyString
+  funding_decision: true
+  granted_funding_dollars: 800
+  artist_id: 2
+  grant_id: 1
