@@ -96,3 +96,15 @@ td {
   border: 2px solid black;
   padding: 2pt;
 }
+
+.notice {
+  background-color: #6df24c;
+  padding: 2px;
+  text-align: center;
+}
+
+.warning {
+  background-color: #ff6835;
+  padding: 2px;
+  text-align: center;
+}

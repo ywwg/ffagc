@@ -65,7 +65,14 @@ class AdminsController < ApplicationController
       send_email = params[:send_email] == "true"
       if send_email
         # Will need to be replaced with deliver_now
-        UserMailer.voter_verified(voter, event_year).deliver!
+        begin
+          UserMailer.voter_verified(voter, event_year).deliver
+        rescue
+          flash[:warning] = "Error sending email"
+          redirect_to action: "voters"
+          return
+        end
+        flash[:notice] = "Voter notified by email"
       end
     end
 
@@ -74,33 +81,51 @@ class AdminsController < ApplicationController
 
   def send_fund_emails
     submissions = GrantSubmission.where(id: params[:ids].split(','))
+    sent = 0
     submissions.each do |gs|
       if params[:send_email] == "true"
         artist = Artist.where(id: gs.artist_id).take
         grant = Grant.where(id: gs.grant_id).take
-        if gs.granted_funding_dollars == 0
-          UserMailer.grant_not_funded(gs, artist, grant, event_year).deliver!
-        else
-          UserMailer.grant_funded(gs, artist, grant, event_year).deliver!
+        begin
+          if gs.granted_funding_dollars == 0
+            UserMailer.grant_not_funded(gs, artist, grant, event_year).deliver
+          else
+            UserMailer.grant_funded(gs, artist, grant, event_year).deliver
+          end
+        rescue
+          flash[:warning] = "Error sending email (#{sent} sent)"
+          redirect_to action: "index"
+          return
         end
+        sent += 1
       end
       gs.funding_decision = true
       gs.save
     end
 
+    flash[:notice] = "#{sent} Funding Emails Sent"
     redirect_to action: "index"
   end
 
   def send_question_emails
     submissions = GrantSubmission.where(grant_id: active_vote_grants)
+    sent = 0
     submissions.each do |gs|
       if gs.questions != nil && !gs.questions.empty?
         artist = Artist.where(id: gs.artist_id).take
         grant = Grant.where(id: gs.grant_id).take
-        UserMailer.notify_questions(gs, artist, grant, event_year).deliver!
+        begin
+          UserMailer.notify_questions(gs, artist, grant, event_year).deliver
+        rescue
+          flash[:warning] = "Error sending emails (#{sent} sent)"
+          redirect_to action: "index"
+          return
+        end
+        sent += 1
       end
     end
 
+    flash[:notice] = "#{sent} Question Notification Emails Sent"
     redirect_to action: "index"
   end
 
