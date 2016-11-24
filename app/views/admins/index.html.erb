@@ -69,7 +69,12 @@
             </form></td>
         <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
     </table>
-    <%= button_to "Assign", :controller => "admins", :action => "assign" %>
+    <table style="border:none;">
+      <tr><td style="border:none;"><%= button_to "Assign", :controller => "admins", :action => "assign" %></td>
+        <td style="border:none;"><%= button_to "Clear Assignments", :controller => "admins", :action => "clear_assignments" %></td>
+      </tr>
+    </table>
+
 
     <h2>Assignments</h2>
     <table border="1">
@@ -82,7 +87,7 @@
       <tr>
         <td><%= vv.name %></td>
         <td><%= vv.email %></td>
-        <td><%= vv.assigned.join(',').html_safe %></td>
+        <td><%= vv.assigned.join(', ').html_safe %></td>
       </tr>
       <% end %>
     </table>
