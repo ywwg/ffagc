@@ -1,12 +1,11 @@
 <div class="container">
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Voting Committee Signup</h1>
 
-If you were on the committee in previous years, thank you for being so awesome! <br /><br /> Also, you <b>will</b> need to sign up again for <%= event_year %>.
-<br />
+  If you were on the committee in previous years, thank you for being so awesome! <br /><br /> Also, you <b>will</b> need to sign up again for <%= event_year %>.
+  <br />
 
   <%= semantic_form_for @voter, :html => { :onsubmit => 'return validate();'} do |f| %>
-
-        <h2>Basic Details:</h2>
+    <h2>Basic Details:</h2>
     <%= f.inputs do %>
       <%= f.input :name, :label => "Full Name", :required => true, :validate => true %>
       <%= f.input :email, :label => "Email Address (this is your login)", :required => true, :validate => true %>
@@ -14,49 +13,58 @@ If you were on the committee in previous years, thank you for being so awesome! 
       <%= f.input :password_confirmation, :label => "Password Confirmation", :required => true, :validate => true %>
     <% end %>
 
-        <br />
+    <br />
 
-        <h2>Requirements:</h2>
+    <h2>Requirements:</h2>
 
-        <%= f.inputs do %>
-            <%= check_box :survey, :has_attended_firefly, :style => "width: 50px;" %> I have attended at least one previous Firefly
-            <br /><br />
-            <%= check_box :survey, :not_applying_this_year, :style => "width: 50px;" %> I am NOT applying for a Firefly Art Grant in <%= event_year %>
-            <br /><br />
-            <%= check_box :survey, :will_read, :style => "width: 50px;" %> I commit to reading and considering > 35 applications (~4-6 hours of brain time)
-            <br /><br />
-            <%= check_box :survey, :will_meet, :style => "width: 50px;" %> I am willing and able to make all of the meeting discussion dates within one or both of the following groups:
-            <ul><li>Group 1:
-                <ul><li>Thursday 2/18, 7 PM to 10 PM</li>
-                <li>Thursday 2/25, 7 PM to 10 PM</li></ul></li>
-                <li>Group 2:
-                <ul><li>Thursday 3/3, 7 PM to 10 PM</li>
-                <li>Thursday 3/10, 7 PM to 10 PM</li></ul></li></ul>
-            These meetings will be held somewhere in or near Somerville, MA.
-
-
-<% end %>
-
-
-        <br />
-
-        <h2>Survey:</h2>
-
-        <%= f.inputs do %>
-            <%= check_box :survey, :has_been_voter, :style => "width: 50px;" %> I have been a member of the Firefly art grant voting committee in previous years
-            <br /> <br />
-            <%= check_box :survey, :has_participated_other, :style => "width: 50px;" %> I have been on art grant voting/judging committees for other institutions
-            <br /><br />
-            <%= check_box :survey, :has_received_grant, :style => "width: 50px;" %> I have been awarded a Firefly art grant in previous years
-            <br /><br />
-            <%= check_box :survey, :has_received_other_grant, :style => "width: 50px;" %> I have been awarded art grants from other institutions
-            <br /><br />
-            How many Fireflies have you attended? <%= number_field :survey, :how_many_fireflies, :min => 0, :style => "width: 50px;" %>
-
+    <%= f.inputs do %>
+        <%= check_box :survey, :has_attended_firefly, :style => "width: 50px;" %> I have attended at least one previous Firefly
+        <br /><br />
+        <%= check_box :survey, :not_applying_this_year, :style => "width: 50px;" %> I am NOT applying for a Firefly Art Grant in <%= event_year %>
+        <br /><br />
+        <%= check_box :survey, :will_read, :style => "width: 50px;" %> I commit to reading and considering > 35 applications (~4-6 hours of brain time)
+        <br /><br />
+        <%= check_box :survey, :will_meet, :style => "width: 50px;" %> I am willing and able to make all of the meeting discussion dates within one or both of the following groups:
+        <ul><li>Temple and Anniversary Discussions:
+            <ul><li>Thursday 2/18, 7 PM to 10 PM</li>
+            <li>Thursday 2/25, 7 PM to 10 PM</li></ul></li>
+            <li>Creativity and Legacy Discussions:
+            <ul><li>Thursday 3/3, 7 PM to 10 PM</li>
+            <li>Thursday 3/10, 7 PM to 10 PM</li></ul></li></ul>
+        These meetings will be held somewhere in or near Somerville, MA.
+    <% end %>
+    <!--
+    <%= f.inputs do %>
+      <p>I can participate in the voting for the following grants:</p>
+      <ul>
+        <% @grants.each do |g| %>
+          <li><%= check_box :grants_voters, g.id %>
+              <strong><%= g.name %> Grant</strong>
+              (voting period: <%= g.vote_start.strftime("%Y/%m/%d") %> to
+              <%= g.vote_end.strftime("%Y/%m/%d") %>)
+          </li>
         <% end %>
+      </ul>
+    <% end %>
+    -->
+
+    <br />
+
+    <h2>Survey:</h2>
+
+    <%= f.inputs do %>
+      <%= check_box :survey, :has_been_voter, :style => "width: 50px;" %> I have been a member of the Firefly art grant voting committee in previous years
+      <br /> <br />
+      <%= check_box :survey, :has_participated_other, :style => "width: 50px;" %> I have been on art grant voting/judging committees for other institutions
+      <br /><br />
+      <%= check_box :survey, :has_received_grant, :style => "width: 50px;" %> I have been awarded a Firefly art grant in previous years
+      <br /><br />
+      <%= check_box :survey, :has_received_other_grant, :style => "width: 50px;" %> I have been awarded art grants from other institutions
+      <br /><br />
+      How many Fireflies have you attended? <%= number_field :survey, :how_many_fireflies, :min => 0, :style => "width: 50px;" %>
+    <% end %>
 
     <fieldset><%= submit_tag("Sign Up!", class: "button")%></fieldset>
-
   <% end %>
 
   <script>
