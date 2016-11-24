@@ -135,7 +135,7 @@ class AdminsController < ApplicationController
     #delete current assignments
     VoterSubmissionAssignment.destroy_all
 
-    #undercooked copypasta w/ no sauce
+    # Each submission is assigned to three people, incrementally
     @verified_voters = Voter.where(verified: true)
     vv_arr = @verified_voters.to_ary
     idx = 0
@@ -169,8 +169,10 @@ class AdminsController < ApplicationController
         vsa.grant_submission_id = s.id
         vsa.save
 
+        # this is a braindead mod algorithm to cycle through all the verified
+        # voters.  If we have fewer voters than 3, we'll just keep assigning
+        # the same submission to the same voters 3 times in a dumb way.
         idx=idx+1
-
         if idx >= max
           idx = 0
         end
