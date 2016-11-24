@@ -169,6 +169,7 @@ class GrantSubmissionsController < ApplicationController
       if artist_logged_in?
         if current_artist.id != @grant_submission.artist_id
           redirect_to "/"
+          return
         end
       end
     end
