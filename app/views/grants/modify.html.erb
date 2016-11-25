@@ -81,9 +81,9 @@
       }
     });
 
-    grant_start_date = date_from_selector("grant_submit_start");
-    grant_end_date = date_from_selector("grant_submit_end");
-    if (grant_start_date > grant_end_date) {
+    submit_start_date = date_from_selector("grant_submit_start");
+    submit_end_date = date_from_selector("grant_submit_end");
+    if (submit_start_date > submit_end_date) {
       errors++;
       alert('error: grant start date must be before or on grant end date');
       document.getElementById("grant_submit_start").style.border = '1px solid red';
