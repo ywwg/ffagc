@@ -116,7 +116,8 @@ class VotersController < ApplicationController
 
       @voter = Voter.find(current_voter)
 
-      @grant_submissions = GrantSubmission.where(grant_id: active_vote_grants)
+      @grant_submissions =
+          GrantSubmission.where(grant_id: voter_active_vote_grants(@voter.id))
 
       # this is good for lace/temple
       # @grant_submissions = @grant_submissions.sort { |a,b| [a.grant_id,a.id] <=> [b.grant_id,b.id] }
