@@ -100,6 +100,24 @@ class ApplicationController < ActionController::Base
   end
   helper_method :grant_submission_funded?
 
+  def active_grant_funding_total(finalized)
+    total = 0
+    GrantSubmission.where(grant_id: active_vote_grants, funding_decision: finalized).each do |gs|
+      total += gs.granted_funding_dollars
+    end
+    return total
+  end
+  helper_method :active_grant_funding_total
+
+  def all_grant_funding_total(finalized)
+    total = 0
+    GrantSubmission.where(funding_decision: finalized).each do |gs|
+      total += gs.granted_funding_dollars
+    end
+    return total
+  end
+  helper_method :all_grant_funding_total
+
   def grant_max_funding_dollars_json
     Grant.all.select(:id, :max_funding_dollars).to_json
   end

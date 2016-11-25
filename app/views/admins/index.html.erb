@@ -30,7 +30,7 @@
   <% end %>
 
   <% if any_vote_open? %>
-    <h2>Submissions Under Consideration</h2>
+    <h2>Submissions Currently Under Consideration</h2>
     <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
     <% if i > 0 %> and<% end %>
     <b><%= g.name %></b><% end %></p>
@@ -68,6 +68,15 @@
             <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
             </form></td>
         <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
+      </tr>
+      <tr>
+        <td colspan="5" align="right">Total proposed grants money</td>
+        <td>$<%= active_grant_funding_total(false) %></td>
+      </tr>
+      <tr>
+        <td colspan="5" align="right">Total finalized grant money</td>
+        <td>$<%= active_grant_funding_total(true) %></td>
+      </tr>
     </table>
     <table style="border:none;">
       <tr><td style="border:none;"><%= button_to "Assign", :controller => "admins", :action => "assign" %></td>
