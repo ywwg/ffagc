@@ -8,10 +8,18 @@ wall:
   artist_id: 1
   grant_id: 1
 
-two:
-  id: 2
-  name: MyString
-  funding_decision: true
-  granted_funding_dollars: 800
-  artist_id: 2
+<% 15.times do |n| %>
+grant_submission_<%= n + 2 %>:
+  id: <%= "#{n + 2}" %>
+  name: <%= "Grant1 Submission#{n + 2}" %>
+  funding_decision: false
   grant_id: 1
+<% end %>
+
+<% 10.times do |n| %>
+grant_submission_<%= n + 17 %>:
+  id: <%= "#{n + 17}" %>
+  name: <%= "Grant2 Submission#{n + 17}" %>
+  funding_decision: false
+  grant_id: 2
+<% end %>

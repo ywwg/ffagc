@@ -154,7 +154,7 @@ class AdminsController < ApplicationController
       GrantSubmission.where(grant_id: g.id).each do |gs|
         while assigned_count(gs.id) < [max_voters_per_submission, voters.count].min
           vsa = VoterSubmissionAssignment.new
-          vsa.voter_id = fewest_assigned_voter(voters).id
+          vsa.voter_id = fewest_assigned_voter(voters, gs.id).id
           vsa.grant_submission_id = gs.id
           vsa.save
         end
@@ -291,10 +291,18 @@ class AdminsController < ApplicationController
   end
 
   # given a list of voters, returns the voter with the fewest assignments.
-  def fewest_assigned_voter(voters)
+  def fewest_assigned_voter(voters, submission_id)
     fewest = nil
     low_count = -1
-    voters.each do |v|
+    # Randomize order to spread submissions around.
+    voters.shuffle.each do |v|
+      # skip if this voter has already been assigned this submission
+      if VoterSubmissionAssignment.exists?(voter_id: v.id, grant_submission_id: submission_id)
+        # Could return nil if all voters have already been assigned
+        # this submission, but that shouldn't happen because of the max count
+        # check in the caller.
+        next
+      end
       count = VoterSubmissionAssignment.where(voter_id: v.id).count
       if low_count < 0 || count < low_count
         fewest = v

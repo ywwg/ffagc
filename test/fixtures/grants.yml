@@ -1,7 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 creativity:
+  id: 1
   name: Creativity
 
 two:
-  name: MyString
+  id: 2
+  name: FewVoters
