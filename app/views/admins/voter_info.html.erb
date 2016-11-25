@@ -39,6 +39,7 @@
                 <strong><%= g.name %> Grant</strong>
                 (voting period: <%= g.vote_start.strftime("%Y/%m/%d") %> to
                 <%= g.vote_end.strftime("%Y/%m/%d") %>)
+                <% if g.hidden %>(<strong>hidden</strong>)<% end %>
             </li>
           <% end %>
         </ul>

@@ -54,6 +54,15 @@
           <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
           </form></td>
       <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
+    </tr>
+    <tr>
+      <td colspan="9" align="right">Total proposed grant money</td>
+      <td>$<%= all_grant_funding_total(false) %></td>
+    </tr>
+    <tr>
+      <td colspan="9" align="right">Total finalized grant money</td>
+      <td>$<%= all_grant_funding_total(true) %></td>
+    </tr>
   </table>
   <br>
   <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">

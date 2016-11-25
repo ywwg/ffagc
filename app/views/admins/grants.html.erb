@@ -29,9 +29,8 @@
     <% else %>
       <p>No voting process open at this time.</p>
     <% end %>
-    <table border=1>
+    <table border="1" style="font-size: 11pt;">
       <tr>
-        <th>id</th>
         <th>Name</th>
         <th>Max Funding $</th>
         <th>Submission Start Date</th>
@@ -40,10 +39,10 @@
         <th>Meeting One</th>
         <th>Meeting Two</th>
         <th>Voting End Date</th>
+        <th>Hidden</th>
       </tr>
       <% @grants.each do |g| %>
       <tr>
-        <td><%= g.id %></td>
         <td><%= g.name %></td>
         <td><%= g.max_funding_dollars %></td>
         <td><%= Date::DAYNAMES[g.submit_start.wday] %>,
@@ -58,6 +57,7 @@
             <%= g.meeting_two.strftime("%Y/%m/%d") %></td>
         <td><%= Date::DAYNAMES[g.vote_end.wday] %>,
             <%= g.vote_end.strftime("%Y/%m/%d") %></td>
+        <td align="center"><% if g.hidden %>Y<% end %></td>
         <td><%= link_to "Modify", :controller => "grants", :action => "modify", :id => g.id %></td>
       </tr>
       <% end %>

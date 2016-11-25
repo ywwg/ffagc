@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125165041) do
+ActiveRecord::Schema.define(version: 20161125194747) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20161125165041) do
     t.datetime "vote_end"
     t.datetime "meeting_one"
     t.datetime "meeting_two"
+    t.boolean  "hidden",              default: false
   end
 
   create_table "grants_voters", force: true do |t|
