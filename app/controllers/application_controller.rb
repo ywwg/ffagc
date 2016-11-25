@@ -50,11 +50,11 @@ class ApplicationController < ActionController::Base
 
   # returns a Hash where the key is a pair of meeting dates and the value is
   # another hash, containing an index number, a list of grant ids of grants
-  # being discussed on those dates, and a list of names.
+  # being discussed on those dates that are NOT hidden, and a list of names.
   def collated_meetings
     meetings = Hash.new
     collated_id = 0
-    Grant.all.each do |g|
+    Grant.where(hidden: false).each do |g|
       key = [g.meeting_one, g.meeting_two]
       if !meetings.has_key?(key)
         meetings[key] = {'id' => collated_id, 'grant_ids' => Array.new, 'names' => Array.new}

@@ -30,6 +30,7 @@
           <label class="label" for="grant_vote_end">Voting End Date<abbr title="required">*</abbr></label>
           <%= f.date_select :vote_end %>
         </li>
+        <%= f.input :hidden, :label => "Hidden from voter signup page"%>
 
         <br /><br />
         <%= submit_tag("Create Grant", class: "button")%></fieldset>
