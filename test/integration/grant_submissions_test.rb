@@ -37,7 +37,7 @@ class GrantSubmissionsTest < ActionDispatch::IntegrationTest
     sign_in_voter(@voter, 'password')
 
     # bad id
-    get grant_submissions_discuss_path(id: 20, authenticity_token: "abc")
+    get grant_submissions_discuss_path(id: 200, authenticity_token: "abc")
     assert_redirected_to "/"
 
     # any good id is ok
@@ -58,7 +58,7 @@ class GrantSubmissionsTest < ActionDispatch::IntegrationTest
     sign_in_admin(@admin, 'password')
 
     # bad id
-    get grant_submissions_discuss_path(id: 20, authenticity_token: "abc")
+    get grant_submissions_discuss_path(id: 200, authenticity_token: "abc")
     assert_redirected_to "/"
 
     # any good id is ok

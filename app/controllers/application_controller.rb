@@ -48,6 +48,26 @@ class ApplicationController < ActionController::Base
   end
   helper_method :active_submit_names
 
+  # returns a Hash where the key is a pair of meeting dates and the value is
+  # another hash, containing an index number, a list of grant ids of grants
+  # being discussed on those dates, and a list of names.
+  def collated_meetings
+    meetings = Hash.new
+    collated_id = 0
+    Grant.all.each do |g|
+      key = [g.meeting_one, g.meeting_two]
+      if !meetings.has_key?(key)
+        meetings[key] = {'id' => collated_id, 'grant_ids' => Array.new, 'names' => Array.new}
+        collated_id += 1
+      end
+      meetings[key]['grant_ids'].push(g.id)
+      meetings[key]['names'].push(g.name)
+    end
+
+    return meetings
+  end
+  helper_method :collated_meetings
+
   def discussion_status(grant_id)
     g = GrantSubmission.find(grant_id)
     if g.questions != nil && !g.questions.empty?
@@ -135,6 +155,13 @@ class ApplicationController < ActionController::Base
   end
   helper_method :verified_voter_logged_in?
 
+  def participating_checked(voter_id, grant_id)
+    if GrantsVoter.exists?(voter_id: voter_id, grant_id: grant_id)
+      return "checked"
+    end
+    return nil
+  end
+  helper_method :participating_checked
 
   # /admins
 

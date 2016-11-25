@@ -33,7 +33,7 @@ class AdminsController < ApplicationController
     end
 
     if Admin.exists?(email: admin_params[:email].downcase)
-      flash[:notice] = "The email address #{admin_params[:email.downcase]} already exists in our system"
+      flash[:warning] = "The email address #{admin_params[:email.downcase]} already exists in our system"
       render "signup_failure"
       return
     end
@@ -129,50 +129,34 @@ class AdminsController < ApplicationController
     redirect_to action: "index"
   end
 
-  def assign
-    # a terrible terrible thing :(
-
-    #delete current assignments
-    VoterSubmissionAssignment.destroy_all
-
-    #undercooked copypasta w/ no sauce
-    @verified_voters = Voter.where(verified: true)
-    vv_arr = @verified_voters.to_ary
-    idx = 0
-    max = vv_arr.size
-    per = 3
-
-    @sv = Hash.new
-
-    @submissions = []
-    if max == 0
-      # bail if no verified voters??
-      logger.warn "WARNING: no verified voters"
-      redirect_to action: "index"
-      return
+  def clear_assignments
+    if admin_logged_in?
+      VoterSubmissionAssignment.destroy_all
     end
+    redirect_to action: "index"
+  end
 
-    @submissions = GrantSubmission.where(grant_id: active_vote_grants).order(grant_id: :asc)
-
-    @submissions.each do |s|
-      @sv[s.id] = Hash.new
-
-      @sv[s.id]['id'] = s.id
-      @sv[s.id]['name'] = s.name
-      @sv[s.id]['assigned'] = Array.new(per)
-
-      for i in 0..per-1
-        @sv[s.id]['assigned'][i] = vv_arr[idx].id
-
-        vsa = VoterSubmissionAssignment.new
-        vsa.voter_id = vv_arr[idx].id
-        vsa.grant_submission_id = s.id
-        vsa.save
-
-        idx=idx+1
-
-        if idx >= max
-          idx = 0
+  # distributes voter assignments fairly and can handle newly-added voters and
+  # submissions without blowing up existing assignments.
+  #
+  # Goes through all grants and for each one gets a list of voters who are
+  # verified and are available to vote on that grant.  Then goes through each
+  # submission for that grant.  If the submission has fewer assignments than
+  # max_voters_per_submission (or the number of voters), we find the voter with
+  # the fewest total assignments and give the submission to them.
+  def assign
+    max_voters_per_submission = 3
+    now = timezone_now
+    Grant.all.each do |g|
+      voters = Voter.joins(:grants_voters)
+          .where('grants_voters.grant_id' => g.id, 'voters.verified' => true)
+          .all
+      GrantSubmission.where(grant_id: g.id).each do |gs|
+        while assigned_count(gs.id) < [max_voters_per_submission, voters.count].min
+          vsa = VoterSubmissionAssignment.new
+          vsa.voter_id = fewest_assigned_voter(voters, gs.id).id
+          vsa.grant_submission_id = gs.id
+          vsa.save
         end
       end
     end
@@ -185,21 +169,25 @@ class AdminsController < ApplicationController
   end
 
   def init_voters
-    # verified voters
     @voters = Voter.all
     @verified_voters = Voter.where(verified: true)
+    # builds a run-time array to map assignments to voters for easy display
     @verified_voters.each do |vv|
       vv.class_eval do
         attr_accessor :assigned
       end
 
       vv.assigned = Array.new
-      VoterSubmissionAssignment.where("voter_id = ?",vv.id).each{|vsa| vv.assigned.push(vsa.grant_submission_id)}
+      VoterSubmissionAssignment.where("voter_id = ?",vv.id).each do |vsa|
+        gs = GrantSubmission.find(vsa.grant_submission_id)
+        vv.assigned.push("#{gs.name}(#{gs.id})")
+      end
     end
   end
 
   def init_submissions
     @results = Hash.new
+    @submissions = GrantSubmission.where(grant_id: active_vote_grants).order(grant_id: :asc)
     @grant_submissions = GrantSubmission.all.order(grant_id: :asc)
     @grant_submissions.each do |gs|
       votes = Vote.where("grant_submission_id = ?", gs.id)
@@ -261,35 +249,6 @@ class AdminsController < ApplicationController
   end
 
   def index
-    vv_arr = @verified_voters.to_ary
-    idx = 0
-    max = vv_arr.size
-    per = 3
-
-    @sv = Hash.new
-
-    @submissions = []
-    if max > 0
-      @submissions = GrantSubmission.where(grant_id: active_vote_grants).order(grant_id: :asc)
-
-      @submissions.each do |s|
-        @sv[s.id] = Hash.new
-
-        @sv[s.id]['id'] = s.id
-        @sv[s.id]['name'] = s.name
-        @sv[s.id]['assigned'] = Array.new(per)
-
-        for i in 0..per-1
-          @sv[s.id]['assigned'][i] = vv_arr[idx].id
-
-          idx=idx+1
-
-          if idx >= max
-            idx = 0
-          end
-        end
-      end
-    end
     init_submissions
   end
 
@@ -309,6 +268,7 @@ class AdminsController < ApplicationController
     id = params.require(:id)
     @voter = Voter.find(id)
     @voter_survey = VoterSurvey.where(voter_id: id).take
+    @grants = Grant.all
   end
 
   def grants
@@ -321,5 +281,34 @@ class AdminsController < ApplicationController
 
   def submissions
     init_submissions
+  end
+
+  private
+
+  # counts the number of voters a submission is assigned to
+  def assigned_count(submission_id)
+    VoterSubmissionAssignment.where(grant_submission_id: submission_id).count
+  end
+
+  # given a list of voters, returns the voter with the fewest assignments.
+  def fewest_assigned_voter(voters, submission_id)
+    fewest = nil
+    low_count = -1
+    # Randomize order to spread submissions around.
+    voters.shuffle.each do |v|
+      # skip if this voter has already been assigned this submission
+      if VoterSubmissionAssignment.exists?(voter_id: v.id, grant_submission_id: submission_id)
+        # Could return nil if all voters have already been assigned
+        # this submission, but that shouldn't happen because of the max count
+        # check in the caller.
+        next
+      end
+      count = VoterSubmissionAssignment.where(voter_id: v.id).count
+      if low_count < 0 || count < low_count
+        fewest = v
+        low_count = count
+      end
+    end
+    return fewest
   end
 end

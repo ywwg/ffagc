@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123174455) do
+ActiveRecord::Schema.define(version: 20161125165041) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -90,6 +90,15 @@ ActiveRecord::Schema.define(version: 20161123174455) do
     t.datetime "submit_end"
     t.datetime "vote_start"
     t.datetime "vote_end"
+    t.datetime "meeting_one"
+    t.datetime "meeting_two"
+  end
+
+  create_table "grants_voters", force: true do |t|
+    t.integer  "voter_id"
+    t.integer  "grant_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "proposals", force: true do |t|

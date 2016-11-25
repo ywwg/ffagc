@@ -2,6 +2,7 @@ class Voter < ActiveRecord::Base
   attr_accessor :activation_token, :reset_token
   before_create :create_activation_digest
   has_secure_password
+  has_many :grants_voters
 
   validates :name, :presence => true, length: { minimum: 4 }
   validates :email, :presence => true

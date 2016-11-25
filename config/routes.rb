@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
   get 'grants/index'
   post 'grants/index' => 'grants#create'
-  post 'grants/modify_grant' => 'grants#modify'
+  get 'grants/modify_grant' => 'grants#modify'
 
   post 'artists/login' => 'sessions#create_artist'
   post 'voters/login' => 'sessions#create_voter'
@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   post 'voters/vote' => 'voters#vote'
 
   post 'admins/assign' => 'admins#assign'
+  post 'admins/clear_assignments' => 'admins#clear_assignments'
   get 'admins/reveal' => 'admins#reveal'
   post 'admins/verify' => 'admins#verify'
   post 'admins/send_fund_emails' => 'admins#send_fund_emails'
