@@ -32,7 +32,7 @@
     <table border="1" style="font-size: 11pt;">
       <tr>
         <th>Name</th>
-        <th>Max Funding $</th>
+        <th>Max Funding</th>
         <th>Submission Start Date</th>
         <th>Submission End Date</th>
         <th>Voting Start Date</th>
@@ -44,7 +44,7 @@
       <% @grants.each do |g| %>
       <tr>
         <td><%= g.name %></td>
-        <td><%= g.max_funding_dollars %></td>
+        <td>$<%= g.max_funding_dollars %></td>
         <td><%= Date::DAYNAMES[g.submit_start.wday] %>,
             <%= g.submit_start.strftime("%Y/%m/%d") %></td>
         <td><%= Date::DAYNAMES[g.submit_end.wday] %>,

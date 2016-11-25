@@ -37,8 +37,8 @@
 
     <table border="1">
       <tr>
-        <th>grant</th>
-        <th>name</th>
+        <th>Grant</th>
+        <th>Name</th>
         <th>Requested $</th>
         <th>Discussion</th>
         <th>Decision Finalized</th>
@@ -51,10 +51,10 @@
       <tr>
         <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
         <td><%= gs.name %></td>
-        <td>$<%= gs.requested_funding_dollars %></td>
+        <td align="right">$<%= gs.requested_funding_dollars %></td>
         <td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
         <td><%= gs.funding_decision %></td>
-        <td>$<%= gs.granted_funding_dollars%></td>
+        <td align="right">$<%= gs.granted_funding_dollars%></td>
         <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
         <td align="center"><form name="fund_email_form-<%= gs.id %>">
               <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
@@ -71,11 +71,11 @@
       </tr>
       <tr>
         <td colspan="5" align="right">Total proposed grants money</td>
-        <td>$<%= active_grant_funding_total(false) %></td>
+        <td align="right">$<%= active_grant_funding_total(false) %></td>
       </tr>
       <tr>
         <td colspan="5" align="right">Total finalized grant money</td>
-        <td>$<%= active_grant_funding_total(true) %></td>
+        <td align="right">$<%= active_grant_funding_total(true) %></td>
       </tr>
     </table>
     <table style="border:none;">
@@ -88,9 +88,9 @@
     <h2>Assignments</h2>
     <table border="1">
       <tr>
-        <th>name</th>
-        <th>email</th>
-        <th>assigned</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Assigned</th>
       </tr>
       <% @verified_voters.each do |vv| %>
       <tr>
