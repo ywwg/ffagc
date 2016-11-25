@@ -37,6 +37,8 @@
         <th>Submission Start Date</th>
         <th>Submission End Date</th>
         <th>Voting Start Date</th>
+        <th>Meeting One</th>
+        <th>Meeting Two</th>
         <th>Voting End Date</th>
       </tr>
       <% @grants.each do |g| %>
@@ -44,11 +46,19 @@
         <td><%= g.id %></td>
         <td><%= g.name %></td>
         <td><%= g.max_funding_dollars %></td>
-        <td><%= g.submit_start.strftime("%Y/%m/%d") %></td>
-        <td><%= g.submit_end.strftime("%Y/%m/%d") %></td>
-        <td><%= g.vote_start.strftime("%Y/%m/%d") %></td>
-        <td><%= g.vote_end.strftime("%Y/%m/%d") %></td>
-        <td><%= button_to "Modify", :controller => "grants", :action => "modify", :id => g.id %></td>
+        <td><%= Date::DAYNAMES[g.submit_start.wday] %>,
+            <%= g.submit_start.strftime("%Y/%m/%d") %></td>
+        <td><%= Date::DAYNAMES[g.submit_end.wday] %>,
+            <%= g.submit_end.strftime("%Y/%m/%d") %></td>
+        <td><%= Date::DAYNAMES[g.vote_start.wday] %>,
+            <%= g.vote_start.strftime("%Y/%m/%d") %></td>
+        <td><%= Date::DAYNAMES[g.meeting_one.wday] %>,
+            <%= g.meeting_one.strftime("%Y/%m/%d") %></td>
+        <td><%= Date::DAYNAMES[g.meeting_two.wday] %>,
+            <%= g.meeting_two.strftime("%Y/%m/%d") %></td>
+        <td><%= Date::DAYNAMES[g.vote_end.wday] %>,
+            <%= g.vote_end.strftime("%Y/%m/%d") %></td>
+        <td><%= link_to "Modify", :controller => "grants", :action => "modify", :id => g.id %></td>
       </tr>
       <% end %>
     </table>

@@ -19,7 +19,6 @@
         Has attended firefly? <% if @voter_survey.has_attended_firefly %>Yes<% else %>No<%end%><br/>
         <b>Not</b> applying for a grant this year? <% if @voter_survey.not_applying_this_year %>Yes<% else %>No<%end%><br/>
         Will commit to reading proposals? <% if @voter_survey.will_read %>Yes<% else %>No<%end%><br/>
-        Will commit to coming to meetings? <% if @voter_survey.will_meet %>Yes<% else %>No<%end%><br/>
       </p>
       <h2>Survey Responses</h2>
       <p>
@@ -33,7 +32,7 @@
 
     <%= semantic_form_for @voter do |f| %>
       <%= f.inputs do %>
-        <p>Voter can participate in the voting for the following grants:</p>
+        <p>Voter can attend the meetings for the following grants:</p>
         <ul>
           <% @grants.each do |g| %>
             <li><%= check_box :grants_voters, g.id, :checked => participating_checked(@voter.id, g.id) %>

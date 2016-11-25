@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
   get 'grants/index'
   post 'grants/index' => 'grants#create'
-  post 'grants/modify_grant' => 'grants#modify'
+  get 'grants/modify_grant' => 'grants#modify'
 
   post 'artists/login' => 'sessions#create_artist'
   post 'voters/login' => 'sessions#create_voter'

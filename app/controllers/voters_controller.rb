@@ -39,18 +39,29 @@ class VotersController < ApplicationController
         voter_survey.save
 
         # save participation info
-        voter_participation_params.each do |id, can_do|
-          # sanity check that the grant id is real.
-          if Grant.find(id) == nil
-            next
-          end
+        meetings = collated_meetings
+        voter_participation_params.each do |collated_id, can_do|
           if can_do == "0"
             next
           end
-          grants_voter = GrantsVoter.new
-          grants_voter.voter_id = @voter.id
-          grants_voter.grant_id = id
-          grants_voter.save
+          # We have to map from collated index to the list of grants.
+          # This is a gross n*m walk through the lists, but we are talking very
+          # small lists.
+          meetings.each do |dates, data|
+            if data['id'].to_s != collated_id
+              next
+            end
+            data['grant_ids'].each do |gid|
+              # sanity check that the grant id is real.
+              if Grant.find(gid) == nil
+                next
+              end
+              grants_voter = GrantsVoter.new
+              grants_voter.voter_id = @voter.id
+              grants_voter.grant_id = gid
+              grants_voter.save
+            end
+          end
         end
 
         # Send email
