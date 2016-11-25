@@ -114,6 +114,8 @@ class VotersController < ApplicationController
         return
       end
 
+      @voter = Voter.find(current_voter)
+
       @grant_submissions = GrantSubmission.where(grant_id: active_vote_grants)
 
       # this is good for lace/temple

@@ -15,7 +15,7 @@
       Your voter signup is still being verified, please check back or contact grants@fireflyartscollective.org for help.
     <% else %>
       <% if any_vote_open? %>
-        The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
+        The voting process is active for <% voter_active_vote_names(@voter.id).each_with_index do |g, i| %>
         <% if i > 0 %> and<% end %>
         <b><%= g.name %></b>
         <% end %>!

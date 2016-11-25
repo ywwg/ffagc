@@ -42,6 +42,13 @@ class ApplicationController < ActionController::Base
   end
   helper_method :active_vote_names
 
+  def voter_active_vote_names(voter_id)
+    now = timezone_now
+    return Grant.joins(:grants_voters).where('grants_voters.voter_id' => voter_id)
+        .where("vote_start <= ?", now).where("vote_end >= ?", now).select(:name)
+  end
+  helper_method :voter_active_vote_names
+
   def active_submit_names
     now = timezone_now
     return Grant.where("submit_start <= ?", now).where("submit_end >= ?", now).select(:name)
