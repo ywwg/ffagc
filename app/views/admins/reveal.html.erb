@@ -18,19 +18,21 @@
 
     <table border="1">
       <tr>
-        <td>name</td>
-        <td>grant</td>
-        <td>$</td>
-        <td>artist name</td>
-        <td>artist email</td>
+        <th>Name</th>
+        <th>Grant</th>
+        <th>Funded Amount</th>
+        <th>Artist Name</th>
+        <th>Contact Name</th>
+        <th>Artist Email</th>
       </tr>
 
       <% @grant_submissions.each do |gs| %>
         <tr>
           <td><%= gs.name %></td>
           <td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
-          <td><%= gs.requested_funding_dollars %></td>
+          <td align="right">$<%= gs.granted_funding_dollars %></td>
           <td><%= (Artist.where(id: gs.artist_id).take).name rescue "Unknown" %></td>
+          <td><%= (Artist.where(id: gs.artist_id).take).contact_name rescue "Unknown" %></td>
           <td><%= (Artist.where(id: gs.artist_id).take).email rescue "Unknown" %></td>
         </tr>
       <% end %>
