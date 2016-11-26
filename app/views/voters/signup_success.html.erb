@@ -1,6 +1,9 @@
 <div class="container">
     <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Almost There...</h1>
     <b>Please check your email (<%= @voter.email %>) for your email address confirmation link.</b>
+    <p>If you don't see one soon, check your spam folder or contact
+       <a href="mailto:grants@fireflyartscollective.org">grants@fireflyartscollective.org.</a>
+    </p>
     <br /><br />
     Your login is: <%= @voter.email %>
     <br /><br />
