@@ -1,7 +1,7 @@
 <div class="container">
 <% if admin_logged_in? %>
-| <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
 | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+| <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
 | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
 |
 <% end %>
@@ -45,9 +45,13 @@
               <tr>
                 <td><%= gs.name %></td>
                 <td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
-                <td>$<%= gs.requested_funding_dollars %></td>
+                <td align="right">$<%= gs.requested_funding_dollars %></td>
                 <td><a href="<%= gs.proposal %>">Download</a></td>
-                <td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
+                <td><% if submission_has_questions?(gs.id) %>
+                      <%= link_to "#{discussion_status(gs.id)}",
+                          :controller => "grant_submissions",
+                          :action => "discuss", :id => gs.id %>
+                    <% else %>None<% end %></td>
                 <td align="center">
                   <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
                     <option></option>
