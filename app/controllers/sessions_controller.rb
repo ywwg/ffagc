@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
       return
     end
 
-    artist = Artist.find_by_email(params[:session][:email])
+    artist = Artist.find_by_email(params[:session][:email].downcase)
     if !artist
       render "login_failure"
       return
@@ -37,7 +37,7 @@ class SessionsController < ApplicationController
       return
     end
 
-    voter = Voter.find_by_email(params[:session][:email])
+    voter = Voter.find_by_email(params[:session][:email].downcase)
     if !voter
       render "login_failure"
       return
@@ -69,7 +69,7 @@ class SessionsController < ApplicationController
       return
     end
 
-    admin = Admin.find_by_email(params[:session][:email])
+    admin = Admin.find_by_email(params[:session][:email].downcase)
     if !admin
       render "login_failure"
       return
