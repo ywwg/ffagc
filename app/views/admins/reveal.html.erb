@@ -1,7 +1,7 @@
 <div class="container">
   <% if admin_logged_in? %>
-  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
   | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
   | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
   |
   <% end %>
@@ -20,7 +20,7 @@
       <tr>
         <th>Name</th>
         <th>Grant</th>
-        <th>Funded Amount</th>
+        <th>Finalized Funded Amount</th>
         <th>Artist Name</th>
         <th>Contact Name</th>
         <th>Artist Email</th>
@@ -30,7 +30,11 @@
         <tr>
           <td><%= gs.name %></td>
           <td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
-          <td align="right">$<%= gs.granted_funding_dollars %></td>
+          <td align="right">
+            <% if grant_submission_funded?(gs.id) %>
+              $<%= gs.granted_funding_dollars%>
+            <% else %>$0
+            <% end %></td>
           <td><%= (Artist.where(id: gs.artist_id).take).name rescue "Unknown" %></td>
           <td><%= (Artist.where(id: gs.artist_id).take).contact_name rescue "Unknown" %></td>
           <td><%= (Artist.where(id: gs.artist_id).take).email rescue "Unknown" %></td>

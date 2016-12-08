@@ -13,7 +13,6 @@ class Grant < ActiveRecord::Base
   # signup page.  The intent is that some grants may be private and only voted
   # on by the Art Core.  Admins should modify individual voters to add them
   # to hidden grants.
-  validates :hidden, :presence => true
 
   # This is redundant to the javascript validation.
   validate :dates_ordering

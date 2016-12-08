@@ -3,7 +3,7 @@
 
   <% if artist_logged_in? || admin_logged_in? || verified_voter_logged_in? %>
     <h2>Discussion for <%= @grant_submission.name %></h2>
-    <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
+    <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate_discussion();'} do |f| %>
       <fieldset>
         <%= f.input :questions, :as => :text,
             :label => "Questions from Committee", :required => false,
@@ -33,7 +33,7 @@
       </table>
     <% end %>
     <br/>
-    <%= semantic_form_for @proposal, :html => { :onsubmit => 'return validate();'} do |f| %>
+    <%= semantic_form_for @proposal, :html => { :onsubmit => 'return validate_supplement();'} do |f| %>
       <label class="label" for="proposal_file">Upload Additional Document:</label>
       <%= f.file_field :file, :required => true, :validate => true, :accept => ".pdf,.doc,.docx,.txt,.md" %>
       <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
@@ -56,7 +56,11 @@
 </div>
 
 <script>
-function validate() {
+function validate_discussion() {
+  return true;
+}
+
+function validate_supplement() {
   if(document.getElementById("proposal_file").value != "") {
     document.getElementById("proposal_file").style.border = '1px solid green';
     return true;

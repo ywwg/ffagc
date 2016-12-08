@@ -26,6 +26,12 @@ class ApplicationController < ActionController::Base
     return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:id)
   end
 
+  def voter_active_vote_grants(voter_id)
+    now = timezone_now
+    return Grant.joins(:grants_voters).where('grants_voters.voter_id' => voter_id)
+        .where("vote_start <= ?", now).where("vote_end >= ?", now).select(:id)
+  end
+
   def any_submit_open?
     return active_submit_grants.count > 0
   end
@@ -36,11 +42,23 @@ class ApplicationController < ActionController::Base
   end
   helper_method :any_vote_open?
 
+  def voter_any_vote_open?(voter_id)
+    return voter_active_vote_grants(voter_id).count > 0
+  end
+  helper_method :voter_any_vote_open?
+
   def active_vote_names
     now = timezone_now
     return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:name)
   end
   helper_method :active_vote_names
+
+  def voter_active_vote_names(voter_id)
+    now = timezone_now
+    return Grant.joins(:grants_voters).where('grants_voters.voter_id' => voter_id)
+        .where("vote_start <= ?", now).where("vote_end >= ?", now).select(:name)
+  end
+  helper_method :voter_active_vote_names
 
   def active_submit_names
     now = timezone_now
@@ -103,7 +121,9 @@ class ApplicationController < ActionController::Base
   def active_grant_funding_total(finalized)
     total = 0
     GrantSubmission.where(grant_id: active_vote_grants, funding_decision: finalized).each do |gs|
-      total += gs.granted_funding_dollars
+      if gs.granted_funding_dollars != nil
+        total += gs.granted_funding_dollars
+      end
     end
     return total
   end
@@ -112,7 +132,9 @@ class ApplicationController < ActionController::Base
   def all_grant_funding_total(finalized)
     total = 0
     GrantSubmission.where(funding_decision: finalized).each do |gs|
-      total += gs.granted_funding_dollars
+      if gs.granted_funding_dollars != nil
+        total += gs.granted_funding_dollars
+      end
     end
     return total
   end

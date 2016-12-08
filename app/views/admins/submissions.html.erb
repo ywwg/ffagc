@@ -1,7 +1,7 @@
 <div class="container">
   <% if admin_logged_in? %>
-  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
   | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
+  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
   | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
   |
   <% end %>
@@ -42,7 +42,11 @@
       <td><%= @results[gs.id]['avg_s'] %></td>
       <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
       <td><% if gs.funding_decision %>Yes<% else %>No<% end %></td>
-      <td align="right">$<%= gs.granted_funding_dollars%></td>
+      <td align="right">
+        <% if gs.granted_funding_dollars != nil %>
+          $<%= gs.granted_funding_dollars %>
+        <% else %>$0
+        <% end %></td>
       <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
       <td align="center"><form name="fund_email_form-<%= gs.id %>">
             <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
