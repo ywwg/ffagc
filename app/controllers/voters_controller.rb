@@ -14,7 +14,10 @@ class VotersController < ApplicationController
     end
 
     def voter_survey_params
-      params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year, :will_read, :will_meet, :has_been_voter, :has_participated_other, :has_received_grant, :has_received_other_grant, :how_many_fireflies)
+      params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year, 
+          :will_read, :will_meet, :has_been_voter, :has_participated_other, 
+          :has_received_grant, :has_received_other_grant, :how_many_fireflies,
+          :signed_agreement)
     end
 
     def voter_participation_params

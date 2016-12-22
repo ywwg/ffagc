@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125194747) do
+ActiveRecord::Schema.define(version: 20161211193734) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 20161125194747) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "voter_id"
+    t.boolean  "signed_agreement",         default: false
   end
 
   add_index "voter_surveys", ["voter_id"], name: "index_voter_surveys_on_voter_id"
