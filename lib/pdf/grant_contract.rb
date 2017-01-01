@@ -10,9 +10,10 @@ class GrantContract < Prawn::Document
   	@amount = amount
   	@date = DateTime.current.strftime("%Y-%m-%d")
 
-  	# TODO: These values may need to live elsewhere...
-  	@year = Rails.configuration.event_year
-  	@install_day = "Friday, July 7, 2017"
+    # @year should probably come from the template_values yaml.
+    @year = Rails.configuration.event_year
+
+  	@values = YAML.load(File.open("#{Rails.root}/config/template_values.yml", "rb").read)
 
   	begin
   	  # XXX hardcoding alert! Template filename must be the same as the grant name,
