@@ -14,7 +14,8 @@
       Phone: <%= @artist.contact_phone %><br/>
       Address: <%= @artist.contact_street %><br/>
       <%= @artist.contact_city %>, <%= @artist.contact_state %>
-      <%= @artist.contact_zipcode %> <%# Not working yet @artist.contact_country %>
+      <%= @artist.contact_zipcode %> <br/>
+      <%= @artist.country_name %>
     </p>
     <h2>Survey Responses</h2>
     <% if @artist_survey == nil %><p>Error: could not locate survey responses</p>
