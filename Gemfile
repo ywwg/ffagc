@@ -45,8 +45,8 @@ gem 'therubyracer'
 
 gem 'formtastic'
 
+# Form validation
 gem 'judge', '~> 2.0.5'
-
 gem 'judge-formtastic', github: 'joecorcoran/judge-formtastic'
 
 # gem 'judge-formtastic'
@@ -54,6 +54,7 @@ gem 'judge-formtastic', github: 'joecorcoran/judge-formtastic'
 gem 'carrierwave'
 # pdf generation
 gem 'prawn'
+gem 'pdf-inspector', :require => "pdf/inspector"
 
 # logging
 gem 'log4r'
@@ -61,4 +62,4 @@ gem 'log4r'
 # file upload size validation
 gem 'file_validators'
 
-gem 'pdf-inspector', :require => "pdf/inspector"
+gem 'country_select'

@@ -10,6 +10,11 @@ class Artist < ActiveRecord::Base
 
   validates_confirmation_of :password, :on => :create
 
+  def country_name
+    country = ISO3166::Country[contact_country]
+    country.translations[I18n.locale.to_s] || country.name
+  end
+
   # These really should be private but then the password resetter can't get
   # at them
 
