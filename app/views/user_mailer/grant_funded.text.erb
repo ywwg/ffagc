@@ -11,7 +11,7 @@ Please visit your page on the Art Grant website and click the button to generate
 a contract for your project.
 
 If you are accepting the grant, please sign and return this contract to us ASAP,
-and no later than end-of-day on <%= @deadline %>. The signed contract
+and no later than end-of-day on <%= @values["contract_deadline"] %>. The signed contract
 should be sent as an email attachment in a response (Reply All) to this email.
 Scans are best, but high quality photographs are also acceptable in a pinch
 (please, please, please have good, even lighting and framing if you must go
@@ -29,7 +29,9 @@ for everyone!
 
 Schedule
 
-<%= @schedule %>
+<% @values["schedule"].each do |line| %>
+  <%= line %>
+<% end %>
 
 Let us know if you have any questions!
 

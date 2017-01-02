@@ -38,13 +38,8 @@ class UserMailer < ActionMailer::Base
     @grant = grant
     @year = year
 
-    # TODO: this is not a great place to store this kind of info, but it's too
-    # specific to put in the DB.  Unless I make a key-value store for this kind
-    # of arbitrary string.
-    @deadline = "Flurbsday, Smarch 34rd 20167"
-
-    # TODO: schedule should be something that will render nicely in html or text.
-    @schedule = "TBD"
+    f = "#{Rails.root}/config/template_values.yml"
+    @values = YAML.load(File.open(f, "rb").read)[@grant.name.downcase]
 
     mail to: @artist.email, cc: get_cc(), subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
   end
@@ -64,8 +59,9 @@ class UserMailer < ActionMailer::Base
     @grant = grant
     @year = year
 
-    # TODO: due_date should also not be set here, because no one will ever find it.
-    @due_date = "TBD"
+    # XXX: Hard coded four day deadline is good enough, right?
+    d = DateTime.current.next_day(4)
+    @due_date = "#{Date::DAYNAMES[d.wday]}, #{d.strftime("%B %-d, %Y")}"
 
     mail to: @artist.email, cc: get_cc(), subject: "#{@year} Firefly #{@grant.name} Grants: Questions regarding #{@submission.name}"
   end

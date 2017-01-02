@@ -37,4 +37,12 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.grant_not_funded(submission, artist, grant, "2017")
   end
 
+  # http://localhost:3000/rails/mailers/user_mailer/notify_questions
+  def notify_questions
+    submission = GrantSubmission.first
+    artist = Artist.first
+    grant = Grant.first
+    UserMailer.notify_questions(submission, artist, grant, "2017")
+  end
+
 end

@@ -11,7 +11,7 @@
   generate a contract for your project.</p>
 
 <p>If you are accepting the grant, please sign and return this contract to us
-  ASAP, and no later than end-of-day on <%= @deadline%>. The signed contract
+  ASAP, and no later than end-of-day on <%= @values["contract_deadline"] %>. The signed contract
   should be sent as an email attachment in a response (Reply All) to this email.
   Scans are best, but high quality photographs are also acceptable in a pinch
   (please, please, please have good, even lighting and framing if you must go
@@ -29,7 +29,9 @@
 
 <h2>Schedule</h2>
 
-<%= @schedule %>
+<% @values["schedule"].each do |line| %>
+  <%= line %><br/>
+<% end %>
 
 <p>Let us know if you have any questions!</p>
 
