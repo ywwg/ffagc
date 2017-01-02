@@ -19,6 +19,7 @@
         Has attended firefly? <% if @voter_survey.has_attended_firefly %>Yes<% else %>No<%end%><br/>
         <b>Not</b> applying for a grant this year? <% if @voter_survey.not_applying_this_year %>Yes<% else %>No<%end%><br/>
         Will commit to reading proposals? <% if @voter_survey.will_read %>Yes<% else %>No<%end%><br/>
+        Has agreed to the Code of Ethics? <% if @voter_survey.signed_agreement %>Yes<% else %>No<%end%><br/>
       </p>
       <h2>Survey Responses</h2>
       <p>
