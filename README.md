@@ -35,14 +35,16 @@ and edit config/environments/*.rb to include your smtp server information.
 
 ## Event-Specific Setup (do this every year)
 
-It's recommended that you delete the database every year, but there's also a few code
-changes you should make.
+It's recommended that you delete the database every year, but there's also a few config
+changes you should make:
 
-Set the year of the event (e.g., "Apply for Firefly 2027!") in config/application.rb.
+* Set the year of the event (e.g., "Apply for Firefly 2027!") in config/application.rb.
 
-You'll also need to update the grant contract generation in lib/pdf/grant_contract.rb.
+* Check the grant contract templates in app/assets/contract_templates.  Each template filename
+must match the corresponding grant name, so if a grant changes name the template filename must
+also be changed.
 
-Grant contract templates will need to be updated with the correct dates.
+* Update the template constants (install dates and deadlines) in config/template_values.yml.
 
 ## Initialize the Database
 

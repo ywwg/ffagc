@@ -2,17 +2,18 @@ require 'erb'
 
 class GrantContract < Prawn::Document
 
-  def initialize(grant, project, artist, amount)
+  def initialize(grant, project, artist, amount, date)
     super()
   	@grant = grant
   	@project = project
   	@artist = artist
   	@amount = amount
-  	@date = DateTime.current.strftime("%Y-%m-%d")
+  	@date = date.strftime("%Y-%m-%d")
 
-  	# TODO: These values may need to live elsewhere...
-  	@year = Rails.configuration.event_year
-  	@install_day = "Friday, July 7, 2017"
+    # @year should probably come from the template_values yaml.
+    @year = Rails.configuration.event_year
+
+  	@values = YAML.load(File.open("#{Rails.root}/config/template_values.yml", "rb").read)
 
   	begin
   	  # XXX hardcoding alert! Template filename must be the same as the grant name,
@@ -23,6 +24,7 @@ class GrantContract < Prawn::Document
         write_templated_line line
       end
   	rescue
+  	  # TODO maybe actually handle errors
   	  return
   	end
   end
