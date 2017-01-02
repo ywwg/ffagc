@@ -22,6 +22,7 @@ class Admin < ActiveRecord::Base
   # Sends password reset email.
   def send_password_reset_email
     UserMailer.password_reset("admins", self).deliver
+    logger.info "email: admin password reset sent to #{self.email}"
   end
 
   # Returns true if a password reset has expired.

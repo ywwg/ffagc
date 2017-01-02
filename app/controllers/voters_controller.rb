@@ -71,6 +71,7 @@ class VotersController < ApplicationController
         begin
           # Will need to be replaced with deliver_now
           UserMailer.account_activation("voters", @voter).deliver
+          logger.info "email: voter account activation sent to #{@voter.email}"
         rescue
           flash[:warning] = "Error sending email confirmation"
           render "signup_failure"
