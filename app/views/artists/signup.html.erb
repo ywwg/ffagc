@@ -25,7 +25,8 @@
                 <%= f.input :contact_city, :label => "City", :required => true, :validate => true %>
                 <%= f.input :contact_state, :label => "State", :required => true, :validate => true %>
                 <%= f.input :contact_zipcode, :label => "Zip Code", :required => true, :validate => true %>
-                <%= f.input :contact_country, :label => "Country", :required => true, :validate => true %>
+                <%= f.input :contact_country, :label => "Country", :required => true, :validate => true,
+                    :priority_countries => ["United States", "Canada"] %>
             <% end %>
 
             <h2>Optional Survey:</h2>
