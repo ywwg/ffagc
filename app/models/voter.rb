@@ -23,6 +23,7 @@ class Voter < ActiveRecord::Base
   # Sends password reset email.
   def send_password_reset_email
     UserMailer.password_reset("voters", self).deliver
+    logger.info "email: voter password reset sent to #{self.email}"
   end
 
   # Returns true if a password reset has expired.
