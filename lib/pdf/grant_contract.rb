@@ -2,13 +2,13 @@ require 'erb'
 
 class GrantContract < Prawn::Document
 
-  def initialize(grant, project, artist, amount)
+  def initialize(grant, project, artist, amount, date)
     super()
   	@grant = grant
   	@project = project
   	@artist = artist
   	@amount = amount
-  	@date = DateTime.current.strftime("%Y-%m-%d")
+  	@date = date.strftime("%Y-%m-%d")
 
     # @year should probably come from the template_values yaml.
     @year = Rails.configuration.event_year
@@ -24,6 +24,7 @@ class GrantContract < Prawn::Document
         write_templated_line line
       end
   	rescue
+  	  # TODO maybe actually handle errors
   	  return
   	end
   end

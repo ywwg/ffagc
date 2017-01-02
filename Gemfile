@@ -41,13 +41,13 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'execjs'
 gem 'therubyracer'
 
-# gem 'clearance' 
+# gem 'clearance'
 
- gem 'formtastic'
+gem 'formtastic'
 
 gem 'judge', '~> 2.0.5'
 
- gem 'judge-formtastic', github: 'joecorcoran/judge-formtastic'
+gem 'judge-formtastic', github: 'joecorcoran/judge-formtastic'
 
 # gem 'judge-formtastic'
 
@@ -60,3 +60,5 @@ gem 'log4r'
 
 # file upload size validation
 gem 'file_validators'
+
+gem 'pdf-inspector', :require => "pdf/inspector"
