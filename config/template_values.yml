@@ -1,38 +1,44 @@
 # It's not worth creating a bunch of db schema info for this data which is only
-# used to generate informational text.3
+# used to generate informational text.
 # DO NOT let this yaml become a dumping ground for things that should be in
 # the db (famous last words).  Rule of thumb: If you need to know the value
 # behind the formatted text, don't put it here.
 
-sos_dates: "May 6 and 7, 2017"
 install_day: "Friday, July 7, 2017"
+skill_attend_day: "Friday, June 30, 2017"
 figment_dates: "TBD FIGMENT DATES"
-skill_attend_day: "TBD SKILLSHARE ATTENDANCE DEADLINE"
-
 creativity:
-  contract_deadline: "TBD CONTRACT DEADLINE"
-  schedule: ["Someday, Month XX, 2017: Signed Contracts Due",
-             "Someday, Month XX, 2017: First check cut and sent",
-             "Someday, Month XX, 2017: Second check cut and sent"]
+  contract_deadline: "Friday, March 17, 2017"
+  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
+             "Monday, March 20, 2017: First check cut and sent",
+             "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!",
+             "Monday, July 24, 2017: Firefly documentation due",
+             "Monday, July 31, 2017: Second check cut and sent",]
 legacy:
-  contract_deadline: "TBD CONTRACT DEADLINE"
-  schedule: ["Someday, Month XX, 2017: Signed Contracts Due",
-             "Someday, Month XX, 2017: Check cut and sent"]
+  contract_deadline: "Friday, March 17, 2017"
+  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
+             "Monday, March 20, 2017: Check cut and sent",
+             "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!"]
 temple:
-  contract_deadline: "TBD CONTRACT DEADLINE"
-  schedule: ["Someday, Month XX, 2017: Signed Contracts Due",
-             "Someday, Month XX, 2017: Check cut and sent"]
+  contract_deadline: "Friday, March 17, 2017"
+  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
+             "Monday, March 20, 2017: Check cut and sent",
+             "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!"]
 crystal:
-  contract_deadline: "TBD CONTRACT DEADLINE"
-  schedule: ["Someday, Month XX, 2017: Signed Contracts Due",
-             "Someday, Month XX, 2017: First check cut and sent",
-             "Someday, Month XX, 2017: Second check cut and sent",
-             "Someday, Month XX, 2017: Third check cut and sent"]
+  contract_deadline: "Friday, March 17, 2017"
+  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
+             "Monday, March 20, 2017: First check cut and sent",
+             "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!",
+             "Monday, July 24, 2017: Firefly documentation due",
+             "Monday, July 31, 2017: Second check cut and sent",
+             "Thursday, August 31, 2017: Third check cut and sent"]
 skillshare:
-  contract_deadline: "TBD CONTRACT DEADLINE"
-  schedule: ["Someday, Month XX, 2017: Signed Contracts Due",
-             "Someday, Month XX, 2017: Check cut and sent"]
+  contract_deadline: "Friday, March 17, 2017"
+  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
+             "Monday, March 20, 2017: Check cut and sent",
+             "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!"]
 bex:
-  contract_deadline: "TBD CONTRACT DEADLINE"
-  schedule: ["Someday, Month XX, 2017: Signed Contracts Due",
-             "Someday, Month XX, 2017: Check cut and sent"]
+  contract_deadline: "Friday, March 17, 2017"
+  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
+             "Monday, March 20, 2017: Check cut and sent",
+             "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!"]
