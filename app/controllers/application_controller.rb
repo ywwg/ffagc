@@ -72,7 +72,7 @@ class ApplicationController < ActionController::Base
   def collated_meetings
     meetings = Hash.new
     collated_id = 0
-    Grant.where(hidden: false).each do |g|
+    Grant.where(hidden: false).order(meeting_one: :asc).each do |g|
       key = [g.meeting_one, g.meeting_two]
       if !meetings.has_key?(key)
         meetings[key] = {'id' => collated_id, 'grant_ids' => Array.new, 'names' => Array.new}
