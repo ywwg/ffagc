@@ -16,7 +16,9 @@ class ApplicationController < ActionController::Base
   # Returns a list of the ids of grants which are currently active for submitting.
   def active_submit_grants
     now = timezone_now
-    return Grant.where("submit_start <= ?", now).where("submit_end >= ?", now).select(:id)
+    deadline_leniency_time = now - 1.hours
+    return Grant.where("? >= submit_start", now)
+      .where("? <= submit_end", deadline_leniency_time).select(:id)
   end
   helper_method :active_submit_grants
 
@@ -62,7 +64,9 @@ class ApplicationController < ActionController::Base
 
   def active_submit_names
     now = timezone_now
-    return Grant.where("submit_start <= ?", now).where("submit_end >= ?", now).select(:name)
+    deadline_leniency_time = now - 1.hours
+    return Grant.where("? >= submit_start", now)
+      .where("? <= submit_end", deadline_leniency_time).select(:name)
   end
   helper_method :active_submit_names
 
