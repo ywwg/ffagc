@@ -20,6 +20,7 @@
       <th>Grant</th>
       <th>Name</th>
       <th>$</th>
+      <th>Discussion / Supplements</th>
       <th>Avg T</th>
       <th>Avg C</th>
       <th>Avg F</th>
@@ -27,15 +28,15 @@
       <th>#</th>
       <th>Decision Finalized</th>
       <th>Funding</th>
-      <th></th>
       <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
     </tr>
 
     <% @grant_submissions.each do |gs| %>
     <tr>
       <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
-      <td><%= gs.name %></td>
+      <td><%= link_to "#{gs.name}" , :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
       <td align="right">$<%= gs.requested_funding_dollars %></td>
+      <td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
       <td><%= @results[gs.id]['avg_t'] %></td>
       <td><%= @results[gs.id]['avg_c'] %></td>
       <td><%= @results[gs.id]['avg_f'] %></td>
@@ -47,7 +48,6 @@
           $<%= gs.granted_funding_dollars %>
         <% else %>$0
         <% end %></td>
-      <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
       <td align="center"><form name="fund_email_form-<%= gs.id %>">
             <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
           </form></td>
