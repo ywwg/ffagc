@@ -1,3 +1,6 @@
+# including a view helper in a controller -- a sign of things to come :/.
+include ActionView::Helpers::TextHelper
+
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -91,17 +94,21 @@ class ApplicationController < ActionController::Base
   helper_method :collated_meetings
 
   def discussion_status(grant_id)
+    discuss = []
     g = GrantSubmission.find(grant_id)
     if g.questions != nil && !g.questions.empty?
-      if g.answers != nil && !g.answers.empty?
-        return "Q&A"
-      end
-      return "Q"
+      discuss.push("Q")
     end
     if g.answers != nil && !g.answers.empty?
-      return "A"
+      discuss.push("A")
     end
-    return "None"
+    status = discuss.join('&').squeeze(' ')
+    if status == ""
+      status = "None"
+    end
+    supplement_count = Proposal.where(:grant_submission_id => g.id).count
+    status += ", #{pluralize(supplement_count, 'doc')}"
+    return status
   end
   helper_method :discussion_status
 

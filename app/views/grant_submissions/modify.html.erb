@@ -42,13 +42,12 @@
       </fieldset>
     <% end %>
     <br />
-    <%= link_to 'Back', :controller => "artists", :action => "index" %>
   <% else %>
     You must be logged in as an artist to modify a grant proposal. (<%= link_to "Log In", :controller => "artists", :action => "index" %>)
     <br />
     <br />
-    <%= link_to 'Back', :back %>
   <% end %>
+  <%= link_to 'Back', :back %>
 
   <script>
     // http://stackoverflow.com/questions/574941/best-way-to-track-onchange-as-you-type-in-input-type-text/26202266#26202266
