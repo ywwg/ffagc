@@ -19,7 +19,9 @@
         <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => false, :validate => true, :input_html => { :onInput => "numericFilter(this);" }  %>
 
         <li class="string input required stringish" id="grant_submission_name_input">
-          <label class="label" for="grant_submission_proposal">Current Application PDF:</label>
+          <label class="label" for="grant_submission_proposal">
+            <a href="<%= @grant_submission.proposal %>">Current Application PDF:</a>
+          </label>
           <input type="test" disabled="true" value="<%= @grant_submission.proposal_identifier %>"/><br/><br/>
           <label class="label" for="grant_submission_proposal">(Optional) Replace PDF:</label>
           <%# Keep extensions in sync with uploader %>
