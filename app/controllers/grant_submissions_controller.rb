@@ -142,6 +142,8 @@ class GrantSubmissionsController < ApplicationController
       return
     end
 
+    @artist_email = Artist.find(@grant_submission.artist_id)[:email]
+
     # Don't allow an artist to decide post-decision that they want a different
     # grant category.
     @grant_change_disable = false
