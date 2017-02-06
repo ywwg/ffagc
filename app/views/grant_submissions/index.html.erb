@@ -14,8 +14,8 @@
        <li><strong>Do not</strong> include any information identifying the artist(s)
          (such as name, alias, contact information, etc) in the submission document
          itself.  The review process can't be blind if your name is at the top
-         of the document. <strong>Submission documents with identifying
-         information will need to be cleaned and resubmitted.</strong>
+         of the document. Therefore <strong>we will reject your proposal</strong>
+         if it contains identifying information!
       </ul>
     <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
     <fieldset>
@@ -31,7 +31,7 @@
         <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }  %>
 
         <li class="string input required stringish" id="grant_submission_name_input">
-            <label class="label" for="grant_submission_proposal">Application PDF<abbr title="required">*</abbr></label>
+            <label class="label" for="grant_submission_proposal">Anonymized Application PDF<abbr title="required">*</abbr></label>
             <%# Keep extensions in sync with uploader %>
             <%= f.file_field :proposal, :required => true, :validate => true, :style => "margin-left:-5px", :accept => ".pdf,.doc,.docx,.txt,.md" %>
         </li>
@@ -56,7 +56,7 @@
     // http://stackoverflow.com/questions/574941/best-way-to-track-onchange-as-you-type-in-input-type-text/26202266#26202266
     onload = function () {
        var e = document.getElementById('grant_submission_requested_funding_dollars');
-       e.oninput = myHandler;
+       //e.oninput = myHandler;
        e.onpropertychange = e.oninput; // for IE8
        // e.onchange = e.oninput; // FF needs this in <select><option>...
     };
@@ -127,6 +127,13 @@
         errors++;
         alert('error: please select your application PDF')
         document.getElementById("grant_submission_proposal").style.border = '1px solid red';
+      }
+
+      if (errors == 0) {
+        var anon = confirm("Did you make sure your proposal is anonymous and DOES NOT include any identifying information?");
+        if (!anon) {
+          errors++;
+        }
       }
 
       return errors===0;
