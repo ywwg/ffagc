@@ -150,7 +150,6 @@ class AdminsController < ApplicationController
   # the fewest total assignments and give the submission to them.
   def assign
     max_voters_per_submission = 3
-    now = timezone_now
     Grant.all.each do |g|
       voters = Voter.joins(:grants_voters)
           .where('grants_voters.grant_id' => g.id, 'voters.verified' => true)

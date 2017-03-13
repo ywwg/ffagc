@@ -11,30 +11,29 @@ class ApplicationController < ActionController::Base
   end
   helper_method :event_year
 
-  def timezone_now
-    DateTime.current.in_time_zone(Rails.configuration.event_timezone)
-  end
-
   private
   # Returns a list of the ids of grants which are currently active for submitting.
   def active_submit_grants
-    now = timezone_now
+    now = DateTime.current
+    offset = ActiveSupport::TimeZone[Rails.configuration.event_timezone].formatted_offset
     deadline_leniency_time = now - 1.hours
-    return Grant.where("? >= submit_start", now)
-      .where("? <= submit_end", deadline_leniency_time).select(:id)
+    return Grant.where("datetime(?, ?) >= submit_start", now, offset)
+      .where("datetime(?, ?) <= submit_end", deadline_leniency_time, offset).select(:id)
   end
   helper_method :active_submit_grants
 
   # Returns a list of the ids of grants which are currently active for voting.
   def active_vote_grants
-    now = timezone_now
-    return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:id)
+    now = DateTime.current
+    offset = ActiveSupport::TimeZone[Rails.configuration.event_timezone].formatted_offset
+    return Grant.where("vote_start <= datetime(?, ?)", now, offset).where("vote_end >= datetime(?, ?)", now, offset).select(:id)
   end
 
   def voter_active_vote_grants(voter_id)
-    now = timezone_now
+    now = DateTime.current
+    offset = ActiveSupport::TimeZone[Rails.configuration.event_timezone].formatted_offset
     return Grant.joins(:grants_voters).where('grants_voters.voter_id' => voter_id)
-        .where("vote_start <= ?", now).where("vote_end >= ?", now).select(:id)
+        .where("vote_start <= datetime(?, ?)", now, offset).where("vote_end >= datetime(?, ?)", now, offset).select(:id)
   end
 
   def any_submit_open?
@@ -53,23 +52,26 @@ class ApplicationController < ActionController::Base
   helper_method :voter_any_vote_open?
 
   def active_vote_names
-    now = timezone_now
-    return Grant.where("vote_start <= ?", now).where("vote_end >= ?", now).select(:name)
+    now = DateTime.current
+    offset = ActiveSupport::TimeZone[Rails.configuration.event_timezone].formatted_offset
+    return Grant.where("vote_start <= datetime(?, ?)", now, offset).where("vote_end >= datetime(?, ?)", now, offset).select(:name)
   end
   helper_method :active_vote_names
 
   def voter_active_vote_names(voter_id)
-    now = timezone_now
+    now = DateTime.current
+    offset = ActiveSupport::TimeZone[Rails.configuration.event_timezone].formatted_offset
     return Grant.joins(:grants_voters).where('grants_voters.voter_id' => voter_id)
-        .where("vote_start <= ?", now).where("vote_end >= ?", now).select(:name)
+        .where("vote_start <= datetime(?, ?)", now, offset).where("vote_end >= datetime(?, ?)", now, offset).select(:name)
   end
   helper_method :voter_active_vote_names
 
   def active_submit_names
-    now = timezone_now
+    now = DateTime.current
+    offset = ActiveSupport::TimeZone[Rails.configuration.event_timezone].formatted_offset
     deadline_leniency_time = now - 1.hours
-    return Grant.where("? >= submit_start", now)
-      .where("? <= submit_end", deadline_leniency_time).select(:name)
+    return Grant.where("datetime(?, ?) >= submit_start", now, offset)
+      .where("datetime(?, ?) <= submit_end", deadline_leniency_time, offset).select(:name)
   end
   helper_method :active_submit_names
 
