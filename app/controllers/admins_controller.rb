@@ -182,8 +182,10 @@ class AdminsController < ApplicationController
 
       vv.assigned = Array.new
       VoterSubmissionAssignment.where("voter_id = ?",vv.id).each do |vsa|
-        gs = GrantSubmission.find(vsa.grant_submission_id)
-        vv.assigned.push("#{gs.name}(#{gs.id})")
+        gs = GrantSubmission.find_by_id(vsa.grant_submission_id)
+        if gs != nil
+          vv.assigned.push("#{gs.name}(#{gs.id})")
+        end
       end
     end
   end
