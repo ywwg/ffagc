@@ -10,11 +10,11 @@ class ApplicationController < ActionController::Base
     Rails.configuration.event_year
   end
   helper_method :event_year
-  
+
   def timezone_string
     ActiveSupport::TimeZone[Rails.configuration.event_timezone].formatted_offset
   end
-  
+
   private
   # Returns a list of the ids of grants which are currently active for submitting.
   def active_submit_grants

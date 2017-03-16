@@ -41,17 +41,19 @@
         <th>Name</th>
         <th>Requested $</th>
         <th>Discussion / Supplements</th>
+        <th>Score</th>
         <th>Decision Finalized</th>
         <th>Granted $</th>
         <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
       </tr>
 
-      <% @submissions.each do |gs| %>
+      <% @sorted_submissions.each do |gs| %>
       <tr>
         <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
         <td><%= link_to "#{gs.name}" , :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
         <td align="right">$<%= gs.requested_funding_dollars %></td>
         <td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
+        <td><%= @results[gs.id]['avg_s'] %></td>
         <td><%= gs.funding_decision %></td>
         <td align="right">
           <% if gs.granted_funding_dollars != nil %>
