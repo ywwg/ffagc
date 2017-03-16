@@ -192,7 +192,7 @@ class AdminsController < ApplicationController
 
   def init_submissions
     @results = Hash.new
-    @submissions = GrantSubmission.where(grant_id: active_vote_grants).order(grant_id: :asc)
+    active_submissions = GrantSubmission.where(grant_id: active_vote_grants)
     @grant_submissions = GrantSubmission.all.order(grant_id: :asc)
     @grant_submissions.each do |gs|
       votes = Vote.where("grant_submission_id = ?", gs.id)
@@ -251,6 +251,19 @@ class AdminsController < ApplicationController
 
       @results[gs.id]['num_total'] = t_num + c_num + f_num
     end
+
+    active_submissions.each do |gs|
+      gs.class_eval do
+        attr_accessor :avg_score
+      end
+      gs.avg_score = @results[gs.id]['avg_s']
+      if gs.avg_score == nil
+        gs.avg_score = 0
+      end
+    end
+    @sorted_submissions = active_submissions.sort_by{|gs| gs.avg_score}
+        .reverse
+        .sort_by{|gs| gs.grant_id}
   end
 
   def index
