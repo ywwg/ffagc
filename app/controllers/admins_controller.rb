@@ -195,7 +195,9 @@ class AdminsController < ApplicationController
     active_submissions = GrantSubmission.where(grant_id: active_vote_grants)
     @grant_submissions = GrantSubmission.all.order(grant_id: :asc)
     @grant_submissions.each do |gs|
-      votes = Vote.where("grant_submission_id = ?", gs.id)
+      votes = Vote.joins(:voter)
+          .where('voters.verified' => true)
+          .where('votes.grant_submission_id' => gs.id)
 
       t_sum = 0
       t_num = 0;
