@@ -72,7 +72,7 @@
       <tr>
         <td colspan="3" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
         <td><%= button_to "Notify Questions", :controller => "admins", :action => "send_question_emails" %></td>
-        <td colspan="<% @show_scored ? '3' : '2' %>" align="right"><form name="send_email_form">
+        <td colspan="<%= @show_scored ? '3' : '2' %>" align="right"><form name="send_email_form">
             <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
             </form></td>
         <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
