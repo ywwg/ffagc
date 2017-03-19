@@ -2,7 +2,8 @@ class GrantSubmission < ActiveRecord::Base
   mount_uploader :proposal, GrantProposalUploader
 
   validates :name, :presence => true, length: { minimum: 4 }
-  validates :proposal, :presence => true
+  # Can't require proposal because modification might not change the proposal.
+  # validates :proposal, :presence => true
 
   validates :grant_id, :presence => true
 
