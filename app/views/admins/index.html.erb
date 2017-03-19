@@ -35,25 +35,29 @@
     <% if i > 0 %> and<% end %>
     <b><%= g.name %></b><% end %></p>
 
+    <p>| <% if @show_scored %><%= link_to "Hide Scores", :controller => "admins", :action => "index" %><% else %><b>Hide Scores</b><% end %>
+       | <% if @show_scored %><b>Hide Scores</b><% else %><%= link_to "Show Scores", :controller => "admins", :action => "index", :scored => "true" %><% end %>
+    |</p>
+
     <table border="1">
       <tr>
         <th>Grant</th>
         <th>Name</th>
         <th>Requested $</th>
         <th>Discussion / Supplements</th>
-        <th>Score</th>
+        <% if @show_scored %><th>Average Score</th> <% end %>
         <th>Decision Finalized</th>
         <th>Granted $</th>
         <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
       </tr>
 
-      <% @sorted_submissions.each do |gs| %>
+      <% @submissions_display.each do |gs| %>
       <tr>
         <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
         <td><%= link_to "#{gs.name}" , :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
         <td align="right">$<%= gs.requested_funding_dollars %></td>
         <td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
-        <td><%# @results[gs.id]['avg_s'] %></td>
+        <% if @show_scored %><td><%= gs.avg_score %></td> <% end %>
         <td><%= gs.funding_decision %></td>
         <td align="right">
           <% if gs.granted_funding_dollars != nil %>
@@ -68,7 +72,7 @@
       <tr>
         <td colspan="3" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
         <td><%= button_to "Notify Questions", :controller => "admins", :action => "send_question_emails" %></td>
-        <td colspan="2" align="right"><form name="send_email_form">
+        <td colspan="<% @show_scored ? '3' : '2' %>" align="right"><form name="send_email_form">
             <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
             </form></td>
         <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>

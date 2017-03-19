@@ -123,9 +123,6 @@ class VotersController < ApplicationController
       @grant_submissions =
           GrantSubmission.where(grant_id: voter_active_vote_grants(@voter.id))
 
-      # this is good for lace/temple
-      # @grant_submissions = @grant_submissions.sort { |a,b| [a.grant_id,a.id] <=> [b.grant_id,b.id] }
-
       @grant_submissions = @grant_submissions.sort { |a,b| [a.name] <=> [b.name] }
 
       @votes = Hash.new

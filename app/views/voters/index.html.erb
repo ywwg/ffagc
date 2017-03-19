@@ -46,7 +46,7 @@
                 <td><%= gs.name %></td>
                 <td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
                 <td align="right">$<%= gs.requested_funding_dollars %></td>
-                <td><a href="<%= gs.proposal %>">Download</a></td>
+                <td><a href="<%= gs.proposal %>" target="_blank">Open...</a></td>
                 <td><% if submission_has_questions?(gs.id) %>
                       <%= link_to "#{discussion_status(gs.id)}",
                           :controller => "grant_submissions",
