@@ -6,39 +6,39 @@
 
 install_day: "Friday, July 7, 2017"
 skill_attend_day: "Friday, June 30, 2017"
-figment_dates: "TBD FIGMENT DATES"
+figment_dates: "TBD FIGMENT DATES (Usually end of July)"
 creativity:
-  contract_deadline: "Friday, March 17, 2017"
-  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
-             "Monday, March 20, 2017: First check cut and sent",
+  contract_deadline: "Friday, April 14, 2017"
+  schedule: ["Friday, April 14, 2017: Signed Contracts Due",
+             "Monday, April 17, 2017: First check cut and sent",
              "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!",
              "Monday, July 24, 2017: Firefly documentation due",
              "Monday, July 31, 2017: Second check cut and sent",]
 legacy:
-  contract_deadline: "Friday, March 17, 2017"
-  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
-             "Monday, March 20, 2017: Check cut and sent",
+  contract_deadline: "Friday, April 14, 2017"
+  schedule: ["Friday, April 14, 2017: Signed Contracts Due",
+             "Monday, April 17, 2017: Check cut and sent",
              "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!"]
 temple:
-  contract_deadline: "Friday, March 17, 2017"
-  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
-             "Monday, March 20, 2017: Check cut and sent",
+  contract_deadline: "Friday, April 14, 2017"
+  schedule: ["Friday, April 14, 2017: Signed Contracts Due",
+             "Monday, April 17, 2017: Check cut and sent",
              "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!"]
 crystal:
-  contract_deadline: "Friday, March 17, 2017"
-  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
-             "Monday, March 20, 2017: First check cut and sent",
+  contract_deadline: "Friday, April 14, 2017"
+  schedule: ["Friday, April 14, 2017: Signed Contracts Due",
+             "Monday, April 17, 2017: First check cut and sent",
              "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!",
              "Monday, July 24, 2017: Firefly documentation due",
              "Monday, July 31, 2017: Second check cut and sent",
              "Thursday, August 31, 2017: Third check cut and sent"]
 skillshare:
-  contract_deadline: "Friday, March 17, 2017"
-  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
-             "Monday, March 20, 2017: Check cut and sent",
+  contract_deadline: "Friday, April 14, 2017"
+  schedule: ["Friday, April 14, 2017: Signed Contracts Due",
+             "Monday, April 17, 2017: Check cut and sent",
              "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!"]
 bex:
-  contract_deadline: "Friday, March 17, 2017"
-  schedule: ["Friday, March 17, 2017: Signed Contracts Due",
-             "Monday, March 20, 2017: Check cut and sent",
+  contract_deadline: "Friday, April 14, 2017"
+  schedule: ["Friday, April 14, 2017: Signed Contracts Due",
+             "Monday, April 17, 2017: Check cut and sent",
              "Tuesday, July 4 - Sunday, July 9, 2017: Firefly!"]
