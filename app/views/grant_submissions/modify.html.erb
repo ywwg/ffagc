@@ -8,19 +8,20 @@
         <%= f.input :name, :label => "Name of Piece", :required => false, :validate => true %>
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_grant_id">Grant</label>
-          <%# NOTE that we allow all grant types regardless of what is open for voting.  This allows
-              artists to move their grant from one type to another with minimal changes %>
+          <%# NOTE that we allow all grant types regardless of what is open for
+              voting or submitting.  This allows artists to move their grant
+              from one type to another with minimal changes %>
           <%= collection_select(:grant_submission, :grant_id,
-                  Grant.where(id: active_submit_grants), :id, :name,
+                  Grant.all, :id, :name,
                   {:include_blank => "(select a grant)"},
-                  { :onchange => "numericFilter();", :disabled => @grant_change_disable }) %>
+                  { :onchange => "numericFilter();", :disabled => @grant_change_disable}) %>
         </li>
 
         <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => false, :validate => true, :input_html => { :onInput => "numericFilter(this);" }  %>
 
         <li class="string input required stringish" id="grant_submission_name_input">
           <label class="label" for="grant_submission_proposal">
-            <a href="<%= @grant_submission.proposal %>">Current Application PDF:</a>
+            <a href="<%= @grant_submission.proposal %>" target="_blank">Current Application PDF:</a>
           </label>
           <input type="test" disabled="true" value="<%= @grant_submission.proposal_identifier %>"/><br/><br/>
           <label class="label" for="grant_submission_proposal">(Optional) Replace PDF:</label>
