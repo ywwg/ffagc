@@ -143,12 +143,15 @@ class AdminsController < ApplicationController
   # distributes voter assignments fairly and can handle newly-added voters and
   # submissions without blowing up existing assignments.
   #
+  # First cleans out the assignments from invalid entries.
+  #
   # Goes through all grants and for each one gets a list of voters who are
   # verified and are available to vote on that grant.  Then goes through each
   # submission for that grant.  If the submission has fewer assignments than
   # max_voters_per_submission (or the number of voters), we find the voter with
   # the fewest total assignments and give the submission to them.
   def assign
+    clean_assignments
     max_voters_per_submission = 3
     Grant.all.each do |g|
       voters = Voter.joins(:grants_voters)
@@ -165,6 +168,22 @@ class AdminsController < ApplicationController
     end
 
     redirect_to action: "index"
+  end
+
+  # Goes through the voter assignments, and deletes entries if the
+  # grant no longer exists or the voter no longer exists.  Unverified voters
+  # keep their assignments because their values are ignored, so they can be
+  # readded (which happens).
+  def clean_assignments
+    VoterSubmissionAssignment.all.each do |vsa|
+      if Voter.find_by_id(vsa.voter_id) == nil
+        vsa.destroy
+        next
+      end
+      if GrantSubmission.find_by_id(vsa.grant_submission_id) == nil
+        vsa.destroy
+      end
+    end
   end
 
   def init_artists
