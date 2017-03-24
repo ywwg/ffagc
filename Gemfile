@@ -63,3 +63,15 @@ gem 'log4r'
 gem 'file_validators'
 
 gem 'country_select'
+
+group :test, :development do
+  # rspec!
+  gem 'rspec-rails'
+  gem 'rspec-its'
+  gem 'guard-rspec'
+end
+
+group :test do
+  gem 'database_cleaner'
+  gem 'rspec_junit_formatter'
+end
