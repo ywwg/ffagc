@@ -1,12 +1,13 @@
 *.rbc
 capybara-*.html
-.rspec
+.rspec-local
 /log
 /tmp
 /db/*.sqlite3
 /public/system
 /coverage/
 /spec/tmp
+/spec/examples.txt
 **.orig
 rerun.txt
 pickle-email-*.html
