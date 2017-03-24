@@ -63,3 +63,7 @@ gem 'log4r'
 gem 'file_validators'
 
 gem 'country_select'
+
+group :development do
+  gem 'bundler-audit', require: false
+end
