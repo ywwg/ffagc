@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :voter do
     name { Faker::Name::name }
-		email
+    email
     password { Faker::Internet.password }
 
     trait :verified do
@@ -9,7 +9,7 @@ FactoryGirl.define do
     end
 
     trait :activated do
-			verified
+      verified
       activated true
     end
   end
