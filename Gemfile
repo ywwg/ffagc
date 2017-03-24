@@ -65,7 +65,9 @@ gem 'file_validators'
 gem 'country_select'
 
 group :test, :development do
-  # rspec!
+  gem 'factory_girl_rails'
+  gem 'faker'
+
   gem 'rspec-rails'
   gem 'rspec-its'
   gem 'guard-rspec'
