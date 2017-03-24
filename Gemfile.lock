@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/joecorcoran/judge-formtastic.git
+  remote: https://github.com/joecorcoran/judge-formtastic.git
   revision: d21265c697e5c0e926ad8eab75c242b73a05d647
   specs:
     judge-formtastic (0.2.0)

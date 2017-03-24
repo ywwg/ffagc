@@ -47,7 +47,7 @@ gem 'formtastic'
 
 # Form validation
 gem 'judge', '~> 2.0.5'
-gem 'judge-formtastic', github: 'joecorcoran/judge-formtastic'
+gem 'judge-formtastic', git: 'https://github.com/joecorcoran/judge-formtastic.git'
 
 # gem 'judge-formtastic'
 
