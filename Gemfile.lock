@@ -258,6 +258,7 @@ DEPENDENCIES
   log4r
   pdf-inspector
   prawn
+  pry
   rails (= 4.1.7)
   rspec-its
   rspec-rails
