@@ -38,19 +38,24 @@ also be changed.
 
 ## Run Tests
 
-    bin/rake
+```sh
+  bundle exec rspec
+```
 
 ## Launch the server
 
 Run the server, which runs on the default port 3000:
 
-    bin/rails server
+```sh
+  bundle exec rails s
+```
 
 You should create an admin right away by going to the admins page.
-
 
 # Troubleshooting
 
 I had problems with bundle install not working, and I had to do:
 
-    bundle install --deployment
+```sh
+  bundle install --deployment
+```
