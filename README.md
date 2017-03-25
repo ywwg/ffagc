@@ -11,27 +11,15 @@ build / install stuff I dunno who even uses rails any more:
     bundle update
     bundle install
 
-You'll need to create config/secrets.yml with the form:
-
-    development:
-      secret_key_base: [[[LOTS OF HEX]]]
-
-    test:
-      secret_key_base: [[[LOTS OF HEX]]]
-
-    production:
-      secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
-
-Use 'rake secret' to generate the hex.  Don't check this file into source control!
+If you are running this project in production you'll need to set environment variables for secrets that include `ENV` in `config/secrets.yml`.
 
 ## Email Setup
 
-If you plan to send email, you'll need to create config/initializers/smtp_secret.rb
-with:
+If using SMTP set the required ENV variables or fill in (and do not commit) `.env` like so:
 
-    ENV['PASSWORD']="your smtp password"
-
-and edit config/environments/*.rb to include your smtp server information.
+```sh
+SMTP_PASSWORD='this_is_not_the_password'
+```
 
 ## Event-Specific Setup (do this every year)
 
