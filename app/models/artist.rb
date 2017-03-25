@@ -1,5 +1,8 @@
 class Artist < ActiveRecord::Base
   attr_accessor :activation_token, :reset_token
+
+  has_many :grant_submissions
+
   before_create :create_activation_digest
 
   has_secure_password

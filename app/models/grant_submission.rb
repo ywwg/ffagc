@@ -1,4 +1,7 @@
 class GrantSubmission < ActiveRecord::Base
+  belongs_to :grant
+  belongs_to :artist
+
   mount_uploader :proposal, GrantProposalUploader
 
   validates :name, :presence => true, length: { minimum: 4 }
