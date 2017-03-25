@@ -40,4 +40,24 @@ describe VotersController do
       end
     end
   end
+
+  describe '#index' do
+    it 'shows index template' do
+      get 'index'
+      assert_template "index"
+    end
+
+    context 'with activated voter' do
+      let!(:voter) { FactoryGirl.create(:voter, :activated) }
+
+      before do
+        sign_in_voter(voter.id)
+      end
+
+      it 'shows index template' do
+        get 'index'
+        assert_template "index"
+      end
+    end
+  end
 end
