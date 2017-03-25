@@ -36,16 +36,6 @@ also be changed.
 
 * Update the template constants (install dates and deadlines) in config/template_values.yml.
 
-## Initialize the Database
-
-init the db with:
-
-    bin/rake db:migrate RAILS_ENV=development
-
-or delete an existing db:
-
-    bin/rake db:reset
-
 ## Run Tests
 
     bin/rake
