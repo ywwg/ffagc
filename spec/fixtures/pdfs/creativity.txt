@@ -1,4 +1,4 @@
-Temple Grant Contract
+Creativity Grant Contract
 SubmissionName
 Dated: 2017-01-07
 Overview
@@ -18,21 +18,21 @@ Funding
 deemed approved upon completion of the artist's and Firefly Arts Collective's signatures on this contract.
 2. Firefly Arts Collective will retain 25% of the grant funding as a performance deposit.  The first payment
 (75% of the total allotted funding) will be disbursed upon receiving the signed contract; the second payment
-(25%) will be disbursed upon completion of all requirements outlined in this document.
+(25% of the total allotted funding) will be disbursed upon completion of all requirements outlined in this
+document.
 3. The artist agrees that this grant of RequestedFundingDollars USD shall represent the total sum they will
 receive from Firefly Arts Collective and the artist hereby agrees to assume responsibility for any additional
-costs beyond the the grant amount incurred in the production of SubmissionName for Firefly Arts Festival
-2017.
+costs beyond the the grant amount incurred in the production of SubmissionName for Firefly Arts Festival .
 4. The artist agrees to pay appropriate taxes on grant income if necessary.  For artists in the United States
 receiving grants valuing at or above 600$ USD, the artist will supply a completed IRS Form W-9 so that
 Firefly Arts Collective can generate a 1099 tax form to properly report this tax.  All artists are solely
 responsible for complying with the tax laws of their locale.
 Events
 5. The artist agrees to meet the following schedule of events, under the given schedule:
-1. Project Installation (Friday, July 7, 2017)]
-The funded project will be completed and fully operational by sunset on Friday, July 7, 2017.  If the
-artist would like to arrive at Firefly Arts Festival before its official start date, the artist must apply for Early
-Arrival and comply with all Early Arrival policies.
+Project Installation:
+The funded project will be completed and fully operational by sunset on Friday, July 7, 2017.  If the artist
+would like to arrive at Firefly Arts Festival before its official start date, the artist must apply for Early Arrival
+and comply with all Early Arrival policies.
 6. Transportation to and from Firefly Arts Festival will be offered by Firefly Arts Collective.  If the artist
 accepts this offer of transportation, the artist is expected to comply with all Art Truck policies and procedures.
 7. The artist agrees to furnish Firefly Arts Collective with documentation of the project, including one or
