@@ -20,10 +20,6 @@ class AdminsController < ApplicationController
 
   end
 
-  def admin_params
-    params.require(:admin).permit(:name, :password_digest, :password, :password_confirmation, :email)
-  end
-
   def create
     # if there is no admin, go ahead and create the account (initial config)
     # even if no admin is logged in.
@@ -331,6 +327,10 @@ class AdminsController < ApplicationController
 
   private
 
+  def admin_params
+    params.require(:admin).permit(:name, :password_digest, :password, :password_confirmation, :email)
+  end
+
   # counts the number of voters a submission is assigned to
   def assigned_count(submission_id)
     VoterSubmissionAssignment.where(grant_submission_id: submission_id).count
@@ -357,4 +357,5 @@ class AdminsController < ApplicationController
     end
     return fewest
   end
+
 end
