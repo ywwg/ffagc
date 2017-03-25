@@ -5,11 +5,13 @@ ffagc
 
 ## Initial Environment Setup
 
-build / install stuff I dunno who even uses rails any more:
+Set up the project with:
 
-    rake
-    bundle update
-    bundle install
+```sh
+  bundle install
+  bundle exec rake db:migrate RAILS_ENV=development
+  bundle exec rails server
+```
 
 If you are running this project in production you'll need to set environment variables for secrets that include `ENV` in `config/secrets.yml`.
 
