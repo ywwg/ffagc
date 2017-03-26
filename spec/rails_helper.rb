@@ -26,6 +26,12 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 # Checks for pending ActiveRecord migration and applies them before tests are run.
 ActiveRecord::Migration.maintain_test_schema!
 
+# Switch off processing for faster tests
+CarrierWave.configure do |config|
+  config.storage = :file
+  config.enable_processing = false
+end
+
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
