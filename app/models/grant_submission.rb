@@ -4,14 +4,14 @@ class GrantSubmission < ActiveRecord::Base
 
   mount_uploader :proposal, GrantProposalUploader
 
-  validates :name, :presence => true, length: { minimum: 4 }
+  validates :name, presence: true, length: { minimum: 4 }
   # Can't require proposal because modification might not change the proposal.
   # validates :proposal, :presence => true
 
-  validates :grant_id, :presence => true
+  validates :grant_id, presence: true
 
   # Max value depends on the grant, so don't constrain here.
-  validates :requested_funding_dollars, :presence => true, :numericality => {:greater_than => 0, :only_integer => true}
+  validates :requested_funding_dollars, presence: true, numericality: { greater_than: 0, only_integer: true}
 
   # This is supposed to check size before upload but I don't think it does.
   # It does validate after upload, though, so it's not DDOS-proof but it will
