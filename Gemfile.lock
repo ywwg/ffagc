@@ -59,7 +59,6 @@ GEM
     country_select (3.0.0)
       countries (~> 2.0)
       sort_alphabetical (~> 1.0)
-    database_cleaner (1.5.1)
     diff-lcs (1.2.5)
     dotenv (2.1.2)
     erubis (2.7.0)
@@ -245,7 +244,6 @@ DEPENDENCIES
   carrierwave
   coffee-rails (~> 4.0.0)
   country_select
-  database_cleaner
   dotenv
   execjs
   factory_girl_rails
