@@ -4,7 +4,7 @@ FactoryGirl.define do
   end
 
   sequence :vote_score do
-    Faker::Number.between(1, 3)
+    Faker::Number.between(0, 2)
   end
 end
 
