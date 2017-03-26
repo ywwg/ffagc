@@ -15,7 +15,6 @@ class Grant < ActiveRecord::Base
   # on by the Art Core.  Admins should modify individual voters to add them
   # to hidden grants.
 
-  # This is redundant to the javascript validation.
   validate :dates_ordering
 
   def dates_ordering
