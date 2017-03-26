@@ -1,4 +1,6 @@
 class Proposal < ActiveRecord::Base
+  belongs_to :grant_submission
+
   mount_uploader :file, GrantProposalUploader
 
   validates :file, :presence => true

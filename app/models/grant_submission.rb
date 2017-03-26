@@ -2,6 +2,8 @@ class GrantSubmission < ActiveRecord::Base
   belongs_to :grant
   belongs_to :artist
 
+  has_many :proposals
+
   delegate :max_funding_dollars, to: :grant
 
   mount_uploader :proposal, GrantProposalUploader
