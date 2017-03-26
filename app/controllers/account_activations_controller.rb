@@ -2,15 +2,7 @@ require 'uri'
 
 class AccountActivationsController < ApplicationController
   def edit
-    @type = params[:type]
-    email = URI.unescape(params[:email]).downcase
-    if @type == "artists"
-      user = Artist.find_by(email: email)
-    elsif @type == "voters"
-      user = Voter.find_by(email: email)
-    elsif @type == "admins"
-      user = Admin.find_by(email: email)
-    end
+    user = UserFinder.find_by_email!(params[:type], params[:email])
 
     if user && !user.activated? && ApplicationController.activate_succeed?(user, params[:id])
       user.update_attribute(:activated, true)
