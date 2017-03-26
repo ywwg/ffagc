@@ -18,7 +18,7 @@ class GrantSubmission < ActiveRecord::Base
   # This is supposed to check size before upload but I don't think it does.
   # It does validate after upload, though, so it's not DDOS-proof but it will
   # prevent randos from using the grants server as an ftp site
-  validate :proposal_validation, :if => "proposal?"
+  validate :proposal_validation, if: :proposal?
 
   def proposal_validation
     if proposal.size > 100.megabytes
