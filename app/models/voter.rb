@@ -6,6 +6,7 @@ class Voter < ActiveRecord::Base
 
   has_many :grants_voters
   has_many :votes
+  has_many :voter_submission_assignments
 
   validates :name, :presence => true, length: { minimum: 4 }
   validates :email, :presence => true
