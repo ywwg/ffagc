@@ -10,5 +10,10 @@ FactoryGirl.define do
     contact_state { Faker::Address.state }
     contact_country { 'United States' }
     contact_zipcode { Faker::Address.zip_code }
+
+    trait :activated do
+      activated { true }
+      activated_at { 1.day.ago }
+    end
   end
 end
