@@ -9,4 +9,22 @@ describe Vote do
 
     its(:valid?) { is_expected.to be(true) }
   end
+
+  context 'score above 2' do
+    subject { FactoryGirl.build(:vote, score_c: 3, score_t: 4, score_f: 5) }
+
+    it 'has expected errors' do
+      expect(subject).not_to be_valid
+      expect(subject.errors).to include(:score_c, :score_t, :score_f)
+    end
+  end
+
+  context 'negative score' do
+    subject { FactoryGirl.build(:vote, score_c: -1, score_t: -2, score_f: -3) }
+
+    it 'has expected errors' do
+      expect(subject).not_to be_valid
+      expect(subject.errors).to include(:score_c, :score_t, :score_f)
+    end
+  end
 end
