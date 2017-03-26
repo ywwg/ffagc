@@ -3,6 +3,7 @@ class GrantSubmission < ActiveRecord::Base
   belongs_to :artist
 
   has_many :proposals
+  has_many :votes
 
   delegate :max_funding_dollars, to: :grant
 
