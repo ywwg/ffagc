@@ -1,6 +1,8 @@
 class Voter < ActiveRecord::Base
-  attr_accessor :activation_token, :reset_token
-  before_create :create_activation_digest
+  include Activatable
+
+  attr_accessor :reset_token
+
   has_secure_password
   has_many :grants_voters
   has_many :votes
@@ -30,13 +32,5 @@ class Voter < ActiveRecord::Base
   # Returns true if a password reset has expired.
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
-  end
-
-  private
-
-  # Creates and assigns the activation token and digest.
-  def create_activation_digest
-    self.activation_token = ApplicationController.new_token
-    self.activation_digest = ApplicationController.digest(activation_token)
   end
 end

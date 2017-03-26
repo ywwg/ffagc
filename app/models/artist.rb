@@ -1,9 +1,9 @@
 class Artist < ActiveRecord::Base
-  attr_accessor :activation_token, :reset_token
+  include Activatable
+
+  attr_accessor :reset_token
 
   has_many :grant_submissions
-
-  before_create :create_activation_digest
 
   has_secure_password
 
@@ -39,11 +39,4 @@ class Artist < ActiveRecord::Base
     reset_sent_at < 2.hours.ago
   end
 
-  private
-
-  # Creates and assigns the activation token and digest.
-  def create_activation_digest
-    self.activation_token = ApplicationController.new_token
-    self.activation_digest = ApplicationController.digest(activation_token)
-  end
 end
