@@ -60,9 +60,8 @@ class AdminsController < ApplicationController
     if voter.save
       send_email = params[:send_email] == "true"
       if send_email
-        # Will need to be replaced with deliver_now
         begin
-          UserMailer.voter_verified(voter, event_year).deliver
+          UserMailer.voter_verified(voter, event_year).deliver_now
           logger.info "email: voter verification sent to #{voter.email}"
         rescue
           flash[:warning] = "Error sending email"

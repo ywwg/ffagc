@@ -13,7 +13,7 @@ module PasswordReset
 
     # Sends password reset email.
     def send_password_reset_email
-      UserMailer.password_reset(self.class.name.to_s.downcase.pluralize, self).deliver
+      UserMailer.password_reset(self.class.name.to_s.downcase.pluralize, self).deliver_now
       logger.info "email: admin password reset sent to #{self.email}"
     end
 
