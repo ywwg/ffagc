@@ -13,6 +13,27 @@ describe AdminsController do
 
     context 'logged in' do
       let!(:admin) { FactoryGirl.create(:admin, :activated) }
+      let!(:grant) { FactoryGirl.create(:grant) }
+      let!(:grant_2) { FactoryGirl.create(:grant) }
+
+      before do
+        FactoryGirl.create_list(:grant_submission, 16, funding_decision: false, grant: grant)
+        FactoryGirl.create_list(:grant_submission, 10, funding_decision: false, grant: grant_2)
+
+        FactoryGirl.create(:voter, :activated)
+        FactoryGirl.create_list(:voter, 4, :activated, verified: false)
+        FactoryGirl.create_list(:voter, 10, :activated)
+
+        # assign to first grant
+        15.times do |n|
+          FactoryGirl.create(:grants_voter, voter: Voter.find(n + 1), grant: grant)
+        end
+
+        # assign to second grant
+        2.times do |n|
+          FactoryGirl.create(:grants_voter, voter: Voter.find(n + 6), grant: grant_2)
+        end
+      end
 
       before { sign_in_admin(admin.id) }
 
