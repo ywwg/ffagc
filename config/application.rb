@@ -38,5 +38,7 @@ module Ffagc
     # The timezone for the event, used to calculate submission and voting
     # deadlines.
     config.event_timezone = "America/New_York"
+
+    config.active_record.raise_in_transactional_callbacks = true
   end
 end
