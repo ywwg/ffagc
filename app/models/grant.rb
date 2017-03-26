@@ -24,7 +24,7 @@ class Grant < ActiveRecord::Base
       errors.add(:submit_start, "must be after submission end date")
     end
     if vote_start > vote_end
-      errors.add(:submit_start, "must be after vote end date")
+      errors.add(:vote_start, "must be after vote end date")
     end
     if meeting_one > vote_end
       errors.add(:meeting_one, "must be before vote end date")
