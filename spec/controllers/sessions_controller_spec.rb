@@ -5,8 +5,6 @@ describe SessionsController do
     it 'allows logging in with case-insensitive email' do
       post 'create_artist', { session: { email: artist.email.upcase, password: artist.password } }
       expect(response).to redirect_to('/artists')
-      #post artists_login_path, { email: user.email, password: password }
-      #assert_redirected_to '/artists'
     end
 
     context 'with inactive artist' do
@@ -25,8 +23,6 @@ describe SessionsController do
     it 'allows logging in with case-insensitive email' do
       post 'create_voter', { session: { email: voter.email.upcase, password: voter.password } }
       expect(response).to redirect_to('/voters')
-      #post voters_login_path, { email: user.email, password: password }
-      #assert_redirected_to '/voters'
     end
 
     context 'with inactive voter' do
@@ -45,8 +41,6 @@ describe SessionsController do
     it 'allows logging in with case-insensitive email' do
       post 'create_admin', { session: { email: admin.email.upcase, password: admin.password } }
       expect(response).to redirect_to('/admins')
-      #post admins_login_path, { email: user.email, password: password }
-      #assert_redirected_to '/admins'
     end
 
     context 'with inactive admin' do
