@@ -16,7 +16,7 @@ class GrantSubmission < ActiveRecord::Base
 
   validates :grant, presence: true
 
-  # Max value depends on the grant, so don't constrain here.
+  # Max value depends on the grant
   validates :requested_funding_dollars, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: :max_funding_dollars, only_integer: true }
 
   # This is supposed to check size before upload but I don't think it does.
