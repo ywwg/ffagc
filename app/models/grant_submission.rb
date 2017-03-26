@@ -8,7 +8,7 @@ class GrantSubmission < ActiveRecord::Base
   # Can't require proposal because modification might not change the proposal.
   # validates :proposal, :presence => true
 
-  validates :grant_id, presence: true
+  validates :grant, presence: true
 
   # Max value depends on the grant, so don't constrain here.
   validates :requested_funding_dollars, presence: true, numericality: { greater_than: 0, only_integer: true}
