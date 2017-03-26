@@ -17,6 +17,8 @@ class Grant < ActiveRecord::Base
 
   validate :dates_ordering
 
+  private
+
   def dates_ordering
     if submit_start > submit_end
       errors.add(:submit_start, "must be after submission end date")
