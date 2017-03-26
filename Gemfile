@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.7'
+gem 'rails', '4.2.7.1'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -47,7 +47,7 @@ gem 'formtastic'
 
 # Form validation
 gem 'judge', '~> 2.0.5'
-gem 'judge-formtastic', github: 'joecorcoran/judge-formtastic'
+gem 'judge-formtastic', git: 'https://github.com/joecorcoran/judge-formtastic.git'
 
 # gem 'judge-formtastic'
 
@@ -77,6 +77,8 @@ group :test, :development do
   gem 'guard-rspec'
 
   gem 'timecop'
+
+  gem 'bundler-audit', require: false
 end
 
 group :test do
