@@ -153,11 +153,23 @@ class AdminsController < ApplicationController
   def assign
     clean_assignments
     max_voters_per_submission = 3
+    # NOTE: TEMP HACK: Keep a list of seen grant submission titles, and if we
+    # see a duplicate, skip it.  This way artists that submitted at more than
+    # one grant level won't appear twice in the voting assignments.  This
+    # should be removed once we have proper tier selection.
+    seen = Set.new
     Grant.all.each do |g|
       voters = Voter.joins(:grants_voters)
           .where('grants_voters.grant_id' => g.id, 'voters.verified' => true)
           .all
       GrantSubmission.where(grant_id: g.id).each do |gs|
+        # Only skip if the name *and* artist id are the same, in case two
+        # artists picked the same name.
+        gs_uid = [gs.name, gs.artist_id]
+        if seen.include?(gs_uid)
+          next
+        end
+        seen.add(gs_uid)
         while assigned_count(gs.id) < [max_voters_per_submission, voters.count].min
           vsa = VoterSubmissionAssignment.new
           vsa.voter_id = fewest_assigned_voter(voters, gs.id).id
