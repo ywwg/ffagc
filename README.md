@@ -17,10 +17,11 @@ If you are running this project in production you'll need to set environment var
 
 ## Email Setup
 
-If using SMTP set the required ENV variables or fill in (and do not commit) `.env` like so:
+If you're using SMTP to send emails, set the required ENV variables in config/secrets.yml or create a hidden file /[your repo]/.env (and do not add it to the repository) that overrides the values you want to set like so:
 
 ```sh
 SMTP_PASSWORD='this_is_not_the_password'
+# ... more values as you need
 ```
 
 ## Event-Specific Setup (do this every year)
