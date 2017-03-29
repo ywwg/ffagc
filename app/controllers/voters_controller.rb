@@ -1,27 +1,7 @@
 class VotersController < ApplicationController
     before_filter :initialize_voter
 
-    def initialize_voter
-      @voter = Voter.new
-      @grants = Grant.all
-    end
-
     def signup
-    end
-
-    def voter_params
-      params.require(:voter).permit(:name, :password_digest, :password, :password_confirmation, :email)
-    end
-
-    def voter_survey_params
-      params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year,
-          :will_read, :will_meet, :has_been_voter, :has_participated_other,
-          :has_received_grant, :has_received_other_grant, :how_many_fireflies,
-          :signed_agreement)
-    end
-
-    def voter_participation_params
-      params.require(:grants_voters)
     end
 
     def create
@@ -69,8 +49,7 @@ class VotersController < ApplicationController
 
         # Send email
         begin
-          # Will need to be replaced with deliver_now
-          UserMailer.account_activation("voters", @voter).deliver
+          UserMailer.account_activation("voters", @voter).deliver_now
           logger.info "email: voter account activation sent to #{@voter.email}"
         rescue
           flash[:warning] = "Error sending email confirmation"
@@ -197,5 +176,27 @@ class VotersController < ApplicationController
     end
 
     render :json => { }
+  end
+
+  private
+
+  def initialize_voter
+    @voter = Voter.new
+    @grants = Grant.all
+  end
+
+  def voter_params
+    params.require(:voter).permit(:name, :password_digest, :password, :password_confirmation, :email)
+  end
+
+  def voter_survey_params
+    params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year,
+        :will_read, :will_meet, :has_been_voter, :has_participated_other,
+        :has_received_grant, :has_received_other_grant, :how_many_fireflies,
+        :signed_agreement)
+  end
+
+  def voter_participation_params
+    params.require(:grants_voters)
   end
 end

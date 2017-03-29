@@ -64,6 +64,23 @@ gem 'file_validators'
 
 gem 'country_select'
 
-group :development do
+gem 'dotenv'
+
+group :test, :development do
+  gem 'pry'
+
+  gem 'factory_girl_rails'
+  gem 'faker'
+
+  gem 'rspec-rails'
+  gem 'rspec-its'
+  gem 'guard-rspec'
+
+  gem 'timecop'
+
   gem 'bundler-audit', require: false
+end
+
+group :test do
+  gem 'rspec_junit_formatter'
 end

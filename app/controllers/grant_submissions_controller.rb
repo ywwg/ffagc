@@ -4,14 +4,6 @@ class GrantSubmissionsController < ApplicationController
 
   before_filter :initialize_grant_submission
 
-  def initialize_grant_submission
-    @grant_submission = GrantSubmission.new
-  end
-
-  def grant_submission_params
-    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars)
-  end
-
   def create
     if !artist_logged_in?
       return
@@ -26,33 +18,6 @@ class GrantSubmissionsController < ApplicationController
     else
       render "failure"
     end
-  end
-
-  def grant_update_params
-    if admin_logged_in?
-      params.require(:grant_submission).permit(:id, :name, :grant_id,
-          :requested_funding_dollars, :proposal, :granted_funding_dollars,
-          :funding_decision, :authenticity_token, :questions, :answers)
-    else
-      params.require(:grant_submission).permit(:id, :name, :grant_id,
-          :requested_funding_dollars, :proposal, :authenticity_token, :answers)
-    end
-  end
-
-  def modify_grant_ok?(submission)
-    if admin_logged_in?
-      logger.warn "admin logged in, allowing submission modification"
-      return true
-    end
-    if !artist_logged_in?
-      logger.warn "no admin or artist logged in, not allowing submission modification"
-      return false
-    end
-    if current_artist.id != submission.artist_id
-      logger.warn "grant modification artist id mismatch: #{@grant_submission.artist_id} != #{current_artist.id}, not allowing submission modification"
-      return false
-    end
-    return true
   end
 
   def destroy
@@ -190,10 +155,6 @@ class GrantSubmissionsController < ApplicationController
     @proposal = Proposal.new
   end
 
-  def grant_contract_params
-    params.permit(:id, :format, :submission_id, :authenticity_token)
-  end
-
   def generate_contract
     begin
       submission = GrantSubmission.find(grant_contract_params[:submission_id])
@@ -223,5 +184,46 @@ class GrantSubmissionsController < ApplicationController
           type: "application/pdf"
       end
     end
+  end
+
+  private
+
+  def initialize_grant_submission
+    @grant_submission = GrantSubmission.new
+  end
+
+  def grant_submission_params
+    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars)
+  end
+
+  def grant_update_params
+    if admin_logged_in?
+      params.require(:grant_submission).permit(:id, :name, :grant_id,
+          :requested_funding_dollars, :proposal, :granted_funding_dollars,
+          :funding_decision, :authenticity_token, :questions, :answers)
+    else
+      params.require(:grant_submission).permit(:id, :name, :grant_id,
+          :requested_funding_dollars, :proposal, :authenticity_token, :answers)
+    end
+  end
+
+  def modify_grant_ok?(submission)
+    if admin_logged_in?
+      logger.warn "admin logged in, allowing submission modification"
+      return true
+    end
+    if !artist_logged_in?
+      logger.warn "no admin or artist logged in, not allowing submission modification"
+      return false
+    end
+    if current_artist.id != submission.artist_id
+      logger.warn "grant modification artist id mismatch: #{@grant_submission.artist_id} != #{current_artist.id}, not allowing submission modification"
+      return false
+    end
+    return true
+  end
+
+  def grant_contract_params
+    params.permit(:id, :format, :submission_id, :authenticity_token)
   end
 end

@@ -41,8 +41,7 @@ class ArtistsController < ApplicationController
 
       # Send email!
       begin
-        # Will need to be replaced with deliver_now
-        UserMailer.account_activation("artists", @artist).deliver
+        UserMailer.account_activation("artists", @artist).deliver_now
         logger.info "email: artist account activation sent to #{@artist.email}"
       rescue
         flash[:warning] = "Error sending email confirmation"

@@ -5,38 +5,27 @@ ffagc
 
 ## Initial Environment Setup
 
-build / install stuff I dunno who even uses rails any more:
+Set up the project with:
 
-    rake
-    bundle update
-    bundle install
+```sh
+  bundle install
+  bundle exec rake db:migrate RAILS_ENV=development
+  bundle exec rails server
+```
 
-You'll need to create config/secrets.yml with the form:
-
-    development:
-      secret_key_base: [[[LOTS OF HEX]]]
-
-    test:
-      secret_key_base: [[[LOTS OF HEX]]]
-
-    production:
-      secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
-
-Use 'rake secret' to generate the hex.  Don't check this file into source control!
+If you are running this project in production you'll need to set environment variables for secrets that include `ENV` in `config/secrets.yml`.
 
 ## Email Setup
 
-If you plan to send email, you'll need to create config/initializers/smtp_secret.rb
-with:
+If using SMTP set the required ENV variables or fill in (and do not commit) `.env` like so:
 
-    ENV['PASSWORD']="your smtp password"
-
-and edit config/environments/*.rb to include your smtp server information.
+```sh
+SMTP_PASSWORD='this_is_not_the_password'
+```
 
 ## Event-Specific Setup (do this every year)
 
-It's recommended that you delete the database every year, but there's also a few config
-changes you should make:
+There are a few changes to make every year:
 
 * Set the year of the event (e.g., "Apply for Firefly 2027!") in config/application.rb.
 
@@ -46,31 +35,28 @@ also be changed.
 
 * Update the template constants (install dates and deadlines) in config/template_values.yml.
 
-## Initialize the Database
-
-init the db with:
-
-    bin/rake db:migrate RAILS_ENV=development
-
-or delete an existing db:
-
-    bin/rake db:reset
+* Reset the database with `bundle exec rake db:reset`. THIS WILL DELETE ALL DATA.
 
 ## Run Tests
 
-    bin/rake
+```sh
+  bundle exec rspec
+```
 
 ## Launch the server
 
 Run the server, which runs on the default port 3000:
 
-    bin/rails server
+```sh
+  bundle exec rails s
+```
 
 You should create an admin right away by going to the admins page.
-
 
 # Troubleshooting
 
 I had problems with bundle install not working, and I had to do:
 
-    bundle install --deployment
+```sh
+  bundle install --deployment
+```

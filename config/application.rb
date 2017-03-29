@@ -25,6 +25,7 @@ module Ffagc
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths += Dir["#{config.root}/lib/pdf"]
 
     # Disable "field_with_errors" magic
@@ -37,5 +38,7 @@ module Ffagc
     # The timezone for the event, used to calculate submission and voting
     # deadlines.
     config.event_timezone = "America/New_York"
+
+    config.active_record.raise_in_transactional_callbacks = true
   end
 end
