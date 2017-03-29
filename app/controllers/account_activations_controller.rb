@@ -2,31 +2,17 @@ require 'uri'
 
 class AccountActivationsController < ApplicationController
   def edit
-    @type = params[:type]
-    email = URI.unescape(params[:email]).downcase
-    if @type == "artists"
-      user = Artist.find_by(email: email)
-    elsif @type == "voters"
-      user = Voter.find_by(email: email)
-    elsif @type == "admins"
-      user = Admin.find_by(email: email)
-    end
+    user = UserFinder.find_by_email!(params[:type], params[:email])
 
-    if user && !user.activated? && ApplicationController.activate_succeed?(user, params[:id])
-      user.update_attribute(:activated, true)
-      user.update_attribute(:activated_at, Time.zone.now)
-      if user.save
-        render "success"
-      else
-        render "failure"
-      end
+    if user.activation_token_valid?(params[:id])
+      user.activate!
+
+      render 'success'
     else
-      if user && user.activated?
-        render "success"
-      else
-        render "failure"
-      end
+      render 'failure'
     end
+  rescue ActiveRecord::ActiveRecordError => e
+    render 'failure'
   end
 
   def unactivated

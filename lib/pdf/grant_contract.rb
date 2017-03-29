@@ -4,29 +4,29 @@ class GrantContract < Prawn::Document
 
   def initialize(grant, project, artist, amount, date)
     super()
-  	@grant = grant
-  	@project = project
-  	@artist = artist
-  	@amount = amount
-  	@date = date.strftime("%Y-%m-%d")
+    @grant = grant
+    @project = project
+    @artist = artist
+    @amount = amount
+    @date = date.strftime("%Y-%m-%d")
 
     # @year should probably come from the template_values yaml.
     @year = Rails.configuration.event_year
 
-  	@values = YAML.load(File.open("#{Rails.root}/config/template_values.yml", "rb").read)
+    @values = YAML.load(File.open("#{Rails.root}/config/template_values.yml", "rb").read)
 
-  	begin
-  	  # XXX hardcoding alert! Template filename must be the same as the grant name,
-  	  # except all lowercase.
-  	  filename = "#{Rails.root}/app/assets/contract_templates/#{@grant.downcase}.tmpl.erb"
+    begin
+      # XXX hardcoding alert! Template filename must be the same as the grant name,
+      # except all lowercase.
+      filename = "#{Rails.root}/app/assets/contract_templates/#{@grant.downcase}.tmpl.erb"
       template = File.open(filename, "rb").read
       template.each_line do |line|
         write_templated_line line
       end
-  	rescue
-  	  # TODO maybe actually handle errors
-  	  return
-  	end
+    rescue
+      # TODO maybe actually handle errors
+      return
+    end
   end
 
   def write_templated_line(line)
@@ -85,8 +85,8 @@ class GrantContract < Prawn::Document
     template = ERB.new line
     font("Times-Roman") do
       indent(indent_amount) do
-    	   text template.result(binding), :align => align, :size => size, :style => style, :indent_paragraphs => indent_amount
-    	end
+         text template.result(binding), :align => align, :size => size, :style => style, :indent_paragraphs => indent_amount
+      end
     end
   end
 
@@ -126,6 +126,12 @@ class GrantContract < Prawn::Document
         move_down 5
         text "Date"
       end
+    end
+  end
+
+  def self.grant_names
+    Dir["#{Rails.root}/app/assets/contract_templates/*.tmpl.erb"].map do |f|
+      /contract_templates\/(.*)\.tmpl/.match(f)[1]
     end
   end
 end

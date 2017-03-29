@@ -1,5 +1,6 @@
 class Vote < ActiveRecord::Base
   belongs_to :voter
+  belongs_to :grant_submission
 
   MIN_VOTE_SCORE = 0
   MAX_VOTE_SCORE = 2

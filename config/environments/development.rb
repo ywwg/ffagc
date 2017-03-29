@@ -50,13 +50,8 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address => "newton.cx",
-    :port => "465",
-    :domain => "newton.cx",
-    :user_name => "owen",
-    :password => ENV['PASSWORD'],
-    :authentication => "login",
-    :ssl => true,
-  }
+  config.action_mailer.smtp_settings = Rails.application.secrets.smtp.merge({
+    authentication: 'login',
+    ssl: true,
+  })
 end
