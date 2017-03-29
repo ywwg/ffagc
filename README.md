@@ -25,8 +25,7 @@ SMTP_PASSWORD='this_is_not_the_password'
 
 ## Event-Specific Setup (do this every year)
 
-It's recommended that you delete the database every year, but there's also a few config
-changes you should make:
+There are a few changes to make every year:
 
 * Set the year of the event (e.g., "Apply for Firefly 2027!") in config/application.rb.
 
@@ -35,6 +34,8 @@ must match the corresponding grant name, so if a grant changes name the template
 also be changed.
 
 * Update the template constants (install dates and deadlines) in config/template_values.yml.
+
+* Reset the database with `bundle exec rake db:reset`. THIS WILL DELETE ALL DATA.
 
 ## Run Tests
 
