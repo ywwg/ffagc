@@ -43,13 +43,13 @@ describe UserMailer do
 
     subject { UserMailer.grant_funded(grant_submission, artist, grant, '2020') }
 
-    its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{ grant_submission.name }") }
+    its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{grant_submission.name}") }
     its(:from) { is_expected.to include('grants@fireflyartscollective.org') }
     its(:to) { is_expected.to eq([artist.email]) }
 
     it do
       expect(subject.body.encoded).to include('Congratulations')
-      expect(subject.body.encoded).to include("$800")
+      expect(subject.body.encoded).to include('$800')
     end
   end
 
@@ -59,7 +59,7 @@ describe UserMailer do
 
     subject { UserMailer.grant_not_funded(grant_submission, artist, grant, '2020') }
 
-    its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{ grant_submission.name }") }
+    its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{grant_submission.name}") }
     its(:from) { is_expected.to include('grants@fireflyartscollective.org') }
     its(:to) { is_expected.to eq([artist.email]) }
 
