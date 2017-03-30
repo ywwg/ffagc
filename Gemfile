@@ -89,5 +89,5 @@ group :test do
 end
 
 group :development do
-  gem 'letter_opener', group: :development
+  gem 'letter_opener'
 end
