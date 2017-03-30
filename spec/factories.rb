@@ -1,6 +1,6 @@
 FactoryGirl.define do
   sequence :email do |n|
-    "email-#{n}@example.com"
+    Faker::Internet.unique.email
   end
 
   sequence :vote_score do
