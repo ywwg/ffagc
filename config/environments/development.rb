@@ -13,6 +13,9 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
+  # Render emails in a browser using letter_opener
+  config.action_mailer.delivery_method = :letter_opener
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
@@ -33,13 +36,7 @@ Rails.application.configure do
   config.assets.raise_runtime_errors = true
 
   # Raises error for missing translations
-  # config.action_view.raise_on_missing_translations = true
-
-  # TEST settings
-  # config.action_mailer.raise_delivery_errors = true
-  # config.action_mailer.delivery_method = :test
-  # host = 'localhost:3000' # Don't use this literally; use your local dev host instead
-  # config.action_mailer.default_url_options = { host: host, protocol: 'http' }
+  config.action_view.raise_on_missing_translations = true
 
   # ACTUAL DEV EMAIL settings
   config.log_level = :debug
@@ -48,10 +45,4 @@ Rails.application.configure do
 
   # This is the hostname that will be used in links inside emails
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = Rails.application.secrets.smtp.merge({
-    authentication: 'login',
-    ssl: true,
-  })
 end
