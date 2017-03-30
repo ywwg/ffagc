@@ -15,13 +15,6 @@
     | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
     |</h3>
 
-    <% if flash[:notice] %>
-      <div class="notice"><%= flash[:notice] %></div>
-    <% end %>
-    <% if flash[:warning] %>
-      <div class="warning"><%= flash[:warning] %></div>
-    <% end %>
-
     <h2>Voters</h2>
     <table border="1">
       <tr>
