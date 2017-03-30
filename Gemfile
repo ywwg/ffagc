@@ -64,6 +64,8 @@ gem 'file_validators'
 
 gem 'country_select'
 
+gem 'devise'
+
 gem 'dotenv'
 
 group :test, :development do
