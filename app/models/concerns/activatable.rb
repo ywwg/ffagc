@@ -15,10 +15,10 @@ module Activatable
     def activate!
       return if activated?
 
-      update!({
+      update!(
         activated: true,
-        activated_at: Time.zone.now,
-      })
+        activated_at: Time.zone.now
+      )
     end
 
     def activation_token_valid?(token)

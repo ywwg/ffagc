@@ -25,9 +25,9 @@ class GrantSubmission < ActiveRecord::Base
   validate :proposal_validation, if: :proposal?
 
   def proposal_validation
-    if proposal.size > 100.megabytes
-      logger.warn "rejecting large upload: #{proposal.inspect}"
-      errors[:proposal] << "File must be less than 100MB"
-    end
+    return unless proposal.size > 100.megabytes
+
+    logger.warn "rejecting large upload: #{proposal.inspect}"
+    errors[:proposal] << 'File must be less than 100MB'
   end
 end

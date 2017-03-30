@@ -7,11 +7,11 @@ class Artist < ActiveRecord::Base
   has_many :artist_surveys
   has_many :grant_submissions
 
-  validates :name, :presence => true, length: { minimum: 4 }
-  validates :email, :presence => true
-  validates :password, :length => { :minimum => 4 }, :on => :create
+  validates :name, presence: true, length: { minimum: 4 }
+  validates :email, presence: true
+  validates :password, length: { minimum: 4 }, on: :create
 
-  validates_confirmation_of :password, :on => :create
+  validates_confirmation_of :password, on: :create
 
   def country_name
     country = ISO3166::Country[contact_country]

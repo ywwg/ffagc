@@ -13,9 +13,9 @@ class Proposal < ActiveRecord::Base
   validate :file_validation, if: :file?
 
   def file_validation
-    if file.size > 100.megabytes
-      logger.warn "rejecting large upload: #{file.inspect}"
-      errors[:file] << "File must be less than 100MB"
-    end
+    return unless file.size > 100.megabytes
+
+    logger.warn "rejecting large upload: #{file.inspect}"
+    errors[:file] << 'File must be less than 100MB'
   end
 end
