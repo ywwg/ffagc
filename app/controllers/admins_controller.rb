@@ -289,9 +289,7 @@ class AdminsController < ApplicationController
         gs.avg_score = 0
       end
     end
-    @submissions_by_score = active_submissions.sort_by{|gs| gs.avg_score}
-        .reverse
-        .sort_by{|gs| gs.grant_id}
+    @submissions_by_score = active_submissions.sort_by{|gs| [gs.grant_id, -gs.avg_score]}
     @submissions_by_id = active_submissions.sort_by{|gs| gs.grant_id}
   end
 

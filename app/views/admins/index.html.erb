@@ -36,7 +36,7 @@
     <b><%= g.name %></b><% end %></p>
 
     <p>| <% if @show_scored %><%= link_to "Hide Scores", :controller => "admins", :action => "index" %><% else %><b>Hide Scores</b><% end %>
-       | <% if @show_scored %><b>Hide Scores</b><% else %><%= link_to "Show Scores", :controller => "admins", :action => "index", :scored => "true" %><% end %>
+       | <% if @show_scored %><b>Show Scores</b><% else %><%= link_to "Show Scores", :controller => "admins", :action => "index", :scored => "true" %><% end %>
     |</p>
 
     <table border="1">
