@@ -35,14 +35,16 @@ describe AdminsController do
         end
       end
 
-      before { sign_in_admin(admin.id) }
-
-      # copied as-is from existing tests, needs to be reworked
-      it 'matches expectations' do
+      before do
+        sign_in_admin(admin.id)
         go!
-        assert_redirected_to '/admins'
+      end
 
-        # Make sure each submission has the expected number of assigned voters
+      it 'is redirected' do
+        expect(response).to redirect_to('/admins')
+      end
+
+      it 'assigns expected number of voters to each submission' do
         GrantSubmission.all.each do |gs|
           vsas = VoterSubmissionAssignment.where(grant_submission_id: gs.id)
 
@@ -52,53 +54,48 @@ describe AdminsController do
             expect(vsas.count).to eq(3)
           end
 
-          verify_assignments(gs.id)
+          verify_assignments(gs)
         end
+      end
 
-        # Make sure there are no dupe assignments
+      it 'has no duplicate assignments' do
         Voter.all.each do |v|
           vsas_ids = VoterSubmissionAssignment.where(voter_id: v.id).pluck(:id)
           expect(vsas_ids).to eq(vsas_ids.uniq)
         end
+      end
 
-        # Make sure voters have an even number of assignments
-        # Urmam will have 4 or 5
-        vsas = VoterSubmissionAssignment.where(voter_id: 1)
-        expect(vsas.count).to be_between(4, 5)
+      it 'assigns 4 or 5 submissions to the first voter' do
+        expect(VoterSubmissionAssignment.where(voter_id: 1).count).to be_between(4, 5)
+      end
 
-        # ids 2 through 5 are inactive so they have none
-        Voter.where("id >= 2 AND id <= 5").each do |v|
-          vsas = VoterSubmissionAssignment.where(voter_id: v.id)
-          expect(vsas.count).to eq(0)
+      it 'does not assign submissions to inactive voters' do
+        Voter.where('id >= 2 AND id <= 5').each do |v|
+          expect(VoterSubmissionAssignment.where(voter_id: v.id).count).to eq(0)
         end
+      end
 
-        # ids 6 and 7 will have a ton because they can vote in the second batch
-        Voter.where("id >= 6 AND id <= 7").each do |v|
-          vsas = VoterSubmissionAssignment.where(voter_id: v.id)
-          expect(vsas.count).to be_between(14, 15)
+      it 'assigns first batch voters 4 or 5 submissions each' do
+        Voter.where('id >= 8').each do |v|
+          expect(VoterSubmissionAssignment.where(voter_id: v.id).count).to be_between(4, 5)
         end
+      end
 
-        # the rest will have 4 or 5
-        Voter.where("id >= 8").each do |v|
-          vsas = VoterSubmissionAssignment.where(voter_id: v.id)
-          expect(vsas.count).to be_between(4, 5)
+      it 'assigns more to voters active in second batch' do
+        Voter.where('id >= 6 AND id <= 7').each do |v|
+          expect(VoterSubmissionAssignment.where(voter_id: v.id).count).to be_between(14, 15)
         end
       end
     end
   end
 
   # verify that the voters assigned to the submission can participate and are verified
-  def verify_assignments(submission_id)
-    submission = GrantSubmission.find(submission_id)
-    grant = Grant.find(submission.grant_id)
-    VoterSubmissionAssignment.where(grant_submission_id: submission.id).each do |vsa|
-      voter = Voter.find(vsa.voter_id)
-      assert voter.verified
-      grants_voter = GrantsVoter.where(
-        grant_id: submission.grant_id,
-        voter_id: voter.id
-      ).take
-      expect(grants_voter).not_to be_nil
+  def verify_assignments(submission)
+    submission.voter_submission_assignments.each do |vsa|
+      grants_voter_count = GrantsVoter.where(grant: submission.grant, voter: vsa.voter).count
+
+      expect(vsa.voter).to be_verified
+      expect(grants_voter_count).not_to eq(0)
     end
   end
 end
