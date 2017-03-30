@@ -9,7 +9,7 @@ describe PasswordResetsController do
 
   describe '#new' do
     it 'renders expected template' do
-      get 'new', { type: 'artists' }
+      get 'new', type: 'artists'
       expect(response).to render_template('password_resets/new')
     end
   end
@@ -17,7 +17,7 @@ describe PasswordResetsController do
   describe '#create' do
     context 'with missing email' do
       it 'shows a flash' do
-        post 'create', { password_reset: { email: '', type: 'artists' } }
+        post 'create', password_reset: { email: '', type: 'artists' }
         expect(flash).not_to be_empty
         expect(response).to render_template('password_resets/failure')
       end
@@ -48,21 +48,21 @@ describe PasswordResetsController do
     render_views
 
     it 'shows password edit' do
-      get 'edit', { id: artist.reset_token, email: artist.email, type: 'artists' }
+      get 'edit', id: artist.reset_token, email: artist.email, type: 'artists'
       expect(response).to render_template('password_resets/edit')
-      assert_select "input[name=email][type=hidden][value=?]", artist.email
+      assert_select 'input[name=email][type=hidden][value=?]', artist.email
     end
 
     context 'with incorrect reset_token' do
       it 'shows failure' do
-        get 'edit', { id: 'wrong token', email: artist.email, type: 'artists' }
+        get 'edit', id: 'wrong token', email: artist.email, type: 'artists'
         expect(response).to render_template('password_resets/failure')
       end
     end
 
     context 'with inactive artist' do
       it 'does not allow editing' do
-        get 'edit', { id: inactive_artist.reset_token, email: inactive_artist.email, type: 'artists' }
+        get 'edit', id: inactive_artist.reset_token, email: inactive_artist.email, type: 'artists'
         expect(response).to render_template('password_resets/failure')
       end
     end
@@ -70,12 +70,14 @@ describe PasswordResetsController do
 
   describe '#update' do
     def go!
-      patch 'update', { id: artist.reset_token, email: artist.email, type: 'artists',
-        artist: {
-          password: password,
-          password_confirmation: password_confirmation
-        }
-      }
+      patch 'update',
+            id: artist.reset_token,
+            email: artist.email,
+            type: 'artists',
+            artist: {
+              password: password,
+              password_confirmation: password_confirmation
+            }
     end
 
     context 'with matching password and password_confirmation' do

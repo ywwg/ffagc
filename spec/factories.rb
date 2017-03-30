@@ -7,4 +7,3 @@ FactoryGirl.define do
     Faker::Number.between(0, 2)
   end
 end
-

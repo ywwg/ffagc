@@ -14,7 +14,7 @@ module PasswordReset
     # Sends password reset email.
     def send_password_reset_email
       UserMailer.password_reset(self.class.name.to_s.downcase.pluralize, self).deliver_now
-      logger.info "email: admin password reset sent to #{self.email}"
+      logger.info "email: admin password reset sent to #{email}"
     end
 
     # Returns true if a password reset has expired.

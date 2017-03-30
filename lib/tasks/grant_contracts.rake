@@ -1,5 +1,5 @@
 namespace :grant_contracts do
-  desc %q{Create 'golden' files for comparison}
+  desc "Create 'golden' files for comparison"
   task create_golden: :environment do
     pdf_fixtures_path = File.join(Rails.root, 'spec', 'fixtures', 'pdfs')
 
@@ -11,10 +11,10 @@ namespace :grant_contracts do
 
       pdf = GrantContract.new(
         grant_name,
-        "SubmissionName",
-        "ArtistName",
-        "RequestedFundingDollars",
-        Time.parse("2017-01-07 20:17:40")
+        'SubmissionName',
+        'ArtistName',
+        'RequestedFundingDollars',
+        Time.parse('2017-01-07 20:17:40')
       )
 
       # create golden_file from generated
@@ -25,4 +25,3 @@ namespace :grant_contracts do
     end
   end
 end
-

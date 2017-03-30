@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :admin do
-    name { Faker::Name::name }
+    name { Faker::Name.name }
     email
     password { Faker::Internet.password }
 

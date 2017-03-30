@@ -78,6 +78,7 @@ group :test, :development do
 
   gem 'timecop'
 
+  gem 'rubocop', require: false
   gem 'bundler-audit', require: false
 end
 

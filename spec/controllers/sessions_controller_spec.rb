@@ -3,7 +3,7 @@ describe SessionsController do
     let!(:artist) { FactoryGirl.create(:artist, :activated) }
 
     it 'allows logging in with case-insensitive email' do
-      post 'create_artist', { session: { email: artist.email.upcase, password: artist.password } }
+      post 'create_artist', session: { email: artist.email.upcase, password: artist.password }
       expect(response).to redirect_to('/artists')
     end
 
@@ -11,7 +11,7 @@ describe SessionsController do
       let!(:inactive_artist) { FactoryGirl.create(:artist) }
 
       it 'redirects to account activation' do
-        post 'create_artist', { session: { email: inactive_artist.email, password: inactive_artist.password } }
+        post 'create_artist', session: { email: inactive_artist.email, password: inactive_artist.password }
         expect(response).to redirect_to(account_activations_unactivated_path(email: inactive_artist.email, type: 'artists'))
       end
     end
@@ -21,7 +21,7 @@ describe SessionsController do
     let!(:voter) { FactoryGirl.create(:voter, :activated) }
 
     it 'allows logging in with case-insensitive email' do
-      post 'create_voter', { session: { email: voter.email.upcase, password: voter.password } }
+      post 'create_voter', session: { email: voter.email.upcase, password: voter.password }
       expect(response).to redirect_to('/voters')
     end
 
@@ -29,7 +29,7 @@ describe SessionsController do
       let!(:inactive_voter) { FactoryGirl.create(:voter) }
 
       it 'redirects to account activation' do
-        post 'create_voter', { session: { email: inactive_voter.email, password: inactive_voter.password } }
+        post 'create_voter', session: { email: inactive_voter.email, password: inactive_voter.password }
         expect(response).to redirect_to(account_activations_unactivated_path(email: inactive_voter.email, type: 'voters'))
       end
     end
@@ -39,7 +39,7 @@ describe SessionsController do
     let!(:admin) { FactoryGirl.create(:admin, :activated) }
 
     it 'allows logging in with case-insensitive email' do
-      post 'create_admin', { session: { email: admin.email.upcase, password: admin.password } }
+      post 'create_admin', session: { email: admin.email.upcase, password: admin.password }
       expect(response).to redirect_to('/admins')
     end
 
@@ -47,7 +47,7 @@ describe SessionsController do
       let!(:inactive_admin) { FactoryGirl.create(:admin) }
 
       it 'redirects to account activation' do
-        post 'create_admin', { session: { email: inactive_admin.email, password: inactive_admin.password } }
+        post 'create_admin', session: { email: inactive_admin.email, password: inactive_admin.password }
         expect(response).to redirect_to(account_activations_unactivated_path(email: inactive_admin.email, type: 'admins'))
       end
     end
