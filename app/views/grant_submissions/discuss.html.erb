@@ -40,19 +40,12 @@
       <%= submit_tag("Upload", class: "button") %>
     <% end %>
     <br />
-    <% if verified_voter_logged_in? %>
-      <%= link_to 'Back', :controller => "voters", :action => "index" %>
-    <% elsif admin_logged_in? %>
-      <%= link_to 'Back', :controller => "admins", :action => "index" %>
-    <% elsif artist_logged_in? %>
-      <%= link_to 'Back', :controller => "artists", :action => "index" %>
-    <% end %>
   <% else %>
     You must be logged in to view discussions. (<%= link_to "Log In", :controller => "home", :action => "index" %>)
     <br />
     <br />
-    <%= link_to 'Back', :back %>
   <% end %>
+  <%= link_to 'Back', :back %>
 </div>
 
 <script>
