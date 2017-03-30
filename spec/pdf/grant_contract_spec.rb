@@ -8,14 +8,14 @@ describe GrantContract do
     it do
       pdf_fixtures_path = File.join(Rails.root, 'spec', 'fixtures', 'pdfs')
       golden_file = File.join(pdf_fixtures_path, "#{grant_name}.txt")
-      golden_text = File.open(golden_file, "rb").read.strip
+      golden_text = File.open(golden_file, 'rb').read.strip
 
       pdf = GrantContract.new(
         grant_name,
-        "SubmissionName",
-        "ArtistName",
-        "RequestedFundingDollars",
-        Time.parse("2017-01-07 20:17:40")
+        'SubmissionName',
+        'ArtistName',
+        'RequestedFundingDollars',
+        Time.parse('2017-01-07 20:17:40')
       )
 
       pdf_text = PDF::Inspector::Text.analyze(pdf.render).strings.join("\n").strip

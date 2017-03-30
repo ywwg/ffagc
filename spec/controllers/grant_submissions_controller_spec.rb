@@ -1,5 +1,5 @@
 describe GrantSubmissionsController do
-  let!(:grant) { FactoryGirl.create(:grant)}
+  let!(:grant) { FactoryGirl.create(:grant) }
   let!(:artist) { FactoryGirl.create(:artist) }
   let!(:grant_submission) { FactoryGirl.create(:grant_submission, artist: artist, grant: grant) }
 
@@ -11,7 +11,7 @@ describe GrantSubmissionsController do
         render_views
 
         it 'shows discussion page' do
-          get 'discuss', { id: grant_submission.id }
+          get 'discuss', id: grant_submission.id
           expect(response).to render_template('grant_submissions/discuss')
 
           # this is an artist, so we can edit the answers but not questions
@@ -20,7 +20,7 @@ describe GrantSubmissionsController do
           # There has got to be an easier way to test for nonexistence of an attr.
           assert_select 'textarea#grant_submission_answers' do |e|
             e.each do |t|
-              assert !t.attributes.has_key?('disabled')
+              expect(t.attributes).not_to have_key('disabled')
             end
           end
         end
@@ -28,7 +28,7 @@ describe GrantSubmissionsController do
 
       context 'with non-existent grant_submission id' do
         it 'redirects to /' do
-          get 'discuss', { id: GrantSubmission.count + 1 }
+          get 'discuss', id: GrantSubmission.count + 1
           expect(response).to redirect_to('/')
         end
       end
@@ -37,7 +37,7 @@ describe GrantSubmissionsController do
         let!(:another_grant_submission) { FactoryGirl.create(:grant_submission) }
 
         it 'redirects to /' do
-          get 'discuss', { id: another_grant_submission.id }
+          get 'discuss', id: another_grant_submission.id
           expect(response).to redirect_to('/')
         end
       end
@@ -52,7 +52,7 @@ describe GrantSubmissionsController do
         render_views
 
         it 'shows discussion page' do
-          get 'discuss', { id: grant_submission.id }
+          get 'discuss', id: grant_submission.id
           expect(response).to render_template('grant_submissions/discuss')
 
           # this is a voter, can't edit either
@@ -63,7 +63,7 @@ describe GrantSubmissionsController do
 
       context 'with non-existent grant_submission id' do
         it 'redirects to /' do
-          get 'discuss', { id: GrantSubmission.count + 1 }
+          get 'discuss', id: GrantSubmission.count + 1
           expect(response).to redirect_to('/')
         end
       end
@@ -78,18 +78,18 @@ describe GrantSubmissionsController do
         render_views
 
         it 'shows discussion page' do
-          get 'discuss', { id: grant_submission.id }
+          get 'discuss', id: grant_submission.id
           expect(response).to render_template('grant_submissions/discuss')
 
           # this is an admin, can edit both
           assert_select 'textarea#grant_submission_questions' do |e|
             e.each do |t|
-              assert !t.attributes.has_key?('disabled')
+              expect(t.attributes).not_to have_key('disabled')
             end
           end
           assert_select 'textarea#grant_submission_answers' do |e|
             e.each do |t|
-              assert !t.attributes.has_key?('disabled')
+              expect(t.attributes).not_to have_key('disabled')
             end
           end
         end
@@ -97,7 +97,7 @@ describe GrantSubmissionsController do
 
       context 'with non-existent grant_submission id' do
         it 'redirects to /' do
-          get 'discuss', { id: GrantSubmission.count + 1 }
+          get 'discuss', id: GrantSubmission.count + 1
           expect(response).to redirect_to('/')
         end
       end
