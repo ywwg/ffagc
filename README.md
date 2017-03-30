@@ -13,7 +13,7 @@ Set up the project with:
   bundle exec rails server
 ```
 
-If you are running this project in production you'll need to set environment variables for secrets that include `ENV` in `config/secrets.yml`.
+If you are running this project in production you'll need to set environment variables for secrets that include `ENV` in `config/secrets.yml`.  To generate new "secret" hex values, use `bundle exec rake secret`.  Be careful not to push changes to this file to publicly-accessible repositories!
 
 ## Email Setup
 
@@ -36,7 +36,7 @@ also be changed.
 
 * Update the template constants (install dates and deadlines) in config/template_values.yml.
 
-* Reset the database with `bundle exec rake db:reset`. THIS WILL DELETE ALL DATA.
+* Reset the database with `bundle exec rake db:reset`. THIS WILL DELETE ALL DATA, so you may want to make a backup of the existing db first.
 
 ## Run Tests
 
