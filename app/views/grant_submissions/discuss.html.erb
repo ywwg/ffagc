@@ -2,7 +2,7 @@
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Grant Proposal Discussion</h1>
 
   <% if artist_logged_in? || admin_logged_in? || verified_voter_logged_in? %>
-    <h2>Discussion for <%= @grant_submission.name %></h2>
+    <h2>Discussion for <a href="<%= @grant_submission.proposal %>" target="_blank"><%= @grant_submission.name %></a></h2>
     <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate_discussion();'} do |f| %>
       <fieldset>
         <%= f.input :questions, :as => :text,
