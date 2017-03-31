@@ -87,7 +87,7 @@ describe GrantsController do
 
     context 'with an admin' do
       let!(:user) { FactoryGirl.create(:admin) }
-      it { is_expected.to render_template('edit') }
+      it { is_expected.to render_template('new') }
     end
 
     context 'with an artist' do

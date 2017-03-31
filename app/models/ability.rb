@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= User.new # guest user (not logged in)
+    user ||= nil
 
     # TODO: currently checks if it has the class, in the future it will check
     # a `roles` attribute or similar
