@@ -29,8 +29,10 @@
     <th>Meeting One</th>
     <th>Meeting Two</th>
     <th>Voting End Date</th>
+    <% if can? :modify, Grant %>
     <th>Hidden</th>
     <th></th>
+    <% end %>
   </tr>
   <% @grants.each do |g| %>
   <tr>
@@ -48,15 +50,14 @@
         <%= g.meeting_two.strftime("%Y/%m/%d") %></td>
     <td><%= Date::DAYNAMES[g.vote_end.wday] %>,
         <%= g.vote_end.strftime("%Y/%m/%d") %></td>
-    <td align="center"><% if g.hidden %>Y<% end %></td>
-
     <% if can? :modify, g %>
-      <td><%= link_to "Edit", edit_grant_path(g) %></td>
+    <td align="center"><% if g.hidden %>Y<% end %></td>
+    <td><%= link_to "Edit", edit_grant_path(g) %></td>
     <% end %>
   </tr>
   <% end %>
 </table>
 
-<% if can? :modify, Grant.new %>
+<% if can? :modify, Grant %>
   <%= link_to "Create Grant", new_grant_path %>
 <% end %>
