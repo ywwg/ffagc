@@ -1,26 +1,23 @@
-<div class="container">
-    <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Failure!</h1>
+<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Failure!</h1>
 
-    Your supplement upload failed. Sorry :(
+Your supplement upload failed. Sorry :(
 
-    <% if @proposal.errors.messages.any? %>
-      <br/>
-      Errors:
-      <ul>
-      <% @proposal.errors.messages.each do |field, errors| %>
-        <% errors.each do |m| %>
-          <li><%= m %></li>
-        <% end %>
-      <% end %>
-      </ul>
+<% if @proposal.errors.messages.any? %>
+  <br/>
+  Errors:
+  <ul>
+  <% @proposal.errors.messages.each do |field, errors| %>
+    <% errors.each do |m| %>
+      <li><%= m %></li>
     <% end %>
+  <% end %>
+  </ul>
+<% end %>
 
-    <br /><br />
+<br /><br />
 
-    Please try again or contact <a href="mailto:grants@fireflyartscollective.org">grants@fireflyartscollective.org</a> for help.
+Please try again or contact <a href="mailto:grants@fireflyartscollective.org">grants@fireflyartscollective.org</a> for help.
 
-    <br /><br />
+<br /><br />
 
-    <%= link_to "Back", :controller => "artists", :action => "index" %>
-</div>
-
+<%= link_to "Back", :controller => "artists", :action => "index" %>

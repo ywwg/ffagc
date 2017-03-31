@@ -1,52 +1,50 @@
-<div class="container">
-  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Grant Proposal Discussion</h1>
+<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Grant Proposal Discussion</h1>
 
-  <% if artist_logged_in? || admin_logged_in? || verified_voter_logged_in? %>
-    <h2>Discussion for <a href="<%= @grant_submission.proposal %>" target="_blank"><%= @grant_submission.name %></a></h2>
-    <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate_discussion();'} do |f| %>
-      <fieldset>
-        <%= f.input :questions, :as => :text,
-            :label => "Questions from Committee", :required => false,
-            :input_html => { :disabled => @question_edit_disable } %>
-        <%= f.input :answers, :as => :text, :label => "Answers from Artist",
-            :required => false,
-            :input_html => { :disabled => @answer_edit_disable } %>
-        <% if artist_logged_in? || admin_logged_in? %>
-          <%= submit_tag("Update Discussion", class: "button")%>
-        <% end %>
-      </fieldset>
-    <% end %>
-    <% if !@supplements.empty? %>
-      <h2>Supplemental documents</h2>
-      <table style="border:none;">
-      <% @supplements.each do |s| %>
-        <tr><td style="border:none;">
-          <%= form_tag("/proposals/delete", authenticity_token: true, :class => "button_to") do %>
-            <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
-            <%= hidden_field_tag :id, s.id, :name => "proposal[id]" %>
-            <input class="button" name="delete" type="submit" value="Delete" />
-          <% end %>
-        </td>
-        <td style="border:none;"><a href="<%= s.file %>"><%= s.file_identifier %></a></td>
-        </tr>
+<% if artist_logged_in? || admin_logged_in? || verified_voter_logged_in? %>
+  <h2>Discussion for <a href="<%= @grant_submission.proposal %>" target="_blank"><%= @grant_submission.name %></a></h2>
+  <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate_discussion();'} do |f| %>
+    <fieldset>
+      <%= f.input :questions, :as => :text,
+          :label => "Questions from Committee", :required => false,
+          :input_html => { :disabled => @question_edit_disable } %>
+      <%= f.input :answers, :as => :text, :label => "Answers from Artist",
+          :required => false,
+          :input_html => { :disabled => @answer_edit_disable } %>
+      <% if artist_logged_in? || admin_logged_in? %>
+        <%= submit_tag("Update Discussion", class: "button")%>
       <% end %>
-      </table>
-    <% end %>
-    <br/>
-    <%= semantic_form_for @proposal, :html => { :onsubmit => 'return validate_supplement();'} do |f| %>
-      <label class="label" for="proposal_file">Upload Additional Document:</label>
-      <%= f.file_field :file, :required => true, :validate => true, :accept => ".pdf,.doc,.docx,.txt,.md" %>
-      <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
-      <%= submit_tag("Upload", class: "button") %>
-    <% end %>
-    <br />
-  <% else %>
-    You must be logged in to view discussions. (<%= link_to "Log In", :controller => "home", :action => "index" %>)
-    <br />
-    <br />
+    </fieldset>
   <% end %>
-  <%= link_to 'Back', :back %>
-</div>
+  <% if !@supplements.empty? %>
+    <h2>Supplemental documents</h2>
+    <table style="border:none;">
+    <% @supplements.each do |s| %>
+      <tr><td style="border:none;">
+        <%= form_tag("/proposals/delete", authenticity_token: true, :class => "button_to") do %>
+          <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
+          <%= hidden_field_tag :id, s.id, :name => "proposal[id]" %>
+          <input class="button" name="delete" type="submit" value="Delete" />
+        <% end %>
+      </td>
+      <td style="border:none;"><a href="<%= s.file %>"><%= s.file_identifier %></a></td>
+      </tr>
+    <% end %>
+    </table>
+  <% end %>
+  <br/>
+  <%= semantic_form_for @proposal, :html => { :onsubmit => 'return validate_supplement();'} do |f| %>
+    <label class="label" for="proposal_file">Upload Additional Document:</label>
+    <%= f.file_field :file, :required => true, :validate => true, :accept => ".pdf,.doc,.docx,.txt,.md" %>
+    <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
+    <%= submit_tag("Upload", class: "button") %>
+  <% end %>
+  <br />
+<% else %>
+  You must be logged in to view discussions. (<%= link_to "Log In", :controller => "home", :action => "index" %>)
+  <br />
+  <br />
+<% end %>
+<%= link_to 'Back', :back %>
 
 <script>
 function validate_discussion() {
