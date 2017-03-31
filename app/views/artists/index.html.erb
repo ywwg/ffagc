@@ -1,90 +1,80 @@
-<div class="container">
-  <% if admin_logged_in? %>
-| <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
-| <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
-| <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
-|
+<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Artists</h1>
+
+<% if artist_logged_in? %>
+  <p>You are logged in as: <%= current_artist.name %> (<%= current_artist.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_artist" %>]</p>
+  <% if any_submit_open? %>
+    <p><b>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
+    <% if i > 0 %> and<% end %>
+    <%= g.name %><% end %> grants!</b></p>
+  <% end %>
+
+  <% if artist_has_submission? %>
+    <h2>Your Submissions:</h2>
+    <% if any_grant_submission_funded?(current_artist.id)%>
+      <div align="center"><h3>OMG you've been funded!</h3></div>
+    <% end %>
+    <table border="1" cellpadding="4">
+      <tr>
+        <th><h4>Submission Title</h4></th>
+        <th><h4>Grant Category</h4></th>
+        <th><h4>Requested Funding Level</h4></th>
+        <th><h4>Discussion</h4></th>
+        <% if any_grant_submission_funded?(current_artist.id)%>
+        <th><h4>Granted Funding Amount</h4></th>
+        <% end %>
+        <th></th>
+        <% if any_grant_submission_funded?(current_artist.id)%>
+        <th></th>
+        <% end %>
+      </tr>
+    <% @grant_submissions.each do |gs| %>
+      <tr>
+        <td><%= gs.name %></td>
+        <td><%= Grant.where("id = ?",gs.grant_id).take.name %> Grant</td>
+        <td align="right">$<%= gs.requested_funding_dollars %></td>
+        <td><% if submission_has_questions?(gs.id) %>
+            <%= link_to "Questions From Committee", :controller => "grant_submissions", :action => "discuss", :id => gs.id %>
+            <% else %>No committee questions yet<% end %>
+        </td>
+        <% if any_grant_submission_funded?(current_artist.id) %>
+          <td align="right"><% if grant_submission_funded?(gs.id) %>
+              $<%= gs.granted_funding_dollars %>
+              <% end %></td>
+        <% end %>
+        <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
+        <% if any_grant_submission_funded?(current_artist.id)%>
+          <td><% if grant_submission_funded?(gs.id) %>
+              <%= button_to "Generate Contract", :controller => "grant_submissions", :action => "generate_contract", :format => "pdf", :submission_id => gs.id %>
+              <% end %></td>
+        <% end %>
+      </tr>
+    <% end %>
+    </table>
+    <br/>
+    <% if any_submit_open? %>
+      <%= link_to "Submit another Grant Proposal", :controller => "grant_submissions", :action => "index" %>
+    <% else %>
+      <p>No submissions open at this time.</p>
+    <% end %>
+  <% else %>
+    <h5>You have not submitted any proposals</h5>
+    <% if any_submit_open? %>
+     <%= link_to "Submit a Grant Proposal", :controller => "grant_submissions", :action => "index" %>
+    <% else %>
+      <p><b>No grant submissions open at this time.</b></p>
+    <% end %>
+  <% end %>
+<% else %>
+  Don't have an account yet?
+    <%= link_to "Register as an artist", :controller => "artists", :action => "signup" %> to access the grant applications.
+  <h2>Sign in:</h2>
+  <fieldset>
+  <%= form_tag(controller: 'sessions', action:'create_artist') do %>
+    <%= text_field :session, :email, :placeholder => "Email Address", :style => "margin-bottom: 10px" %><br />
+    <%= password_field :session, :password, :placeholder => "Password" %>
+    <br /><br />
+    <%= submit_tag("Sign in", class: "button")%>
+  <% end %>
+  <%= link_to "(forgot password)", new_password_reset_path(type: "artists") %>
 <% end %>
-
-	<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Artists</h1>
-
-	<% if artist_logged_in? %>
-
-	    <p>You are logged in as: <%= current_artist.name %> (<%= current_artist.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_artist" %>]</p>
-      <% if any_submit_open? %>
-  	    <p><b>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
-            <% if i > 0 %> and<% end %>
-            <%= g.name %><% end %> grants!</b></p>
-      <% end %>
-
-	    <% if artist_has_submission? %>
-	      <h2>Your Submissions:</h2>
-	      <% if any_grant_submission_funded?(current_artist.id)%>
-	        <div align="center"><h3>OMG you've been funded!</h3></div>
-	      <% end %>
-  	    <table border="1" cellpadding="4">
-  	      <tr>
-  	        <th><h4>Submission Title</h4></th>
-  	        <th><h4>Grant Category</h4></th>
-  	        <th><h4>Requested Funding Level</h4></th>
-  	        <th><h4>Discussion</h4></th>
-  	        <% if any_grant_submission_funded?(current_artist.id)%>
-            <th><h4>Granted Funding Amount</h4></th>
-            <% end %>
-  	        <th></th>
-  	        <% if any_grant_submission_funded?(current_artist.id)%>
-  	        <th></th>
-  	        <% end %>
-  	      </tr>
-  	    <% @grant_submissions.each do |gs| %>
-          <tr>
-            <td><%= gs.name %></td>
-            <td><%= Grant.where("id = ?",gs.grant_id).take.name %> Grant</td>
-            <td align="right">$<%= gs.requested_funding_dollars %></td>
-            <td><% if submission_has_questions?(gs.id) %>
-                <%= link_to "Questions From Committee", :controller => "grant_submissions", :action => "discuss", :id => gs.id %>
-                <% else %>No committee questions yet<% end %>
-            </td>
-            <% if any_grant_submission_funded?(current_artist.id) %>
-              <td align="right"><% if grant_submission_funded?(gs.id) %>
-                  $<%= gs.granted_funding_dollars %>
-                  <% end %></td>
-            <% end %>
-            <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
-            <% if any_grant_submission_funded?(current_artist.id)%>
-              <td><% if grant_submission_funded?(gs.id) %>
-                  <%= button_to "Generate Contract", :controller => "grant_submissions", :action => "generate_contract", :format => "pdf", :submission_id => gs.id %>
-                  <% end %></td>
-            <% end %>
-          </tr>
-        <% end %>
-        </table>
-        <br/>
-        <% if any_submit_open? %>
-          <%= link_to "Submit another Grant Proposal", :controller => "grant_submissions", :action => "index" %>
-        <% else %>
-          <p>No submissions open at this time.</p>
-        <% end %>
-      <% else %>
-        <h5>You have not submitted any proposals</h5>
-        <% if any_submit_open? %>
-  	     <%= link_to "Submit a Grant Proposal", :controller => "grant_submissions", :action => "index" %>
-  	    <% else %>
-          <p><b>No grant submissions open at this time.</b></p>
-        <% end %>
-      <% end %>
-	<% else %>
-		Don't have an account yet?
-	    <%= link_to "Register as an artist", :controller => "artists", :action => "signup" %> to access the grant applications.
-  	<h2>Sign in:</h2>
-  	<fieldset>
-  	<%= form_tag(controller: 'sessions', action:'create_artist') do %>
-  	  <%= text_field :session, :email, :placeholder => "Email Address", :style => "margin-bottom: 10px" %><br />
-  	  <%= password_field :session, :password, :placeholder => "Password" %>
-  	  <br /><br />
-  	  <%= submit_tag("Sign in", class: "button")%>
-  	<% end %>
-  	<%= link_to "(forgot password)", new_password_reset_path(type: "artists") %>
-	<% end %>
-	</fieldset>
-</div>
+</fieldset>
