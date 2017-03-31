@@ -22,12 +22,7 @@ Rails.application.routes.draw do
   get 'admins/artist_info' => 'admins#artist_info'
   get 'admins/voters' => 'admins#voters'
   get 'admins/voter_info' => 'admins#voter_info'
-  get 'admins/grants' => 'admins#grants'
   get 'admins/submissions' => 'admins#submissions'
-
-  get 'grants/index'
-  post 'grants/index' => 'grants#create'
-  get 'grants/modify_grant' => 'grants#modify'
 
   post 'artists/login' => 'sessions#create_artist'
   post 'voters/login' => 'sessions#create_voter'
@@ -58,7 +53,8 @@ Rails.application.routes.draw do
   post 'admins/send_question_emails' => 'admins#send_question_emails'
 
 
-  resources :artists, :admins, :grant_submissions, :grants
+  resources :artists, :admins, :grant_submissions
+  resources :grants, except: [:show]
   resources :voters, only: [:create, :update, :index]
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :create, :edit, :update]
