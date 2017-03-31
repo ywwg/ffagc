@@ -205,78 +205,11 @@ class AdminsController < ApplicationController
   end
 
   def init_submissions
-    @results = Hash.new
     active_submissions = GrantSubmission.where(grant_id: active_vote_grants)
     @grant_submissions = GrantSubmission.all.order(grant_id: :asc)
-    @grant_submissions.each do |gs|
-      votes = Vote.joins(:voter)
-          .where('voters.verified' => true)
-          .where('votes.grant_submission_id' => gs.id)
 
-      t_sum = 0
-      t_num = 0;
-      c_sum = 0;
-      c_num = 0;
-      f_sum = 0;
-      f_num = 0;
+    @results = VoteResult.results(@grant_submissions)
 
-      votes.each do |gsv|
-        if gsv.score_t
-          t_sum = t_sum+gsv.score_t
-          t_num = t_num+1
-        end
-
-        if gsv.score_c
-          c_sum = c_sum+gsv.score_c
-          c_num = c_num+1
-        end
-
-        if gsv.score_f
-          f_sum = f_sum+gsv.score_f
-          f_num = f_num+1
-        end
-
-      end
-
-      @results[gs.id] = Hash.new
-
-      @results[gs.id]['num_t'] = t_num
-      @results[gs.id]['sum_t'] = t_sum
-
-      if t_num > 0
-        @results[gs.id]['avg_t'] = t_sum.fdiv(t_num).round(2)
-      end
-
-      @results[gs.id]['num_c'] = c_num
-      @results[gs.id]['sum_c'] = c_sum
-
-      if c_num > 0
-        @results[gs.id]['avg_c'] = c_sum.fdiv(c_num).round(2)
-      end
-
-      @results[gs.id]['num_f'] = f_num
-      @results[gs.id]['sum_f'] = f_sum
-
-      if f_num > 0
-        @results[gs.id]['avg_f'] = f_sum.fdiv(f_num).round(2)
-      end
-
-      if @results[gs.id]['avg_t'] && @results[gs.id]['avg_c'] && @results[gs.id]['avg_f']
-        @results[gs.id]['avg_s'] = ((@results[gs.id]['avg_t'] + @results[gs.id]['avg_c'] + @results[gs.id]['avg_f'])/3.0).round(2)
-      end
-
-      @results[gs.id]['num_total'] = t_num + c_num + f_num
-    end
-
-    active_submissions.each do |gs|
-      gs.class_eval do
-        attr_accessor :avg_score
-      end
-      gs.avg_score = @results[gs.id]['avg_s']
-      if gs.avg_score == nil
-        gs.avg_score = 0
-      end
-    end
     @submissions_by_score = active_submissions.sort_by{|gs| [gs.grant_id, -gs.avg_score]}
     @submissions_by_id = active_submissions.sort_by{|gs| gs.grant_id}
   end
