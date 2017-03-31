@@ -1,47 +1,41 @@
 <div class="container">
   <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Modify a Grant Type</h1>
 
-  <% if admin_logged_in? %>
-    <%= semantic_form_for @grant, :html => { :onsubmit => 'return validate();'} do |f| %>
-    <fieldset>
-        <%= f.input :name, :label => "Name of Grant", :required => true, :validate => true %>
-        <%= f.input :max_funding_dollars, :label => "Max Funding ($)", :required => true, :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
-        <li class="string input required stringish" id="grant_submit_start">
-          <label class="label" for="grant_submit_start">Submissions Start Date<abbr title="required">*</abbr></label>
-          <%= f.date_select :submit_start %>
-        </li>
-        <li class="string input required stringish" id="grant_submit_end">
-          <label class="label" for="grant_submit_end">Submissions End Date<abbr title="required">*</abbr></label>
-          <%= f.date_select :submit_end %>
-        </li>
-        <li class="string input required stringish" id="grant_vote_start">
-          <label class="label" for="grant_vote_start">Voting Start Date<abbr title="required">*</abbr></label>
-          <%= f.date_select :vote_start %>
-        </li>
-        <li class="string input required stringish" id="grant_meeting_one">
-          <label class="label" for="grant_meeting_one">First Meeting<abbr title="required">*</abbr></label>
-          <%= f.date_select :meeting_one %>
-        </li>
-        <li class="string input required stringish" id="grant_meeting_two">
-          <label class="label" for="grant_meeting_two">Second Meeting<abbr title="required">*</abbr></label>
-          <%= f.date_select :meeting_two %>
-        </li>
-        <li class="string input required stringish" id="grant_vote_end">
-          <label class="label" for="grant_vote_end">Voting End Date<abbr title="required">*</abbr></label>
-          <%= f.date_select :vote_end %>
-        </li>
-        <%= f.input :hidden, :label => "Hidden from voter signup page"%>
+  <%= semantic_form_for @grant, :html => { :onsubmit => 'return validate();'} do |f| %>
+  <fieldset>
+      <%= f.input :name, :label => "Name of Grant", :required => true, :validate => true %>
+      <%= f.input :max_funding_dollars, :label => "Max Funding ($)", :required => true, :validate => true, :input_html => { :onKeyUp => "numericFilter(this);" }  %>
+      <li class="string input required stringish" id="grant_submit_start">
+        <label class="label" for="grant_submit_start">Submissions Start Date<abbr title="required">*</abbr></label>
+        <%= f.date_select :submit_start %>
+      </li>
+      <li class="string input required stringish" id="grant_submit_end">
+        <label class="label" for="grant_submit_end">Submissions End Date<abbr title="required">*</abbr></label>
+        <%= f.date_select :submit_end %>
+      </li>
+      <li class="string input required stringish" id="grant_vote_start">
+        <label class="label" for="grant_vote_start">Voting Start Date<abbr title="required">*</abbr></label>
+        <%= f.date_select :vote_start %>
+      </li>
+      <li class="string input required stringish" id="grant_meeting_one">
+        <label class="label" for="grant_meeting_one">First Meeting<abbr title="required">*</abbr></label>
+        <%= f.date_select :meeting_one %>
+      </li>
+      <li class="string input required stringish" id="grant_meeting_two">
+        <label class="label" for="grant_meeting_two">Second Meeting<abbr title="required">*</abbr></label>
+        <%= f.date_select :meeting_two %>
+      </li>
+      <li class="string input required stringish" id="grant_vote_end">
+        <label class="label" for="grant_vote_end">Voting End Date<abbr title="required">*</abbr></label>
+        <%= f.date_select :vote_end %>
+      </li>
+      <%= f.input :hidden, :label => "Hidden from voter signup page"%>
 
-        <br /><br />
-        <%= submit_tag("Modify Grant", class: "button")%></fieldset>
-    <% end %>
-    <br />
-    <%= link_to 'Back', :controller => "admins", :action => "grants" %>
-  <% else %>
-    You must be logged in as an admin to modify grants.
-    <br />
-    <%= link_to 'Back', :back %>
+      <br /><br />
+      <%= submit_tag("Modify Grant", class: "button")%></fieldset>
   <% end %>
+  <br />
+  <%= link_to 'Back', grants_path %>
 
   <script>
       function numericFilter(txb) {
