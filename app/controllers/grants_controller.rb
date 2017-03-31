@@ -21,7 +21,7 @@ class GrantsController < ApplicationController
       return
     end
 
-    render 'edit'
+    render 'new'
   end
 
   def update
