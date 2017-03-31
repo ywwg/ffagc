@@ -3,21 +3,9 @@ class AdminsController < ApplicationController
   before_filter :init_admin
   before_filter :init_artists
   before_filter :init_voters
-  before_filter :verify_admin_logged_in, except: [:create, :index, :signup]
-
-  def verify_admin_logged_in
-    if !current_admin
-      redirect_to "/"
-      return
-    end
-  end
-
-  def init_admin
-      @admin = Admin.new
-  end
+  before_filter :verify_admin, except: [:create, :index, :signup]
 
   def signup
-
   end
 
   def create
@@ -367,4 +355,14 @@ class AdminsController < ApplicationController
     return fewest
   end
 
+  def verify_admin
+    unless can? :manage, :all
+      redirect_to '/'
+      return
+    end
+  end
+
+  def init_admin
+    @admin = Admin.new
+  end
 end
