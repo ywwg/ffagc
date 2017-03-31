@@ -42,21 +42,30 @@ describe VotersController do
   end
 
   describe '#index' do
-    it 'shows index template' do
-      get 'index'
-      assert_template 'index'
-    end
-
     context 'with activated voter' do
       let!(:voter) { FactoryGirl.create(:voter, :activated) }
 
       before do
-        sign_in_voter(voter.id)
+        sign_in voter
       end
 
       it 'shows index template' do
         get 'index'
         assert_template 'index'
+      end
+    end
+
+    context 'with user who cannot vote' do
+      let!(:user) { FactoryGirl.create(:artist) }
+
+      before do
+        sign_in user
+      end
+
+      it 'redirects with flash' do
+        get 'index'
+        expect(response).to redirect_to('/')
+        expect(flash).not_to be_empty
       end
     end
   end

@@ -65,7 +65,7 @@ class VotersController < ApplicationController
     end
 
     def update
-      # could allow for Voter enumeration
+      # could allow for (timing based) Voter enumeration
       @voter = Voter.find(params[:id])
 
       unless can? :manage, GrantsVoter.new(voter: @voter)
@@ -95,15 +95,16 @@ class VotersController < ApplicationController
     end
 
     def index
-      if !voter_logged_in?
+      unless can? :vote, GrantSubmission.new
+        flash[:warning] = 'You are not able to vote'
+        redirect_to '/'
         return
       end
 
-      @voter = Voter.find(current_voter.id)
+      # TODO: use scope
+      @grant_submissions = GrantSubmission.where(grant_id: voter_active_vote_grants(current_user.id))
 
-      @grant_submissions =
-          GrantSubmission.where(grant_id: voter_active_vote_grants(@voter.id))
-
+      # TODO: sort in scope or add sorting scope
       @grant_submissions = @grant_submissions.sort { |a,b| [a.name] <=> [b.name] }
 
       @votes = Hash.new
@@ -113,36 +114,33 @@ class VotersController < ApplicationController
           attr_accessor :assigned
         end
 
-        vote = Vote.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
-
-        if !vote
-          vote = Vote.new
-          vote.voter_id = current_voter.id
-          vote.grant_submission_id = gs.id
-          vote.save
-        end
+        vote = current_user.votes.where(grant_submission: gs).first_or_create
 
         @votes[gs.id] = vote
 
         #assignments
-        vsa = VoterSubmissionAssignment.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
-        if vsa
+        vsa = current_user.voter_submission_assignment.where(grant_submission: gs)
+
+        if vsa.exists?
           gs.assigned = 1
         else
           gs.assigned = 0
         end
       end
 
+      # TODO: use scopes
       @grant_submissions_assigned = @grant_submissions.select{|gs| gs.assigned == 1}
       @grant_submissions_unassigned = @grant_submissions.select{|gs| gs.assigned == 0}
 
+      # TODO: sort in scope or add sorting scope
       @grant_submissions_unassigned.sort_by {|gs| gs.grant_id}
 
-      @grant_submissions_display = @grant_submissions_assigned
-      @show_all = false
       if params[:all] == "true"
         @show_all = true
         @grant_submissions_display = @grant_submissions
+      else
+        @show_all = false
+        @grant_submissions_display = @grant_submissions_assigned
       end
     end
 
