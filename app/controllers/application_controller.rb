@@ -163,6 +163,12 @@ class ApplicationController < ActionController::Base
 
 
   # /artists, /voters, /admins
+  public
+  # This method is expected by CanCan
+  def current_user
+    current_admin || current_artist || current_voter
+  end
+  helper_method :current_user
 
   # /artists
 
