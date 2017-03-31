@@ -58,7 +58,8 @@ Rails.application.routes.draw do
   post 'admins/send_question_emails' => 'admins#send_question_emails'
 
 
-  resources :artists, :voters, :admins, :grant_submissions, :grants
+  resources :artists, :admins, :grant_submissions, :grants
+  resources :voters, only: [:create, :update, :index]
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :create, :edit, :update]
   resources :proposals

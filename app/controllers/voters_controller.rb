@@ -23,6 +23,7 @@ class VotersController < ApplicationController
 
         # save participation info
         meetings = collated_meetings
+
         voter_participation_params.each do |collated_id, can_do|
           if can_do == "0"
             next
@@ -64,32 +65,33 @@ class VotersController < ApplicationController
     end
 
     def update
-      if !admin_logged_in?
-        redirect_to "/"
+      # could allow for Voter enumeration
+      @voter = Voter.find(params[:id])
+
+      unless can? :manage, GrantsVoter.new(voter: @voter)
+        redirect_to '/'
         return
       end
 
-      @voter = Voter.find(params[:id])
-      voter_participation_params.each do |id, can_do|
-        if Grant.find(id) == nil
+      voter_participation_params.each do |grant_id, can_do|
+        unless Grant.find(grant_id).present?
           next
         end
-        if can_do == "0"
-          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: id)
-            GrantsVoter.find_by(voter_id: @voter.id, grant_id: id).destroy
+
+        if can_do == '0'
+          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: grant_id)
+            GrantsVoter.find_by(voter_id: @voter.id, grant_id: grant_id).destroy
           end
         else
-          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: id)
+          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: grant_id)
             next
           end
-          grants_voter = GrantsVoter.new
-          grants_voter.voter_id = @voter.id
-          grants_voter.grant_id = id
-          grants_voter.save
+
+          grants_voter = GrantsVoter.create!(voter: @voter, grant_id: grant_id)
         end
       end
 
-      redirect_to :controller => "admins", :action => "voters"
+      redirect_to controller: 'admins', action: 'voters'
     end
 
     def index
