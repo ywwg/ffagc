@@ -1,10 +1,10 @@
 <h1>Firefly Art Grants: <%= event_year %></h1>
 
-Are you an <%= link_to "artist", :controller => "artists", :action => "index" %>?
-<br/><br/>
-Are you a member of the <%= link_to "voting committee", :controller => "voters", :action => "index" %>?
-<br/><br/>
-Are you an <%= link_to "administrator", :controller => "admins", :action => "index" %>?
+<p>Are you an <%= link_to 'artist', controller: 'artists', action: 'index' %>?</p>
+
+<p>Are you a member of the <%= link_to 'voting committee', voters_login_path %>?</p>
+
+<p>Are you an <%= link_to 'administrator', controller: 'admins', action: 'index' %>?</p>
 
 <% if false %>
 

@@ -1,7 +1,6 @@
 <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Voting Committee</h1>
 
 <% if voter_logged_in? %>
-  You are logged in as: <%= current_voter.name %> (<%= current_voter.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_voter" %>]
   <br /><br />
   <% if !voter_verified?(current_voter.id)%>
     Your voter signup is still being verified, please check back or contact grants@fireflyartscollective.org for help.
@@ -96,20 +95,6 @@
 
 
   <% end %>
-<% else %>
-  <%= link_to "Register", :controller => "voters", :action => "signup" %> as a voting member of the voting committee.
-  <h2>Sign in:</h2>
-  <fieldset>
-  <%= form_tag(controller: 'sessions', action:'create_voter') do %>
-    <%= text_field :session, :email, :placeholder => "Email Address" %>
-      <br />
-    <%= password_field :session, :password, :placeholder => "Password" %>
-      <br />
-    <%= submit_tag("Sign in", class: "button") %>
-
-     </fieldset>
-  <% end %>
-  <%= link_to "(forgot password)", new_password_reset_path(type: "voters") %>
 <% end %>
 
 <script>

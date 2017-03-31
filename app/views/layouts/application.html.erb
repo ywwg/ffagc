@@ -15,6 +15,16 @@
     <div class="warning"><%= flash[:warning] %></div>
   <% end %>
 
+  <% if voter_logged_in? %>
+    <p>You are logged in as: <%= current_voter.name %> (<%= current_voter.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_voter" %>]</p>
+  <% end %>
+  <% if admin_logged_in? %>
+    <p>You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]</p>
+  <% end %>
+  <% if artist_logged_in? %>
+    <p>You are logged in as: <%= current_artist.name %> (<%= current_artist.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_artist" %>]</p>
+  <% end %>
+
   <%= render partial: 'shared/admin_links' %>
 
   <%= yield %>
