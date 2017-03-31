@@ -99,7 +99,7 @@ class VotersController < ApplicationController
         return
       end
 
-      @voter = Voter.find(current_voter)
+      @voter = Voter.find(current_voter.id)
 
       @grant_submissions =
           GrantSubmission.where(grant_id: voter_active_vote_grants(@voter.id))
