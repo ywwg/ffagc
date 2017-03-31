@@ -310,14 +310,6 @@ class AdminsController < ApplicationController
     @grants = Grant.all
   end
 
-  def grants
-    if !current_admin
-      redirect_to "/"
-      return
-    end
-    @grants = Grant.all
-  end
-
   def submissions
     init_submissions
   end
