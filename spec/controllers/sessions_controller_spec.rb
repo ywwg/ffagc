@@ -35,6 +35,26 @@ describe SessionsController do
     end
   end
 
+  describe '#voter_login' do
+    it 'not logged in' do
+      get 'voter_login'
+      expect(response).to be_ok
+    end
+
+    context 'already logged in' do
+      let!(:voter) { FactoryGirl.create(:voter, :activated) }
+
+      before { sign_in voter }
+
+      context 'it redirects' do
+        it 'redirects to account activation' do
+          get 'voter_login'
+          expect(response).to redirect_to(voters_path)
+        end
+      end
+    end
+  end
+
   describe '#create_admin' do
     let!(:admin) { FactoryGirl.create(:admin, :activated) }
 

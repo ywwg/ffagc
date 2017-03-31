@@ -31,6 +31,12 @@ class SessionsController < ApplicationController
     redirect_to :controller => "artists", :action => "index"
   end
 
+  def voter_login
+    if voter_logged_in?
+      redirect_to voters_path
+    end
+  end
+
   def create_voter
     if(!params[:session][:email].present? || !params[:session][:password].present?)
       render "login_failure"
