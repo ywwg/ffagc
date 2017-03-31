@@ -22,6 +22,8 @@ class Ability
     end
 
     if user.is_a?(Voter) && user.activated?
+      can :vote, GrantSubmission
+
       can :manage, VoterSurvey, voter_id: user.id
       can :manage, Vote, voter_id: user.id
       # TODO: should voters be able to change their 'GrantVoter`s?

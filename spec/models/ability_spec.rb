@@ -55,6 +55,8 @@ describe Ability do
     let(:voter_survey) { FactoryGirl.create(:voter_survey, voter: user) }
     let(:vote) { FactoryGirl.build(:vote, voter: user) }
 
+    it { is_expected.to be_able_to(:vote, GrantSubmission.new) }
+
     it { is_expected.to be_able_to(:manage, vote) }
     it { is_expected.to be_able_to(:manage, voter_survey) }
     it { is_expected.to be_able_to(:read, voter_submission_assignment) }
@@ -74,6 +76,8 @@ describe Ability do
 
     context 'when not activated' do
       let(:user) { FactoryGirl.create(:voter) }
+
+      it { is_expected.not_to be_able_to(:vote, GrantSubmission.new) }
 
       it { is_expected.not_to be_able_to(:manage, vote) }
       it { is_expected.not_to be_able_to(:manage, voter_survey) }
