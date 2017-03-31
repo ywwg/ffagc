@@ -4,9 +4,6 @@
 
 <% if admin_logged_in? %>
 <p>
-  You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]
-</p>
-<p>
   (<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)
 </p>
 

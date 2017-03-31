@@ -1,7 +1,6 @@
 <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Voting Committee</h1>
 
 <% if voter_logged_in? %>
-  You are logged in as: <%= current_voter.name %> (<%= current_voter.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_voter" %>]
   <br /><br />
   <% if !voter_verified?(current_voter.id)%>
     Your voter signup is still being verified, please check back or contact grants@fireflyartscollective.org for help.

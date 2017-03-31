@@ -1,7 +1,6 @@
 <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Artists</h1>
 
 <% if artist_logged_in? %>
-  <p>You are logged in as: <%= current_artist.name %> (<%= current_artist.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_artist" %>]</p>
   <% if any_submit_open? %>
     <p><b>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
     <% if i > 0 %> and<% end %>
