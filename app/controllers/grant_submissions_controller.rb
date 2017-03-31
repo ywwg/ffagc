@@ -95,7 +95,7 @@ class GrantSubmissionsController < ApplicationController
   def index
   end
 
-  def modify
+  def edit
     begin
       @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
       if !modify_grant_ok?(@grant_submission)
@@ -116,7 +116,7 @@ class GrantSubmissionsController < ApplicationController
       @grant_change_disable = true
     end
 
-    render "modify"
+    render 'edit'
   end
 
   def discuss
