@@ -95,20 +95,6 @@
 
 
   <% end %>
-<% else %>
-  <%= link_to "Register", :controller => "voters", :action => "signup" %> as a voting member of the voting committee.
-  <h2>Sign in:</h2>
-  <fieldset>
-  <%= form_tag(controller: 'sessions', action:'create_voter') do %>
-    <%= text_field :session, :email, :placeholder => "Email Address" %>
-      <br />
-    <%= password_field :session, :password, :placeholder => "Password" %>
-      <br />
-    <%= submit_tag("Sign in", class: "button") %>
-
-     </fieldset>
-  <% end %>
-  <%= link_to "(forgot password)", new_password_reset_path(type: "voters") %>
 <% end %>
 
 <script>
