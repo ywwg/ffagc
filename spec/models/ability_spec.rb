@@ -26,6 +26,8 @@ describe Ability do
     it { is_expected.to be_able_to(:manage, artist_survey) }
     it { is_expected.to be_able_to(:manage, grant_submission) }
     it { is_expected.to be_able_to(:manage, proposal) }
+    it { is_expected.to be_able_to(:index, Grant.new) }
+    it { is_expected.to be_able_to(:show, Grant.new) }
 
     it { is_expected.not_to be_able_to(:manage, Admin.new) }
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
@@ -45,6 +47,8 @@ describe Ability do
       it { is_expected.not_to be_able_to(:manage, artist_survey) }
       it { is_expected.not_to be_able_to(:manage, grant_submission) }
       it { is_expected.not_to be_able_to(:manage, proposal) }
+      it { is_expected.not_to be_able_to(:index, Grant.new) }
+      it { is_expected.not_to be_able_to(:show, Grant.new) }
     end
   end
 
@@ -61,6 +65,8 @@ describe Ability do
     it { is_expected.to be_able_to(:manage, voter_survey) }
     it { is_expected.to be_able_to(:read, voter_submission_assignment) }
     it { is_expected.to be_able_to(:read, GrantSubmission.new) }
+    it { is_expected.to be_able_to(:index, Grant.new) }
+    it { is_expected.to be_able_to(:show, Grant.new) }
 
     it { is_expected.not_to be_able_to(:manage, Admin.new) }
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
@@ -83,6 +89,8 @@ describe Ability do
       it { is_expected.not_to be_able_to(:manage, voter_survey) }
       it { is_expected.not_to be_able_to(:read, voter_submission_assignment) }
       it { is_expected.not_to be_able_to(:read, GrantSubmission.new) }
+      it { is_expected.not_to be_able_to(:index, Grant.new) }
+      it { is_expected.not_to be_able_to(:show, Grant.new) }
     end
   end
 end
