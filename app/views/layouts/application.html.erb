@@ -14,9 +14,11 @@
   <% if flash[:warning] %>
     <div class="warning"><%= flash[:warning] %></div>
   <% end %>
-</div>
 
-<%= yield %>
+  <%= render partial: 'shared/admin_links' %>
+
+  <%= yield %>
+</div>
 
 </body>
 </html>

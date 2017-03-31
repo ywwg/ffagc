@@ -1,154 +1,141 @@
-<div class="container">
-  <% if admin_logged_in? %>
-  | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
-  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
-  | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
-  |
-  <% end %>
-  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
+<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
 
-  <% if admin_logged_in? %>
-  <p>
-    You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]
-  </p>
-  <p>
-    (<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)
-  </p>
-  <h3>
-  | Index
-  | <%= link_to "Submissions", :controller => "admins", :action => "submissions" %>
-  | <%= link_to "Artists", :controller => "admins", :action => "artists" %>
-  | <%= link_to "Voters", :controller => "admins", :action => "voters" %>
-  | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
-  |</h3>
+<%= render partial: 'shared/links' %>
 
-  <% if any_vote_open? %>
-    <h2>Submissions Currently Under Consideration</h2>
-    <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
-    <% if i > 0 %> and<% end %>
-    <b><%= g.name %></b><% end %></p>
+<% if admin_logged_in? %>
+<p>
+  You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]
+</p>
+<p>
+  (<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)
+</p>
 
-    <p>| <% if @show_scored %><%= link_to "Hide Scores", :controller => "admins", :action => "index" %><% else %><b>Hide Scores</b><% end %>
-       | <% if @show_scored %><b>Show Scores</b><% else %><%= link_to "Show Scores", :controller => "admins", :action => "index", :scored => "true" %><% end %>
-    |</p>
+<% if any_vote_open? %>
+  <h2>Submissions Currently Under Consideration</h2>
+  <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
+  <% if i > 0 %> and<% end %>
+  <b><%= g.name %></b><% end %></p>
 
-    <table border="1">
-      <tr>
-        <th>Grant</th>
-        <th>Name</th>
-        <th>Requested $</th>
-        <th>Discussion / Supplements</th>
-        <% if @show_scored %><th>Average Score</th> <% end %>
-        <th>Decision Finalized</th>
-        <th>Granted $</th>
-        <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
-      </tr>
+  <p>| <% if @show_scored %><%= link_to "Hide Scores", :controller => "admins", :action => "index" %><% else %><b>Hide Scores</b><% end %>
+     | <% if @show_scored %><b>Show Scores</b><% else %><%= link_to "Show Scores", :controller => "admins", :action => "index", :scored => "true" %><% end %>
+  |</p>
 
-      <% @submissions_display.each do |gs| %>
-      <tr>
-        <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
-        <td><%= link_to "#{gs.name}" , :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
-        <td align="right">$<%= gs.requested_funding_dollars %></td>
-        <td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
-        <% if @show_scored %><td><%= gs.avg_score %></td> <% end %>
-        <td><%= gs.funding_decision %></td>
-        <td align="right">
-          <% if gs.granted_funding_dollars != nil %>
-            $<%= gs.granted_funding_dollars %>
-          <% else %>$0
-          <% end %></td>
-        <td align="center"><form name="fund_email_form-<%= gs.id %>">
-              <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
-            </form></td>
-      </tr>
-      <% end %>
-      <tr>
-        <td colspan="3" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
-        <td><%= button_to "Notify Questions", :controller => "admins", :action => "send_question_emails" %></td>
-        <td colspan="<%= @show_scored ? '3' : '2' %>" align="right"><form name="send_email_form">
-            <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
-            </form></td>
-        <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
-      </tr>
-      <tr>
-        <td colspan="5" align="right">Total proposed grants money</td>
-        <td align="right">$<%= active_grant_funding_total(false) %></td>
-      </tr>
-      <tr>
-        <td colspan="5" align="right">Total finalized grant money</td>
-        <td align="right">$<%= active_grant_funding_total(true) %></td>
-      </tr>
-    </table>
-    <table style="border:none;">
-      <tr><td style="border:none;"><%= button_to "Assign", :controller => "admins", :action => "assign" %></td>
-        <td style="border:none;"><%= button_to "Clear Assignments", :controller => "admins", :action => "clear_assignments" %></td>
-      </tr>
-    </table>
+  <table border="1">
+    <tr>
+      <th>Grant</th>
+      <th>Name</th>
+      <th>Requested $</th>
+      <th>Discussion / Supplements</th>
+      <% if @show_scored %><th>Average Score</th> <% end %>
+      <th>Decision Finalized</th>
+      <th>Granted $</th>
+      <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
+    </tr>
+
+    <% @submissions_display.each do |gs| %>
+    <tr>
+      <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
+      <td><%= link_to "#{gs.name}" , :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
+      <td align="right">$<%= gs.requested_funding_dollars %></td>
+      <td><%= link_to "#{discussion_status(gs.id)}", :controller => "grant_submissions", :action => "discuss", :id => gs.id %></td>
+      <% if @show_scored %><td><%= gs.avg_score %></td> <% end %>
+      <td><%= gs.funding_decision %></td>
+      <td align="right">
+        <% if gs.granted_funding_dollars != nil %>
+          $<%= gs.granted_funding_dollars %>
+        <% else %>$0
+        <% end %></td>
+      <td align="center"><form name="fund_email_form-<%= gs.id %>">
+            <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
+          </form></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td colspan="3" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
+      <td><%= button_to "Notify Questions", :controller => "admins", :action => "send_question_emails" %></td>
+      <td colspan="<%= @show_scored ? '3' : '2' %>" align="right"><form name="send_email_form">
+          <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
+          </form></td>
+      <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
+    </tr>
+    <tr>
+      <td colspan="5" align="right">Total proposed grants money</td>
+      <td align="right">$<%= active_grant_funding_total(false) %></td>
+    </tr>
+    <tr>
+      <td colspan="5" align="right">Total finalized grant money</td>
+      <td align="right">$<%= active_grant_funding_total(true) %></td>
+    </tr>
+  </table>
+  <table style="border:none;">
+    <tr><td style="border:none;"><%= button_to "Assign", :controller => "admins", :action => "assign" %></td>
+      <td style="border:none;"><%= button_to "Clear Assignments", :controller => "admins", :action => "clear_assignments" %></td>
+    </tr>
+  </table>
 
 
-    <h2>Assignments</h2>
-    <table border="1">
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Assigned</th>
-      </tr>
-      <% @verified_voters.each do |vv| %>
-      <tr>
-        <td><%= vv.name %></td>
-        <td><%= vv.email %></td>
-        <td><%= vv.assigned.join(', ').html_safe %></td>
-      </tr>
-      <% end %>
-    </table>
-  <% else %>
-    <h2> No active grants for vote at this time </h2>
-  <% end %>
+  <h2>Assignments</h2>
+  <table border="1">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Assigned</th>
+    </tr>
+    <% @verified_voters.each do |vv| %>
+    <tr>
+      <td><%= vv.name %></td>
+      <td><%= vv.email %></td>
+      <td><%= vv.assigned.join(', ').html_safe %></td>
+    </tr>
+    <% end %>
+  </table>
+<% else %>
+  <h2> No active grants for vote at this time </h2>
+<% end %>
 
-  <% elsif !admin_exists? %>
-  <%= link_to "Create", :controller => "admins", :action => "signup" %> initial admin account
-  <% else %>
-    <%= form_tag(controller: 'sessions', action:'create_admin') do %>
-    <h2>Sign in:</h2>
-    <fieldset>
-      <%= text_field :session, :email, :placeholder => "Email Address" %>
-      <br />
-      <%= password_field :session, :password, :placeholder => "Password" %>
-      <br />
-      <%= submit_tag("Sign In", class: "button") %>
-      </formset>
-      <% end %>
-    <%= link_to "(forgot password)", new_password_reset_path(type: "admins") %>
-  <% end %>
-  <script>
-    function toggle_all_fund_emails(event) {
-      event.preventDefault();
-      checkboxes = document.getElementsByName('fund_email_checkbox');
-      var toggle_to = !checkboxes[0].checked;
-      for(var i=0, n=checkboxes.length; i<n; i++) {
-        checkboxes[i].checked = toggle_to;
+<% elsif !admin_exists? %>
+<%= link_to "Create", :controller => "admins", :action => "signup" %> initial admin account
+<% else %>
+  <%= form_tag(controller: 'sessions', action:'create_admin') do %>
+  <h2>Sign in:</h2>
+  <fieldset>
+    <%= text_field :session, :email, :placeholder => "Email Address" %>
+    <br />
+    <%= password_field :session, :password, :placeholder => "Password" %>
+    <br />
+    <%= submit_tag("Sign In", class: "button") %>
+    </formset>
+    <% end %>
+  <%= link_to "(forgot password)", new_password_reset_path(type: "admins") %>
+<% end %>
+<script>
+  function toggle_all_fund_emails(event) {
+    event.preventDefault();
+    checkboxes = document.getElementsByName('fund_email_checkbox');
+    var toggle_to = !checkboxes[0].checked;
+    for(var i=0, n=checkboxes.length; i<n; i++) {
+      checkboxes[i].checked = toggle_to;
+    }
+    return false;
+  }
+
+  function confirm_selected(event) {
+    event.preventDefault();
+    checkboxes = document.getElementsByName('fund_email_checkbox');
+    var selected = [];
+    for (var i=0, n=checkboxes.length; i<n; i++) {
+      if (checkboxes[i].checked) {
+        var id = checkboxes[i].id.split("-")[1];
+        selected.push(id);
       }
+    }
+    if (selected.length == 0) {
       return false;
     }
-
-    function confirm_selected(event) {
-      event.preventDefault();
-      checkboxes = document.getElementsByName('fund_email_checkbox');
-      var selected = [];
-      for (var i=0, n=checkboxes.length; i<n; i++) {
-        if (checkboxes[i].checked) {
-          var id = checkboxes[i].id.split("-")[1];
-          selected.push(id);
-        }
-      }
-      if (selected.length == 0) {
-        return false;
-      }
-      var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
-      var admin_js = '<%= raw @admin.to_json %>';
-      $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email,
-          {"admin": admin_js});
-      return false;
-    }
-  </script>
-</div>
+    var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
+    var admin_js = '<%= raw @admin.to_json %>';
+    $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email,
+        {"admin": admin_js});
+    return false;
+  }
+</script>

@@ -1,0 +1,18 @@
+<%
+admin_links = [
+  ['Index', admins_path],
+  ['Submissions', admins_submissions_path],
+  ['Artists', admins_artists_path],
+  ['Voters', admins_voters_path],
+  ['Grants', admins_grants_path]
+]
+%>
+<h3>
+  <% admin_links.each do |text, path| %>
+    | <% if request.path == path %>
+      <%= text %>
+    <% else %>
+      <%= link_to text, path %>
+    <% end %>
+  <% end %>
+|</h3>
