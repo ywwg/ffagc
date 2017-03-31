@@ -1,55 +1,62 @@
 <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
 
-<% if admin_logged_in? %>
-  <%= render partial: 'shared/links' %>
-  <h2>Grant Types</h2>
-  <% if any_submit_open? %>
-    <p>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
-    <% if i > 0 %> and<% end %>
-    <b><%= g.name %></b><% end %></p>
-  <% else %>
-    <p>No submission process open at this time.</p>
-  <% end %>
-  <% if any_vote_open? %>
-    <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
-    <% if i > 0 %> and<% end %>
-    <b><%= g.name %></b><% end %></p>
-  <% else %>
-    <p>No voting process open at this time.</p>
-  <% end %>
+<%= render partial: 'shared/links' %>
 
-  <table border="1" style="font-size: 11pt;">
-    <tr>
-      <th>Name</th>
-      <th>Max Funding</th>
-      <th>Submission Start Date</th>
-      <th>Submission End Date</th>
-      <th>Voting Start Date</th>
-      <th>Meeting One</th>
-      <th>Meeting Two</th>
-      <th>Voting End Date</th>
-      <th>Hidden</th>
-    </tr>
-    <% @grants.each do |g| %>
-    <tr>
-      <td><%= g.name %></td>
-      <td>$<%= g.max_funding_dollars %></td>
-      <td><%= Date::DAYNAMES[g.submit_start.wday] %>,
-          <%= g.submit_start.strftime("%Y/%m/%d") %></td>
-      <td><%= Date::DAYNAMES[g.submit_end.wday] %>,
-          <%= g.submit_end.strftime("%Y/%m/%d") %></td>
-      <td><%= Date::DAYNAMES[g.vote_start.wday] %>,
-          <%= g.vote_start.strftime("%Y/%m/%d") %></td>
-      <td><%= Date::DAYNAMES[g.meeting_one.wday] %>,
-          <%= g.meeting_one.strftime("%Y/%m/%d") %></td>
-      <td><%= Date::DAYNAMES[g.meeting_two.wday] %>,
-          <%= g.meeting_two.strftime("%Y/%m/%d") %></td>
-      <td><%= Date::DAYNAMES[g.vote_end.wday] %>,
-          <%= g.vote_end.strftime("%Y/%m/%d") %></td>
-      <td align="center"><% if g.hidden %>Y<% end %></td>
-      <td><%= link_to "Modify", edit_grant_path(g) %></td>
-    </tr>
+<h2>Grant Types</h2>
+
+<% if any_submit_open? %>
+  <p>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
+  <% if i > 0 %> and<% end %>
+  <b><%= g.name %></b><% end %></p>
+<% else %>
+  <p>No submission process open at this time.</p>
+<% end %>
+<% if any_vote_open? %>
+  <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
+  <% if i > 0 %> and<% end %>
+  <b><%= g.name %></b><% end %></p>
+<% else %>
+  <p>No voting process open at this time.</p>
+<% end %>
+
+<table border="1" style="font-size: 11pt;">
+  <tr>
+    <th>Name</th>
+    <th>Max Funding</th>
+    <th>Submission Start Date</th>
+    <th>Submission End Date</th>
+    <th>Voting Start Date</th>
+    <th>Meeting One</th>
+    <th>Meeting Two</th>
+    <th>Voting End Date</th>
+    <th>Hidden</th>
+    <th></th>
+  </tr>
+  <% @grants.each do |g| %>
+  <tr>
+    <td><%= g.name %></td>
+    <td>$<%= g.max_funding_dollars %></td>
+    <td><%= Date::DAYNAMES[g.submit_start.wday] %>,
+        <%= g.submit_start.strftime("%Y/%m/%d") %></td>
+    <td><%= Date::DAYNAMES[g.submit_end.wday] %>,
+        <%= g.submit_end.strftime("%Y/%m/%d") %></td>
+    <td><%= Date::DAYNAMES[g.vote_start.wday] %>,
+        <%= g.vote_start.strftime("%Y/%m/%d") %></td>
+    <td><%= Date::DAYNAMES[g.meeting_one.wday] %>,
+        <%= g.meeting_one.strftime("%Y/%m/%d") %></td>
+    <td><%= Date::DAYNAMES[g.meeting_two.wday] %>,
+        <%= g.meeting_two.strftime("%Y/%m/%d") %></td>
+    <td><%= Date::DAYNAMES[g.vote_end.wday] %>,
+        <%= g.vote_end.strftime("%Y/%m/%d") %></td>
+    <td align="center"><% if g.hidden %>Y<% end %></td>
+
+    <% if can? :modify, g %>
+      <td><%= link_to "Edit", edit_grant_path(g) %></td>
     <% end %>
-  </table>
+  </tr>
+  <% end %>
+</table>
+
+<% if can? :modify, Grant.new %>
   <%= link_to "Create Grant", new_grant_path %>
 <% end %>
