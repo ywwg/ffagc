@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  rescue_from CanCan::AccessDenied, :with => :deny_access
+
   def event_year
     Rails.configuration.event_year
   end
@@ -253,5 +255,11 @@ class ApplicationController < ActionController::Base
 
   def self.activate_succeed?(user, token)
     BCrypt::Password.new(user.activation_digest).is_password?(token)
+  end
+
+  protected
+
+  def deny_access
+    render nothing: true, status: :forbidden
   end
 end
