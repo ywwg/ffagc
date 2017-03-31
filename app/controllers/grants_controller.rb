@@ -1,56 +1,44 @@
 class GrantsController < ApplicationController
-  before_filter :initialize_grant
-
-  def initialize_grant
-    if !admin_logged_in?
-      redirect_to "/"
-      return
-    end
-    @grant = Grant.new
-  end
-
-  def grant_params
-    params.require(:grant).permit(:id, :name, :max_funding_dollars,
-                                  :submit_start, :submit_end, :vote_start,
-                                  :vote_end, :meeting_one, :meeting_two,
-                                  :hidden)
-  end
+  load_and_authorize_resource
 
   def index
   end
 
-  def create
-    @grant = Grant.new(grant_params)
+  def new
+  end
 
+  def create
     if @grant.save
-      redirect_to :controller => "admins", :action => "grants"
+      redirect_to action: 'index'
     else
-      render "failure"
+      render 'failure'
     end
   end
 
-  def modify
-    begin
-      @grant = Grant.find(params.permit(:id)[:id])
-    rescue
-      redirect_to action: "index"
+  def edit
+    unless @grant.present?
+      redirect_to action: 'index'
       return
     end
 
-    render "modify"
-  end
-
-  def show
-    redirect_to :controller => "admins", :action => "grants"
+    render 'edit'
   end
 
   def update
-    @grant = Grant.find(params[:id])
-    @grant.attributes = grant_params
-    if @grant.save
-      redirect_to :controller => "admins", :action => "grants"
+    if @grant.update(resource_params)
+      redirect_to action: 'index'
     else
-      render "failure"
+      render 'failure'
     end
+  end
+
+  private
+
+  def resource_params
+    params.require(:grant).permit(:name, :max_funding_dollars,
+                                  :submit_start, :submit_end,
+                                  :vote_start, :vote_end,
+                                  :meeting_one, :meeting_two,
+                                  :hidden)
   end
 end
