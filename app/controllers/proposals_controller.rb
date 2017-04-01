@@ -31,8 +31,7 @@ class ProposalsController < ApplicationController
   def create
     @proposal = Proposal.new(proposal_params)
     if @proposal.save
-      redirect_to :controller => "grant_submissions", :action => "discuss",
-          :id => proposal_params[:grant_submission_id]
+      redirect_to grant_submission_discuss_path(proposal_params[:grant_submission_id])
     else
       render "upload_failure"
     end
@@ -42,8 +41,7 @@ class ProposalsController < ApplicationController
     @proposal = Proposal.find(proposal_params[:id])
     begin
       @proposal.destroy
-      redirect_to :controller => "grant_submissions", :action => "discuss",
-            :id => proposal_params[:grant_submission_id]
+      redirect_to grant_submission_discuss_path(proposal_params[:grant_submission_id])
     rescue
       render "destroy_failure"
     end

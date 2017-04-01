@@ -35,7 +35,7 @@
         <td><%= Grant.where("id = ?",gs.grant_id).take.name %> Grant</td>
         <td align="right">$<%= gs.requested_funding_dollars %></td>
         <td><% if submission_has_questions?(gs.id) %>
-            <%= link_to "Questions From Committee", :controller => "grant_submissions", :action => "discuss", :id => gs.id %>
+            <%= link_to "Questions From Committee", grant_submission_discuss_path(gs) %>
             <% else %>No committee questions yet<% end %>
         </td>
         <% if any_grant_submission_funded?(current_artist.id) %>
