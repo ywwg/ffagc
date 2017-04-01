@@ -83,18 +83,8 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def edit
-    begin
-      @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
-      if !modify_grant_ok?(@grant_submission)
-        redirect_to "/"
-        return
-      end
-    rescue
-      redirect_to "/"
-      return
-    end
-
-    @artist_email = Artist.find(@grant_submission.artist_id)[:email]
+    @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
+    authorize! :edit, @grant_submission
 
     # Don't allow an artist to decide post-decision that they want a different
     # grant category.
