@@ -28,7 +28,7 @@
 		<%= f.input :proposal, as: :file, label: 'Anonymized Application PDF' %>
 
 		<%= f.button :submit, class: 'btn btn-primary' %>
-		<%= link_to 'Back', artists_path %>
+		<%= link_to 'Back', @back_link %>
   <% end %>
 	<br />
 <% elsif artist_logged_in? %>
@@ -39,7 +39,7 @@
   You must be logged in as an artist to modify a grant proposal. (<%= link_to "Log In", :controller => "artists", :action => "index" %>)
   <br />
   <br />
-  <%= link_to 'Back', :back %>
+  <%= link_to 'Back', @back_link %>
 <% end %>
 
 <script>

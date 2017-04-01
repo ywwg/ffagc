@@ -3,6 +3,7 @@ require 'grant_contract'
 class GrantSubmissionsController < ApplicationController
 
   before_filter :initialize_grant_submission
+  before_action :set_back_link
 
   def create
     if !artist_logged_in?
@@ -225,5 +226,15 @@ class GrantSubmissionsController < ApplicationController
 
   def grant_contract_params
     params.permit(:id, :format, :submission_id, :authenticity_token)
+  end
+
+  def set_back_link
+    @back_link = if admin_logged_in?
+      admins_submissions_path
+    elsif artist_logged_in?
+      artists_path
+    else
+      grant_submissions_path
+    end
   end
 end
