@@ -72,6 +72,11 @@ class GrantSubmissionsController < ApplicationController
     end
   end
 
+  def show
+    @grant_submission = GrantSubmission.find(params[:id])
+    authorize! :show, @grant_submission
+  end
+
   def index
     authorize! :index, GrantSubmission
     @grant_submissions = GrantSubmission.accessible_by(current_ability)
