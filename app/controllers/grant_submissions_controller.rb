@@ -125,31 +125,26 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def generate_contract
-    begin
-      submission = GrantSubmission.find(grant_contract_params[:submission_id])
-    rescue
-      redirect_to "/"
-      return
-    end
-    if !modify_grant_ok?(submission)
-      redirect_to "/"
-      return
-    end
-    if !grant_submission_funded?(submission.id)
+    @grant_submission = GrantSubmission.find(params[:grant_submission_id])
+    authorize! :read, @grant_submission
+
+    if !grant_submission_funded?(@grant_submission.id)
+      flash[:error] = "Grant Submission must be funded to create contract"
       logger.warn "tried to generate contract for non-funded grant"
       redirect_to "/"
     end
-    grant_name = Grant.find(submission.grant_id).name
-    artist_name = Artist.find(submission.artist_id).name
+
+    grant_name = @grant_submission.grant.name
+    artist_name = @grant_submission.artist.name
 
     respond_to do |format|
       format.html
       format.pdf do
         now = DateTime.current
-        pdf = GrantContract.new(grant_name, submission.name, artist_name,
-            submission.requested_funding_dollars, now)
+        pdf = GrantContract.new(grant_name, @grant_submission.name, artist_name,
+            @grant_submission.requested_funding_dollars, now)
         send_data pdf.render, filename:
-          "#{submission.name}_#{grant_name}_Contract_#{now.strftime("%Y%m%d")}.pdf",
+          "#{@grant_submission.name}_#{grant_name}_Contract_#{now.strftime("%Y%m%d")}.pdf",
           type: "application/pdf"
       end
     end
