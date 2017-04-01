@@ -73,6 +73,8 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def index
+    authorize! :index, GrantSubmission
+    @grant_submissions = GrantSubmission.accessible_by(current_ability)
   end
 
   def edit

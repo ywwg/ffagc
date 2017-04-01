@@ -1,138 +1,73 @@
-<% if (artist_logged_in? && any_submit_open?) || admin_logged_in? %>
-  <p>Please refer to the <a href="https://www.fireflyartscollective.org/participate/art-at-firefly/art-grants/" target="_blank">Firefly website</a>
-     for information on the grant submission process, rules, and funding guidelines.</p>
-  <h3>Important Notes:</h3>
-    <ul><li>This year the <strong>Anniversary Grants</strong> are called the
-       <strong>Crystal Grants</strong>.
-     </li>
-     <li>Please choose an <strong>approved funding level</strong> for the Grant you're applying
-       for.  Funding requests at values between grant levels
-       will be rounded down.</li>
-     <li><strong>Do not</strong> include any information identifying the artist(s)
-       (such as name, alias, contact information, etc) in the submission document
-       itself.  The review process can't be blind if your name is at the top
-       of the document. Therefore <strong>we will reject your proposal</strong>
-       if it contains identifying information!
+<ol class="breadcrumb">
+  <li>Grant Submissions</li>
+  <li class="active">Index</li>
+</ol>
+
+<div class="alert alert-info">
+  <% if any_submit_open? %>
+    <p>The submission process is active for:
+    <ul>
+      <% active_submit_names.each_with_index do |g| %>
+        <li><%= g.name %></li>
+      <% end %>
     </ul>
-  <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate();'} do |f| %>
-  <fieldset>
-      <%= f.input :name, :label => "Name of Piece", :required => true, :validate => true %>
-      <li class="string input required stringish" id="grant_submission_name_input">
-        <label class="label" for="grant_submission_grant_id">Grant<abbr title="required">*</abbr></label>
-        <%= collection_select(:grant_submission, :grant_id,
-                Grant.where(id: active_submit_grants), :id, :name,
-                {:include_blank => "(select a grant)"},
-                { :onchange => "numericFilter();"}) %>
-      </li>
-
-      <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }  %>
-
-      <li class="string input required stringish" id="grant_submission_name_input">
-          <label class="label" for="grant_submission_proposal">Anonymized Application PDF<abbr title="required">*</abbr></label>
-          <%# Keep extensions in sync with uploader %>
-          <%= f.file_field :proposal, :required => true, :validate => true, :style => "margin-left:-5px", :accept => ".pdf,.doc,.docx,.txt,.md" %>
-      </li>
-
-      <h5>* Required</h5>
-      <%= submit_tag("Submit Application", class: "button")%></fieldset>
+    </p>
+    <p><%= link_to "Submit Grant Proposal", new_grant_submission_path, class: 'btn btn-primary' %></p>
+  <% else %>
+    No submissions open at this time.
   <% end %>
-    <br />
-    <%= link_to 'Back', :controller => "artists", :action => "index" %>
-<% elsif artist_logged_in? %>
-  Submissions are now closed
-  <br /><br />
-  <%= link_to 'Back', :controller => "artists", :action => "index" %>
-<% else %>
-  You must be logged in as an artist to modify a grant proposal. (<%= link_to "Log In", :controller => "artists", :action => "index" %>)
-  <br />
-  <br />
-  <%= link_to 'Back', :back %>
+</div>
+
+<% if any_grant_submission_funded?(current_artist.id) %>
+  <div class="alert alert-success text-center">
+    <p class="lead">OMG you've been funded!</p>
+  </div>
 <% end %>
 
-<script>
-  // http://stackoverflow.com/questions/574941/best-way-to-track-onchange-as-you-type-in-input-type-text/26202266#26202266
-  onload = function () {
-     var e = document.getElementById('grant_submission_requested_funding_dollars');
-     //e.oninput = myHandler;
-     e.onpropertychange = e.oninput; // for IE8
-     // e.onchange = e.oninput; // FF needs this in <select><option>...
-  };
-
-  function numericFilter() {
-    var txb = document.getElementById('grant_submission_requested_funding_dollars')
-    var max_fund_json = '<%= raw grant_max_funding_dollars_json %>';
-    var grant_id = document.getElementById("grant_submission_grant_id").value;
-    // If they haven't selected a grant, just go with 1000
-    var max_funding = 1000;
-    if (grant_id !== "") {
-      var max_fund_ob = JSON.parse(max_fund_json);
-      // I am bad at javascript.
-      for (var i = 0; i < max_fund_ob.length; i++) {
-        if (max_fund_ob[i].id == parseInt(grant_id)) {
-          max_funding = max_fund_ob[i].max_funding_dollars;
-          break;
-        }
-      }
-    }
-    txb.value = txb.value.replace(/[^\0-9]/ig, "");
-    if(parseInt(txb.value) > max_funding) {
-      txb.value = max_funding;
-    }
-  }
-
-  function validate() {
-    errors = 0;
-
-    //round decimals in funding amounts -- whole dollars only
-    var requested_funding_dollars = document.getElementById('grant_submission_requested_funding_dollars').value;
-    var requested_funding_dollars_num = parseInt(requested_funding_dollars).toFixed(0);
-    document.getElementById('grant_submission_requested_funding_dollars').value = requested_funding_dollars_num.toString();
-
-    judge.validate(document.getElementById('grant_submission_name'), {
-      valid: function(element) {
-        element.style.border = '1px solid green';
-      },
-      invalid: function(element, messages) {
-        element.style.border = '1px solid red';
-        alert('name error: ' + messages.join(','));
-        errors++;
-      }
-    });
-
-    if(document.getElementById("grant_submission_grant_id").value != "") {
-      document.getElementById("grant_submission_grant_id").style.border = '1px solid green';
-    } else {
-      errors++;
-      alert('error: please select a grant to apply for')
-      document.getElementById("grant_submission_grant_id").style.border = '1px solid red';
-    }
-
-    judge.validate(document.getElementById('grant_submission_requested_funding_dollars'), {
-      valid: function(element) {
-        element.style.border = '1px solid green';
-      },
-      invalid: function(element, messages) {
-        element.style.border = '1px solid red';
-        alert('requested funding error: ' + messages.join(','));
-        errors++;
-      }
-    });
-
-    if(document.getElementById("grant_submission_proposal").value != "") {
-      document.getElementById("grant_submission_proposal").style.border = '1px solid green';
-    } else {
-      errors++;
-      alert('error: please select your application PDF')
-      document.getElementById("grant_submission_proposal").style.border = '1px solid red';
-    }
-
-    if (errors == 0) {
-      var anon = confirm("Did you make sure your proposal is anonymous and DOES NOT include any identifying information?");
-      if (!anon) {
-        errors++;
-      }
-    }
-
-    return errors===0;
-  }
-</script>
+<% unless @grant_submissions.empty? %>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Submission Title</th>
+      <th>Grant</th>
+      <th>Discussion</th>
+      <th>Requested Funds</th>
+      <% if any_grant_submission_funded?(current_artist.id)%>
+      <th>Granted Funds</th>
+      <% end %>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+  <% @grant_submissions.each do |gs| %>
+    <tr>
+      <td><%= gs.name %></td>
+      <td><%= gs.grant&.name %> Grant</td>
+      <td>
+        <% if submission_has_questions?(gs.id) %>
+          Questions
+        <% else %>
+          None (yet)
+        <% end %>
+      </td>
+      <td align="right"><%= number_to_currency gs.requested_funding_dollars %></td>
+      <% if any_grant_submission_funded?(current_artist.id) %>
+        <td align="right">
+          <% if grant_submission_funded?(gs.id) %>
+            <%= number_to_currency gs.granted_funding_dollars %>
+          <% end %></td>
+      <% end %>
+      <td class="text-right">
+        <% if submission_has_questions?(gs.id) %>
+          <%= link_to "Answer Questions", grant_submission_discuss_path(gs), class: 'btn btn-primary' %>
+        <% end %>
+        <% if grant_submission_funded?(gs.id) %>
+          <%= link_to "Generate Contract", grant_submission_generate_contract_path(gs, format: 'pdf'), method: :post, class: 'btn btn-success btn-inline' %>
+        <% end %>
+        <%= link_to "Edit", edit_grant_submission_path(id: gs.id), class: 'btn btn-default' %>
+      </td>
+    </tr>
+  <% end %>
+    </tbody>
+  </table>
+<% end %>
