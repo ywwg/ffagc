@@ -32,7 +32,7 @@
     <% @grant_submissions.each do |gs| %>
       <tr>
         <td><%= gs.name %></td>
-        <td><%= Grant.where("id = ?",gs.grant_id).take.name %> Grant</td>
+        <td><%= gs.grant&.name %> Grant</td>
         <td align="right">$<%= gs.requested_funding_dollars %></td>
         <td><% if submission_has_questions?(gs.id) %>
             <%= link_to "Questions From Committee", grant_submission_discuss_path(gs) %>
