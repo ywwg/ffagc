@@ -7,12 +7,12 @@ admin_links = [
   ['Grants', grants_path]
 ]
 %>
-<h3>
+<ul class="nav nav-pills">
   <% admin_links.each do |text, path| %>
-    | <% if request.path == path %>
-      <%= text %>
+    <% if request.path == path %>
+      <li role="presentation" class="active"><%= link_to text, path %></li>
     <% else %>
-      <%= link_to text, path %>
+      <li role="presentation"><%= link_to text, path %></li>
     <% end %>
   <% end %>
-|</h3>
+</ul>
