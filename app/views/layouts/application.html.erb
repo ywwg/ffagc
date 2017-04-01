@@ -9,24 +9,49 @@
 </head>
 <body>
 <div class="main-container container-fluid">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="<% root_path %>">Firefly Arts Grants</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <% if admin_logged_in? %>
+            <li><%= link_to 'Artist Page', artists_path %></li>
+            <li><%= link_to 'Voter Page', voters_path %></li>
+            <li><%= link_to 'Admin Page', admins_path %></li>
+          <% end %>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <% if current_user.present? %>
+            <% if voter_logged_in? %>
+              <li><%= link_to "Log out (#{current_voter.email})", :controller => "sessions", :action => "delete_voter" %></li>
+            <% end %>
+            <% if admin_logged_in? %>
+              <li><%= link_to "Log out (#{current_admin.email})", :controller => "sessions", :action => "delete_admin" %></li>
+            <% end %>
+            <% if artist_logged_in? %>
+              <li><%= link_to "Log out (#{current_artist.email})", :controller => "sessions", :action => "delete_artist" %></li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
   <% if flash[:notice] %>
     <div class="notice"><%= flash[:notice] %></div>
   <% end %>
   <% if flash[:warning] %>
     <div class="warning"><%= flash[:warning] %></div>
   <% end %>
-
-  <% if voter_logged_in? %>
-    <p>You are logged in as: <%= current_voter.name %> (<%= current_voter.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_voter" %>]</p>
-  <% end %>
-  <% if admin_logged_in? %>
-    <p>You are logged in as: <%= current_admin.name %> (<%= current_admin.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_admin" %>]</p>
-  <% end %>
-  <% if artist_logged_in? %>
-    <p>You are logged in as: <%= current_artist.name %> (<%= current_artist.email %>) [<%= link_to "Log Out", :controller => "sessions", :action => "delete_artist" %>]</p>
-  <% end %>
-
-  <%= render partial: 'shared/admin_links' %>
 
   <%= yield %>
 </div>
