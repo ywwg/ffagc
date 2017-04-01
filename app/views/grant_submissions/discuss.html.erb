@@ -32,27 +32,24 @@
             <h3 class="panel-title">Supplemental documents</h3>
           </div>
           <div class="panel-body">
-            <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
-              <%= f_proposal.input :file, as: :file, label: 'Anonymized Supplemental PDF', required: false %>
+            <% unless @grant_submission.proposals.empty? && @grant_submission.proposal.nil? %>
+              <ul class="list-group">
+                <% if @grant_submission.proposal.present? %>
+                  <li class="list-group-item">
+                    <%= link_to @grant_submission.proposal_identifier, @grant_submission.proposal_url, target: :blank %>
+                </li>
+                <% end %>
+              <% @grant_submission.proposals.each do |s| %>
+                <li class="list-group-item">
+                  <%= link_to s.file_identifier, s.file_url, target: :blank %>
+                  <%= link_to 'Delete', proposal_path(s, grant_submission_id: @grant_submission.id), method: :delete, class: 'btn btn-danger btn-xs inline pull-right', data: { confirm: 'Are you sure?' } %>
+                </li>
+              <% end %>
+              </ul>
             <% end %>
 
-            <% if !@grant_submission.proposals.empty? %>
-              <table class="table">
-              <% @grant_submission.proposals.each do |s| %>
-                <tbody>
-                <tr>
-                  <td style="border:none;"><a href="<%= s.file %>"><%= s.file_identifier %></a></td>
-                  <td style="border:none;">
-                  <%= form_tag("/proposals/delete", authenticity_token: true, :class => "button_to") do %>
-                    <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
-                    <%= hidden_field_tag :id, s.id, :name => "proposal[id]" %>
-                    <input class="btn btn-danger btn-xs" name="delete" type="submit" value="Delete" />
-                  <% end %>
-                  </td>
-                </tr>
-                </tbody>
-              <% end %>
-              </table>
+            <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
+              <%= f_proposal.input :file, as: :file, label: 'Anonymized Supplemental PDF', required: false %>
             <% end %>
           </div>
         </div>

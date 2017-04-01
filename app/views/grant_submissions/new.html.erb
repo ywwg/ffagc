@@ -19,18 +19,37 @@
   </div>
 
   <%= simple_form_for @grant_submission do |f| %>
-		<%= f.input :name, label: "Name of Piece", required: true, validate: true %>
+    <%= f.input :name, label: "Name of Piece", required: true, validate: true %>
 
-		<%= f.association :grant, as: :radio_buttons %>
+    <%= f.association :grant, as: :radio_buttons %>
 
-		<%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }, as: :integer, html5: true  %>
+    <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }, as: :integer, html5: true  %>
 
-		<%= f.input :proposal, as: :file, label: 'Anonymized Application PDF' %>
+    <%= f.input :proposal, as: :file, label: 'Anonymized Application PDF' %>
+    <div class="alert alert-warning">Did you make sure your proposal is anonymous and DOES NOT include any identifying information?</div>
 
-		<%= f.button :submit, class: 'btn btn-primary' %>
-		<%= link_to 'Back', @back_link %>
+    <% unless @grant_submission.proposals.empty? && @grant_submission.proposal.nil? %>
+      <ul class="list-group">
+        <% if @grant_submission.proposal.present? %>
+          <li class="list-group-item">
+            <%= link_to @grant_submission.proposal_identifier, @grant_submission.proposal_url, target: :blank %>
+        </li>
+        <% end %>
+      <% @grant_submission.proposals.each do |s| %>
+        <li class="list-group-item">
+          <%= link_to s.file_identifier, s.file_url, target: :blank %>
+          <%= link_to 'Delete', proposal_path(s, grant_submission_id: @grant_submission.id), method: :delete, class: 'btn btn-danger btn-xs inline pull-right', data: { confirm: 'Are you sure?' } %>
+        </li>
+      <% end %>
+      </ul>
+    <% end %>
+
+    <p>
+      <%= f.button :submit, class: 'btn btn-primary' %>
+      <%= link_to 'Back', @back_link %>
+    </p>
   <% end %>
-	<br />
+  <br />
 <% elsif artist_logged_in? %>
   Submissions are now closed
   <br /><br />
