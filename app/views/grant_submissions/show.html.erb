@@ -42,9 +42,7 @@
         <h3 class="panel-title">Questions</h3>
       </div>
       <div class="panel-body">
-        <blockquote>
-        <%= @grant_submission.questions.presence || "<em>No response</em>".html_safe %>
-        </blockquote>
+        <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
       </div>
     </div>
   </div>
@@ -54,9 +52,7 @@
         <h3 class="panel-title">Answers</h3>
       </div>
       <div class="panel-body">
-        <blockquote>
-          <%= @grant_submission.answers.presence || "<em>No response</em>".html_safe %>
-        </blockquote>
+        <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
       </div>
     </div>
   </div>

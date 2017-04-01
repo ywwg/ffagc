@@ -14,9 +14,7 @@
           </div>
           <div class="panel-body">
             <% if @question_edit_disable %>
-              <blockquote>
-                <%= @grant_submission.questions %>
-              </blockquote>
+              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
             <% else %>
               <%= f.text_area :questions, class: 'form-control', rows: '20' %>
             <% end %>
@@ -29,7 +27,11 @@
             <h3 class="panel-title">Answers from Artist</h3>
           </div>
           <div class="panel-body">
-            <%= f.text_area :answers, class: 'form-control', rows: '20', disabled: @answer_edit_disable %>
+            <% if @answer_edit_disable %>
+              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
+            <% else %>
+              <%= f.text_area :answers, class: 'form-control', rows: '20' %>
+            <% end %>
           </div>
           <div class="panel-heading">
             <h3 class="panel-title">Supplemental documents</h3>
