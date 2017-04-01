@@ -101,8 +101,10 @@
     <% end %>
     </tbody>
   </table>
-  <br>
-  <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", admins_submissions_path(reveal: true, scores: false) %> <img src="/uploads/emot-siren.gif">
+
+  <P>
+  <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", admins_submissions_path(reveal: true, scores: false, scope: :active), class: 'btn btn-danger' %> <img src="/uploads/emot-siren.gif">
+  </p>
 <% end %>
 
 <script>
