@@ -1,4 +1,10 @@
 class SessionsController < ApplicationController
+  def artist_login
+    if artist_logged_in?
+      redirect_to artists_path
+    end
+  end
+
   def create_artist
     if(!params[:session][:email].present? || !params[:session][:password].present?)
       render "login_failure"

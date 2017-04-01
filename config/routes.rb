@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get 'admins/submissions' => 'admins#submissions'
 
   post 'artists/login' => 'sessions#create_artist'
+  get 'artists/login' => 'sessions#artist_login'
   post 'voters/login' => 'sessions#create_voter'
   get 'voters/login' => 'sessions#voter_login'
   post 'admins/login' => 'sessions#create_admin'
