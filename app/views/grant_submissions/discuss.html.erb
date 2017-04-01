@@ -58,10 +58,13 @@
         </div>
       </div>
     </div>
-    <% if artist_logged_in? || admin_logged_in? %>
-      <%= f.button :submit, 'Update Discussion', class: 'btn btn-primary' %>
+    <p class="text-center">
+      <% if can? :edit, @grant_submission %>
+        <%= f.button :submit, 'Update Discussion', class: 'btn btn-primary' %>
+        <br />
+      <% end %>
       <%= link_to 'Back', :back %>
-    <% end %>
+    </p>
   <% end %>
 <% else %>
   You must be logged in to view discussions. (<%= link_to "Log In", :controller => "home", :action => "index" %>)
