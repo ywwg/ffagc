@@ -63,12 +63,6 @@
       <%= link_to 'Back', :back %>
     <% end %>
   <% end %>
-
-  <br/>
-  <%= semantic_form_for @proposal, :html => { :onsubmit => 'return validate_supplement();'} do |f| %>
-    <label class="label" for="proposal_file">Upload Additional Document:</label>
-  <% end %>
-  <br />
 <% else %>
   You must be logged in to view discussions. (<%= link_to "Log In", :controller => "home", :action => "index" %>)
   <br />
