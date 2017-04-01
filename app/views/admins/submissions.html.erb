@@ -3,7 +3,8 @@
 <% if admin_logged_in? %>
   <%= render partial: 'shared/links' %>
   <h2>All Submitted Grants</h2>
-  <table border="1">
+  <table class="table table-striped">
+    <thead>
     <tr>
       <th>Grant</th>
       <th>Name</th>
@@ -18,7 +19,8 @@
       <th>Funding</th>
       <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
     </tr>
-
+    </thead>
+    <tbody>
     <% @grant_submissions.each do |gs| %>
     <tr>
       <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
@@ -55,6 +57,7 @@
       <td colspan="9" align="right">Total finalized grant money</td>
       <td align="right">$<%= all_grant_funding_total(true) %></td>
     </tr>
+    </tbody>
   </table>
   <br>
   <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", :controller => "admins", :action => "reveal" %> <img src="/uploads/emot-siren.gif">

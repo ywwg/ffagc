@@ -19,21 +19,24 @@
   <p>No voting process open at this time.</p>
 <% end %>
 
-<table border="1" style="font-size: 11pt;">
-  <tr>
-    <th>Name</th>
-    <th>Max Funding</th>
-    <th>Submission Start Date</th>
-    <th>Submission End Date</th>
-    <th>Voting Start Date</th>
-    <th>Meeting One</th>
-    <th>Meeting Two</th>
-    <th>Voting End Date</th>
-    <% if can? :modify, Grant %>
-    <th>Hidden</th>
-    <th></th>
-    <% end %>
-  </tr>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Max Funding</th>
+      <th>Submission Start</th>
+      <th>Submission End</th>
+      <th>Vote Start</th>
+      <th>Meeting One</th>
+      <th>Meeting Two</th>
+      <th>Vote End</th>
+      <% if can? :modify, Grant %>
+      <th>Hidden</th>
+      <th></th>
+      <% end %>
+    </tr>
+  <thead>
+  <tbody>
   <% @grants.each do |g| %>
   <tr>
     <td><%= g.name %></td>
@@ -56,8 +59,9 @@
     <% end %>
   </tr>
   <% end %>
+  </tbody>
 </table>
 
 <% if can? :modify, Grant %>
-  <%= link_to "Create Grant", new_grant_path %>
+  <%= link_to "Create Grant", new_grant_path, class: 'btn btn-primary' %>
 <% end %>

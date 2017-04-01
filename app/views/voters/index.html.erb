@@ -20,7 +20,8 @@
         <p>Please vote on these before the meeting!</p>
         <% end %>
         <br />
-        <table border="1" cellpadding="4">
+        <table class="table table-striped">
+          <thead>
           <tr>
             <th>Project Name</th>
             <th>Grant</th>
@@ -32,6 +33,8 @@
             <th>F</th>
             <th></th>
           </tr>
+          </thead>
+          <tbody>
           <% @grant_submissions_display.each do |gs| %>
             <tr>
               <td><%= gs.name %></td>
@@ -70,6 +73,7 @@
               <td><div id="save<%= gs.id %>" style="width: 60px"></div></td>
             </tr>
           <% end %>
+          </tbody>
         </table>
       <% end %>
 
@@ -92,8 +96,6 @@
     <% else %>
       <b>Voting is not open at this time, relax.</b>
     <% end %>
-
-
   <% end %>
 <% end %>
 
