@@ -42,7 +42,6 @@ Rails.application.routes.draw do
 
   post 'admins/assign' => 'admins#assign'
   post 'admins/clear_assignments' => 'admins#clear_assignments'
-  get 'admins/reveal' => 'admins#reveal'
   post 'admins/verify' => 'admins#verify'
   post 'admins/send_fund_emails' => 'admins#send_fund_emails'
   post 'admins/send_question_emails' => 'admins#send_question_emails'

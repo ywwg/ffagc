@@ -38,10 +38,6 @@ class AdminsController < ApplicationController
     end
   end
 
-  def reveal
-    init_submissions
-  end
-
   def verify
     voter = Voter.find(params[:id])
     voter.verified = params[:verify]
@@ -204,24 +200,7 @@ class AdminsController < ApplicationController
     end
   end
 
-  def init_submissions
-    active_submissions = GrantSubmission.where(grant_id: active_vote_grants)
-    @grant_submissions = GrantSubmission.all.order(grant_id: :asc)
-
-    @results = VoteResult.results(@grant_submissions)
-
-    @submissions_by_score = active_submissions.sort_by{|gs| [gs.grant_id, -gs.avg_score]}
-    @submissions_by_id = active_submissions.sort_by{|gs| gs.grant_id}
-  end
-
   def index
-    init_submissions
-    @submissions_display = @submissions_by_id
-    @show_scored = false
-    if params[:scored] == "true"
-      @show_scored = true
-      @submissions_display = @submissions_by_score
-    end
   end
 
   def artists
@@ -244,7 +223,24 @@ class AdminsController < ApplicationController
   end
 
   def submissions
-    init_submissions
+    @scope = params[:scope] || 'all'
+    @order = params[:order] || 'name'
+    @revealed = params[:reveal] == 'true'
+    @show_scores = params[:scores] == 'true'
+
+    if @scope == 'active'
+      @grant_submissions = GrantSubmission.where(grant_id: active_vote_grants)
+    else
+      @grant_submissions = GrantSubmission.all
+    end
+
+    @results = VoteResult.results(@grant_submissions)
+
+    if @order == 'score'
+      @grant_submissions = @grant_submissions.to_a.sort_by { |gs| [gs.grant_id, -gs.avg_score] }
+    elsif @order == 'name'
+      @grant_submissions = @grant_submissions.to_a.sort_by { |gs| gs.name }
+    end
   end
 
   private
