@@ -95,7 +95,7 @@ GEM
       activemodel (>= 3.0)
       mime-types (>= 1.0)
     formatador (0.2.5)
-    formtastic (3.1.4)
+    formtastic (3.1.5)
       actionpack (>= 3.2.13)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -252,6 +252,9 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     shellany (0.0.1)
+    simple_form (3.4.0)
+      actionpack (> 4, < 5.1)
+      activemodel (> 4, < 5.1)
     sixarm_ruby_unaccent (1.1.1)
     slop (3.6.0)
     sort_alphabetical (1.1.0)
@@ -316,6 +319,7 @@ DEPENDENCIES
   rubocop
   sass-rails
   sdoc (~> 0.4.0)
+  simple_form
   spring
   sqlite3
   therubyracer

@@ -45,6 +45,7 @@ gem 'therubyracer'
 # gem 'clearance'
 
 gem 'formtastic'
+gem 'simple_form'
 
 # Form validation
 gem 'judge', '~> 2.0.5'
