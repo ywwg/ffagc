@@ -223,7 +223,7 @@ class AdminsController < ApplicationController
   end
 
   def submissions
-    @scope = params[:scope] || 'all'
+    @scope = params[:scope] || 'active'
     @order = params[:order] || 'name'
     @revealed = params[:reveal] == 'true'
     @show_scores = params[:scores] == 'true'
