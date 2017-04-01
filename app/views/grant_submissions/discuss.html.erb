@@ -13,7 +13,13 @@
             <h3 class="panel-title">Questions from Committee</h3>
           </div>
           <div class="panel-body">
-            <%= f.text_area :questions, class: 'form-control', rows: '20', disabled: @question_edit_disable  %>
+            <% if @question_edit_disable %>
+              <blockquote>
+                <%= @grant_submission.questions %>
+              </blockquote>
+            <% else %>
+              <%= f.text_area :questions, class: 'form-control', rows: '20' %>
+            <% end %>
           </div>
         </div>
       </div>
