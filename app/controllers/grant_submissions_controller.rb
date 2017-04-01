@@ -164,21 +164,21 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def grant_update_params
-    if admin_logged_in?
-      params.require(:grant_submission).permit(:id, :name, :grant_id,
-          :requested_funding_dollars, :proposal, :granted_funding_dollars,
-          :funding_decision, :authenticity_token, :questions, :answers)
-    else
-      par = params.require(:grant_submission).permit(:id, :name, :grant_id,
-          :requested_funding_dollars, :authenticity_token, :answers)
+    allowed_params = [:name, :grant_id, :requested_funding_dollars, :answers, :proposal]
 
-      # TODO this works but doesn't seem like the correct way
-      proposal_attributes = params.require(:grant_submission).permit(proposals_attributes: :file)["proposals_attributes"]
-      if proposal_attributes.present?
-        par["proposals_attributes"] = [params.require(:grant_submission).permit(proposals_attributes: :file)["proposals_attributes"]]
-      end
-      par
+    if admin_logged_in?
+      allowed_params.push(:granted_funding_dollars, :funding_decision, :questions)
     end
+
+    par = params.require(:grant_submission).permit(allowed_params)
+
+    # TODO this works but doesn't seem like the correct way
+    proposal_attributes = params.require(:grant_submission).permit(proposals_attributes: :file)["proposals_attributes"]
+    if proposal_attributes.present?
+      par["proposals_attributes"] = [proposal_attributes]
+    end
+
+    par
   end
 
   def modify_grant_ok?(submission)
