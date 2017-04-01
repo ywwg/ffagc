@@ -1,0 +1,131 @@
+<% if (artist_logged_in? && any_submit_open?) || admin_logged_in? %>
+  <p>Please refer to the <a href="https://www.fireflyartscollective.org/participate/art-at-firefly/art-grants/" target="_blank">Firefly website</a>
+     for information on the grant submission process, rules, and funding guidelines.</p>
+  
+  <div class="alert alert-info">
+    <strong>Important Notes</strong>
+    <ul><li>This year the <strong>Anniversary Grants</strong> are called the
+       <strong>Crystal Grants</strong>.
+     </li>
+     <li>Please choose an <strong>approved funding level</strong> for the Grant you're applying
+       for.  Funding requests at values between grant levels
+       will be rounded down.</li>
+     <li><strong>Do not</strong> include any information identifying the artist(s)
+       (such as name, alias, contact information, etc) in the submission document
+       itself.  The review process can't be blind if your name is at the top
+       of the document. Therefore <strong>we will reject your proposal</strong>
+       if it contains identifying information!
+    </ul>
+  </div>
+
+  <%= simple_form_for @grant_submission do |f| %>
+		<%= f.input :name, label: "Name of Piece", required: true, validate: true %>
+
+		<%= f.association :grant, as: :radio_buttons %>
+
+		<%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }, as: :integer, html5: true  %>
+
+		<%= f.input :proposal, as: :file, label: 'Anonymized Application PDF' %>
+
+		<%= f.button :submit, class: 'btn btn-primary' %>
+		<%= link_to 'Back', artists_path %>
+  <% end %>
+	<br />
+<% elsif artist_logged_in? %>
+  Submissions are now closed
+  <br /><br />
+  <%= link_to 'Back', :controller => "artists", :action => "index" %>
+<% else %>
+  You must be logged in as an artist to modify a grant proposal. (<%= link_to "Log In", :controller => "artists", :action => "index" %>)
+  <br />
+  <br />
+  <%= link_to 'Back', :back %>
+<% end %>
+
+<script>
+  // http://stackoverflow.com/questions/574941/best-way-to-track-onchange-as-you-type-in-input-type-text/26202266#26202266
+  onload = function () {
+     var e = document.getElementById('grant_submission_requested_funding_dollars');
+     //e.oninput = myHandler;
+     e.onpropertychange = e.oninput; // for IE8
+     // e.onchange = e.oninput; // FF needs this in <select><option>...
+  };
+
+  function numericFilter() {
+    var txb = document.getElementById('grant_submission_requested_funding_dollars')
+    var max_fund_json = '<%= raw grant_max_funding_dollars_json %>';
+    var grant_id = document.getElementById("grant_submission_grant_id").value;
+    // If they haven't selected a grant, just go with 1000
+    var max_funding = 1000;
+    if (grant_id !== "") {
+      var max_fund_ob = JSON.parse(max_fund_json);
+      // I am bad at javascript.
+      for (var i = 0; i < max_fund_ob.length; i++) {
+        if (max_fund_ob[i].id == parseInt(grant_id)) {
+          max_funding = max_fund_ob[i].max_funding_dollars;
+          break;
+        }
+      }
+    }
+    txb.value = txb.value.replace(/[^\0-9]/ig, "");
+    if(parseInt(txb.value) > max_funding) {
+      txb.value = max_funding;
+    }
+  }
+
+  function validate() {
+    errors = 0;
+
+    //round decimals in funding amounts -- whole dollars only
+    var requested_funding_dollars = document.getElementById('grant_submission_requested_funding_dollars').value;
+    var requested_funding_dollars_num = parseInt(requested_funding_dollars).toFixed(0);
+    document.getElementById('grant_submission_requested_funding_dollars').value = requested_funding_dollars_num.toString();
+
+    judge.validate(document.getElementById('grant_submission_name'), {
+      valid: function(element) {
+        element.style.border = '1px solid green';
+      },
+      invalid: function(element, messages) {
+        element.style.border = '1px solid red';
+        alert('name error: ' + messages.join(','));
+        errors++;
+      }
+    });
+
+    if(document.getElementById("grant_submission_grant_id").value != "") {
+      document.getElementById("grant_submission_grant_id").style.border = '1px solid green';
+    } else {
+      errors++;
+      alert('error: please select a grant to apply for')
+      document.getElementById("grant_submission_grant_id").style.border = '1px solid red';
+    }
+
+    judge.validate(document.getElementById('grant_submission_requested_funding_dollars'), {
+      valid: function(element) {
+        element.style.border = '1px solid green';
+      },
+      invalid: function(element, messages) {
+        element.style.border = '1px solid red';
+        alert('requested funding error: ' + messages.join(','));
+        errors++;
+      }
+    });
+
+    if(document.getElementById("grant_submission_proposal").value != "") {
+      document.getElementById("grant_submission_proposal").style.border = '1px solid green';
+    } else {
+      errors++;
+      alert('error: please select your application PDF')
+      document.getElementById("grant_submission_proposal").style.border = '1px solid red';
+    }
+
+    if (errors == 0) {
+      var anon = confirm("Did you make sure your proposal is anonymous and DOES NOT include any identifying information?");
+      if (!anon) {
+        errors++;
+      }
+    }
+
+    return errors===0;
+  }
+</script>

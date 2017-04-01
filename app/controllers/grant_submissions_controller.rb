@@ -16,7 +16,7 @@ class GrantSubmissionsController < ApplicationController
     if @grant_submission.save
       redirect_to :controller => "artists", :action => "index"
     else
-      render "failure"
+      render 'new'
     end
   end
 
@@ -116,7 +116,7 @@ class GrantSubmissionsController < ApplicationController
       @grant_change_disable = true
     end
 
-    render 'edit'
+    render 'new'
   end
 
   def discuss
