@@ -57,14 +57,23 @@
             <%= number_to_currency gs.granted_funding_dollars %>
           <% end %></td>
       <% end %>
-      <td class="text-right">
-        <% if submission_has_questions?(gs.id) %>
-          <%= link_to "Answer Questions", grant_submission_discuss_path(gs), class: 'btn btn-primary' %>
-        <% end %>
-        <% if grant_submission_funded?(gs.id) %>
-          <%= link_to "Generate Contract", grant_submission_generate_contract_path(gs, format: 'pdf'), method: :post, class: 'btn btn-success btn-inline' %>
-        <% end %>
-        <%= link_to "Edit", edit_grant_submission_path(id: gs.id), class: 'btn btn-default' %>
+      <td>
+        <div class="btn-toolbar">
+          <div class="btn-group">
+            <% if submission_has_questions?(gs.id) %>
+              <%= link_to "Answer Questions", grant_submission_discuss_path(gs), class: 'btn btn-primary' %>
+            <% end %>
+            <% if grant_submission_funded?(gs.id) %>
+              <%= link_to "Generate Contract", grant_submission_generate_contract_path(gs, format: 'pdf'), method: :post, class: 'btn btn-success btn-inline' %>
+            <% end %>
+          </div>
+          <div class="btn-group pull-right">
+            <% if can? :edit, gs %>
+            <%= link_to "Edit", edit_grant_submission_path(id: gs.id), class: 'btn btn-default' %>
+            <% end %>
+            <%= link_to "View", grant_submission_path(id: gs.id), class: 'btn btn-default' %>
+          </div>
+        </div>
       </td>
     </tr>
   <% end %>
