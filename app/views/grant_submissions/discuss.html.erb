@@ -5,7 +5,7 @@
 </ol>
 
 <% if artist_logged_in? || admin_logged_in? || verified_voter_logged_in? %>
-  <%= simple_form_for @grant_submission, :html => { :onsubmit => 'return validate_discussion();'} do |f| %>
+  <%= simple_form_for @grant_submission do |f| %>
     <div class="row">
       <div class="col-md-6">
         <div class="panel panel-default">
