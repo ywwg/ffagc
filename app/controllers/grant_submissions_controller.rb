@@ -85,11 +85,7 @@ class GrantSubmissionsController < ApplicationController
         redirect_to :controller => "artists", :action => "index"
       end
     else
-      if admin_logged_in?
-        render "failure_admin"
-      else
-        render "failure_modify"
-      end
+      render 'new'
     end
   end
 
