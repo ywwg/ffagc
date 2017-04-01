@@ -51,21 +51,7 @@
 
             <%= f.input :proposal, as: :file, label: 'Anonymized Application PDF' %>
 
-            <% unless @grant_submission.proposals.empty? && @grant_submission.proposal.nil? %>
-              <ul class="list-group">
-                <% if @grant_submission.proposal.present? %>
-                  <li class="list-group-item">
-                    Original document: <%= link_to @grant_submission.proposal_identifier, @grant_submission.proposal_url, target: :blank %>
-                </li>
-                <% end %>
-              <% @grant_submission.proposals.each do |s| %>
-                <li class="list-group-item">
-                  Supplemental: <%= link_to s.file_identifier, s.file_url, target: :blank %>
-                  <%= link_to 'Delete', proposal_path(s, grant_submission_id: @grant_submission.id), method: :delete, class: 'btn btn-danger btn-xs inline pull-right', data: { confirm: 'Are you sure?' } %>
-                </li>
-              <% end %>
-              </ul>
-            <% end %>
+            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
           </div>
         </div>
       </div>

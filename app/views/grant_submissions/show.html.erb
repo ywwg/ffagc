@@ -29,20 +29,7 @@
         <h3 class="panel-title">Documents</h3>
       </div>
       <div class="panel-body">
-        <% unless @grant_submission.proposals.empty? && @grant_submission.proposal.nil? %>
-          <ul class="list-group">
-            <% if @grant_submission.proposal.present? %>
-              <li class="list-group-item">
-                Original document: <%= link_to @grant_submission.proposal_identifier, @grant_submission.proposal_url, target: :blank %>
-            </li>
-            <% end %>
-          <% @grant_submission.proposals.each do |s| %>
-            <li class="list-group-item">
-              Supplemental: <%= link_to s.file_identifier, s.file_url, target: :blank %>
-            </li>
-          <% end %>
-          </ul>
-        <% end %>
+        <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
       </div>
     </div>
   </div>
