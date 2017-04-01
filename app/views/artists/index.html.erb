@@ -43,7 +43,7 @@
               $<%= gs.granted_funding_dollars %>
               <% end %></td>
         <% end %>
-        <td><%= button_to "Modify", artists_modify_grant_path(id: gs.id), class: 'btn btn-default' %></td>
+        <td><%= link_to "Edit", edit_grant_submission_path(id: gs.id), class: 'btn btn-default' %></td>
         <% if any_grant_submission_funded?(current_artist.id)%>
           <td><% if grant_submission_funded?(gs.id) %>
               <%= button_to "Generate Contract", :controller => "grant_submissions", :action => "generate_contract", :format => "pdf", :submission_id => gs.id %>
