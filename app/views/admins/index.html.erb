@@ -1,5 +1,3 @@
-<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
-
 <%= render partial: 'shared/links' %>
 
 <% if admin_logged_in? %>
@@ -17,7 +15,8 @@
      | <% if @show_scored %><b>Show Scores</b><% else %><%= link_to "Show Scores", :controller => "admins", :action => "index", :scored => "true" %><% end %>
   |</p>
 
-  <table border="1">
+  <table class="table table-striped">
+    <thead>
     <tr>
       <th>Grant</th>
       <th>Name</th>
@@ -26,9 +25,11 @@
       <% if @show_scored %><th>Average Score</th> <% end %>
       <th>Decision Finalized</th>
       <th>Granted $</th>
-      <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);" %></th>
+      <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);", class: 'btn btn-default' %></th>
     </tr>
+    </thead>
 
+    <tbody>
     <% @submissions_display.each do |gs| %>
     <tr>
       <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
@@ -49,11 +50,11 @@
     <% end %>
     <tr>
       <td colspan="3" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
-      <td><%= button_to "Notify Questions", :controller => "admins", :action => "send_question_emails" %></td>
+      <td><%= button_to "Notify Questions", admins_send_question_emails_path, class: 'btn btn-warning' %></td>
       <td colspan="<%= @show_scored ? '3' : '2' %>" align="right"><form name="send_email_form">
           <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
           </form></td>
-      <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);" %></td>
+      <td align="center"><%= button_to "Finalize", '#', onclick: "confirm_selected(event);", class: 'btn btn-warning' %></td>
     </tr>
     <tr>
       <td colspan="5" align="right">Total proposed grants money</td>
@@ -63,21 +64,31 @@
       <td colspan="5" align="right">Total finalized grant money</td>
       <td align="right">$<%= active_grant_funding_total(true) %></td>
     </tr>
+    </tbody>
   </table>
-  <table style="border:none;">
-    <tr><td style="border:none;"><%= button_to "Assign", :controller => "admins", :action => "assign" %></td>
-      <td style="border:none;"><%= button_to "Clear Assignments", :controller => "admins", :action => "clear_assignments" %></td>
+
+  <table>
+		<tr>
+      <td>
+        <%= button_to "Assign", admins_assign_path, class: 'btn btn-info', type: 'button' %>
+      </td>
+      <td>
+        <%= button_to "Clear Assignments", admins_clear_assignments_path , class: 'btn btn-warning', type: 'button' %>
+      </td>
     </tr>
   </table>
 
 
   <h2>Assignments</h2>
-  <table border="1">
+  <table class="table">
+    <thead>
     <tr>
       <th>Name</th>
       <th>Email</th>
       <th>Assigned</th>
     </tr>
+    </thead>
+    <tbody>
     <% @verified_voters.each do |vv| %>
     <tr>
       <td><%= vv.name %></td>
@@ -85,6 +96,7 @@
       <td><%= vv.assigned.join(', ').html_safe %></td>
     </tr>
     <% end %>
+    </tbody>
   </table>
 <% else %>
   <h2> No active grants for vote at this time </h2>

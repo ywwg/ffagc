@@ -6,7 +6,8 @@ gem 'rails', '4.2.7.1'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails'
+gem 'bootstrap-sass', '~> 3.3.6'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
@@ -44,6 +45,7 @@ gem 'therubyracer'
 # gem 'clearance'
 
 gem 'formtastic'
+gem 'simple_form'
 
 # Form validation
 gem 'judge', '~> 2.0.5'

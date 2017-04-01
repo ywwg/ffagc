@@ -1,25 +1,60 @@
-<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
+<ol class="breadcrumb">
+  <li><%= link_to "Artists", admins_artists_path %></li>
+  <li class="active"><%= @artist.name %></li>
+</ol>
 
-<% if admin_logged_in? %>
-  <h2>Artist Information for <%= @artist.name %></h2>
-  <p>Contact: <%= @artist.contact_name%><br/>
-    Email: <%= @artist.email%><br/>
-    Phone: <%= @artist.contact_phone %><br/>
-    Address: <%= @artist.contact_street %><br/>
-    <%= @artist.contact_city %>, <%= @artist.contact_state %>
-    <%= @artist.contact_zipcode %> <br/>
-    <%= @artist.country_name %>
-  </p>
-  <h2>Survey Responses</h2>
-  <% if @artist_survey == nil %><p>Error: could not locate survey responses</p>
-  <% else %>
-    <p>Has attended firefly? <% if @artist_survey.has_attended_firefly %>Yes<% else %>No<%end%><br/>
-      <blockquote><%= @artist_survey.has_attended_firefly_desc %></blockquote></p>
-    <p>Has attended a regional? <% if @artist_survey.has_attended_regional %>Yes<% else %>No<%end%><br/>
-      <blockquote><%= @artist_survey.has_attended_regional_desc %></blockquote></p>
-    <p>Has attended Burning Man? <% if @artist_survey.has_attended_bm %>Yes<% else %>No<%end%><br/>
-      <blockquote><%= @artist_survey.has_attended_bm_desc %></blockquote></p>
-    <p>Permission to use grant as example? <% if @artist_survey.can_use_as_example %>Yes<% else %>No<%end%></p>
-  <% end %>
-  <%= link_to "Back", :controller => "admins", :action => "artists" %>
-<% end %>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Survey Responses</h3>
+      </div>
+      <div class="panel-body">
+        <% if @artist_survey.present? %>
+          <p>Has attended firefly? <% if @artist_survey.has_attended_firefly %>Yes<% else %>No<%end%></p>
+          <% if @artist_survey.has_attended_firefly_desc.present? %>
+          <blockquote><%= @artist_survey.has_attended_firefly_desc %></blockquote>
+          <% end %>
+
+          <p>Has attended a regional? <% if @artist_survey.has_attended_regional %>Yes<% else %>No<%end%></p>
+          <% if @artist_survey.has_attended_regional_desc.present? %>
+          <blockquote><%= @artist_survey.has_attended_regional_desc %></blockquote>
+          <% end %>
+
+          <p>Has attended Burning Man? <% if @artist_survey.has_attended_bm %>Yes<% else %>No<%end%><br/>
+          <% if @artist_survey.has_attended_bm_desc.present? %>
+          <blockquote><%= @artist_survey.has_attended_bm_desc %></blockquote>
+          <% end %>
+
+          <p>Permission to use grant as example? <% if @artist_survey.can_use_as_example %>Yes<% else %>No<%end%></p>
+        <% else %>
+          <p>Could not locate survey responses.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Contact Information</h3>
+      </div>
+      <div class="panel-body">
+        <dl>
+          <dt>Contact</dt>
+          <dd><%= @artist.contact_name %></dd>
+
+          <dt>Email</dt>
+          <dd><%= mail_to @artist.email %></dd>
+
+          <dt>Phone</dt>
+          <dd><%= @artist.contact_phone %></dd>
+
+          <dt>Address</dt>
+          <dd><%= @artist.contact_street %><br />
+          <%= @artist.contact_city %>, <%= @artist.contact_state %> <%= @artist.contact_zipcode %> <br/>
+          <%= @artist.country_name %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

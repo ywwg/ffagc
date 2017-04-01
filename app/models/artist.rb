@@ -4,7 +4,7 @@ class Artist < ActiveRecord::Base
 
   has_secure_password
 
-  has_many :artist_surveys
+  has_one :artist_survey
   has_many :grant_submissions
 
   validates :name, presence: true, length: { minimum: 4 }
@@ -16,6 +16,6 @@ class Artist < ActiveRecord::Base
 
   def country_name
     country = ISO3166::Country[contact_country]
-    country.translations[I18n.locale.to_s] || country.name
+    country&.translations[I18n.locale.to_s] || country.name
   end
 end

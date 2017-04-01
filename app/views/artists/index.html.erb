@@ -8,11 +8,12 @@
   <% end %>
 
   <% if artist_has_submission? %>
-    <h2>Your Submissions:</h2>
+    <h2>Your Submissions</h2>
     <% if any_grant_submission_funded?(current_artist.id)%>
       <div align="center"><h3>OMG you've been funded!</h3></div>
     <% end %>
-    <table border="1" cellpadding="4">
+    <table class="table table-striped">
+      <thead>
       <tr>
         <th><h4>Submission Title</h4></th>
         <th><h4>Grant Category</h4></th>
@@ -26,6 +27,8 @@
         <th></th>
         <% end %>
       </tr>
+      </thead>
+      <tbody>
     <% @grant_submissions.each do |gs| %>
       <tr>
         <td><%= gs.name %></td>
@@ -40,7 +43,7 @@
               $<%= gs.granted_funding_dollars %>
               <% end %></td>
         <% end %>
-        <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
+        <td><%= button_to "Modify", artists_modify_grant_path(id: gs.id), class: 'btn btn-default' %></td>
         <% if any_grant_submission_funded?(current_artist.id)%>
           <td><% if grant_submission_funded?(gs.id) %>
               <%= button_to "Generate Contract", :controller => "grant_submissions", :action => "generate_contract", :format => "pdf", :submission_id => gs.id %>
@@ -48,10 +51,11 @@
         <% end %>
       </tr>
     <% end %>
+      </tbody>
     </table>
     <br/>
     <% if any_submit_open? %>
-      <%= link_to "Submit another Grant Proposal", :controller => "grant_submissions", :action => "index" %>
+      <%= link_to "Submit another Grant Proposal", new_grant_submission_path, class: 'btn btn-primary' %>
     <% else %>
       <p>No submissions open at this time.</p>
     <% end %>
