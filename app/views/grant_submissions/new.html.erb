@@ -70,12 +70,13 @@
       </div>
     </div>
 
-    <p>
+    <p class="text-center">
       <%= f.button :submit, class: 'btn btn-primary' %>
+      <br />
       <%= link_to 'Back', @back_link %>
     </p>
   <% end %>
-  <br />
+
 <% elsif artist_logged_in? %>
   Submissions are now closed
   <br /><br />
