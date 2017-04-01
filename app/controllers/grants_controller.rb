@@ -28,7 +28,7 @@ class GrantsController < ApplicationController
     if @grant.update(resource_params)
       redirect_to action: 'index'
     else
-      render 'failure'
+      render 'new'
     end
   end
 

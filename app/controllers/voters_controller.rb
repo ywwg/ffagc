@@ -119,7 +119,7 @@ class VotersController < ApplicationController
         @votes[gs.id] = vote
 
         #assignments
-        vsa = current_user.voter_submission_assignment.where(grant_submission: gs)
+        vsa = current_user.voter_submission_assignments.where(grant_submission: gs)
 
         if vsa.exists?
           gs.assigned = 1

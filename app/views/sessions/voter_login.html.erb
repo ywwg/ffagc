@@ -1,0 +1,15 @@
+<%= link_to "Register", voters_signup_path %> as a member of the voting committee.
+
+<h2>Have an account?</h2>
+
+<%= form_tag(controller: 'sessions', action:'create_voter') do %>
+  <fieldset>
+  <%= text_field :session, :email, :placeholder => "Email Address" %>
+    <br />
+  <%= password_field :session, :password, :placeholder => "Password" %>
+    <br />
+  <%= submit_tag("Sign in", class: "button") %>
+  </fieldset>
+<% end %>
+
+<%= link_to "(forgot password)", new_password_reset_path(type: "voters") %>

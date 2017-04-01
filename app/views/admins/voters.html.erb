@@ -1,10 +1,9 @@
-<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
-
 <% if admin_logged_in? %>
   <%= render partial: 'shared/links' %>
 
   <h2>Voters</h2>
-  <table border="1">
+  <table class="table table-striped">
+    <thead>
     <tr>
       <th>Name</th>
       <th>Email</th>
@@ -14,6 +13,8 @@
           send email when verifying <input type="checkbox" id="send_verify_email_checkbox" checked="true">
           </form></th>
     </tr>
+    </thead>
+    <tbody>
     <% @voters.each do |v| %>
     <tr>
       <td><%= link_to v['name'], :controller => "admins", :action => "voter_info", :id => v['id']%></td>
@@ -22,13 +23,14 @@
       <td><%if v['verified'] %>Yes<% else %>No<% end %></td>
       <td>
         <% if v['verified'] %>
-          <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %>
+          <%= button_to "Unverify", admins_verify_path(id: v['id'], verify: 0), class: 'btn btn-default' %>
         <% else %>
-          <%= button_to "Verify", '#', :onclick => "do_verify(event, #{v['id']});" %>
+          <%= button_to "Verify", '#', :onclick => "do_verify(event, #{v['id']});", class: 'btn btn-primary' %>
         <% end %>
       </td>
     </tr>
     <% end %>
+    </tbody>
   </table>
 <% end %>
 
