@@ -42,21 +42,78 @@ describe VotersController do
   end
 
   describe '#index' do
-    it 'shows index template' do
-      get 'index'
-      assert_template 'index'
-    end
-
     context 'with activated voter' do
       let!(:voter) { FactoryGirl.create(:voter, :activated) }
 
       before do
-        sign_in_voter(voter.id)
+        sign_in voter
       end
 
       it 'shows index template' do
         get 'index'
         assert_template 'index'
+      end
+    end
+
+    context 'with user who cannot vote' do
+      let!(:user) { FactoryGirl.create(:artist) }
+
+      before do
+        sign_in user
+      end
+
+      it 'redirects with flash' do
+        get 'index'
+        expect(response).to redirect_to('/')
+        expect(flash).not_to be_empty
+      end
+    end
+  end
+
+  describe '#update' do
+    let!(:voter) { FactoryGirl.create(:voter) }
+    let!(:grant_1) { FactoryGirl.create(:grant) }
+    let!(:grant_2) { FactoryGirl.create(:grant) }
+
+    let(:grants_voters_params) do
+      [
+        [grant_1.id, '0'],
+        [grant_2.id, '1']
+      ]
+    end
+
+    def go!
+      put 'update', id: voter.id, grants_voters: grants_voters_params
+    end
+
+    before do
+      sign_in user
+    end
+
+    context 'when voter signed in' do
+      let!(:user) { FactoryGirl.create(:voter) }
+
+      it 'redirects to root' do
+        go!
+        expect(response).to redirect_to('/')
+      end
+    end
+
+    context 'when admin logged in' do
+      let!(:user) { FactoryGirl.create(:admin) }
+
+      it 'creates new grants_voters' do
+        go!
+        expect(GrantsVoter.where(grant: grant_2, voter: voter)).to exist
+      end
+
+      context 'with existing grants_voter' do
+        let!(:grants_voter) { FactoryGirl.create(:grants_voter, grant_id: 1, voter: voter) }
+
+        it 'deletes' do
+          go!
+          expect(GrantsVoter.where(id: grants_voter.id)).not_to exist
+        end
       end
     end
   end

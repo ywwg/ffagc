@@ -1,12 +1,10 @@
-<div class="container">
-  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Failure</h1>
-  <h1>Password Reset Failed</h1>
-  <% if flash.any? %>
-    <% flash.each do |name, msg| -%>
-      <%= content_tag :div, msg, class: name %>
-    <% end -%>
-    For help please contact us at: <a href="mailto:grants@fireflyartscollective.org">grants@fireflyartscollective.org</a>
-  <% else %>
-    We're not sure why this happened. Please try again or contact us at: <a href="mailto:grants@fireflyartscollective.org">grants@fireflyartscollective.org</a>
-  <% end %>
-</div>
+<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Failure</h1>
+<h1>Password Reset Failed</h1>
+<% if flash.any? %>
+  <% flash.each do |name, msg| -%>
+    <%= content_tag :div, msg, class: name %>
+  <% end -%>
+  For help please contact us at: <a href="mailto:grants@fireflyartscollective.org">grants@fireflyartscollective.org</a>
+<% else %>
+  We're not sure why this happened. Please try again or contact us at: <a href="mailto:grants@fireflyartscollective.org">grants@fireflyartscollective.org</a>
+<% end %>

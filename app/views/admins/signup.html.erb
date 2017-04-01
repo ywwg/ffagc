@@ -1,26 +1,24 @@
-<div class="container">
-  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admin Creation</h1>
+<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admin Creation</h1>
 
-  <% if admin_logged_in? || !admin_exists? %>
+<% if admin_logged_in? || !admin_exists? %>
 
-    <%= semantic_form_for @admin, :html => { :onsubmit => 'return validate();'} do |f| %>
+  <%= semantic_form_for @admin, :html => { :onsubmit => 'return validate();'} do |f| %>
 
-      <h2>New Admin Details:</h2>
-      <%= f.inputs do %>
-        <%= f.input :name, :label => "Full Name", :required => true, :validate => true %>
-        <%= f.input :email, :label => "Email Address", :required => true, :validate => true %>
-        <%= f.input :password, :label => "Password", :required => true, :validate => true %>
-        <%= f.input :password_confirmation, :label => "Password Confirmation", :required => true, :validate => true %>
-      <% end %>
-      <br />
-      <fieldset><%= submit_tag("Create", class: "button")%></fieldset>
+    <h2>New Admin Details:</h2>
+    <%= f.inputs do %>
+      <%= f.input :name, :label => "Full Name", :required => true, :validate => true %>
+      <%= f.input :email, :label => "Email Address", :required => true, :validate => true %>
+      <%= f.input :password, :label => "Password", :required => true, :validate => true %>
+      <%= f.input :password_confirmation, :label => "Password Confirmation", :required => true, :validate => true %>
     <% end %>
-  <% else %>
-    <p>Must have empty db or be logged in as admin to create another admin.</p>
+    <br />
+    <fieldset><%= submit_tag("Create", class: "button")%></fieldset>
   <% end %>
+<% else %>
+  <p>Must have empty db or be logged in as admin to create another admin.</p>
+<% end %>
 
-  <script>
-
+<script>
   function validate() {
 
   errors = 0;
@@ -72,6 +70,4 @@
   return errors===0;
 
   }
-
-  </script>
-</div>
+</script>

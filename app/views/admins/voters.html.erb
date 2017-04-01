@@ -1,49 +1,36 @@
-<div class="container">
-  <% if admin_logged_in? %>
-  | <%= link_to "Artist Page", :controller => "artists", :action => "index" %>
-  | <%= link_to "Voter Page", :controller => "voters", :action => "index" %>
-  | <%= link_to "Admin Page", :controller => "admins", :action => "index" %>
-  |
-  <% end %>
-  <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
+<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
 
-  <% if admin_logged_in? %>
-    <h3>| <%= link_to "Index", :controller => "admins", :action => "index" %>
-    | <%= link_to "Submissions", :controller => "admins", :action => "submissions" %>
-    | <%= link_to "Artists", :controller => "admins", :action => "artists" %>
-    | Voters
-    | <%= link_to "Grants", :controller => "admins", :action => "grants" %>
-    |</h3>
+<% if admin_logged_in? %>
+  <%= render partial: 'shared/links' %>
 
-    <h2>Voters</h2>
-    <table border="1">
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Grants</th>
-        <th>Verified</th>
-        <th><form name="send_email_form">
-            send email when verifying <input type="checkbox" id="send_verify_email_checkbox" checked="true">
-            </form></th>
-      </tr>
-      <% @voters.each do |v| %>
-      <tr>
-        <td><%= link_to v['name'], :controller => "admins", :action => "voter_info", :id => v['id']%></td>
-        <td><%= v['email'] %></td>
-        <td><%= Grant.joins(:grants_voters).where('grants_voters.voter_id' => v.id).pluck(:name).join(", ").html_safe %></td>
-        <td><%if v['verified'] %>Yes<% else %>No<% end %></td>
-        <td>
-          <% if v['verified'] %>
-            <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %>
-          <% else %>
-            <%= button_to "Verify", '#', :onclick => "do_verify(event, #{v['id']});" %>
-          <% end %>
-        </td>
-      </tr>
-      <% end %>
-    </table>
-  <% end %>
-</div>
+  <h2>Voters</h2>
+  <table border="1">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Grants</th>
+      <th>Verified</th>
+      <th><form name="send_email_form">
+          send email when verifying <input type="checkbox" id="send_verify_email_checkbox" checked="true">
+          </form></th>
+    </tr>
+    <% @voters.each do |v| %>
+    <tr>
+      <td><%= link_to v['name'], :controller => "admins", :action => "voter_info", :id => v['id']%></td>
+      <td><%= v['email'] %></td>
+      <td><%= Grant.joins(:grants_voters).where('grants_voters.voter_id' => v.id).pluck(:name).join(", ").html_safe %></td>
+      <td><%if v['verified'] %>Yes<% else %>No<% end %></td>
+      <td>
+        <% if v['verified'] %>
+          <%= button_to "Unverify", :controller => "admins", :action => "verify", :id => v['id'], :verify => 0 %>
+        <% else %>
+          <%= button_to "Verify", '#', :onclick => "do_verify(event, #{v['id']});" %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+<% end %>
 
 <script>
 function do_verify(event, id) {
@@ -55,4 +42,3 @@ function do_verify(event, id) {
   return false;
 }
 </script>
-

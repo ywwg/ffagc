@@ -66,6 +66,8 @@ gem 'country_select'
 
 gem 'dotenv'
 
+gem 'cancancan'
+
 group :test, :development do
   gem 'pry'
 
