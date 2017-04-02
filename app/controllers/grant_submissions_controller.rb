@@ -69,6 +69,8 @@ class GrantSubmissionsController < ApplicationController
   def index
     authorize! :index, GrantSubmission
     @grant_submissions = GrantSubmission.accessible_by(current_ability)
+
+    @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
   end
 
   def edit

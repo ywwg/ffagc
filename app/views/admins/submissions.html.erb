@@ -58,11 +58,9 @@
       <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
       <% end %>
       <td><% if gs.funding_decision %>Yes<% else %>No<% end %></td>
-      <td align="right">
-        <% if gs.granted_funding_dollars != nil %>
-          $<%= gs.granted_funding_dollars %>
-        <% else %>$0
-        <% end %></td>
+      <td>
+        <%= render partial: 'grant_submissions/funding_table', locals: { grant_submission: gs }%>
+      </td>
       <% if @revealed %>
         <td><%= (Artist.where(id: gs.artist_id).take).name rescue "Unknown" %></td>
         <td><%= (Artist.where(id: gs.artist_id).take).contact_name rescue "Unknown" %></td>
