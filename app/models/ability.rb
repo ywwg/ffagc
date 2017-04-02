@@ -14,6 +14,10 @@ class Ability
 
     # Allow an initial Admin to be crated by anyone
     can :manage, Admin unless Admin.exists?
+
+    can [:new, :create], Artist
+    can [:new, :create], Voter
+
     can :read, Grant, hidden: false
 
     if user.is_a?(Admin)
