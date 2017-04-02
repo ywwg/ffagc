@@ -25,9 +25,9 @@ class ArtistsController < ApplicationController
       rescue
         flash[:warning] = 'Error sending email confirmation'
       end
-    else
-      render 'new'
     end
+
+    render 'new'
   end
 
   private
