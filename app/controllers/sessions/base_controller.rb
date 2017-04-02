@@ -4,6 +4,7 @@ class Sessions::BaseController < ApplicationController
   def new
     if resource_logged_in?
       redirect_to after_create_path
+      return
     end
 
     render 'new'
@@ -15,6 +16,7 @@ class Sessions::BaseController < ApplicationController
 
     if @resource.present? && requires_activation? && !@resource.activated?
       redirect_to account_activations_unactivated_path(type: type_name, email: @email)
+      return
     end
 
     if @resource&.authenticate(params[:session][:password])
