@@ -24,12 +24,13 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <% if admin_logged_in? %>
-            <li><%= link_to 'Artist Page', artists_path %></li>
-            <li><%= link_to 'Voter Page', voters_path %></li>
-            <li><%= link_to 'Admin Page', admins_path %></li>
+            <li><%= link_to 'Admin Panel', admins_path %></li>
           <% end %>
-          <% if artist_logged_in? %>
+          <% if admin_logged_in? || artist_logged_in? %>
             <li><%= link_to 'Submissions', grant_submissions_path %></li>
+          <% end %>
+          <% if voter_logged_in? %>
+            <li><%= link_to 'Voting', voters_path %></li>
           <% end %>
         </ul>
         <ul class="nav navbar-nav navbar-right">
