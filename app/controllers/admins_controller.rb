@@ -5,7 +5,7 @@ class AdminsController < ApplicationController
   before_filter :init_voters
   before_filter :verify_admin, except: [:create, :index, :signup]
 
-  def signup
+  def new
     @can_create_admin = can_create_admin?
   end
 

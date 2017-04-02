@@ -16,8 +16,6 @@ Rails.application.routes.draw do
 
   get 'admins/' => 'admins#index'
   post 'admins/index' => 'admins#index'
-  get 'admins/signup' => 'admins#signup'
-  post 'admins/signup' => 'admins#create'
   get 'admins/artists' => 'admins#artists'
   get 'admins/artist_info' => 'admins#artist_info'
   get 'admins/voters' => 'admins#voters'
@@ -38,8 +36,10 @@ Rails.application.routes.draw do
   post 'admins/send_question_emails' => 'admins#send_question_emails'
 
 
-  resources :artists, :admins, :grant_submissions
+  resources :artists, :grant_submissions
   resources :grants, except: [:show]
+
+  resources :admins, only: [:new, :create, :index]
 
   resources :grant_submissions do
     member do

@@ -2,7 +2,7 @@
 
 <% if admin_logged_in? %>
 <p>
-  (<%= link_to "Create", :controller => "admins", :action => "signup" %> additional admin account)
+  (<%= link_to "Create", new_admin_path %> additional admin account)
 </p>
 
 <% if any_vote_open? %>
