@@ -254,10 +254,7 @@ class AdminsController < ApplicationController
   end
 
   def verify_admin
-    unless can? :manage, :all
-      redirect_to '/'
-      return
-    end
+    authorize! :manage, :all
   end
 
   def init_admin
