@@ -32,6 +32,7 @@ class AdminsController < ApplicationController
     render 'new'
   end
 
+  # TODO: endpoint does not belong here
   def verify
     @voter = Voter.find(params[:id])
     authorize! :verify, @voter
@@ -197,18 +198,22 @@ class AdminsController < ApplicationController
     end
   end
 
+  # TODO: endpoint does not belong here
   def artists
   end
 
+  # TODO: endpoint does not belong here
   def artist_info
     id = params.require(:id)
     @artist = Artist.find(id)
     @artist_survey = ArtistSurvey.where(artist_id: id).take
   end
 
+  # TODO: endpoint does not belong here
   def voters
   end
 
+  # TODO: endpoint does not belong here
   def voter_info
     id = params.require(:id)
     @voter = Voter.find(id)
@@ -216,6 +221,7 @@ class AdminsController < ApplicationController
     @grants = Grant.all
   end
 
+  # TODO: endpoint does not belong here
   def submissions
     @scope = params[:scope] || 'active'
     @order = params[:order] || 'name'
