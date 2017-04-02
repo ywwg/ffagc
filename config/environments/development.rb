@@ -49,9 +49,5 @@ Rails.application.configure do
   # This is the hostname that will be used in links inside emails
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = Rails.application.secrets.smtp.merge({
-    authentication: 'login',
-    ssl: true,
-  })
+  config.action_mailer.delivery_method = :letter_opener
 end
