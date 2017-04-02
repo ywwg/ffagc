@@ -66,7 +66,10 @@ describe Ability do
     context 'when not activated' do
       let!(:user) { FactoryGirl.create(:artist) }
 
-      it { is_expected.not_to be_able_to(:manage, artist_survey) }
+      it { is_expected.to be_able_to(:manage, user) }
+      it { is_expected.to be_able_to(:manage, artist_survey) }
+
+      it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
       it { is_expected.not_to be_able_to(:manage, grant_submission) }
       it { is_expected.not_to be_able_to(:manage, proposal) }
     end
@@ -104,10 +107,13 @@ describe Ability do
     context 'when not activated' do
       let(:user) { FactoryGirl.create(:voter) }
 
+      it { is_expected.to be_able_to(:manage, user) }
+      it { is_expected.to be_able_to(:manage, voter_survey) }
+
       it { is_expected.not_to be_able_to(:vote, GrantSubmission.new) }
 
       it { is_expected.not_to be_able_to(:manage, vote) }
-      it { is_expected.not_to be_able_to(:manage, voter_survey) }
+      it { is_expected.not_to be_able_to(:manage, VoterSurvey.new) }
       it { is_expected.not_to be_able_to(:read, voter_submission_assignment) }
       it { is_expected.not_to be_able_to(:read, GrantSubmission.new) }
     end

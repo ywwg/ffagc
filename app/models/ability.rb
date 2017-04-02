@@ -20,21 +20,29 @@ class Ability
       can :manage, :all
     end
 
-    if user.is_a?(Artist) && user.activated?
-      can :manage, GrantSubmission, artist_id: user.id
+    if user.is_a?(Artist)
+      can :manage, Artist, id: user.id
       can :manage, ArtistSurvey, artist_id: user.id
-      can :manage, Proposal, grant_submission_id: user.grant_submission_ids
+
+      if  user.activated?
+        can :manage, GrantSubmission, artist_id: user.id
+        can :manage, Proposal, grant_submission_id: user.grant_submission_ids
+      end
     end
 
-    if user.is_a?(Voter) && user.activated?
-      can :vote, GrantSubmission
-
+    if user.is_a?(Voter)
+      can :manage, Voter, id: user.id
       can :manage, VoterSurvey, voter_id: user.id
-      can :manage, Vote, voter_id: user.id
-      # TODO: should voters be able to change their 'GrantVoter`s?
 
-      can :read, GrantSubmission
-      can :read, VoterSubmissionAssignment, voter_id: user.id
+      if user.activated?
+        can :vote, GrantSubmission
+
+        can :manage, Vote, voter_id: user.id
+        # TODO: should voters be able to change their 'GrantVoter`s?
+
+        can :read, GrantSubmission
+        can :read, VoterSubmissionAssignment, voter_id: user.id
+      end
     end
   end
 end
