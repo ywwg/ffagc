@@ -1,6 +1,5 @@
 <%= render partial: 'shared/links' %>
 
-<% if admin_logged_in? %>
 <p>
   (<%= link_to "Create", new_admin_path %> additional admin account)
 </p>
@@ -38,6 +37,7 @@
     </tbody>
   </table>
 <% else %>
-  <h2> No active grants for vote at this time </h2>
-<% end %>
+  <div class="alert alert-info">
+    No active grants for vote at this time
+  </div>
 <% end %>
