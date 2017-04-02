@@ -1,11 +1,11 @@
 class AccountActivationsController < ApplicationController
-  before_action :redirect_if_current_user_activated, only: [:show, :create]
-
   # this GET request action can edit a user
   def show
     @type = params[:type]
     @email = params[:email]
     @user = UserFinder.find_by_email(@type, @email)
+
+    redirect_if_current_user_activated and return
 
     if @user&.activation_token_valid?(params[:id])
       @user.activate!
@@ -19,22 +19,24 @@ class AccountActivationsController < ApplicationController
   # Reset activation token and send activation email
   def create
     @user = current_user
-    authorize! :view, @user
+    authorize! :manage, @user
 
     @type = UserFinder.type_from_user(@user)
 
-    raise if @user.activated? || @user.nil?
+    begin
+      redirect_if_current_user_activated and return
 
-    @user.create_activation_digest
-    @user.save!
+      raise if @user.activated? || @user.nil?
 
-    UserMailer.account_activation(@type, @user).deliver_now
+      @user.create_activation_digest
+      @user.save!
+
+      UserMailer.account_activation(@type, @user).deliver_now
+    rescue
+      flash[:info] = 'Error sending email confirmation'
+    end
 
     redirect_to root_path
-  rescue
-    flash[:info] = 'Error sending email confirmation'
-    redirect_to :back
-    return
   end
 
   private

@@ -56,8 +56,8 @@ describe AccountActivationsController do
 
         it 'redirects to root' do
           go!
-          expect(response).to redirect_to(root_path)
           expect(flash[:info]).to be_present
+          expect(response).to redirect_to(root_path)
         end
       end
     end
@@ -77,44 +77,39 @@ describe AccountActivationsController do
   describe '#create' do
     let(:artist) { FactoryGirl.create(:artist) }
 
+    subject { response }
+
     def go!
-      put 'create', type: 'artists', email: artist.email
+      put 'create'
     end
 
-    context 'with inactive user' do
-      it 'creates new activation_digest' do
-        expect { go! }.to change { artist.reload.activation_digest }
-      end
-
-      it 'sends email' do
-        expect(UserMailer).to receive(:account_activation)
-        go!
-      end
+    context 'when not logged in' do
+      it { go!; is_expected.to be_forbidden }
     end
 
-    context 'with incorrect email' do
-      def go!
-        put 'create', type: 'artists', email: 'incorrect@example.com'
+    context 'when signed in' do
+      before { sign_in artist }
+
+      context 'with inactive user' do
+        it 'creates new activation_digest' do
+          expect { go! }.to change { artist.reload.activation_digest }
+        end
+
+        it 'sends email' do
+          expect(UserMailer).to receive(:account_activation)
+          go!
+        end
       end
 
-      context 'with incorrect email' do
+      context 'with activated user' do
+        let(:artist) { FactoryGirl.create(:artist, :activated) }
+
         it 'shows flash' do
           go!
           expect(flash[:info]).to be_present
-          expect(response).to render_template('unactivated')
+          expect(response).to redirect_to root_path
         end
       end
     end
-
-    context 'with activated user' do
-      let(:artist) { FactoryGirl.create(:artist, :activated) }
-
-      it 'shows flash' do
-        go!
-        expect(flash[:info]).to be_present
-        expect(response).to render_template('unactivated')
-      end
-    end
-  end
   end
 end
