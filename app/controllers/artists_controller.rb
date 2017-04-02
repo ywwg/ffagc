@@ -1,5 +1,5 @@
 class ArtistsController < ApplicationController
-  load_and_authorize_resource only: [:show]
+  load_and_authorize_resource only: [:index, :show]
 
   before_filter :initialize_user, except: [:show]
 
@@ -38,10 +38,6 @@ class ArtistsController < ApplicationController
       @artist.artist_survey ||= ArtistSurvey.new(artist_survey_params)
       render "signup"
     end
-  end
-
-  def index
-    redirect_to grant_submissions_path
   end
 
   def delete_grant

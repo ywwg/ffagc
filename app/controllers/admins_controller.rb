@@ -176,10 +176,6 @@ class AdminsController < ApplicationController
   end
 
   # TODO: endpoint does not belong here
-  def artists
-  end
-
-  # TODO: endpoint does not belong here
   def voters
   end
 

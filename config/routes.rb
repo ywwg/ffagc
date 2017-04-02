@@ -16,7 +16,6 @@ Rails.application.routes.draw do
 
   get 'admins/' => 'admins#index'
   post 'admins/index' => 'admins#index'
-  get 'admins/artists' => 'admins#artists'
   get 'admins/voters' => 'admins#voters'
   get 'admins/submissions' => 'admins#submissions'
 
