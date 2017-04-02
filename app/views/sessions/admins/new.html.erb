@@ -1,4 +1,6 @@
-<%= link_to "Register as an admin", admins_signup_path %> to access submit grant applications.
+<% if can? :new, Admin %>
+  <%= link_to "Register as an admin", new_admin_path %> to access submit grant applications.
+<% end %>
 
 <h2>Have an account?</h2>
 
