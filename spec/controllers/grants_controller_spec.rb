@@ -88,6 +88,14 @@ describe GrantsController do
     context 'with an admin' do
       let!(:user) { FactoryGirl.create(:admin) }
       it { is_expected.to render_template('new') }
+
+      context 'with id that does not exist' do
+        def go!
+          get 'edit', id: Grant.count + 1
+        end
+
+        it { is_expected.to be_forbidden }
+      end
     end
 
     context 'with an artist' do
