@@ -1,9 +1,12 @@
 class AccountActivationsController < ApplicationController
-  before_action :set_user
   before_action :redirect_if_current_user_activated, only: [:show, :create]
 
   # this GET request action can edit a user
   def show
+    @type = params[:type]
+    @email = params[:email]
+    @user = UserFinder.find_by_email(@type, @email)
+
     if @user&.activation_token_valid?(params[:id])
       @user.activate!
 
@@ -14,9 +17,12 @@ class AccountActivationsController < ApplicationController
   end
 
   # Reset activation token and send activation email
-  # Currently doesn't have any sort of timeout and sends an email
-  # so it could be abused.
   def create
+    @user = current_user
+    authorize! :view, @user
+
+    @type = UserFinder.type_from_user(@user)
+
     raise if @user.activated? || @user.nil?
 
     @user.create_activation_digest
@@ -37,12 +43,6 @@ class AccountActivationsController < ApplicationController
     if @user&.activated? && @user == current_user
       after_activate
     end
-  end
-
-  def set_user
-    @type = params[:type]
-    @email = params[:email]
-    @user = UserFinder.find_by_email(@type, @email)
   end
 
   def after_activate
