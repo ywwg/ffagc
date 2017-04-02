@@ -1,9 +1,7 @@
 describe Ability do
   subject(:ability) { Ability.new(user) }
 
-  context 'with nil' do
-    let(:user) { nil }
-
+  shared_examples 'can manage Admin unless Admin.exists?' do
     it { is_expected.to be_able_to(:manage, Admin) }
 
     context 'an Admin already exists' do
@@ -11,6 +9,14 @@ describe Ability do
 
       it { is_expected.not_to be_able_to(:manage, Admin) }
     end
+  end
+
+  context 'with nil' do
+    let(:user) { nil }
+
+    it_behaves_like 'can manage Admin unless Admin.exists?'
+
+
   end
 
   context 'with admin' do
@@ -30,11 +36,12 @@ describe Ability do
   end
 
   context 'with artist' do
-    let!(:admin) { FactoryGirl.create(:admin) }
     let!(:user) { FactoryGirl.create(:artist, :activated) }
     let!(:artist_survey) { FactoryGirl.create(:artist_survey, artist: user) }
     let!(:grant_submission) { FactoryGirl.create(:grant_submission, artist: user) }
     let!(:proposal) { FactoryGirl.create(:proposal, grant_submission: grant_submission) }
+
+    it_behaves_like 'can manage Admin unless Admin.exists?'
 
     it { is_expected.to be_able_to(:manage, artist_survey) }
     it { is_expected.to be_able_to(:manage, grant_submission) }
@@ -42,7 +49,6 @@ describe Ability do
     it { is_expected.to be_able_to(:index, Grant.new) }
     it { is_expected.to be_able_to(:show, Grant.new) }
 
-    it { is_expected.not_to be_able_to(:manage, Admin.new) }
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
     it { is_expected.not_to be_able_to(:manage, Artist.new) }
     it { is_expected.not_to be_able_to(:manage, GrantSubmission.new) }
@@ -72,7 +78,8 @@ describe Ability do
     let(:voter_survey) { FactoryGirl.create(:voter_survey, voter: user) }
     let(:vote) { FactoryGirl.build(:vote, voter: user) }
 
-    it { is_expected.to be_able_to(:manage, Admin.new) }
+    it_behaves_like 'can manage Admin unless Admin.exists?'
+
     it { is_expected.to be_able_to(:vote, GrantSubmission.new) }
 
     it { is_expected.to be_able_to(:manage, vote) }
@@ -92,12 +99,6 @@ describe Ability do
     it { is_expected.not_to be_able_to(:manage, VoterSurvey.new) }
     it { is_expected.not_to be_able_to(:manage, Voter.new) }
     it { is_expected.not_to be_able_to(:manage, Vote.new) }
-
-    context 'an Admin already exists' do
-      let!(:admin) { FactoryGirl.create(:admin) }
-
-      it { is_expected.not_to be_able_to(:manage, Admin) }
-    end
 
     context 'when not activated' do
       let(:user) { FactoryGirl.create(:voter) }
