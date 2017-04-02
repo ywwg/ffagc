@@ -4,7 +4,7 @@ class ArtistsController < ApplicationController
   def show
   end
 
-  def signup
+  def new
     @artist = Artist.new
     @artist.artist_survey ||= ArtistSurvey.new
   end
@@ -38,7 +38,7 @@ class ArtistsController < ApplicationController
       render "signup_success"
     else
       @artist.artist_survey ||= ArtistSurvey.new(artist_survey_params)
-      render "signup"
+      render 'new'
     end
   end
 
