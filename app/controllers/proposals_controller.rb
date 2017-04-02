@@ -5,7 +5,7 @@ class ProposalsController < ApplicationController
   def create
     @proposal = Proposal.new(proposal_params)
     if @proposal.save
-      redirect_to grant_submission_discuss_path(grant_submission_id)
+      redirect_to discuss_grant_submission_path(grant_submission_id)
     else
       render "upload_failure"
     end
@@ -16,7 +16,7 @@ class ProposalsController < ApplicationController
 
     begin
       @proposal.destroy
-      redirect_to grant_submission_discuss_path(grant_submission_id)
+      redirect_to discuss_grant_submission_path(grant_submission_id)
     rescue
       render "destroy_failure"
     end

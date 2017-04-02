@@ -49,7 +49,7 @@
       <td><%= link_to "#{gs.name}" , edit_grant_submission_path(gs) %></td>
       <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
       <td align="right">$<%= gs.requested_funding_dollars %></td>
-      <td><%= link_to "#{discussion_status(gs.id)}", grant_submission_discuss_path(gs) %></td>
+      <td><%= link_to "#{discussion_status(gs.id)}", discuss_grant_submission_path(gs) %></td>
       <% if @show_scores %>
       <td><%= @results[gs.id]['avg_t'] %></td>
       <td><%= @results[gs.id]['avg_c'] %></td>
