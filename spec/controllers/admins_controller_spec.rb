@@ -7,11 +7,10 @@ describe AdminsController do
     end
 
     context 'with valid params' do
-      let(:admin_params) { FactoryGirl.attributes_for(:admin) }
-
-      it 'creates Admin' do
-        expect { go! }.to change { Admin.count }.by(1)
-        expect(response).to redirect_to(root_path)
+      it 'is ok' do
+        go!
+        expect(response).to render_template('index')
+        expect(response).to be_ok
       end
 
       context 'when an Admin already exists' do
@@ -24,10 +23,10 @@ describe AdminsController do
             sign_in admin
           end
 
-          it 'creates Admin' do
-            expect { go! }.to change { Admin.count }.by(1)
-            expect(response).to render_template('new')
-            expect(flash.keys).to include('success')
+          it 'is ok' do
+            go!
+            expect(response).to render_template('index')
+            expect(response).to be_ok
           end
         end
       end
@@ -59,7 +58,7 @@ describe AdminsController do
     context 'when an Admin already exists' do
       let!(:admin) { FactoryGirl.create(:admin) }
 
-      it { go!; is_expected.to be_forbidden}
+      it { go!; is_expected.to be_forbidden }
 
       context 'when admin signed in' do
         before do
@@ -75,8 +74,7 @@ describe AdminsController do
     end
 
     context 'with invalid params' do
-      let!(:existing_admin) { FactoryGirl.create(:admin) }
-      let(:admin_params) { FactoryGirl.attributes_for(:admin, email: existing_admin.email) }
+      let(:admin_params) { FactoryGirl.attributes_for(:admin, email: nil) }
 
       it 'displays form' do
         expect { go! }.not_to change { Admin.count }
@@ -91,9 +89,9 @@ describe AdminsController do
     end
 
     context 'logged out' do
-      it 'redirects' do
+      it 'is forbidden' do
         go!
-        expect(response).to redirect_to('/')
+        expect(response).to be_forbidden
       end
     end
 
