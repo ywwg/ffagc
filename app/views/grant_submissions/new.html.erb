@@ -1,0 +1,70 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Grant Submissions", grant_submissions_path %></li>
+  <li class="active">Submission</li>
+</ol>
+
+<% if any_submit_open? || admin_logged_in? %>
+  <div class="alert alert-info">
+    <p>Please refer to the <a href="https://www.fireflyartscollective.org/participate/art-at-firefly/art-grants/" target="_blank">Firefly website</a>
+     for information on the grant submission process, rules, and funding guidelines.</p>
+  </div>
+
+  <div class="alert alert-info">
+    <strong>Important Notes</strong>
+    <ul><li>This year the <strong>Anniversary Grants</strong> are called the
+       <strong>Crystal Grants</strong>.
+     </li>
+     <li>Please choose an <strong>approved funding level</strong> for the Grant you're applying
+       for.  Funding requests at values between grant levels
+       will be rounded down.</li>
+     <li><strong>Do not</strong> include any information identifying the artist(s)
+       (such as name, alias, contact information, etc) in the submission document
+       itself.  The review process can't be blind if your name is at the top
+       of the document. Therefore <strong>we will reject your proposal</strong>
+       if it contains identifying information!
+    </ul>
+  </div>
+
+  <%= simple_form_for @grant_submission do |f| %>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Submission Details
+          </div>
+          <div class="panel-body">
+            <%= f.input :name, label: "Name of Piece", required: true, validate: true %>
+
+            <%= f.association :grant, as: :radio_buttons %>
+
+            <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }, as: :integer, html5: true  %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Submission Documents
+          </div>
+          <div class="panel-body">
+            <div class="alert alert-warning">Did you make sure your proposal is <strong>anonymous</strong> and DOES NOT include any identifying information?</div>
+
+            <%= f.input :proposal, as: :file, label: 'Anonymized Application PDF' %>
+
+            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center">
+      <%= f.button :submit, class: 'btn btn-primary' %>
+      <br />
+      <%= link_to 'Back', @back_link %>
+    </p>
+  <% end %>
+<% else %>
+  <div class="alert alert-warning">
+    <p>There are no open submissions at this time.</p>
+  </div>
+<% end %>

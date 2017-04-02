@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  rescue_from CanCan::AccessDenied, :with => :deny_access
+
   def event_year
     Rails.configuration.event_year
   end
@@ -118,11 +120,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :submission_has_questions?
 
-  def any_grant_submission_funded?(artist_id)
-    return GrantSubmission.where("artist_id = ? AND funding_decision = 't' AND granted_funding_dollars > 0", artist_id).count > 0
-  end
-  helper_method :any_grant_submission_funded?
-
   def grant_submission_funded?(id)
     g = GrantSubmission.find(id)
     return g.funding_decision && g.granted_funding_dollars > 0
@@ -163,6 +160,12 @@ class ApplicationController < ActionController::Base
 
 
   # /artists, /voters, /admins
+  public
+  # This method is expected by CanCan
+  def current_user
+    current_admin || current_artist || current_voter
+  end
+  helper_method :current_user
 
   # /artists
 
@@ -247,5 +250,11 @@ class ApplicationController < ActionController::Base
 
   def self.activate_succeed?(user, token)
     BCrypt::Password.new(user.activation_digest).is_password?(token)
+  end
+
+  protected
+
+  def deny_access
+    render nothing: true, status: :forbidden
   end
 end

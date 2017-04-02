@@ -1,7 +1,6 @@
 require 'erb'
 
 class GrantContract < Prawn::Document
-
   def initialize(grant, project, artist, amount, date)
     super()
     @grant = grant
@@ -18,7 +17,7 @@ class GrantContract < Prawn::Document
     begin
       # XXX hardcoding alert! Template filename must be the same as the grant name,
       # except all lowercase.
-      filename = "#{Rails.root}/app/assets/contract_templates/#{@grant.downcase}.tmpl.erb"
+      filename = File.join(template_dir, "#{@grant.downcase}.tmpl.erb")
       template = File.open(filename, "rb").read
       template.each_line do |line|
         write_templated_line line
@@ -129,8 +128,17 @@ class GrantContract < Prawn::Document
     end
   end
 
+  def self.template_dir
+    File.join(Rails.root, 'app', 'assets', 'contract_templates')
+  end
+
+
+  def self.template_files
+    Dir[File.join(template_dir, '*.tmpl.erb')]
+  end
+
   def self.grant_names
-    Dir["#{Rails.root}/app/assets/contract_templates/*.tmpl.erb"].map do |f|
+    template_files.map do |f|
       /contract_templates\/(.*)\.tmpl/.match(f)[1]
     end
   end

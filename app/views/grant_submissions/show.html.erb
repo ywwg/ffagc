@@ -1,0 +1,59 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Submissions", grant_submissions_path %></li>
+  <li class="active"><%= @grant_submission.name %></li>
+</ol>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Grant Submission</h3>
+      </div>
+      <div class="panel-body">
+        <dl>
+          <dt>Name</dt>
+          <dd><%= @grant_submission.name %></dd>
+
+          <dt>Grant</dt>
+          <dd><%= @grant_submission.grant.name %></dd>
+
+          <dt>Requested Funding</dt>
+          <dd><%= number_to_currency @grant_submission.requested_funding_dollars %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Documents</h3>
+      </div>
+      <div class="panel-body">
+        <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Questions</h3>
+      </div>
+      <div class="panel-body">
+        <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Answers</h3>
+      </div>
+      <div class="panel-body">
+        <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
+      </div>
+    </div>
+  </div>
+</div>

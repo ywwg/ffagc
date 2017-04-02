@@ -8,7 +8,7 @@ FactoryGirl.define do
     contact_street { Faker::Address.street_address }
     contact_city { Faker::Address.city }
     contact_state { Faker::Address.state }
-    contact_country { 'United States' }
+    contact_country { 'US' }
     contact_zipcode { Faker::Address.zip_code }
 
     trait :activated do

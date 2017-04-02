@@ -1,0 +1,32 @@
+<% title = controller.action_name == 'edit' ? 'Modify a Grant Type' : 'Create a Grant Type' %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= title %></h3>
+  </div>
+  <div class="panel-body">
+    <%= simple_form_for @grant do |f| %>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :name %>
+          <%= f.input :max_funding_dollars %>
+          <%= f.input :submit_start, as: :date, html5: true %>
+          <%= f.input :submit_end, as: :date, html5: true %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :vote_start, as: :date, html5: true %>
+          <%= f.input :meeting_one, as: :date, html5: true %>
+          <%= f.input :meeting_two, as: :date, html5: true %>
+          <%= f.input :vote_end, as: :date, html5: true %>
+        </div>
+      </div>
+      <div class="form-actions">
+        <%= f.button :submit, class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', grants_path, class: 'btn btn-default' %>
+        <%= f.input :hidden, label: 'Hidden from voter signup page' %>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>

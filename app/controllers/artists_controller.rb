@@ -7,6 +7,7 @@ class ArtistsController < ApplicationController
   end
 
   def signup
+    @artist.artist_survey ||= ArtistSurvey.new
   end
 
   def artist_params
@@ -17,7 +18,7 @@ class ArtistsController < ApplicationController
   end
 
   def artist_survey_params
-    params.require(:survey).permit(:has_attended_firefly,
+    params.require(:artist).require(:artist_survey).permit(:has_attended_firefly,
         :has_attended_firefly_desc, :has_attended_regional,
         :has_attended_regional_desc, :has_attended_bm, :has_attended_bm_desc,
         :can_use_as_example)
@@ -51,16 +52,13 @@ class ArtistsController < ApplicationController
 
       render "signup_success"
     else
-      render "signup_failure"
+      @artist.artist_survey ||= ArtistSurvey.new(artist_survey_params)
+      render "signup"
     end
   end
 
   def index
-    if !artist_logged_in?
-        return
-    end
-
-    @grant_submissions = GrantSubmission.where(artist_id: [current_artist.id])
+    redirect_to grant_submissions_path
   end
 
   def delete_grant

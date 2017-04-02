@@ -23,6 +23,7 @@ class VotersController < ApplicationController
 
         # save participation info
         meetings = collated_meetings
+
         voter_participation_params.each do |collated_id, can_do|
           if can_do == "0"
             next
@@ -64,44 +65,46 @@ class VotersController < ApplicationController
     end
 
     def update
-      if !admin_logged_in?
-        redirect_to "/"
+      # could allow for (timing based) Voter enumeration
+      @voter = Voter.find(params[:id])
+
+      unless can? :manage, GrantsVoter.new(voter: @voter)
+        redirect_to '/'
         return
       end
 
-      @voter = Voter.find(params[:id])
-      voter_participation_params.each do |id, can_do|
-        if Grant.find(id) == nil
+      voter_participation_params.each do |grant_id, can_do|
+        unless Grant.find(grant_id).present?
           next
         end
-        if can_do == "0"
-          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: id)
-            GrantsVoter.find_by(voter_id: @voter.id, grant_id: id).destroy
+
+        if can_do == '0'
+          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: grant_id)
+            GrantsVoter.find_by(voter_id: @voter.id, grant_id: grant_id).destroy
           end
         else
-          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: id)
+          if GrantsVoter.exists?(voter_id: @voter.id, grant_id: grant_id)
             next
           end
-          grants_voter = GrantsVoter.new
-          grants_voter.voter_id = @voter.id
-          grants_voter.grant_id = id
-          grants_voter.save
+
+          grants_voter = GrantsVoter.create!(voter: @voter, grant_id: grant_id)
         end
       end
 
-      redirect_to :controller => "admins", :action => "voters"
+      redirect_to controller: 'admins', action: 'voters'
     end
 
     def index
-      if !voter_logged_in?
+      unless can? :vote, GrantSubmission.new
+        flash[:warning] = 'You are not able to vote'
+        redirect_to '/'
         return
       end
 
-      @voter = Voter.find(current_voter)
+      # TODO: use scope
+      @grant_submissions = GrantSubmission.where(grant_id: voter_active_vote_grants(current_voter.id))
 
-      @grant_submissions =
-          GrantSubmission.where(grant_id: voter_active_vote_grants(@voter.id))
-
+      # TODO: sort in scope or add sorting scope
       @grant_submissions = @grant_submissions.sort { |a,b| [a.name] <=> [b.name] }
 
       @votes = Hash.new
@@ -111,36 +114,33 @@ class VotersController < ApplicationController
           attr_accessor :assigned
         end
 
-        vote = Vote.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
-
-        if !vote
-          vote = Vote.new
-          vote.voter_id = current_voter.id
-          vote.grant_submission_id = gs.id
-          vote.save
-        end
+        vote = current_voter.votes.where(grant_submission: gs).first_or_create
 
         @votes[gs.id] = vote
 
         #assignments
-        vsa = VoterSubmissionAssignment.where("voter_id = ? AND grant_submission_id = ?", current_voter.id, gs.id).take
-        if vsa
+        vsa = current_voter.voter_submission_assignments.where(grant_submission: gs)
+
+        if vsa.exists?
           gs.assigned = 1
         else
           gs.assigned = 0
         end
       end
 
+      # TODO: use scopes
       @grant_submissions_assigned = @grant_submissions.select{|gs| gs.assigned == 1}
       @grant_submissions_unassigned = @grant_submissions.select{|gs| gs.assigned == 0}
 
+      # TODO: sort in scope or add sorting scope
       @grant_submissions_unassigned.sort_by {|gs| gs.grant_id}
 
-      @grant_submissions_display = @grant_submissions_assigned
-      @show_all = false
       if params[:all] == "true"
         @show_all = true
         @grant_submissions_display = @grant_submissions
+      else
+        @show_all = false
+        @grant_submissions_display = @grant_submissions_assigned
       end
     end
 
