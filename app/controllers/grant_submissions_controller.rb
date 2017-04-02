@@ -162,10 +162,6 @@ class GrantSubmissionsController < ApplicationController
     par
   end
 
-  def modify_grant_ok?(submission)
-    can? :modify, submission
-  end
-
   def grant_contract_params
     params.permit(:id, :format, :submission_id, :authenticity_token)
   end
