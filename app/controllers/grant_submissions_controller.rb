@@ -1,8 +1,8 @@
 require 'grant_contract'
 
 class GrantSubmissionsController < ApplicationController
+  load_and_authorize_resource
 
-  before_filter :initialize_grant_submission
   before_action :set_back_link
 
   def create
@@ -62,21 +62,13 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def show
-    @grant_submission = GrantSubmission.find(params[:id])
-    authorize! :show, @grant_submission
   end
 
   def index
-    authorize! :index, GrantSubmission
-    @grant_submissions = GrantSubmission.accessible_by(current_ability)
-
     @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
   end
 
   def edit
-    @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
-    authorize! :edit, @grant_submission
-
     # Don't allow an artist to decide post-decision that they want a different
     # grant category.
     @grant_change_disable = false
@@ -137,10 +129,6 @@ class GrantSubmissionsController < ApplicationController
   end
 
   private
-
-  def initialize_grant_submission
-    @grant_submission = GrantSubmission.new
-  end
 
   def grant_submission_params
     params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars)
