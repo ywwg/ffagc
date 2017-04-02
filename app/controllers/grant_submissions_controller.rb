@@ -6,13 +6,6 @@ class GrantSubmissionsController < ApplicationController
   before_action :set_back_link
 
   def create
-    if !artist_logged_in?
-      redirect_to root_path
-      return
-    end
-
-    @grant_submission = GrantSubmission.new(grant_submission_params)
-
     @grant_submission.artist_id = current_artist.id
 
     if @grant_submission.save
@@ -23,18 +16,12 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def destroy
-    @grant_submission = GrantSubmission.where(id: params[:id]).first
-    authorize! :destroy, @grant_submission
-
     @grant_submission&.destroy!
 
     redirect_to action: 'index'
   end
 
   def update
-    @grant_submission = GrantSubmission.find(params[:id])
-    authorize! :update, @grant_submission
-
     @grant_submission.attributes = grant_update_params
 
     if @grant_submission.questions_changed?
