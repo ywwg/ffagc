@@ -40,28 +40,7 @@
       <td><%= gs.name %></td>
       <td><%= gs.grant&.name %> Grant</td>
       <td>
-        <table class="text-right">
-          <tr>
-            <td>
-              Requested:
-            </td>
-            <td>
-              <%= number_to_currency gs.requested_funding_dollars %>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Granted:
-            </td>
-            <td>
-                <%= number_to_currency gs.granted_funding_dollars %>
-            </td>
-            <td>
-              <% if grant_submission_funded?(gs.id) %>
-              <% end %>
-            </td>
-          </tr>
-        </table>
+        <%= render partial: 'funding_table', locals: { grant_submission: gs }%>
       <td>
         <div class="btn-toolbar">
           <div class="btn-group pull-right">
