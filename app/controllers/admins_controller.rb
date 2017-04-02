@@ -235,7 +235,7 @@ class AdminsController < ApplicationController
   private
 
   def admin_params
-    params.require(:admin).permit(:name, :password_digest, :password, :password_confirmation, :email)
+    params.require(:admin).permit(:name, :email, :password, :password_confirmation)
   end
 
   # counts the number of voters a submission is assigned to
