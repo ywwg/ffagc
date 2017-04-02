@@ -3,9 +3,11 @@ require 'grant_contract'
 class GrantSubmissionsController < ApplicationController
 
   before_filter :initialize_grant_submission
+  before_action :set_back_link
 
   def create
     if !artist_logged_in?
+      redirect_to root_path
       return
     end
 
@@ -16,65 +18,36 @@ class GrantSubmissionsController < ApplicationController
     if @grant_submission.save
       redirect_to :controller => "artists", :action => "index"
     else
-      render "failure"
+      render 'new'
     end
   end
 
   def destroy
-    @grant_submission = GrantSubmission.find(params[:id])
+    @grant_submission = GrantSubmission.where(id: params[:id]).first
+    authorize! :destroy, @grant_submission
 
-    if !modify_grant_ok?(@grant_submission)
-      redirect_to "/"
-      return
-    end
+    @grant_submission&.destroy!
 
-    @grant_submission.destroy
-    if admin_logged_in?
-      redirect_to :controller => "admins", :action => "index"
-    else
-      redirect_to :controller => "artists", :action => "index"
-    end
+    redirect_to action: 'index'
   end
 
   def update
     @grant_submission = GrantSubmission.find(params[:id])
+    authorize! :update, @grant_submission
 
-    if !modify_grant_ok?(@grant_submission)
-      redirect_to "/"
-      return
+    @grant_submission.attributes = grant_update_params
+
+    if @grant_submission.questions_changed?
+      @grant_submission.questions_updated_at = Time.zone.now
     end
 
-    if params[:commit] == "Delete Submission"
-      destroy
-      return
+    if @grant_submission.answers_changed?
+      @grant_submission.answers_updated_at = Time.zone.now
     end
 
-    if params[:commit] == "Update Discussion"
-      if admin_logged_in?
-        if @grant_submission.questions != grant_update_params[:questions]
-          @grant_submission.questions_updated_at = Time.zone.now
-          @grant_submission.questions = grant_update_params[:questions]
-        end
-      end
-      if @grant_submission.answers != grant_update_params[:answers]
-        @grant_submission.answers_updated_at = Time.zone.now
-        @grant_submission.answers = grant_update_params[:answers]
-      end
-    else
-      # Default grant modify case
-      @grant_submission.name = grant_update_params[:name]
-      if grant_update_params[:proposal] != nil && grant_update_params[:proposal] != ""
-        @grant_submission.proposal = grant_update_params[:proposal]
-      end
-      if grant_update_params[:grant_id] != nil
-        @grant_submission.grant_id = grant_update_params[:grant_id]
-      end
-      @grant_submission.requested_funding_dollars = grant_update_params[:requested_funding_dollars]
-
-      if admin_logged_in?
-        @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
-        @grant_submission.funding_decision = grant_update_params[:funding_decision]
-      end
+    if admin_logged_in?
+      @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
+      @grant_submission.funding_decision = grant_update_params[:funding_decision]
     end
 
     if @grant_submission.save
@@ -84,30 +57,23 @@ class GrantSubmissionsController < ApplicationController
         redirect_to :controller => "artists", :action => "index"
       end
     else
-      if admin_logged_in?
-        render "failure_admin"
-      else
-        render "failure_modify"
-      end
+      render 'new'
     end
+  end
+
+  def show
+    @grant_submission = GrantSubmission.find(params[:id])
+    authorize! :show, @grant_submission
   end
 
   def index
+    authorize! :index, GrantSubmission
+    @grant_submissions = GrantSubmission.accessible_by(current_ability)
   end
 
-  def modify
-    begin
-      @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
-      if !modify_grant_ok?(@grant_submission)
-        redirect_to "/"
-        return
-      end
-    rescue
-      redirect_to "/"
-      return
-    end
-
-    @artist_email = Artist.find(@grant_submission.artist_id)[:email]
+  def edit
+    @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
+    authorize! :edit, @grant_submission
 
     # Don't allow an artist to decide post-decision that they want a different
     # grant category.
@@ -116,30 +82,18 @@ class GrantSubmissionsController < ApplicationController
       @grant_change_disable = true
     end
 
-    render "modify"
+    render 'new'
   end
 
   def discuss
     begin
-      @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
+      @grant_submission = GrantSubmission.find(params[:grant_submission_id] || params[:id])
     rescue
       redirect_to "/"
       return
     end
 
-    # Don't show discussions for projects that don't belong to the artist.
-    # Overridden if admin or verified voter is logged in
-    if !admin_logged_in? && !verified_voter_logged_in?
-      # In the case that nobody is logged in, we'll just display an error.
-      # Artists trying to snoop on other people's discussions don't get the
-      # benefit of knowing what they did wrong.
-      if artist_logged_in?
-        if current_artist.id != @grant_submission.artist_id
-          redirect_to "/"
-          return
-        end
-      end
-    end
+    authorize! :show, @grant_submission
 
     @question_edit_disable = false
     if !admin_logged_in?
@@ -151,36 +105,30 @@ class GrantSubmissionsController < ApplicationController
       @answer_edit_disable = true
     end
 
-    @supplements = Proposal.where(grant_submission_id: @grant_submission.id)
     @proposal = Proposal.new
   end
 
   def generate_contract
-    begin
-      submission = GrantSubmission.find(grant_contract_params[:submission_id])
-    rescue
-      redirect_to "/"
-      return
-    end
-    if !modify_grant_ok?(submission)
-      redirect_to "/"
-      return
-    end
-    if !grant_submission_funded?(submission.id)
+    @grant_submission = GrantSubmission.find(params[:grant_submission_id])
+    authorize! :read, @grant_submission
+
+    if !grant_submission_funded?(@grant_submission.id)
+      flash[:error] = "Grant Submission must be funded to create contract"
       logger.warn "tried to generate contract for non-funded grant"
       redirect_to "/"
     end
-    grant_name = Grant.find(submission.grant_id).name
-    artist_name = Artist.find(submission.artist_id).name
+
+    grant_name = @grant_submission.grant.name
+    artist_name = @grant_submission.artist.name
 
     respond_to do |format|
       format.html
       format.pdf do
         now = DateTime.current
-        pdf = GrantContract.new(grant_name, submission.name, artist_name,
-            submission.requested_funding_dollars, now)
+        pdf = GrantContract.new(grant_name, @grant_submission.name, artist_name,
+            @grant_submission.requested_funding_dollars, now)
         send_data pdf.render, filename:
-          "#{submission.name}_#{grant_name}_Contract_#{now.strftime("%Y%m%d")}.pdf",
+          "#{@grant_submission.name}_#{grant_name}_Contract_#{now.strftime("%Y%m%d")}.pdf",
           type: "application/pdf"
       end
     end
@@ -197,33 +145,34 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def grant_update_params
-    if admin_logged_in?
-      params.require(:grant_submission).permit(:id, :name, :grant_id,
-          :requested_funding_dollars, :proposal, :granted_funding_dollars,
-          :funding_decision, :authenticity_token, :questions, :answers)
-    else
-      params.require(:grant_submission).permit(:id, :name, :grant_id,
-          :requested_funding_dollars, :proposal, :authenticity_token, :answers)
-    end
-  end
+    allowed_params = [:name, :grant_id, :requested_funding_dollars, :answers, :proposal]
 
-  def modify_grant_ok?(submission)
     if admin_logged_in?
-      logger.warn "admin logged in, allowing submission modification"
-      return true
+      allowed_params.push(:granted_funding_dollars, :funding_decision, :questions)
     end
-    if !artist_logged_in?
-      logger.warn "no admin or artist logged in, not allowing submission modification"
-      return false
+
+    par = params.require(:grant_submission).permit(allowed_params)
+
+    # TODO this works but doesn't seem like the correct way
+    proposal_attributes = params.require(:grant_submission).permit(proposals_attributes: :file)["proposals_attributes"]
+    if proposal_attributes.present?
+      par["proposals_attributes"] = [proposal_attributes]
     end
-    if current_artist.id != submission.artist_id
-      logger.warn "grant modification artist id mismatch: #{@grant_submission.artist_id} != #{current_artist.id}, not allowing submission modification"
-      return false
-    end
-    return true
+
+    par
   end
 
   def grant_contract_params
     params.permit(:id, :format, :submission_id, :authenticity_token)
+  end
+
+  def set_back_link
+    @back_link = if admin_logged_in?
+      admins_submissions_path
+    elsif artist_logged_in?
+      artists_path
+    else
+      grant_submissions_path
+    end
   end
 end

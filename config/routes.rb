@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get 'admins/submissions' => 'admins#submissions'
 
   post 'artists/login' => 'sessions#create_artist'
+  get 'artists/login' => 'sessions#artist_login'
   post 'voters/login' => 'sessions#create_voter'
   get 'voters/login' => 'sessions#voter_login'
   post 'admins/login' => 'sessions#create_admin'
@@ -36,19 +37,12 @@ Rails.application.routes.draw do
   get 'account_activations/unactivated' => 'account_activations#unactivated'
   #get 'account_activations/resend_activation' => 'account_activations#resend_activation'
 
-  get 'artists/grant_submissions' => 'grant_submissions#index'
-  get 'artists/modify_grant' => 'grant_submissions#modify'
-  get 'grant_submissions/discuss' => 'grant_submissions#discuss'
-  post 'artists/modify_grant' => 'grant_submissions#modify'
-  post 'grant_submissions/delete' => 'grant_submissions#delete'
-  post 'grant_submissions/generate_contract' => 'grant_submissions#generate_contract'
   post 'proposals/delete' => 'proposals#delete'
 
   post 'voters/vote' => 'voters#vote'
 
   post 'admins/assign' => 'admins#assign'
   post 'admins/clear_assignments' => 'admins#clear_assignments'
-  get 'admins/reveal' => 'admins#reveal'
   post 'admins/verify' => 'admins#verify'
   post 'admins/send_fund_emails' => 'admins#send_fund_emails'
   post 'admins/send_question_emails' => 'admins#send_question_emails'
@@ -56,6 +50,14 @@ Rails.application.routes.draw do
 
   resources :artists, :admins, :grant_submissions
   resources :grants, except: [:show]
+
+  resources :grant_submissions do
+    member do
+      get 'discuss'
+      post 'generate_contract'
+    end
+  end
+
   resources :voters, only: [:create, :update, :index]
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :create, :edit, :update]

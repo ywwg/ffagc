@@ -42,9 +42,7 @@
               <td align="right">$<%= gs.requested_funding_dollars %></td>
               <td><a href="<%= gs.proposal %>" target="_blank">Open...</a></td>
               <td><% if submission_has_questions?(gs.id) %>
-                    <%= link_to "#{discussion_status(gs.id)}",
-                        :controller => "grant_submissions",
-                        :action => "discuss", :id => gs.id %>
+                    <%= link_to "#{discussion_status(gs.id)}", grant_submission_discuss_path(gs) %>
                   <% else %>None<% end %></td>
               <td align="center">
                 <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">

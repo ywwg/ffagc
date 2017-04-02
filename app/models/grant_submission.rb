@@ -2,11 +2,13 @@ class GrantSubmission < ActiveRecord::Base
   belongs_to :grant
   belongs_to :artist
 
-  has_many :proposals
+  has_many :proposals, inverse_of: :grant_submission
   has_many :votes
   has_many :voter_submission_assignments
 
   delegate :max_funding_dollars, to: :grant
+
+  accepts_nested_attributes_for :proposals
 
   mount_uploader :proposal, GrantProposalUploader
 

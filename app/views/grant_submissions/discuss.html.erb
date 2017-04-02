@@ -1,64 +1,61 @@
-<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Grant Proposal Discussion</h1>
+<ol class="breadcrumb">
+  <li><%= link_to "Grant Submissions", grant_submissions_path %></li>
+  <li><%= link_to @grant_submission.name, edit_grant_submission_path(@grant_submission) %></li>
+  <li class="active">Discussion</li>
+</ol>
 
 <% if artist_logged_in? || admin_logged_in? || verified_voter_logged_in? %>
-  <h2>Discussion for <a href="<%= @grant_submission.proposal %>" target="_blank"><%= @grant_submission.name %></a></h2>
-  <%= semantic_form_for @grant_submission, :html => { :onsubmit => 'return validate_discussion();'} do |f| %>
-    <fieldset>
-      <%= f.input :questions, :as => :text,
-          :label => "Questions from Committee", :required => false,
-          :input_html => { :disabled => @question_edit_disable } %>
-      <%= f.input :answers, :as => :text, :label => "Answers from Artist",
-          :required => false,
-          :input_html => { :disabled => @answer_edit_disable } %>
-      <% if artist_logged_in? || admin_logged_in? %>
-        <%= submit_tag("Update Discussion", class: "button")%>
+  <%= simple_form_for @grant_submission do |f| %>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Questions from Committee</h3>
+          </div>
+          <div class="panel-body">
+            <% if @question_edit_disable %>
+              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
+            <% else %>
+              <%= f.text_area :questions, class: 'form-control', rows: '20' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Answers from Artist</h3>
+          </div>
+          <div class="panel-body">
+            <% if @answer_edit_disable %>
+              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
+            <% else %>
+              <%= f.text_area :answers, class: 'form-control', rows: '20' %>
+            <% end %>
+          </div>
+          <div class="panel-heading">
+            <h3 class="panel-title">Supplemental documents</h3>
+          </div>
+          <div class="panel-body">
+            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
+
+            <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
+              <%= f_proposal.input :file, as: :file, label: 'Anonymized Supplemental PDF', required: false %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="text-center">
+      <% if can? :edit, @grant_submission %>
+        <%= f.button :submit, 'Update Discussion', class: 'btn btn-primary' %>
+        <br />
       <% end %>
-    </fieldset>
+      <%= link_to 'Back', :back %>
+    </p>
   <% end %>
-  <% if !@supplements.empty? %>
-    <h2>Supplemental documents</h2>
-    <table style="border:none;">
-    <% @supplements.each do |s| %>
-      <tr><td style="border:none;">
-        <%= form_tag("/proposals/delete", authenticity_token: true, :class => "button_to") do %>
-          <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
-          <%= hidden_field_tag :id, s.id, :name => "proposal[id]" %>
-          <input class="button" name="delete" type="submit" value="Delete" />
-        <% end %>
-      </td>
-      <td style="border:none;"><a href="<%= s.file %>"><%= s.file_identifier %></a></td>
-      </tr>
-    <% end %>
-    </table>
-  <% end %>
-  <br/>
-  <%= semantic_form_for @proposal, :html => { :onsubmit => 'return validate_supplement();'} do |f| %>
-    <label class="label" for="proposal_file">Upload Additional Document:</label>
-    <%= f.file_field :file, :required => true, :validate => true, :accept => ".pdf,.doc,.docx,.txt,.md" %>
-    <%= hidden_field_tag :grant_submission_id, @grant_submission.id, :name => "proposal[grant_submission_id]" %>
-    <%= submit_tag("Upload", class: "button") %>
-  <% end %>
-  <br />
 <% else %>
   You must be logged in to view discussions. (<%= link_to "Log In", :controller => "home", :action => "index" %>)
   <br />
   <br />
 <% end %>
-<%= link_to 'Back', :back %>
-
-<script>
-function validate_discussion() {
-  return true;
-}
-
-function validate_supplement() {
-  if(document.getElementById("proposal_file").value != "") {
-    document.getElementById("proposal_file").style.border = '1px solid green';
-    return true;
-  } else {
-    alert('error: please select your application PDF')
-    document.getElementById("proposal_file").style.border = '1px solid red';
-    return false;
-  }
-}
-</script>

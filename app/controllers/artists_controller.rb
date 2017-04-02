@@ -58,11 +58,7 @@ class ArtistsController < ApplicationController
   end
 
   def index
-    if !artist_logged_in?
-        return
-    end
-
-    @grant_submissions = GrantSubmission.where(artist_id: [current_artist.id])
+    redirect_to grant_submissions_path
   end
 
   def delete_grant

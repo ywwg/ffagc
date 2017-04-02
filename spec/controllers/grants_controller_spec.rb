@@ -132,7 +132,7 @@ describe GrantsController do
           }
         end
 
-        it { is_expected.to render_template('failure') }
+        it { is_expected.to render_template('new') }
       end
     end
 
