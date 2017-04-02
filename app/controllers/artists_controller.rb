@@ -31,7 +31,6 @@ class ArtistsController < ApplicationController
 
       render "signup_success"
     else
-      @artist.artist_survey ||= ArtistSurvey.new(artist_survey_params)
       render 'new'
     end
   end
