@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <%= f.simple_fields_for @artist.artist_survey do |f_artist_survey| %>
+  <%= f.simple_fields_for :artist_survey do |f_artist_survey| %>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Optional Survey</h3>
@@ -49,7 +49,7 @@
       <%= f_artist_survey.input :has_attended_bm, as: :radio_buttons, label: 'I have attended Burning Man' %>
       <%= f_artist_survey.text_area :has_attended_bm_desc, placeholder: 'Please elaborate. How have you participated at Burning Man?', class: 'form-control', rows: '3'  %>
 
-      <%= f_artist_survey.input :can_use_as_example, label: 'If I am awarded a grant, Firefly has permission to use my grant application as an example of a successful application in future years' %>
+      <%= f_artist_survey.input :can_use_as_example, label: 'If I am awarded a grant, Firefly has permission to use my grant application as an example of a successful application in future years', as: :boolean %>
     </div>
   </div>
   <% end %>

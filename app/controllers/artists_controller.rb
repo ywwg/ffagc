@@ -5,8 +5,6 @@ class ArtistsController < ApplicationController
   end
 
   def new
-    @artist = Artist.new
-    @artist.artist_survey ||= ArtistSurvey.new
   end
 
   def create
