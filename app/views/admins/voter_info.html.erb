@@ -1,44 +1,73 @@
-<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Admins</h1>
+<ol class="breadcrumb">
+  <li><%= link_to 'Voters', admins_voters_path %></li>
+  <li class="active"><%= @voter.name %></li>
+</ol>
 
-<% if admin_logged_in? %>
-  <h2>Voter Information for <%= @voter.name %></h2>
-  <p>Email: <%= @voter.email %><br/>
-  Verified: <b><% if @voter.verified %>Yes<% else %>No<% end %></b><br/>
-  </p>
-  <% if @voter_survey == nil %><p>Error: could not locate survey responses</p>
-  <% else %>
-    <h2>Required Responses</h2>
-    <p>
-      Has attended firefly? <% if @voter_survey.has_attended_firefly %>Yes<% else %>No<%end%><br/>
-      <b>Not</b> applying for a grant this year? <% if @voter_survey.not_applying_this_year %>Yes<% else %>No<%end%><br/>
-      Will commit to reading proposals? <% if @voter_survey.will_read %>Yes<% else %>No<%end%><br/>
-      Has agreed to the Code of Ethics? <% if @voter_survey.signed_agreement %>Yes<% else %>No<%end%><br/>
-    </p>
-    <h2>Survey Responses</h2>
-    <p>
-      Has been a voter? <% if @voter_survey.has_been_voter %>Yes<% else %>No<%end%><br/>
-      Has been a voter for another institution? <% if @voter_survey.has_participated_other %>Yes<% else %>No<%end%><br/>
-      Have been awarded a grant? <% if @voter_survey.has_received_grant %>Yes<% else %>No<%end%><br/>
-      Have been awarded a grant by another institution? <% if @voter_survey.has_received_other_grant %>Yes<% else %>No<%end%><br/>
-      Fireflies attended? <%= @voter_survey.how_many_fireflies %>
-    </p>
-  <% end %>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Voter Details</h3>
+      </div>
+      <div class="panel-body">
+        <dl class="dl-horizontal">
+          <dt>Name</dt>
+          <dd><%= @voter.name %></dd>
 
-  <%= semantic_form_for @voter do |f| %>
-    <%= f.inputs do %>
-      <p>Voter can attend the meetings for the following grants:</p>
-      <ul>
-        <% @grants.each do |g| %>
-          <li><%= check_box :grants_voters, g.id, :checked => participating_checked(@voter.id, g.id) %>
-              <strong><%= g.name %> Grant</strong>
-              (voting period: <%= g.vote_start.strftime("%Y/%m/%d") %> to
-              <%= g.vote_end.strftime("%Y/%m/%d") %>)
-              <% if g.hidden %>(<strong>hidden</strong>)<% end %>
-          </li>
+          <dt>Email</dt>
+          <dd><%= @voter.email %></dd>
+
+          <dt>Verified</dt>
+          <dd><% if @voter.verified %>Yes<% else %>No<% end %></dd>
+        </dl>
+      </div>
+      <div class="panel-heading">
+        <h3 class="panel-title">Survey</h3>
+      </div>
+      <div class="panel-body">
+        <% if @voter_survey == nil %>
+          <p>Error: could not locate survey responses</p>
+        <% else %>
+          <p>
+            Has attended firefly? <% if @voter_survey.has_attended_firefly %>Yes<% else %>No<%end%><br/>
+            <b>Not</b> applying for a grant this year? <% if @voter_survey.not_applying_this_year %>Yes<% else %>No<%end%><br/>
+            Will commit to reading proposals? <% if @voter_survey.will_read %>Yes<% else %>No<%end%><br/>
+            Has agreed to the Code of Ethics? <% if @voter_survey.signed_agreement %>Yes<% else %>No<%end%><br/>
+          </p>
+          <p>
+            Has been a voter? <% if @voter_survey.has_been_voter %>Yes<% else %>No<%end%><br/>
+            Has been a voter for another institution? <% if @voter_survey.has_participated_other %>Yes<% else %>No<%end%><br/>
+            Have been awarded a grant? <% if @voter_survey.has_received_grant %>Yes<% else %>No<%end%><br/>
+            Have been awarded a grant by another institution? <% if @voter_survey.has_received_other_grant %>Yes<% else %>No<%end%><br/>
+            Fireflies attended? <%= @voter_survey.how_many_fireflies %>
+          </p>
         <% end %>
-      </ul>
-      <%= submit_tag("Update", class: "button")%>
-    <% end %>
-  <% end %>
-  <%= link_to "Back", :controller => "admins", :action => "voters" %>
-<% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Meetings</h3>
+      </div>
+      <div class="panel-body">
+        <%= simple_form_for @voter do |f| %>
+          <p>Voter can attend the meetings for the following grants:</p>
+          <% @grants.each do |g| %>
+            <div class="checkbox">
+              <label>
+                <%= check_box :grants_voters, g.id, :checked => participating_checked(@voter.id, g.id) %>
+                  <strong><%= g.name %> Grant</strong>
+                  (voting period: <%= g.vote_start.strftime("%Y/%m/%d") %> to
+                  <%= g.vote_end.strftime("%Y/%m/%d") %>)
+                  <% if g.hidden %>(<strong>hidden</strong>)<% end %>
+              </label>
+            </div>
+          <% end %>
+
+          <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,7 @@ class AdminsController < ApplicationController
   before_filter :verify_admin, except: [:create, :index, :signup]
 
   def signup
+    @can_create_admin = can_create_admin?
   end
 
   def create
@@ -285,5 +286,9 @@ class AdminsController < ApplicationController
 
   def init_admin
     @admin = Admin.new
+  end
+
+  def can_create_admin?
+    admin_logged_in? || !admin_exists?
   end
 end
