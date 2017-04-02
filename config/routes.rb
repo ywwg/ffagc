@@ -15,8 +15,6 @@ Rails.application.routes.draw do
   get 'admins/voters' => 'admins#voters'
   get 'admins/submissions' => 'admins#submissions'
 
-  post 'proposals/delete' => 'proposals#delete'
-
   post 'voters/vote' => 'voters#vote'
 
   post 'admins/assign' => 'admins#assign'
@@ -32,6 +30,8 @@ Rails.application.routes.draw do
   resources :admins, only: [:new, :create, :index]
 
   resources :grant_submissions do
+    resources :proposals, only: [:destroy]
+
     member do
       get 'discuss'
       post 'generate_contract'
@@ -43,7 +43,6 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:show, :create]
 
   resources :password_resets, only: [:new, :create, :edit, :update]
-  resources :proposals
 
   namespace :sessions do
     resource :admin, only: [:new, :create, :destroy]
