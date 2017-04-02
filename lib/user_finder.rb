@@ -20,6 +20,6 @@ class UserFinder
   end
 
   private_class_method def self.normalize_email(email)
-    URI.unescape(email).downcase
+    URI.unescape(email || '').downcase.strip
   end
 end
