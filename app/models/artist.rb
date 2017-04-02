@@ -4,8 +4,10 @@ class Artist < ActiveRecord::Base
 
   has_secure_password
 
-  has_one :artist_survey
+  has_one :artist_survey, inverse_of: :artist
   has_many :grant_submissions
+
+  accepts_nested_attributes_for :artist_survey
 
   validates :name, presence: true, length: { minimum: 4 }
   validates :email, presence: true
