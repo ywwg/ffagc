@@ -4,7 +4,7 @@ class AdminsController < ApplicationController
   before_filter :init_admin
   before_filter :init_artists
   before_filter :init_voters
-  before_filter :verify_admin, except: [:index, :new, :create]
+  before_filter :verify_admin, except: [:index, :new, :create, :verify]
 
   def index
   end
@@ -33,14 +33,17 @@ class AdminsController < ApplicationController
   end
 
   def verify
-    voter = Voter.find(params[:id])
-    voter.verified = params[:verify]
-    if voter.save
+    @voter = Voter.find(params[:id])
+    authorize! :verify, @voter
+
+    @voter.verified = params[:verify]
+
+    if @voter.save
       send_email = params[:send_email] == "true"
       if send_email
         begin
-          UserMailer.voter_verified(voter, event_year).deliver_now
-          logger.info "email: voter verification sent to #{voter.email}"
+          UserMailer.voter_verified(@voter, event_year).deliver_now
+          logger.info "email: voter verification sent to #{@voter.email}"
         rescue
           flash[:warning] = "Error sending email"
           redirect_to action: "voters"
