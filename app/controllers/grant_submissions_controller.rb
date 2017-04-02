@@ -9,7 +9,7 @@ class GrantSubmissionsController < ApplicationController
     @grant_submission.artist_id = current_artist.id
 
     if @grant_submission.save
-      redirect_to :controller => "artists", :action => "index"
+      redirect_to artists_path
     else
       render 'new'
     end
@@ -39,9 +39,9 @@ class GrantSubmissionsController < ApplicationController
 
     if @grant_submission.save
       if admin_logged_in?
-        redirect_to :controller => "admins", :action => "index"
+        redirect_to admins_path
       else
-        redirect_to :controller => "artists", :action => "index"
+        redirect_to artists_path
       end
     else
       render 'new'
