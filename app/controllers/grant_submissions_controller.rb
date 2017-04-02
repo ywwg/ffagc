@@ -23,19 +23,12 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def destroy
-    @grant_submission = GrantSubmission.find(params[:id])
+    @grant_submission = GrantSubmission.where(id: params[:id]).first
+    authorize! :destroy, @grant_submission
 
-    if !modify_grant_ok?(@grant_submission)
-      redirect_to "/"
-      return
-    end
+    @grant_submission&.destroy!
 
-    @grant_submission.destroy
-    if admin_logged_in?
-      redirect_to :controller => "admins", :action => "index"
-    else
-      redirect_to :controller => "artists", :action => "index"
-    end
+    redirect_to action: 'index'
   end
 
   def update
