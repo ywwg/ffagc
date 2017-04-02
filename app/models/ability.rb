@@ -11,6 +11,10 @@ class Ability
     # after models are unified
 
     # TODO: why do admins not require activation?
+
+    # Allow an initial Admin to be crated by anyone
+    can :manage, Admin unless Admin.exists?
+
     if user.is_a?(Admin)
       can :manage, :all
     end

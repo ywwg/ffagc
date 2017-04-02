@@ -1,6 +1,18 @@
 describe Ability do
   subject(:ability) { Ability.new(user) }
 
+  context 'with nil' do
+    let(:user) { nil }
+
+    it { is_expected.to be_able_to(:manage, Admin) }
+
+    context 'an Admin already exists' do
+      let!(:admin) { FactoryGirl.create(:admin) }
+
+      it { is_expected.not_to be_able_to(:manage, Admin) }
+    end
+  end
+
   context 'with admin' do
     let(:user) { FactoryGirl.create(:admin) }
 
@@ -18,6 +30,7 @@ describe Ability do
   end
 
   context 'with artist' do
+    let!(:admin) { FactoryGirl.create(:admin) }
     let!(:user) { FactoryGirl.create(:artist, :activated) }
     let!(:artist_survey) { FactoryGirl.create(:artist_survey, artist: user) }
     let!(:grant_submission) { FactoryGirl.create(:grant_submission, artist: user) }
