@@ -1,0 +1,6 @@
+<div class="alert alert-warning">
+  <p><strong>Account not activated</strong></p>
+
+  <p>Please look in your email for an activation link. If it hasn't arrived contact <%= mail_to 'grants@fireflyartscollective.org' %> for help or request a new activation email.</p>
+  <p><%= link_to 'Request new activation email', account_activations_path, class: 'btn btn-default', method: :post %></p>
+</div>

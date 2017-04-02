@@ -27,11 +27,8 @@ class AccountActivationsController < ApplicationController
     redirect_to root_path
   rescue
     flash[:info] = 'Error sending email confirmation'
-    render 'unactivated'
+    redirect_to :back
     return
-  end
-
-  def unactivated
   end
 
   private

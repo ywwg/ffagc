@@ -43,11 +43,7 @@ Rails.application.routes.draw do
 
   resources :voters, only: [:create, :update, :index, :show]
 
-  resources :account_activations, only: [:show, :create] do
-    collection do
-      get 'unactivated'
-    end
-  end
+  resources :account_activations, only: [:show, :create]
 
   resources :password_resets, only: [:new, :create, :edit, :update]
   resources :proposals

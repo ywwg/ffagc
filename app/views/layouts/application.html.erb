@@ -61,6 +61,10 @@
     </div>
   </nav>
 
+  <% if current_user && !current_user&.activated? %>
+    <%= render partial: 'account_activations/unactivated_alert' %>
+  <% end %>
+
   <% if flash.any? %>
     <% flash.each do |name, msg| %>
       <%= content_tag :div, msg, class: "alert alert-#{name}" %>
