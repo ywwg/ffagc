@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
   mount Judge::Engine => '/judge'
 
-  get 'home/index'
-  root 'home#index'
+  root to: 'home#index'
 
   get 'password_resets/' => 'password_resets#index'
   get 'password_resets/new'
