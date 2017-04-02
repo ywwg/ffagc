@@ -70,6 +70,8 @@ gem 'dotenv'
 
 gem 'cancancan'
 
+gem 'premailer-rails'
+
 group :test, :development do
   gem 'pry'
 
