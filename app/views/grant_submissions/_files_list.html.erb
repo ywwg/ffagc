@@ -9,7 +9,7 @@
     <li class="list-group-item">
       Supplemental: <%= link_to proposal.file_identifier, proposal.file_url, target: :blank %>
       <% if local_assigns[:show_actions] && can?(:delete, proposal) %>
-        <%= link_to 'Delete', grant_submission_proposal_path(grant_submission, proposal), method: :delete, class: 'btn btn-danger btn-xs inline pull-right', data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Delete', proposal_path(proposal), method: :delete, class: 'btn btn-danger btn-xs inline pull-right', data: { confirm: 'Are you sure?' } %>
       <% end %>
     </li>
   <% end %>

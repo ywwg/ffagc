@@ -30,13 +30,13 @@ Rails.application.routes.draw do
   resources :admins, only: [:new, :create, :index]
 
   resources :grant_submissions do
-    resources :proposals, only: [:destroy]
-
     member do
       get 'discuss'
       post 'generate_contract'
     end
   end
+
+  resources :proposals, only: [:destroy]
 
   resources :voters, only: [:create, :update, :index, :show]
 
