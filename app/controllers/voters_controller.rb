@@ -102,7 +102,7 @@ class VotersController < ApplicationController
       end
 
       # TODO: use scope
-      @grant_submissions = GrantSubmission.where(grant_id: voter_active_vote_grants(current_user.id))
+      @grant_submissions = GrantSubmission.where(grant_id: voter_active_vote_grants(current_voter.id))
 
       # TODO: sort in scope or add sorting scope
       @grant_submissions = @grant_submissions.sort { |a,b| [a.name] <=> [b.name] }
@@ -114,12 +114,12 @@ class VotersController < ApplicationController
           attr_accessor :assigned
         end
 
-        vote = current_user.votes.where(grant_submission: gs).first_or_create
+        vote = current_voter.votes.where(grant_submission: gs).first_or_create
 
         @votes[gs.id] = vote
 
         #assignments
-        vsa = current_user.voter_submission_assignments.where(grant_submission: gs)
+        vsa = current_voter.voter_submission_assignments.where(grant_submission: gs)
 
         if vsa.exists?
           gs.assigned = 1

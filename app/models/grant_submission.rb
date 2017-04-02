@@ -2,6 +2,8 @@ class GrantSubmission < ActiveRecord::Base
   belongs_to :grant
   belongs_to :artist
 
+  scope :funded, -> { where('granted_funding_dollars > ?', 0).where(funding_decision: true) }
+
   has_many :proposals, inverse_of: :grant_submission
   has_many :votes
   has_many :voter_submission_assignments

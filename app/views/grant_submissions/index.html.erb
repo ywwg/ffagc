@@ -18,7 +18,7 @@
   <% end %>
 </div>
 
-<% if any_grant_submission_funded?(current_artist.id) %>
+<% if @celebrate_funded %>
   <div class="alert alert-success text-center">
     <p class="lead">OMG you've been funded!</p>
   </div>
@@ -30,11 +30,7 @@
     <tr>
       <th>Submission Title</th>
       <th>Grant</th>
-      <th>Discussion</th>
-      <th>Requested Funds</th>
-      <% if any_grant_submission_funded?(current_artist.id)%>
-      <th>Granted Funds</th>
-      <% end %>
+      <th>Funding</th>
       <th></th>
     </tr>
     </thead>
@@ -44,34 +40,21 @@
       <td><%= gs.name %></td>
       <td><%= gs.grant&.name %> Grant</td>
       <td>
-        <% if submission_has_questions?(gs.id) %>
-          Questions
-        <% else %>
-          None (yet)
-        <% end %>
-      </td>
-      <td align="right"><%= number_to_currency gs.requested_funding_dollars %></td>
-      <% if any_grant_submission_funded?(current_artist.id) %>
-        <td align="right">
-          <% if grant_submission_funded?(gs.id) %>
-            <%= number_to_currency gs.granted_funding_dollars %>
-          <% end %></td>
-      <% end %>
+        <%= render partial: 'funding_table', locals: { grant_submission: gs }%>
       <td>
         <div class="btn-toolbar">
-          <div class="btn-group">
-            <% if submission_has_questions?(gs.id) %>
-              <%= link_to "Answer Questions", discuss_grant_submission_path(gs), class: 'btn btn-primary' %>
-            <% end %>
-            <% if grant_submission_funded?(gs.id) %>
-              <%= link_to "Generate Contract", generate_contract_grant_submission_path(gs, format: 'pdf'), method: :post, class: 'btn btn-success btn-inline' %>
-            <% end %>
-          </div>
           <div class="btn-group pull-right">
             <% if can? :edit, gs %>
             <%= link_to "Edit", edit_grant_submission_path(id: gs.id), class: 'btn btn-default' %>
             <% end %>
             <%= link_to "View", grant_submission_path(id: gs.id), class: 'btn btn-default' %>
+          </div>
+          <div class="btn-group pull-right">
+            <% if grant_submission_funded?(gs.id) %>
+              <%= link_to "Generate Contract", generate_contract_grant_submission_path(gs, format: 'pdf'), method: :post, class: 'btn btn-success btn-inline' %>
+            <% elsif submission_has_questions?(gs.id) %>
+              <%= link_to "Answer Questions", discuss_grant_submission_path(gs), class: 'btn btn-primary' %>
+            <% end %>
           </div>
         </div>
       </td>
