@@ -24,16 +24,6 @@ Rails.application.routes.draw do
   get 'admins/voter_info' => 'admins#voter_info'
   get 'admins/submissions' => 'admins#submissions'
 
-  post 'artists/login' => 'sessions#create_artist'
-  get 'artists/login' => 'sessions#artist_login'
-  post 'voters/login' => 'sessions#create_voter'
-  get 'voters/login' => 'sessions#voter_login'
-  post 'admins/login' => 'sessions#create_admin'
-
-  get 'artists/logout' => 'sessions#delete_artist'
-  get 'voters/logout' => 'sessions#delete_voter'
-  get 'admins/logout' => 'sessions#delete_admin'
-
   get 'account_activations/unactivated' => 'account_activations#unactivated'
   #get 'account_activations/resend_activation' => 'account_activations#resend_activation'
 
