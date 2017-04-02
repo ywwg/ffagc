@@ -33,11 +33,7 @@ class GrantSubmissionsController < ApplicationController
 
   def update
     @grant_submission = GrantSubmission.find(params[:id])
-
-    if !modify_grant_ok?(@grant_submission)
-      redirect_to "/"
-      return
-    end
+    authorize! :update, @grant_submission
 
     @grant_submission.attributes = grant_update_params
 
