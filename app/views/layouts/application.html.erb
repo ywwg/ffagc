@@ -41,7 +41,7 @@
           <% if voter_logged_in? %>
             <li><%= link_to 'Voting', voters_path %></li>
           <% end %>
-          <% if current_user.present? %>
+          <% if can? :index, Grant %>
             <li><%= link_to 'Grants', grants_path %></li>
           <% end %>
         </ul>
