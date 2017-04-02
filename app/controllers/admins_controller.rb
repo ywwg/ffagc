@@ -17,8 +17,10 @@ class AdminsController < ApplicationController
 
     if @admin.save
       # Only assign the session to the new account if it's the first one.
-      if !session[:admin_id]
+      unless session[:admin_id].present?
         session[:admin_id] = @admin.id
+        redirect_to root_path
+        return
       end
 
       flash[:success] = "New admin <#{@admin.email}> created."
