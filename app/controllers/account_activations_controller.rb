@@ -46,7 +46,7 @@ class AccountActivationsController < ApplicationController
       # # Will need to be replaced with deliver_now
       # UserMailer.account_activation(@type, @user).deliver!
     # # rescue
-      # # flash[:notice] = "Error sending email confirmation"
+      # # flash[:info] = "Error sending email confirmation"
       # # render "signup_failure"
       # # return
     # # end
