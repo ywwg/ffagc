@@ -24,10 +24,14 @@ class AdminsController < ApplicationController
       if !session[:admin_id]
         session[:admin_id] = @admin.id
       end
-      render "signup_success"
-    else
-      render "signup_failure"
+
+      flash[:success] = "New admin <#{@admin.email}> created."
+
+      # reset @admin so form is empty
+      @admin = Admin.new
     end
+
+    render 'new'
   end
 
   def verify
