@@ -23,6 +23,11 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
+          <% if current_user.nil? %>
+            <li><%= link_to 'Artist login', new_sessions_artist_path %></li>
+            <li><%= link_to 'Voter login', new_sessions_voter_path %></li>
+            <li><%= link_to 'Admin login', new_sessions_admin_path %></li>
+          <% end %>
           <% if admin_logged_in? %>
             <li><%= link_to 'Admin Panel', admins_path %></li>
           <% end %>
@@ -36,13 +41,13 @@
         <ul class="nav navbar-nav navbar-right">
           <% if current_user.present? %>
             <% if voter_logged_in? %>
-              <li><%= link_to "Log out (#{current_voter.email})", :controller => "sessions", :action => "delete_voter" %></li>
+              <li><%= link_to "Log out (#{current_voter.email})", sessions_voter_path, method: :delete %></li>
             <% end %>
             <% if admin_logged_in? %>
-              <li><%= link_to "Log out (#{current_admin.email})", :controller => "sessions", :action => "delete_admin" %></li>
+              <li><%= link_to "Log out (#{current_admin.email})", sessions_admin_path, method: :delete %></li>
             <% end %>
             <% if artist_logged_in? %>
-              <li><%= link_to "Log out (#{current_artist.email})", :controller => "sessions", :action => "delete_artist" %></li>
+              <li><%= link_to "Log out (#{current_artist.email})", sessions_artist_path, method: :delete %></li>
             <% end %>
           <% end %>
         </ul>
