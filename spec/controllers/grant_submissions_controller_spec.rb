@@ -101,10 +101,7 @@ describe GrantSubmissionsController do
       end
 
       context 'with non-existent grant_submission id' do
-        it 'redirects to /' do
-          go! GrantSubmission.count + 1
-          expect(response).to redirect_to('/')
-        end
+        it { go! GrantSubmission.count + 1; expect(response).not_to be_ok }
       end
     end
 
@@ -129,10 +126,7 @@ describe GrantSubmissionsController do
       end
 
       context 'with non-existent grant_submission id' do
-        it 'redirects to /' do
-          go! GrantSubmission.count + 1
-          expect(response).to redirect_to('/')
-        end
+        it { go! GrantSubmission.count + 1; expect(response).not_to be_ok }
       end
     end
   end

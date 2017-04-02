@@ -28,10 +28,26 @@ class GrantSubmission < ActiveRecord::Base
   # prevent randos from using the grants server as an ftp site
   validate :proposal_validation, if: :proposal?
 
+  before_save :update_question_and_answer_dates
+
   def proposal_validation
     return unless proposal.size > 100.megabytes
 
     logger.warn "rejecting large upload: #{proposal.inspect}"
     errors[:proposal] << 'File must be less than 100MB'
+  end
+
+  private
+
+  def update_question_and_answer_dates
+    # TODO: is there a nice way to have this be the same as the new updated_at
+
+    if questions_changed?
+      self.questions_updated_at = Time.zone.now
+    end
+
+    if answers_changed?
+      self.answers_updated_at = Time.zone.now
+    end
   end
 end

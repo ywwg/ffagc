@@ -13,10 +13,10 @@
             <h3 class="panel-title">Questions from Committee</h3>
           </div>
           <div class="panel-body">
-            <% if @question_edit_disable %>
-              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
-            <% else %>
+            <% if can? :edit_questions, @grant_submission %>
               <%= f.text_area :questions, class: 'form-control', rows: '20' %>
+            <% else %>
+              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
             <% end %>
           </div>
         </div>
@@ -27,10 +27,10 @@
             <h3 class="panel-title">Answers from Artist</h3>
           </div>
           <div class="panel-body">
-            <% if @answer_edit_disable %>
-              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
-            <% else %>
+            <% if can? :edit_answers, @grant_submission %>
               <%= f.text_area :answers, class: 'form-control', rows: '20' %>
+            <% else %>
+              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
             <% end %>
           </div>
           <div class="panel-heading">

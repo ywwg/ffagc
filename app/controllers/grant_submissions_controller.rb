@@ -1,49 +1,28 @@
 require 'grant_contract'
 
 class GrantSubmissionsController < ApplicationController
+  load_and_authorize_resource
 
-  before_filter :initialize_grant_submission
   before_action :set_back_link
 
   def create
-    if !artist_logged_in?
-      redirect_to root_path
-      return
-    end
-
-    @grant_submission = GrantSubmission.new(grant_submission_params)
-
     @grant_submission.artist_id = current_artist.id
 
     if @grant_submission.save
-      redirect_to :controller => "artists", :action => "index"
+      redirect_to artists_path
     else
       render 'new'
     end
   end
 
   def destroy
-    @grant_submission = GrantSubmission.where(id: params[:id]).first
-    authorize! :destroy, @grant_submission
-
     @grant_submission&.destroy!
 
     redirect_to action: 'index'
   end
 
   def update
-    @grant_submission = GrantSubmission.find(params[:id])
-    authorize! :update, @grant_submission
-
     @grant_submission.attributes = grant_update_params
-
-    if @grant_submission.questions_changed?
-      @grant_submission.questions_updated_at = Time.zone.now
-    end
-
-    if @grant_submission.answers_changed?
-      @grant_submission.answers_updated_at = Time.zone.now
-    end
 
     if admin_logged_in?
       @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
@@ -52,9 +31,9 @@ class GrantSubmissionsController < ApplicationController
 
     if @grant_submission.save
       if admin_logged_in?
-        redirect_to :controller => "admins", :action => "index"
+        redirect_to admins_path
       else
-        redirect_to :controller => "artists", :action => "index"
+        redirect_to artists_path
       end
     else
       render 'new'
@@ -62,23 +41,16 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def show
-    @grant_submission = GrantSubmission.find(params[:id])
-    authorize! :show, @grant_submission
   end
 
   def index
-    authorize! :index, GrantSubmission
-    @grant_submissions = GrantSubmission.accessible_by(current_ability)
-
     @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
   end
 
   def edit
-    @grant_submission = GrantSubmission.find(params.permit(:id, :authenticity_token)[:id])
-    authorize! :edit, @grant_submission
-
     # Don't allow an artist to decide post-decision that they want a different
     # grant category.
+    # TODO move this logic to Ability
     @grant_change_disable = false
     if @grant_submission.funding_decision && !admin_logged_in?
       @grant_change_disable = true
@@ -88,30 +60,12 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def discuss
-    begin
-      @grant_submission = GrantSubmission.find(params[:grant_submission_id] || params[:id])
-    rescue
-      redirect_to "/"
-      return
-    end
-
-    authorize! :show, @grant_submission
-
-    @question_edit_disable = false
-    if !admin_logged_in?
-      @question_edit_disable = true
-    end
-
-    @answer_edit_disable = false
-    if !artist_logged_in? && !admin_logged_in?
-      @answer_edit_disable = true
-    end
-
     @proposal = Proposal.new
   end
 
   def generate_contract
     @grant_submission = GrantSubmission.find(params[:grant_submission_id])
+    # TODO: use new Ability action
     authorize! :read, @grant_submission
 
     if !grant_submission_funded?(@grant_submission.id)
@@ -138,19 +92,23 @@ class GrantSubmissionsController < ApplicationController
 
   private
 
-  def initialize_grant_submission
-    @grant_submission = GrantSubmission.new
-  end
-
   def grant_submission_params
     params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars)
   end
 
   def grant_update_params
-    allowed_params = [:name, :grant_id, :requested_funding_dollars, :answers, :proposal]
+    allowed_params = [:name, :grant_id, :requested_funding_dollars, :proposal]
 
     if admin_logged_in?
-      allowed_params.push(:granted_funding_dollars, :funding_decision, :questions)
+      allowed_params.push(:granted_funding_dollars, :funding_decision)
+    end
+
+    if can? :edit_questions, GrantSubmission
+      allowed_params.push(:questions)
+    end
+
+    if can? :edit_answers, GrantSubmission
+      allowed_params.push(:answers)
     end
 
     par = params.require(:grant_submission).permit(allowed_params)
