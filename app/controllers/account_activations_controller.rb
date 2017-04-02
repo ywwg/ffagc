@@ -14,6 +14,8 @@ class AccountActivationsController < ApplicationController
   end
 
   # Reset activation token and send activation email
+  # Currently doesn't have any sort of timeout and sends an email
+  # so it could be abused.
   def create
     raise if @user.activated? || @user.nil?
 
