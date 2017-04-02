@@ -16,7 +16,7 @@ class Admin < ActiveRecord::Base
   private
 
   def normalize_email
-    self.email = email.downcase.strip
+    self.email = email&.downcase&.strip
   end
 
   def activate

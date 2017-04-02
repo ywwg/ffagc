@@ -15,5 +15,10 @@ describe Admin do
       expect { subject.save! }.to change { subject.activated }
       expect(subject.activated).to eq(true)
     end
+
+    context 'nil email' do
+      subject { FactoryGirl.build(:admin, email: nil) }
+      its(:valid?) { is_expected.to eq(false) }
+    end
   end
 end
