@@ -104,7 +104,7 @@ class GrantSubmissionsController < ApplicationController
       return
     end
 
-    authorize! :view, @grant_submission
+    authorize! :show, @grant_submission
 
     @question_edit_disable = false
     if !admin_logged_in?
