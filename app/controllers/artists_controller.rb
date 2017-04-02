@@ -1,6 +1,7 @@
 class ArtistsController < ApplicationController
+  load_and_authorize_resource only: [:show]
 
-  before_filter :initialize_user
+  before_filter :initialize_user, except: [:show]
 
   def signup
     @artist.artist_survey ||= ArtistSurvey.new

@@ -10,23 +10,23 @@
         <h3 class="panel-title">Survey Responses</h3>
       </div>
       <div class="panel-body">
-        <% if @artist_survey.present? %>
-          <p>Has attended firefly? <% if @artist_survey.has_attended_firefly %>Yes<% else %>No<%end%></p>
-          <% if @artist_survey.has_attended_firefly_desc.present? %>
-          <blockquote><%= @artist_survey.has_attended_firefly_desc %></blockquote>
+        <% if @artist.artist_survey.present? %>
+          <p>Has attended firefly? <% if @artist.artist_survey.has_attended_firefly %>Yes<% else %>No<%end%></p>
+          <% if @artist.artist_survey.has_attended_firefly_desc.present? %>
+          <blockquote><%= @artist.artist_survey.has_attended_firefly_desc %></blockquote>
           <% end %>
 
-          <p>Has attended a regional? <% if @artist_survey.has_attended_regional %>Yes<% else %>No<%end%></p>
-          <% if @artist_survey.has_attended_regional_desc.present? %>
-          <blockquote><%= @artist_survey.has_attended_regional_desc %></blockquote>
+          <p>Has attended a regional? <% if @artist.artist_survey.has_attended_regional %>Yes<% else %>No<%end%></p>
+          <% if @artist.artist_survey.has_attended_regional_desc.present? %>
+          <blockquote><%= @artist.artist_survey.has_attended_regional_desc %></blockquote>
           <% end %>
 
-          <p>Has attended Burning Man? <% if @artist_survey.has_attended_bm %>Yes<% else %>No<%end%><br/>
-          <% if @artist_survey.has_attended_bm_desc.present? %>
-          <blockquote><%= @artist_survey.has_attended_bm_desc %></blockquote>
+          <p>Has attended Burning Man? <% if @artist.artist_survey.has_attended_bm %>Yes<% else %>No<%end%><br/>
+          <% if @artist.artist_survey.has_attended_bm_desc.present? %>
+          <blockquote><%= @artist.artist_survey.has_attended_bm_desc %></blockquote>
           <% end %>
 
-          <p>Permission to use grant as example? <% if @artist_survey.can_use_as_example %>Yes<% else %>No<%end%></p>
+          <p>Permission to use grant as example? <% if @artist.artist_survey.can_use_as_example %>Yes<% else %>No<%end%></p>
         <% else %>
           <p>Could not locate survey responses.</p>
         <% end %>

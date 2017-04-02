@@ -180,13 +180,6 @@ class AdminsController < ApplicationController
   end
 
   # TODO: endpoint does not belong here
-  def artist_info
-    id = params.require(:id)
-    @artist = Artist.find(id)
-    @artist_survey = ArtistSurvey.where(artist_id: id).take
-  end
-
-  # TODO: endpoint does not belong here
   def voters
   end
 
