@@ -11,12 +11,16 @@ describe Ability do
     end
   end
 
+  shared_examples 'can read non-hidden Grants' do
+    it { is_expected.to be_able_to(:read, Grant) }
+    it { is_expected.not_to be_able_to(:read, FactoryGirl.build(:grant, hidden: true)) }
+  end
+
   context 'with nil' do
     let(:user) { nil }
 
     it_behaves_like 'can manage Admin unless Admin.exists?'
-
-
+    it_behaves_like 'can read non-hidden Grants'
   end
 
   context 'with admin' do
@@ -42,12 +46,11 @@ describe Ability do
     let!(:proposal) { FactoryGirl.create(:proposal, grant_submission: grant_submission) }
 
     it_behaves_like 'can manage Admin unless Admin.exists?'
+    it_behaves_like 'can read non-hidden Grants'
 
     it { is_expected.to be_able_to(:manage, artist_survey) }
     it { is_expected.to be_able_to(:manage, grant_submission) }
     it { is_expected.to be_able_to(:manage, proposal) }
-    it { is_expected.to be_able_to(:index, Grant.new) }
-    it { is_expected.to be_able_to(:show, Grant.new) }
 
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
     it { is_expected.not_to be_able_to(:manage, Artist.new) }
@@ -66,8 +69,6 @@ describe Ability do
       it { is_expected.not_to be_able_to(:manage, artist_survey) }
       it { is_expected.not_to be_able_to(:manage, grant_submission) }
       it { is_expected.not_to be_able_to(:manage, proposal) }
-      it { is_expected.not_to be_able_to(:index, Grant.new) }
-      it { is_expected.not_to be_able_to(:show, Grant.new) }
     end
   end
 
@@ -79,6 +80,7 @@ describe Ability do
     let(:vote) { FactoryGirl.build(:vote, voter: user) }
 
     it_behaves_like 'can manage Admin unless Admin.exists?'
+    it_behaves_like 'can read non-hidden Grants'
 
     it { is_expected.to be_able_to(:vote, GrantSubmission.new) }
 
@@ -86,8 +88,7 @@ describe Ability do
     it { is_expected.to be_able_to(:manage, voter_survey) }
     it { is_expected.to be_able_to(:read, voter_submission_assignment) }
     it { is_expected.to be_able_to(:read, GrantSubmission.new) }
-    it { is_expected.to be_able_to(:index, Grant.new) }
-    it { is_expected.to be_able_to(:show, Grant.new) }
+    it { is_expected.to be_able_to(:read, Grant.new) }
 
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
     it { is_expected.not_to be_able_to(:manage, Artist.new) }
@@ -109,8 +110,6 @@ describe Ability do
       it { is_expected.not_to be_able_to(:manage, voter_survey) }
       it { is_expected.not_to be_able_to(:read, voter_submission_assignment) }
       it { is_expected.not_to be_able_to(:read, GrantSubmission.new) }
-      it { is_expected.not_to be_able_to(:index, Grant.new) }
-      it { is_expected.not_to be_able_to(:show, Grant.new) }
     end
   end
 end
