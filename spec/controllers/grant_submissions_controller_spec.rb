@@ -1,69 +1,72 @@
 describe GrantSubmissionsController do
   let!(:grant) { FactoryGirl.create(:grant) }
-  let!(:artist) { FactoryGirl.create(:artist) }
+  let!(:artist) { FactoryGirl.create(:artist, :activated) }
   let!(:grant_submission) { FactoryGirl.create(:grant_submission, artist: artist, grant: grant) }
 
   describe '#discuss' do
+    def go!(id)
+      get 'discuss', id: id
+    end
+
+    subject { response }
+
     context 'artist signed in' do
-      before { sign_in_artist(artist.id) }
+      before { sign_in artist }
 
       context 'with valid submission for artist' do
         render_views
 
         it 'shows discussion page' do
-          get 'discuss', id: grant_submission.id
+          go! grant_submission.id
           expect(response).to render_template('grant_submissions/discuss')
 
           # this is an artist, so we can edit the answers but not questions
-          assert_select 'textarea#grant_submission_questions[disabled=?]', 'disabled'
+          expect(css_select('textarea#grant_submission_questions')).to be_empty
 
-          # There has got to be an easier way to test for nonexistence of an attr.
-          assert_select 'textarea#grant_submission_answers' do |e|
-            e.each do |t|
-              expect(t.attributes).not_to have_key('disabled')
-            end
-          end
+          # answers block is present and not disabled
+          expect(css_select('textarea#grant_submission_answers').first.attr('disabled')).to be_nil
         end
       end
 
       context 'with non-existent grant_submission id' do
-        it 'redirects to /' do
-          get 'discuss', id: GrantSubmission.count + 1
-          expect(response).to redirect_to('/')
-        end
+        before { go! GrantSubmission.count + 1 }
+
+        it { is_expected.not_to be_ok }
       end
 
       context 'with grant_submission id for another artist' do
         let!(:another_grant_submission) { FactoryGirl.create(:grant_submission) }
 
-        it 'redirects to /' do
-          get 'discuss', id: another_grant_submission.id
-          expect(response).to redirect_to('/')
-        end
+        before { go! another_grant_submission.id }
+
+        it { is_expected.not_to be_ok }
       end
     end
 
     context 'voter signed in' do
-      let(:voter) { FactoryGirl.create(:voter, :verified) }
+      let(:voter) { FactoryGirl.create(:voter, :verified, :activated) }
 
-      before { sign_in_voter(voter.id) }
+      before { sign_in voter }
 
       context 'with valid grant_submission' do
         render_views
 
         it 'shows discussion page' do
-          get 'discuss', id: grant_submission.id
+          go! grant_submission.id
           expect(response).to render_template('grant_submissions/discuss')
 
           # this is a voter, can't edit either
-          assert_select 'textarea#grant_submission_questions[disabled=?]', 'disabled'
-          assert_select 'textarea#grant_submission_answers[disabled=?]', 'disabled'
+          expect(css_select('textarea#grant_submission_questions')).to be_empty
+          expect(css_select('textarea#grant_submission_answers')).to be_empty
+
+          # test that both blockquotes are present
+          expect(css_select('blockquote').size).to eq(2)
         end
       end
 
       context 'with non-existent grant_submission id' do
         it 'redirects to /' do
-          get 'discuss', id: GrantSubmission.count + 1
+          go! GrantSubmission.count + 1
           expect(response).to redirect_to('/')
         end
       end
@@ -72,32 +75,26 @@ describe GrantSubmissionsController do
     context 'admin signed in' do
       let(:admin) { FactoryGirl.create(:admin, :activated) }
 
-      before { sign_in_admin(admin.id) }
+      before { sign_in admin }
 
       context 'with valid grant_submission' do
         render_views
 
         it 'shows discussion page' do
-          get 'discuss', id: grant_submission.id
+          go!(grant_submission.id)
           expect(response).to render_template('grant_submissions/discuss')
 
-          # this is an admin, can edit both
-          assert_select 'textarea#grant_submission_questions' do |e|
-            e.each do |t|
-              expect(t.attributes).not_to have_key('disabled')
-            end
-          end
-          assert_select 'textarea#grant_submission_answers' do |e|
-            e.each do |t|
-              expect(t.attributes).not_to have_key('disabled')
-            end
-          end
+          # questions block is present and not disabled
+          expect(css_select('textarea#grant_submission_questions').first.attr('disabled')).to be_nil
+
+          # answers block is present and not disabled
+          expect(css_select('textarea#grant_submission_answers').first.attr('disabled')).to be_nil
         end
       end
 
       context 'with non-existent grant_submission id' do
         it 'redirects to /' do
-          get 'discuss', id: GrantSubmission.count + 1
+          go! GrantSubmission.count + 1
           expect(response).to redirect_to('/')
         end
       end
