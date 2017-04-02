@@ -1,119 +1,90 @@
-<h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Voting Committee Signup</h1>
+<ol class="breadcrumb">
+  <li>Signup</li>
+  <li class="active">Voting Committee</li>
+</ol>
 
-If you were on the committee in previous years, thank you for being so awesome! You <b>will</b> need to sign up again for <%= event_year %>.
-<br />
+<div class="alert alert-info">
+  <p><strong>Notice</strong>: If you were on the committee in previous years, thank you for being so awesome! You <b>will</b> need to sign up again for <%= event_year %>.</p>
+</div>
 
-<%= semantic_form_for @voter, :html => { :onsubmit => 'return validate();'} do |f| %>
-  <h2>Basic Details:</h2>
-  <%= f.inputs do %>
-    <%= f.input :name, :label => "Full Name", :required => true, :validate => true %>
-    <%= f.input :email, :label => "Email Address (this is your login)", :required => true, :validate => true %>
-    <%= f.input :password, :label => "Password", :required => true, :validate => true %>
-    <%= f.input :password_confirmation, :label => "Password Confirmation", :required => true, :validate => true %>
-  <% end %>
+<%= simple_form_for @voter do |f| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Basic Details</h3>
+    </div>
+    <div class="panel-body">
+      <%= f.input :name, label: "Full Name", required: true, validate: true %>
+      <%= f.input :email, label: "Email Address (this is your login)", required: true, validate: true %>
+      <%= f.input :password, label: "Password", required: true, validate: true %>
+      <%= f.input :password_confirmation, label: "Password Confirmation", required: true, validate: true %>
+    </div>
+  </div>
 
-  <br />
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Requirements</h3>
+    </div>
+    <div class="panel-body">
+      <div class="checkbox">
+        <label><%= check_box :survey, :has_attended_firefly %> I have attended at least one previous Firefly</label>
+      </div>
+      <div class="checkbox">
+        <label><%= check_box :survey, :not_applying_this_year %> I am NOT applying for a Firefly Art Grant in <%= event_year %></label>
+      </div>
+      <div class="checkbox">
+        <label><%= check_box :survey, :will_read %> I commit to reading and considering > 35 applications (~4-6 hours of brain time)</label>
+      </div>
+      <div class="checkbox">
+        <label><%= check_box :survey, :signed_agreement %>
+          <%# TODO Link to the actual agreement! %>
+          <strong>I have read and agree to abide by the
+          <a href="https://www.fireflyartscollective.org/wp-content/uploads/2017/01/FireflyArtGrantCommitteeCodeofEthics.pdf">
+            Firefly Art Grant Code of Ethics</a>.
+        </strong></label>
+      </div>
 
-  <h2>Requirements:</h2>
+      <p>I am willing and able to make all of the meeting discussion dates within one or more of the following groups:</p>
+      <ul class="list-unstyled">
+        <% collated_meetings.each do |dates, data| %>
+          <li>
+            <div class="checkbox">
+              <label>
+              <%= check_box :grants_voters, data['id'] %>
+              <strong><%= data['names'].join(", ") %></strong><br/>
+              (First meeting: <%= Date::DAYNAMES[dates[0].wday] %>,
+                              <%= dates[0].strftime("%b %-d, %Y") %>;
+              Second meeting: <%= Date::DAYNAMES[dates[1].wday] %>,
+                              <%= dates[1].strftime("%b %-d, %Y") %>)
+              </label>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
 
-  <%= f.inputs do %>
-      <%= check_box :survey, :has_attended_firefly, :style => "width: 50px;" %> I have attended at least one previous Firefly
-      <br /><br />
-      <%= check_box :survey, :not_applying_this_year, :style => "width: 50px;" %> I am NOT applying for a Firefly Art Grant in <%= event_year %>
-      <br /><br />
-      <%= check_box :survey, :will_read, :style => "width: 50px;" %> I commit to reading and considering > 35 applications (~4-6 hours of brain time)
-      <br /><br />
-      <%= check_box :survey, :signed_agreement, :style => "width: 50px;" %>
-        <%# TODO Link to the actual agreement! %>
-        <strong>I have read and agree to abide by the
-        <a href="https://www.fireflyartscollective.org/wp-content/uploads/2017/01/FireflyArtGrantCommitteeCodeofEthics.pdf">
-          Firefly Art Grant Code of Ethics</a>.
-      </strong>
-  <% end %>
-  <%= f.inputs do %>
-    <p>I am willing and able to make all of the meeting discussion dates within one or both of the following groups:</p>
-    <ul>
-      <% collated_meetings.each do |dates, data| %>
-        <li><%= check_box :grants_voters, data['id'] %>
-            <strong><%= data['names'].join(", ").html_safe %></strong><br/>
-            (First meeting: <%= Date::DAYNAMES[dates[0].wday] %>,
-                            <%= dates[0].strftime("%b %-d, %Y") %>;
-            Second meeting: <%= Date::DAYNAMES[dates[1].wday] %>,
-                            <%= dates[1].strftime("%b %-d, %Y") %>)
-        </li>
-      <% end %>
-    </ul>
-  <% end %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Optional Survey</h3>
+    </div>
+    <div class="panel-body">
+      <div class="checkbox">
+        <label><%= check_box :survey, :has_been_voter, :style => "width: 50px;" %> I have been a member of the Firefly art grant voting committee in previous years</label>
+      </div>
+      <div class="checkbox">
+        <label><%= check_box :survey, :has_participated_other, :style => "width: 50px;" %> I have been on art grant voting/judging committees for other institutions</label>
+      </div>
+      <div class="checkbox">
+        <label><%= check_box :survey, :has_received_grant, :style => "width: 50px;" %> I have been awarded a Firefly art grant in previous years</label>
+      </div>
+      <div class="checkbox">
+        <label><%= check_box :survey, :has_received_other_grant, :style => "width: 50px;" %> I have been awarded art grants from other institutions</label>
+      </div>
+      How many Fireflies have you attended? <%= number_field :survey, :how_many_fireflies, :min => 0, :style => "width: 50px;" %>
+    </div>
+  </div>
 
-  <br />
-
-  <h2>Survey:</h2>
-
-  <%= f.inputs do %>
-    <%= check_box :survey, :has_been_voter, :style => "width: 50px;" %> I have been a member of the Firefly art grant voting committee in previous years
-    <br /> <br />
-    <%= check_box :survey, :has_participated_other, :style => "width: 50px;" %> I have been on art grant voting/judging committees for other institutions
-    <br /><br />
-    <%= check_box :survey, :has_received_grant, :style => "width: 50px;" %> I have been awarded a Firefly art grant in previous years
-    <br /><br />
-    <%= check_box :survey, :has_received_other_grant, :style => "width: 50px;" %> I have been awarded art grants from other institutions
-    <br /><br />
-    How many Fireflies have you attended? <%= number_field :survey, :how_many_fireflies, :min => 0, :style => "width: 50px;" %>
-  <% end %>
-
-  <fieldset><%= submit_tag("Sign Up!", class: "button")%></fieldset>
+  <p>
+  <%= submit_tag("Sign Up!", class: "btn btn-primary")%>
+  </p>
 <% end %>
-
-<script>
-  function validate() {
-
-  errors = 0;
-
-  judge.validate(document.getElementById('voter_name'), {
-    valid: function(element) {
-      element.style.border = '1px solid green';
-    },
-    invalid: function(element, messages) {
-      element.style.border = '1px solid red';
-      alert('name error: ' + messages.join(','));
-      errors++;
-    }
-  });
-
-  judge.validate(document.getElementById('voter_email'), {
-    valid: function(element) {
-      element.style.border = '1px solid green';
-    },
-    invalid: function(element, messages) {
-      element.style.border = '1px solid red';
-      alert('email error:' + messages.join(','));
-      errors++;
-    }
-  });
-
-  judge.validate(document.getElementById('voter_password'), {
-    valid: function(element) {
-      element.style.border = '1px solid green';
-    },
-    invalid: function(element, messages) {
-      element.style.border = '1px solid red';
-      alert('password error:' + messages.join(','));
-      errors++;
-    }
-  });
-
-  judge.validate(document.getElementById('voter_password_confirmation'), {
-    valid: function(element) {
-      element.style.border = '1px solid green';
-    },
-    invalid: function(element, messages) {
-      element.style.border = '1px solid red';
-      alert('password_confirmation error:' + messages.join(','));
-      errors++;
-    }
-  });
-
-  return errors===0;
-
-  }
-</script>
