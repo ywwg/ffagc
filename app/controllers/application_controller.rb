@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from CanCan::AccessDenied, :with => :deny_access
+  rescue_from ActiveRecord::RecordNotFound, :with => :deny_access
 
   def event_year
     Rails.configuration.event_year
