@@ -1,67 +1,14 @@
 class ProposalsController < ApplicationController
-
-  before_filter :verify_correct_artist
-
-  def create
-    @proposal = Proposal.new(proposal_params)
-    if @proposal.save
-      redirect_to discuss_grant_submission_path(grant_submission_id)
-    else
-      render "upload_failure"
-    end
-  end
+  load_and_authorize_resource
 
   def destroy
-    @proposal = Proposal.find(proposal_id)
-
     begin
-      @proposal.destroy
-      redirect_to discuss_grant_submission_path(grant_submission_id)
+      @proposal.destroy!
     rescue
-      render "destroy_failure"
-    end
-  end
-
-  private
-
-  def grant_submission_id
-    params[:grant_submission_id] || proposal_params[:grant_submission_id]
-  end
-
-  def proposal_id
-    params[:id] || proposal_params[:id]
-  end
-
-  def proposal_params
-    params.require(:proposal).permit(:grant_submission_id, :file, :id)
-  end
-
-  def verify_correct_artist
-    # TODO: use cancan
-    @proposal = Proposal.find(proposal_id)
-
-    if admin_logged_in?
-      return
+      flash[:warning] = 'Error deleting supplemental document.'
     end
 
-    if !current_artist
-      redirect_to "/"
-      return
-    end
-    begin
-      @grant_submission = if @proposal.present?
-        @proposal.grant_submission
-      else
-        GrantSubmission.find(grant_submission_id)
-      end
-    rescue
-      redirect_to "/"
-      return
-    end
-    if @grant_submission.artist_id != current_artist.id
-      logger.warning "Attempt to upload supplement for submission not owned by current artist"
-      redirect_to "/"
-      return
-    end
+    # TODO consider have redirect_to param
+    redirect_to edit_grant_submission_path(@proposal.grant_submission)
   end
 end
