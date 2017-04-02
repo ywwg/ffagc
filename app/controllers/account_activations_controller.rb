@@ -1,56 +1,53 @@
-require 'uri'
-
 class AccountActivationsController < ApplicationController
-  def edit
-    user = UserFinder.find_by_email!(params[:type], params[:email])
+  before_action :set_user
+  before_action :redirect_if_current_user_activated, only: [:show, :create]
 
-    if user.activation_token_valid?(params[:id])
-      user.activate!
+  # this GET request action can edit a user
+  def show
+    if @user&.activation_token_valid?(params[:id])
+      @user.activate!
 
-      render 'success'
-    else
-      render 'failure'
+      render 'show'
     end
   rescue ActiveRecord::ActiveRecordError => e
-    render 'failure'
+    render 'show'
+  end
+
+  # Reset activation token and send activation email
+  def create
+    raise if @user.activated? || @user.nil?
+
+    @user.create_activation_digest
+    @user.save!
+
+    UserMailer.account_activation(@type, @user).deliver_now
+
+    redirect_to root_path
+  rescue
+    flash[:info] = 'Error sending email confirmation'
+    render 'unactivated'
+    return
   end
 
   def unactivated
-    @type = params[:type]
-    @email = params[:email]
   end
 
-  # This doesn't work because we have to regenerate the token *and* the
-  # digest, and then resend to the user.  Therefore it'd have to happen in
-  # the individual user type controllers.  I can't be bothered, so let's just
-  # leave this undone for now.
+  private
 
-  # def resend_activation
-    # @type = params[:type]
-    # @email = params[:email]
-#
-    # if @type == "artists"
-      # @user = Artist.find_by(email: params[:email].downcase)
-    # elsif @type == "voters"
-      # @user = Voter.find_by(email: params[:email].downcase)
-    # elsif @type == "admins"
-      # @user = Admin.find_by(email: params[:email].downcase)
-    # end
-#
-    # if @user.activated
-      # redirect_to :controller => "home", :action => "index"
-    # end
-#
-    # # Send email!
-    # #begin
-      # # Will need to be replaced with deliver_now
-      # UserMailer.account_activation(@type, @user).deliver!
-    # # rescue
-      # # flash[:info] = "Error sending email confirmation"
-      # # render "signup_failure"
-      # # return
-    # # end
-    # redirect_to "/"
-  # end
+  def redirect_if_current_user_activated
+    if @user&.activated? && @user == current_user
+      after_activate
+    end
+  end
 
+  def set_user
+    @type = params[:type]
+    @email = params[:email]
+    @user = UserFinder.find_by_email(@type, @email)
+  end
+
+  def after_activate
+    flash[:info] = 'Account already activated.'
+    redirect_to root_path
+  end
 end

@@ -18,9 +18,6 @@ Rails.application.routes.draw do
   get 'admins/voters' => 'admins#voters'
   get 'admins/submissions' => 'admins#submissions'
 
-  get 'account_activations/unactivated' => 'account_activations#unactivated'
-  #get 'account_activations/resend_activation' => 'account_activations#resend_activation'
-
   post 'proposals/delete' => 'proposals#delete'
 
   post 'voters/vote' => 'voters#vote'
@@ -45,7 +42,13 @@ Rails.application.routes.draw do
   end
 
   resources :voters, only: [:create, :update, :index, :show]
-  resources :account_activations, only: [:edit]
+
+  resources :account_activations, only: [:show, :create] do
+    collection do
+      get 'unactivated'
+    end
+  end
+
   resources :password_resets, only: [:new, :create, :edit, :update]
   resources :proposals
 
