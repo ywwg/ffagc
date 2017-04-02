@@ -80,25 +80,6 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def discuss
-    begin
-      @grant_submission = GrantSubmission.find(params[:grant_submission_id] || params[:id])
-    rescue
-      redirect_to "/"
-      return
-    end
-
-    authorize! :show, @grant_submission
-
-    @question_edit_disable = false
-    if !admin_logged_in?
-      @question_edit_disable = true
-    end
-
-    @answer_edit_disable = false
-    if !artist_logged_in? && !admin_logged_in?
-      @answer_edit_disable = true
-    end
-
     @proposal = Proposal.new
   end
 
