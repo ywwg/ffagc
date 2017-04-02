@@ -24,14 +24,6 @@ class GrantSubmissionsController < ApplicationController
   def update
     @grant_submission.attributes = grant_update_params
 
-    if @grant_submission.questions_changed?
-      @grant_submission.questions_updated_at = Time.zone.now
-    end
-
-    if @grant_submission.answers_changed?
-      @grant_submission.answers_updated_at = Time.zone.now
-    end
-
     if admin_logged_in?
       @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
       @grant_submission.funding_decision = grant_update_params[:funding_decision]
