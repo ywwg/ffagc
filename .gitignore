@@ -32,3 +32,5 @@ bower.json
 
 # Email passwords (not even working, though)
 config/initializers/smtp_secret.rb
+
+.DS_Store
