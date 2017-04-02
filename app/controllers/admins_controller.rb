@@ -6,6 +6,9 @@ class AdminsController < ApplicationController
   before_filter :init_voters
   before_filter :verify_admin, except: [:index, :new, :create]
 
+  def index
+  end
+
   def new
   end
 
@@ -187,9 +190,6 @@ class AdminsController < ApplicationController
         end
       end
     end
-  end
-
-  def index
   end
 
   def artists
