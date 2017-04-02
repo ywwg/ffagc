@@ -72,6 +72,7 @@ describe Ability do
     let(:voter_survey) { FactoryGirl.create(:voter_survey, voter: user) }
     let(:vote) { FactoryGirl.build(:vote, voter: user) }
 
+    it { is_expected.to be_able_to(:manage, Admin.new) }
     it { is_expected.to be_able_to(:vote, GrantSubmission.new) }
 
     it { is_expected.to be_able_to(:manage, vote) }
@@ -81,7 +82,6 @@ describe Ability do
     it { is_expected.to be_able_to(:index, Grant.new) }
     it { is_expected.to be_able_to(:show, Grant.new) }
 
-    it { is_expected.not_to be_able_to(:manage, Admin.new) }
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
     it { is_expected.not_to be_able_to(:manage, Artist.new) }
     it { is_expected.not_to be_able_to(:manage, GrantSubmission.new) }
@@ -92,6 +92,12 @@ describe Ability do
     it { is_expected.not_to be_able_to(:manage, VoterSurvey.new) }
     it { is_expected.not_to be_able_to(:manage, Voter.new) }
     it { is_expected.not_to be_able_to(:manage, Vote.new) }
+
+    context 'an Admin already exists' do
+      let!(:admin) { FactoryGirl.create(:admin) }
+
+      it { is_expected.not_to be_able_to(:manage, Admin) }
+    end
 
     context 'when not activated' do
       let(:user) { FactoryGirl.create(:voter) }
