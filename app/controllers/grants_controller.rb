@@ -16,11 +16,6 @@ class GrantsController < ApplicationController
   end
 
   def edit
-    unless @grant.present?
-      redirect_to action: 'index'
-      return
-    end
-
     render 'new'
   end
 
