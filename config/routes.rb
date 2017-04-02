@@ -16,12 +16,7 @@ Rails.application.routes.draw do
 
   get 'admins/' => 'admins#index'
   post 'admins/index' => 'admins#index'
-  get 'admins/signup' => 'admins#signup'
-  post 'admins/signup' => 'admins#create'
-  get 'admins/artists' => 'admins#artists'
-  get 'admins/artist_info' => 'admins#artist_info'
   get 'admins/voters' => 'admins#voters'
-  get 'admins/voter_info' => 'admins#voter_info'
   get 'admins/submissions' => 'admins#submissions'
 
   get 'account_activations/unactivated' => 'account_activations#unactivated'
@@ -38,8 +33,10 @@ Rails.application.routes.draw do
   post 'admins/send_question_emails' => 'admins#send_question_emails'
 
 
-  resources :artists, :admins, :grant_submissions
+  resources :artists, :grant_submissions
   resources :grants, except: [:show]
+
+  resources :admins, only: [:new, :create, :index]
 
   resources :grant_submissions do
     member do
@@ -48,7 +45,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :voters, only: [:create, :update, :index]
+  resources :voters, only: [:create, :update, :index, :show]
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :create, :edit, :update]
   resources :proposals

@@ -1,6 +1,13 @@
 class VotersController < ApplicationController
     before_filter :initialize_voter
 
+  def show
+    @voter = Voter.find(params[:id])
+    authorize! :show, @voter
+
+    @grants = Grant.all
+  end
+
     def signup
     end
 

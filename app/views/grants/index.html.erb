@@ -1,6 +1,7 @@
-<%= render partial: 'shared/links' %>
-
-<h2>Grant Types</h2>
+<ol class="breadcrumb">
+  <li><%= link_to "Grants", grants_path %></li>
+  <li class="active">Overview</li>
+</ol>
 
 <% if any_submit_open? %>
   <p>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>

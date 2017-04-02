@@ -1,27 +1,10 @@
 class ArtistsController < ApplicationController
+  load_and_authorize_resource only: [:index, :show]
 
-  before_filter :initialize_user
-
-  def initialize_user
-    @artist = Artist.new
-  end
+  before_filter :initialize_user, except: [:show]
 
   def signup
     @artist.artist_survey ||= ArtistSurvey.new
-  end
-
-  def artist_params
-    params.require(:artist).permit(:name, :password_digest, :password,
-        :password_confirmation, :email, :contact_name, :contact_phone,
-        :contact_street, :contact_city, :contact_state, :contact_zipcode,
-        :contact_country)
-  end
-
-  def artist_survey_params
-    params.require(:artist).require(:artist_survey).permit(:has_attended_firefly,
-        :has_attended_firefly_desc, :has_attended_regional,
-        :has_attended_regional_desc, :has_attended_bm, :has_attended_bm_desc,
-        :can_use_as_example)
   end
 
   def create
@@ -57,10 +40,6 @@ class ArtistsController < ApplicationController
     end
   end
 
-  def index
-    redirect_to grant_submissions_path
-  end
-
   def delete_grant
     if !artist_logged_in?
       return
@@ -85,4 +64,23 @@ class ArtistsController < ApplicationController
     redirect_to action: "index"
   end
 
+  private
+
+  def initialize_user
+    @artist = Artist.new
+  end
+
+  def artist_params
+    params.require(:artist).permit(:name, :password_digest, :password,
+        :password_confirmation, :email, :contact_name, :contact_phone,
+        :contact_street, :contact_city, :contact_state, :contact_zipcode,
+        :contact_country)
+  end
+
+  def artist_survey_params
+    params.require(:artist).require(:artist_survey).permit(:has_attended_firefly,
+        :has_attended_firefly_desc, :has_attended_regional,
+        :has_attended_regional_desc, :has_attended_bm, :has_attended_bm_desc,
+        :can_use_as_example)
+  end
 end

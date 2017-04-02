@@ -233,11 +233,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :admin_logged_in?
 
-  def admin_exists?
-    true if Admin.exists?
-  end
-  helper_method :admin_exists?
-
   public
   # Password token generation helpers
   def self.new_token
@@ -255,6 +250,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def deny_access
-    render nothing: true, status: :forbidden
+    flash[:danger] = "503 Forbidden"
+    render 'errors/503', status: :forbidden
   end
 end

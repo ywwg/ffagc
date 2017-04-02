@@ -1,53 +1,50 @@
 class AdminsController < ApplicationController
+  load_and_authorize_resource only: [:index, :new, :create]
 
   before_filter :init_admin
   before_filter :init_artists
   before_filter :init_voters
-  before_filter :verify_admin, except: [:create, :index, :signup]
+  before_filter :verify_admin, except: [:index, :new, :create, :verify]
 
-  def signup
-    @can_create_admin = can_create_admin?
+  def index
+  end
+
+  def new
   end
 
   def create
-    # if there is no admin, go ahead and create the account (initial config)
-    # even if no admin is logged in.
-    if admin_exists? && !current_admin
-      redirect_to "/"
-      return
-    end
-
-    if Admin.exists?(email: admin_params[:email].downcase)
-      flash[:warning] = "The email address #{admin_params[:email.downcase]} already exists in our system"
-      render "signup_failure"
-      return
-    end
-
     @admin = Admin.new(admin_params)
-    @admin.email = @admin.email.downcase
-    # Auto-activate admins
-    @admin.activated = true
 
     if @admin.save
       # Only assign the session to the new account if it's the first one.
-      if !session[:admin_id]
+      unless session[:admin_id].present?
         session[:admin_id] = @admin.id
+        redirect_to root_path
+        return
       end
-      render "signup_success"
-    else
-      render "signup_failure"
+
+      flash[:success] = "New admin <#{@admin.email}> created."
+
+      # reset @admin so form is empty
+      @admin = Admin.new
     end
+
+    render 'new'
   end
 
+  # TODO: endpoint does not belong here
   def verify
-    voter = Voter.find(params[:id])
-    voter.verified = params[:verify]
-    if voter.save
+    @voter = Voter.find(params[:id])
+    authorize! :verify, @voter
+
+    @voter.verified = params[:verify]
+
+    if @voter.save
       send_email = params[:send_email] == "true"
       if send_email
         begin
-          UserMailer.voter_verified(voter, event_year).deliver_now
-          logger.info "email: voter verification sent to #{voter.email}"
+          UserMailer.voter_verified(@voter, event_year).deliver_now
+          logger.info "email: voter verification sent to #{@voter.email}"
         rescue
           flash[:warning] = "Error sending email"
           redirect_to action: "voters"
@@ -178,51 +175,11 @@ class AdminsController < ApplicationController
     end
   end
 
-  def init_artists
-    @artists = Artist.all
-  end
-
-  def init_voters
-    @voters = Voter.all
-    @verified_voters = Voter.where(verified: true)
-    # builds a run-time array to map assignments to voters for easy display
-    @verified_voters.each do |vv|
-      vv.class_eval do
-        attr_accessor :assigned
-      end
-
-      vv.assigned = Array.new
-      VoterSubmissionAssignment.where("voter_id = ?",vv.id).each do |vsa|
-        gs = GrantSubmission.find_by_id(vsa.grant_submission_id)
-        if gs != nil
-          vv.assigned.push("#{gs.name}(#{gs.id})")
-        end
-      end
-    end
-  end
-
-  def index
-  end
-
-  def artists
-  end
-
-  def artist_info
-    id = params.require(:id)
-    @artist = Artist.find(id)
-    @artist_survey = ArtistSurvey.where(artist_id: id).take
-  end
-
+  # TODO: endpoint does not belong here
   def voters
   end
 
-  def voter_info
-    id = params.require(:id)
-    @voter = Voter.find(id)
-    @voter_survey = VoterSurvey.where(voter_id: id).take
-    @grants = Grant.all
-  end
-
+  # TODO: endpoint does not belong here
   def submissions
     @scope = params[:scope] || 'active'
     @order = params[:order] || 'name'
@@ -247,7 +204,7 @@ class AdminsController < ApplicationController
   private
 
   def admin_params
-    params.require(:admin).permit(:name, :password_digest, :password, :password_confirmation, :email)
+    params.require(:admin).permit(:name, :email, :password, :password_confirmation)
   end
 
   # counts the number of voters a submission is assigned to
@@ -278,17 +235,33 @@ class AdminsController < ApplicationController
   end
 
   def verify_admin
-    unless can? :manage, :all
-      redirect_to '/'
-      return
-    end
+    authorize! :manage, :all
   end
 
   def init_admin
     @admin = Admin.new
   end
 
-  def can_create_admin?
-    admin_logged_in? || !admin_exists?
+  def init_artists
+    @artists = Artist.all
+  end
+
+  def init_voters
+    @voters = Voter.all
+    @verified_voters = Voter.where(verified: true)
+    # builds a run-time array to map assignments to voters for easy display
+    @verified_voters.each do |vv|
+      vv.class_eval do
+        attr_accessor :assigned
+      end
+
+      vv.assigned = Array.new
+      VoterSubmissionAssignment.where("voter_id = ?",vv.id).each do |vsa|
+        gs = GrantSubmission.find_by_id(vsa.grant_submission_id)
+        if gs != nil
+          vv.assigned.push("#{gs.name}(#{gs.id})")
+        end
+      end
+    end
   end
 end

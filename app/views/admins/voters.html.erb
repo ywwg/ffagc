@@ -1,6 +1,4 @@
 <% if admin_logged_in? %>
-  <%= render partial: 'shared/links' %>
-
   <h2>Voters</h2>
   <table class="table table-striped">
     <thead>
@@ -17,7 +15,7 @@
     <tbody>
     <% @voters.each do |v| %>
     <tr>
-      <td><%= link_to v['name'], :controller => "admins", :action => "voter_info", :id => v['id']%></td>
+      <td><%= link_to v.name, voter_path(v) %></td>
       <td><%= v['email'] %></td>
       <td><%= Grant.joins(:grants_voters).where('grants_voters.voter_id' => v.id).pluck(:name).join(", ").html_safe %></td>
       <td><%if v['verified'] %>Yes<% else %>No<% end %></td>

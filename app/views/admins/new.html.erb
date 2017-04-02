@@ -3,7 +3,7 @@
   <li class="active">Admin</li>
 </ol>
 
-<% if @can_create_admin %>
+<% if can? :manage, @admin %>
   <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
       <%= simple_form_for @admin do |f| %>
