@@ -55,6 +55,11 @@ describe ArtistsController do
       expect { go! }.to change { ArtistSurvey.count }.by(1)
     end
 
+    it 'sends email' do
+      expect(UserMailer).to receive(:account_activation)
+      go!
+    end
+
     context 'with invalid params' do
       let(:artist_attributes) { FactoryGirl.attributes_for(:artist, email: '') }
 
