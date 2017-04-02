@@ -1,5 +1,5 @@
 class ArtistsController < ApplicationController
-  load_and_authorize_resource only: [:index, :show]
+  load_and_authorize_resource
 
   before_filter :initialize_user, except: [:show]
 
