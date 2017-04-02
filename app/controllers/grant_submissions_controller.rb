@@ -50,6 +50,7 @@ class GrantSubmissionsController < ApplicationController
   def edit
     # Don't allow an artist to decide post-decision that they want a different
     # grant category.
+    # TODO move this logic to Ability
     @grant_change_disable = false
     if @grant_submission.funding_decision && !admin_logged_in?
       @grant_change_disable = true
@@ -64,6 +65,7 @@ class GrantSubmissionsController < ApplicationController
 
   def generate_contract
     @grant_submission = GrantSubmission.find(params[:grant_submission_id])
+    # TODO: use new Ability action
     authorize! :read, @grant_submission
 
     if !grant_submission_funded?(@grant_submission.id)
