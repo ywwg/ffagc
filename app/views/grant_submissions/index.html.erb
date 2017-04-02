@@ -18,7 +18,7 @@
   <% end %>
 </div>
 
-<% if any_grant_submission_funded?(current_artist.id) %>
+<% if @celebrate_funded %>
   <div class="alert alert-success text-center">
     <p class="lead">OMG you've been funded!</p>
   </div>
