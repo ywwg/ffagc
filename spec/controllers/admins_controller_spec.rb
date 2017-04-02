@@ -52,6 +52,7 @@ describe AdminsController do
 
     it 'creates Admin' do
       expect { go! }.to change { Admin.count }.by(1)
+      expect(flash[:success]).to be_present
       expect(response).to redirect_to(root_path)
     end
 
