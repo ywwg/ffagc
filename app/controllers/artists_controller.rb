@@ -3,6 +3,9 @@ class ArtistsController < ApplicationController
 
   before_filter :initialize_user, except: [:show]
 
+  def show
+  end
+
   def signup
     @artist.artist_survey ||= ArtistSurvey.new
   end
