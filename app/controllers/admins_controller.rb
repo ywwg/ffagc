@@ -175,29 +175,6 @@ class AdminsController < ApplicationController
     end
   end
 
-  def init_artists
-    @artists = Artist.all
-  end
-
-  def init_voters
-    @voters = Voter.all
-    @verified_voters = Voter.where(verified: true)
-    # builds a run-time array to map assignments to voters for easy display
-    @verified_voters.each do |vv|
-      vv.class_eval do
-        attr_accessor :assigned
-      end
-
-      vv.assigned = Array.new
-      VoterSubmissionAssignment.where("voter_id = ?",vv.id).each do |vsa|
-        gs = GrantSubmission.find_by_id(vsa.grant_submission_id)
-        if gs != nil
-          vv.assigned.push("#{gs.name}(#{gs.id})")
-        end
-      end
-    end
-  end
-
   # TODO: endpoint does not belong here
   def artists
   end
@@ -285,5 +262,28 @@ class AdminsController < ApplicationController
 
   def init_admin
     @admin = Admin.new
+  end
+
+  def init_artists
+    @artists = Artist.all
+  end
+
+  def init_voters
+    @voters = Voter.all
+    @verified_voters = Voter.where(verified: true)
+    # builds a run-time array to map assignments to voters for easy display
+    @verified_voters.each do |vv|
+      vv.class_eval do
+        attr_accessor :assigned
+      end
+
+      vv.assigned = Array.new
+      VoterSubmissionAssignment.where("voter_id = ?",vv.id).each do |vsa|
+        gs = GrantSubmission.find_by_id(vsa.grant_submission_id)
+        if gs != nil
+          vv.assigned.push("#{gs.name}(#{gs.id})")
+        end
+      end
+    end
   end
 end
