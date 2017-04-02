@@ -34,8 +34,15 @@
           <% if admin_logged_in? || artist_logged_in? %>
             <li><%= link_to 'Submissions', grant_submissions_path %></li>
           <% end %>
+          <% if admin_logged_in? %>
+            <li><%= link_to 'Artists', artists_path %></li>
+            <li><%= link_to 'Voters', voters_path %></li>
+          <% end %>
           <% if voter_logged_in? %>
             <li><%= link_to 'Voting', voters_path %></li>
+          <% end %>
+          <% if current_user.present? %>
+            <li><%= link_to 'Grants', grants_path %></li>
           <% end %>
         </ul>
         <ul class="nav navbar-nav navbar-right">
