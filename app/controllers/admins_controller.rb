@@ -53,7 +53,7 @@ class AdminsController < ApplicationController
           redirect_to action: "voters"
           return
         end
-        flash[:notice] = "Voter notified by email"
+        flash[:info] = "Voter notified by email"
       end
     end
 
@@ -86,7 +86,7 @@ class AdminsController < ApplicationController
       gs.save
     end
 
-    flash[:notice] = "#{sent} Funding Emails Sent"
+    flash[:info] = "#{sent} Funding Emails Sent"
     redirect_to action: "index"
   end
 
@@ -109,7 +109,7 @@ class AdminsController < ApplicationController
       end
     end
 
-    flash[:notice] = "#{sent} Question Notification Emails Sent"
+    flash[:info] = "#{sent} Question Notification Emails Sent"
     redirect_to action: "index"
   end
 

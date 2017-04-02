@@ -55,15 +55,10 @@
     </div>
   </nav>
 
-  <% if flash[:notice] %>
-    <div class="alert alert-info">
-      <%= flash[:notice] %>
-    </div>
-  <% end %>
-  <% if flash[:warning] %>
-    <div class="alert alert-warning">
-      <%= flash[:warning] %>
-    </div>
+  <% if flash.any? %>
+    <% flash.each do |name, msg| %>
+      <%= content_tag :div, msg, class: "alert alert-#{name}" %>
+    <% end %>
   <% end %>
 
   <%= yield %>
