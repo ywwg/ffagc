@@ -1,56 +1,54 @@
-require 'uri'
-
 class AccountActivationsController < ApplicationController
-  def edit
-    user = UserFinder.find_by_email!(params[:type], params[:email])
-
-    if user.activation_token_valid?(params[:id])
-      user.activate!
-
-      render 'success'
-    else
-      render 'failure'
-    end
-  rescue ActiveRecord::ActiveRecordError => e
-    render 'failure'
-  end
-
-  def unactivated
+  # this GET request action can edit a user
+  def show
     @type = params[:type]
     @email = params[:email]
+    @user = UserFinder.find_by_email(@type, @email)
+
+    redirect_if_current_user_activated and return
+
+    if @user&.activation_token_valid?(params[:id])
+      @user.activate!
+
+      render 'show'
+    end
+  rescue ActiveRecord::ActiveRecordError => e
+    render 'show'
   end
 
-  # This doesn't work because we have to regenerate the token *and* the
-  # digest, and then resend to the user.  Therefore it'd have to happen in
-  # the individual user type controllers.  I can't be bothered, so let's just
-  # leave this undone for now.
+  # Reset activation token and send activation email
+  def create
+    @user = current_user
+    authorize! :manage, @user
 
-  # def resend_activation
-    # @type = params[:type]
-    # @email = params[:email]
-#
-    # if @type == "artists"
-      # @user = Artist.find_by(email: params[:email].downcase)
-    # elsif @type == "voters"
-      # @user = Voter.find_by(email: params[:email].downcase)
-    # elsif @type == "admins"
-      # @user = Admin.find_by(email: params[:email].downcase)
-    # end
-#
-    # if @user.activated
-      # redirect_to :controller => "home", :action => "index"
-    # end
-#
-    # # Send email!
-    # #begin
-      # # Will need to be replaced with deliver_now
-      # UserMailer.account_activation(@type, @user).deliver!
-    # # rescue
-      # # flash[:info] = "Error sending email confirmation"
-      # # render "signup_failure"
-      # # return
-    # # end
-    # redirect_to "/"
-  # end
+    @type = UserFinder.type_from_user(@user)
 
+    begin
+      redirect_if_current_user_activated and return
+
+      raise if @user.activated? || @user.nil?
+
+      @user.create_activation_digest
+      @user.save!
+
+      UserMailer.account_activation(@type, @user).deliver_now
+    rescue
+      flash[:info] = 'Error sending email confirmation'
+    end
+
+    redirect_to root_path
+  end
+
+  private
+
+  def redirect_if_current_user_activated
+    if @user&.activated? && @user == current_user
+      after_activate
+    end
+  end
+
+  def after_activate
+    flash[:info] = 'Account already activated.'
+    redirect_to root_path
+  end
 end

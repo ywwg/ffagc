@@ -30,9 +30,9 @@ shared_examples 'sessions create endpoind' do |type_name, session_key, redirect_
     end
 
     context 'with inactive user' do
-      it 'redirects to account activation' do
-        go! inactive_user
-        expect(response).to redirect_to(account_activations_unactivated_path(email: inactive_user.email, type: type_name))
+      it 'allows logging in with case-insensitive email' do
+        expect { go! inactive_user }.to change { session[session_key] }.from(nil)
+        expect(response).to redirect_to(redirect_path)
       end
     end
   end

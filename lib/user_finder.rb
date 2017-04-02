@@ -19,7 +19,17 @@ class UserFinder
     user
   end
 
+  def self.type_from_user(user)
+    if user.is_a? Admin
+      'admins'
+    elsif user.is_a? Artist
+      'artists'
+    elsif user.is_a? Voter
+      'voters'
+    end
+  end
+
   private_class_method def self.normalize_email(email)
-    URI.unescape(email).downcase
+    URI.unescape(email || '').downcase.strip
   end
 end

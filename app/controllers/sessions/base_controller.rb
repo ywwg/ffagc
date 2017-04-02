@@ -14,11 +14,6 @@ class Sessions::BaseController < ApplicationController
     @email = normalize_email(params[:session][:email])
     @resource = resource_by_email(@email)
 
-    if @resource.present? && requires_activation? && !@resource.activated?
-      redirect_to account_activations_unactivated_path(type: type_name, email: @email)
-      return
-    end
-
     if @resource&.authenticate(params[:session][:password])
       session[session_key] = @resource.id
 
