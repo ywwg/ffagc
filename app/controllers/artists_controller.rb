@@ -1,12 +1,11 @@
 class ArtistsController < ApplicationController
   load_and_authorize_resource
 
-  before_filter :initialize_user, except: [:show]
-
   def show
   end
 
   def signup
+    @artist = Artist.new
     @artist.artist_survey ||= ArtistSurvey.new
   end
 
@@ -44,10 +43,6 @@ class ArtistsController < ApplicationController
   end
 
   private
-
-  def initialize_user
-    @artist = Artist.new
-  end
 
   def artist_params
     params.require(:artist).permit(:name, :password_digest, :password,
