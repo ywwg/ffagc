@@ -19,7 +19,6 @@ Rails.application.routes.draw do
   get 'admins/artists' => 'admins#artists'
   get 'admins/artist_info' => 'admins#artist_info'
   get 'admins/voters' => 'admins#voters'
-  get 'admins/voter_info' => 'admins#voter_info'
   get 'admins/submissions' => 'admins#submissions'
 
   get 'account_activations/unactivated' => 'account_activations#unactivated'
@@ -48,7 +47,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :voters, only: [:create, :update, :index]
+  resources :voters, only: [:create, :update, :index, :show]
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :create, :edit, :update]
   resources :proposals

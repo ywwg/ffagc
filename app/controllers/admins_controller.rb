@@ -191,14 +191,6 @@ class AdminsController < ApplicationController
   end
 
   # TODO: endpoint does not belong here
-  def voter_info
-    id = params.require(:id)
-    @voter = Voter.find(id)
-    @voter_survey = VoterSurvey.where(voter_id: id).take
-    @grants = Grant.all
-  end
-
-  # TODO: endpoint does not belong here
   def submissions
     @scope = params[:scope] || 'active'
     @order = params[:order] || 'name'
