@@ -52,8 +52,10 @@ Rails.application.routes.draw do
   resources :grants, except: [:show]
 
   resources :grant_submissions do
-    get 'discuss'
-    post 'generate_contract'
+    member do
+      get 'discuss'
+      post 'generate_contract'
+    end
   end
 
   resources :voters, only: [:create, :update, :index]
