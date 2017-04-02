@@ -1,22 +1,15 @@
 class AdminsController < ApplicationController
+  load_and_authorize_resource only: [:index, :new, :create]
 
   before_filter :init_admin
   before_filter :init_artists
   before_filter :init_voters
-  before_filter :verify_admin, except: [:create, :index, :signup]
+  before_filter :verify_admin, except: [:index, :new, :create]
 
   def new
-    @can_create_admin = can_create_admin?
   end
 
   def create
-    # if there is no admin, go ahead and create the account (initial config)
-    # even if no admin is logged in.
-    if admin_exists? && !current_admin
-      redirect_to "/"
-      return
-    end
-
     @admin = Admin.new(admin_params)
 
     if @admin.save
@@ -281,9 +274,5 @@ class AdminsController < ApplicationController
 
   def init_admin
     @admin = Admin.new
-  end
-
-  def can_create_admin?
-    admin_logged_in? || !admin_exists?
   end
 end
