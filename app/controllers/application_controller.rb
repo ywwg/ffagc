@@ -250,6 +250,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def deny_access
-    render nothing: true, status: :forbidden
+    flash[:danger] = "503 Forbidden"
+    render 'errors/503', status: :forbidden
   end
 end
