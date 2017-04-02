@@ -7,9 +7,6 @@ Rails.application.routes.draw do
   get 'password_resets/new'
   get 'password_resets/edit'
 
-  get 'artists/signup' => 'artists#signup'
-  post 'artists/signup' => 'artists#create'
-
   get 'voters/signup' => 'voters#signup'
   post 'voters/signup' => 'voters#create'
 
