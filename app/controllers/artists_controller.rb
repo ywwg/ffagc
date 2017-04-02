@@ -40,30 +40,6 @@ class ArtistsController < ApplicationController
     end
   end
 
-  def delete_grant
-    if !artist_logged_in?
-      return
-    end
-
-    begin
-      @submission = GrantSubmission.find(params[:grant_id])
-    rescue
-      redirect_to action: "index"
-      return
-    end
-
-    # TODO: is this enough "security"?
-    if @submission.artist_id != current_artist.id
-      # Log more stuff
-      logger.info "SECURITY WARNING: Attempted to delete grant while not logged in as that artist"
-      redirect_to action: "index"
-      return
-    end
-    # Also should delete pdf from filesystem
-    @submission.destroy
-    redirect_to action: "index"
-  end
-
   private
 
   def initialize_user
