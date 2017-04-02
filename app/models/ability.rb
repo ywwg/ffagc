@@ -30,6 +30,7 @@ class Ability
 
       if  user.activated?
         can [:manage, :discuss, :edit_answers], GrantSubmission, artist_id: user.id
+        cannot :edit_questions, GrantSubmission, artist_id: user.id
         can :manage, Proposal, grant_submission_id: user.grant_submission_ids
       end
     end

@@ -64,6 +64,7 @@ describe Ability do
     it { is_expected.to be_able_to(:manage, grant_submission) }
     it { is_expected.to be_able_to(:discuss, grant_submission) }
     it { is_expected.to be_able_to(:edit_answers, grant_submission) }
+    it { is_expected.not_to be_able_to(:edit_questions, grant_submission) }
     it { is_expected.to be_able_to(:manage, proposal) }
 
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
