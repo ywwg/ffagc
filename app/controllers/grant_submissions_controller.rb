@@ -116,10 +116,18 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def grant_update_params
-    allowed_params = [:name, :grant_id, :requested_funding_dollars, :answers, :proposal]
+    allowed_params = [:name, :grant_id, :requested_funding_dollars, :proposal]
 
     if admin_logged_in?
-      allowed_params.push(:granted_funding_dollars, :funding_decision, :questions)
+      allowed_params.push(:granted_funding_dollars, :funding_decision)
+    end
+
+    if can? :edit_questions, GrantSubmission
+      allowed_params.push(:questions)
+    end
+
+    if can? :edit_answers, GrantSubmission
+      allowed_params.push(:answers)
     end
 
     par = params.require(:grant_submission).permit(allowed_params)
