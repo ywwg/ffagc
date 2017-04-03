@@ -31,14 +31,14 @@
           <% if can? :manage, :all %>
             <li><%= link_to 'Admin Panel', admins_path %></li>
           <% end %>
+          <% if can? :vote, GrantSubmission %>
+            <li><%= link_to 'Voting', votes_path %></li>
+          <% end %>
           <% if can? :index, GrantSubmission %>
             <li><%= link_to 'Submissions', grant_submissions_path %></li>
           <% end %>
           <% if can? :index, Artist %>
             <li><%= link_to 'Artists', artists_path %></li>
-          <% end %>
-          <% if can? :vote, GrantSubmission %>
-            <li><%= link_to 'Voting', votes_path %></li>
           <% end %>
           <% if can? :index, Grant %>
             <li><%= link_to 'Grants', grants_path %></li>
