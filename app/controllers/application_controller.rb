@@ -50,11 +50,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :any_vote_open?
 
-  def voter_any_vote_open?(voter_id)
-    return voter_active_vote_grants(voter_id).count > 0
-  end
-  helper_method :voter_any_vote_open?
-
   def active_vote_names
     now = DateTime.current
     return Grant.where("vote_start <= datetime(?, ?)", now, timezone_string).where("vote_end >= datetime(?, ?)", now, timezone_string).select(:name)
