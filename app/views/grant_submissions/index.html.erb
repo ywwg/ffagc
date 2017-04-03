@@ -12,7 +12,9 @@
       <% end %>
     </ul>
     </p>
+    <% if can? :new, GrantSubmission %>
     <p><%= link_to "Submit Grant Proposal", new_grant_submission_path, class: 'btn btn-primary' %></p>
+    <% end%>
   <% else %>
     No submissions open at this time.
   <% end %>
