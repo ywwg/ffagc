@@ -10,17 +10,18 @@
 <% end %>
 
 <% if @grant_submissions_display.present? %>
-  <!-- TODO: figure out how to do with proper remote:true -->
-  <%= form_tag("/voters/vote", authenticity_token: true, name: "vote_form") do %>
-    <p>| <% if @show_all %><%= link_to "Assigned To You", :controller => "voters", :action => "index" %><% else %><b>Assigned To You</b><% end %>
-       | <% if @show_all %><b>All Submissions</b><% else %><%= link_to "All Submissions", :controller => "voters", :action => "index", :all => "true" %><% end %>
-    |</p>
   <% unless @scope == 'all' %>
     <div class="alert alert-info">
       <p>Please vote on these before the meeting!</p>
     </div>
   <% end %>
-  <br />
+
+  <div class="btn-group">
+    <%= link_to "Assigned to you", voters_path(scope: :assigned), class: 'btn btn-default' %>
+    <%= link_to "All submissions", voters_path(scope: :all), class: 'btn btn-default' %>
+  </div>
+
+  <%= form_tag("/voters/vote", authenticity_token: true, name: "vote_form") do %>
   <table class="table table-striped">
     <thead>
     <tr>
