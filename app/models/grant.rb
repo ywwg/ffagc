@@ -15,6 +15,14 @@ class Grant < ActiveRecord::Base
   # on by the Art Core.  Admins should modify individual voters to add them
   # to hidden grants.
 
+  scope :voting_active, -> (now, timezone_string) do
+    where("vote_start <= datetime(?, ?)", now, timezone_string).where("vote_end >= datetime(?, ?)", now, timezone_string)
+  end
+
+  scope :submission_active, -> (now, deadline, timezone_string) do
+    where("submit_start <= datetime(?, ?)", now, timezone_string).where("submit_end >= datetime(?, ?)", deadline, timezone_string)
+  end
+
   validate :dates_ordering
 
   private

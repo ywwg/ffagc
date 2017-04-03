@@ -19,42 +19,34 @@ class ApplicationController < ActionController::Base
   end
 
   private
-  # Returns a list of the ids of grants which are currently active for submitting.
+
+  def active_vote_grants
+    Grant.voting_active(DateTime.current, timezone_string)
+  end
+
   def active_submit_grants
     now = DateTime.current
     deadline_leniency_time = now - 1.hours
-    return Grant.where("datetime(?, ?) >= submit_start", now, timezone_string)
-      .where("datetime(?, ?) <= submit_end", deadline_leniency_time, timezone_string).select(:id)
-  end
-  helper_method :active_submit_grants
-
-  # Returns a list of the ids of grants which are currently active for voting.
-  def active_vote_grants
-    now = DateTime.current
-    return Grant.where("vote_start <= datetime(?, ?)", now, timezone_string).where("vote_end >= datetime(?, ?)", now, timezone_string).select(:id)
+    Grant.submission_active(now, deadline_leniency_time, timezone_string)
   end
 
   def any_submit_open?
-    return active_submit_grants.count > 0
+    active_submit_grants.exists?
   end
   helper_method :any_submit_open?
 
   def any_vote_open?
-    return active_vote_grants.count > 0
+    return active_vote_grants.exists?
   end
   helper_method :any_vote_open?
 
   def active_vote_names
-    now = DateTime.current
-    return Grant.where("vote_start <= datetime(?, ?)", now, timezone_string).where("vote_end >= datetime(?, ?)", now, timezone_string).select(:name)
+    active_vote_grants.select(&:name)
   end
   helper_method :active_vote_names
 
   def active_submit_names
-    now = DateTime.current
-    deadline_leniency_time = now - 1.hours
-    return Grant.where("datetime(?, ?) >= submit_start", now, timezone_string)
-      .where("datetime(?, ?) <= submit_end", deadline_leniency_time, timezone_string).select(:name)
+    active_submit_grants.select(&:name)
   end
   helper_method :active_submit_names
 
