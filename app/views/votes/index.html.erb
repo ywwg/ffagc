@@ -9,7 +9,7 @@
   </div>
 <% end %>
 
-<% if @grant_submissions_display.present? %>
+<% if @grant_submissions.present? %>
   <% unless @scope == 'all' %>
     <div class="alert alert-info">
       <p>Please vote on these before the meeting!</p>
@@ -37,7 +37,7 @@
     </tr>
     </thead>
     <tbody>
-    <% @grant_submissions_display.each do |gs| %>
+    <% @grant_submissions.each do |gs| %>
       <tr>
         <td><%= gs.name %></td>
         <td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
