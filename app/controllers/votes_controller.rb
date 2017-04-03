@@ -8,18 +8,20 @@ class VotesController < ApplicationController
       @scope = 'all'
     end
 
-    @grant_submissions = if @scope == 'all'
-      @grant_submissions = GrantSubmission.accessible_by(current_ability)
-    else
+    @grant_submissions = if @scope == 'assigned' && current_voter.present?
       @grant_submissions = current_voter.grant_submissions.accessible_by(current_ability)
+    else
+      @grant_submissions = GrantSubmission.accessible_by(current_ability)
     end
 
-    @votes = @grant_submissions.map do |gs|
-      vote = current_voter.votes.where(grant_submission: gs).first_or_create
-      [gs.id, vote]
-    end
+    if current_voter.present?
+      @votes = @grant_submissions.map do |gs|
+        vote = current_voter.votes.where(grant_submission: gs).first_or_create
+        [gs.id, vote]
+      end
 
-    @votes = @votes.to_h
+      @votes = @votes.to_h
+    end
   end
 
   def update
