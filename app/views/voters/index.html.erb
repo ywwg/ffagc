@@ -41,11 +41,15 @@
       <tr>
         <td><%= gs.name %></td>
         <td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
-        <td align="right">$<%= gs.requested_funding_dollars %></td>
+        <td align="right"><%= number_to_currency gs.requested_funding_dollars %></td>
         <td><a href="<%= gs.proposal %>" target="_blank">Open...</a></td>
-        <td><% if submission_has_questions?(gs.id) %>
-              <%= link_to "#{discussion_status(gs.id)}", discuss_grant_submission_path(gs) %>
-            <% else %>None<% end %></td>
+        <td>
+          <% if submission_has_questions?(gs.id) %>
+            <%= link_to "#{discussion_status(gs.id)}", discuss_grant_submission_path(gs) %>
+          <% else %>
+            None
+          <% end %>
+        </td>
         <td align="center">
           <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
             <option></option>
