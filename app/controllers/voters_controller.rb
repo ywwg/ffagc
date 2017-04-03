@@ -1,11 +1,9 @@
 class VotersController < ApplicationController
-  before_filter :initialize_voter
+  before_filter :initialize_grants
 
   def show
     @voter = Voter.find(params[:id])
     authorize! :show, @voter
-
-    @grants = Grant.all
   end
 
   def signup
@@ -187,8 +185,7 @@ class VotersController < ApplicationController
 
   private
 
-  def initialize_voter
-    @voter = Voter.new
+  def initialize_grants
     @grants = Grant.all
   end
 
