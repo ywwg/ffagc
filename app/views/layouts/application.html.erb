@@ -29,12 +29,14 @@
             <li><%= link_to 'Admin login', new_sessions_admin_path %></li>
           <% end %>
           <% if can? :manage, :all %>
-            <li><%= link_to 'Admin Panel', admins_path %></li>
+            <li><%= link_to 'Admin', admins_path %></li>
           <% end %>
           <% if can? :vote, GrantSubmission %>
             <li><%= link_to 'Voting', votes_path %></li>
           <% end %>
-          <% if can? :index, GrantSubmission %>
+          <% if can? :manage, :all %>
+            <li><%= link_to 'Submissions', admins_submissions_path %></li>
+          <% elsif can? :index, GrantSubmission %>
             <li><%= link_to 'Submissions', grant_submissions_path %></li>
           <% end %>
           <% if can? :index, Artist %>

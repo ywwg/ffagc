@@ -1,108 +1,124 @@
-<% if admin_logged_in? %>
-  <h2>Grants</h2>
-
+<div class="btn-toolbar">
   <div class="btn-group">
-    <%= link_to "All", admins_submissions_path(scores: @show_scores, scope: :all, order: @order), class: ['btn', (@scope == 'all' ? 'btn-primary' : 'btn-default')] %>
-    <%= link_to "Active", admins_submissions_path(scores: @show_scores, scope: :active, order: @order), class: ['btn', (@scope == 'active' ? 'btn-primary' : 'btn-default')] %>
+    <%= link_to "All", admins_submissions_path(scores: @show_scores, scope: :all, order: @order), class: ['btn', 'btn-default', (@scope == 'all' ? 'active' : nil)] %>
+    <%= link_to "Active", admins_submissions_path(scores: @show_scores, scope: :active, order: @order), class: ['btn', 'btn-default', (@scope == 'active' ? 'active' : nil)] %>
   </div>
-
   <div class="btn-group">
-    <%= link_to "Show scores", admins_submissions_path(scores: true, scope: @scope, order: @order), class: ['btn', (@show_scores ? 'btn-primary' : 'btn-default')] %>
-    <%= link_to "Hide scores", admins_submissions_path(scores: false, scope: @scope, order: @order), class: ['btn', (@show_scores ? 'btn-default' : 'btn-primary')] %>
+    <%= link_to "Show scores", admins_submissions_path(scores: true, scope: @scope, order: @order), class: ['btn', 'btn-default', (@show_scores ? 'active' : nil)] %>
+    <%= link_to "Hide scores", admins_submissions_path(scores: false, scope: @scope, order: @order), class: ['btn', 'btn-default', (@show_scores ? nil : 'active')] %>
   </div>
-
   <div class="btn-group">
-    <%= link_to "By Score", admins_submissions_path(scores: @show_scores, scope: @scope, order: :score), class: ['btn', (@order == 'score' ? 'btn-primary' : 'btn-default')] %>
-    <%= link_to "By Date", admins_submissions_path(scores: @show_scores, scope: @scope, order: :date), class: ['btn', (@order == 'date' ? 'btn-primary' : 'btn-default')] %>
-    <%= link_to "By Name", admins_submissions_path(scores: @show_scores, scope: @scope, order: :name), class: ['btn', (@order == 'name' ? 'btn-primary' : 'btn-default')] %>
+    <%= link_to "By Score", admins_submissions_path(scores: @show_scores, scope: @scope, order: :score), class: ['btn', 'btn-default', (@order == 'score' ? 'active' : nil)] %>
+    <%= link_to "By Date", admins_submissions_path(scores: @show_scores, scope: @scope, order: :date), class: ['btn', 'btn-default', (@order == 'date' ? 'active' : nil)] %>
+    <%= link_to "By Name", admins_submissions_path(scores: @show_scores, scope: @scope, order: :name), class: ['btn', 'btn-default', (@order == 'name' ? 'active' : nil)] %>
   </div>
+</div>
 
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Grant</th>
-      <th>$</th>
-      <th>Discussion / Supplements</th>
-      <% if @show_scores %>
-      <th>Avg T</th>
-      <th>Avg C</th>
-      <th>Avg F</th>
-      <th>Avg Score</th>
-      <th>#</th>
-      <% end %>
-      <th>Decision Finalized</th>
-      <th>Funding</th>
-      <% if @revealed %>
-      <th>Artist Name</th>
-      <th>Contact Name</th>
-      <th>Artist Email</th>
-      <% else %>
-      <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);", class: 'btn btn-default' %></th>
-      <% end %>
-    </tr>
-    </thead>
-    <tbody>
-    <% @grant_submissions.each do |gs| %>
-    <tr>
-      <td><%= link_to "#{gs.name}" , edit_grant_submission_path(gs) %></td>
-      <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
-      <td align="right">$<%= gs.requested_funding_dollars %></td>
-      <td><%= link_to "#{discussion_status(gs.id)}", discuss_grant_submission_path(gs) %></td>
-      <% if @show_scores %>
-      <td><%= @results[gs.id]['avg_t'] %></td>
-      <td><%= @results[gs.id]['avg_c'] %></td>
-      <td><%= @results[gs.id]['avg_f'] %></td>
-      <td><%= @results[gs.id]['avg_s'] %></td>
-      <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
-      <% end %>
-      <td><% if gs.funding_decision %>Yes<% else %>No<% end %></td>
-      <td>
-        <%= render partial: 'grant_submissions/funding_table', locals: { grant_submission: gs }%>
-      </td>
-      <% if @revealed %>
-        <td><%= (Artist.where(id: gs.artist_id).take).name rescue "Unknown" %></td>
-        <td><%= (Artist.where(id: gs.artist_id).take).contact_name rescue "Unknown" %></td>
-        <td><%= (Artist.where(id: gs.artist_id).take).email rescue "Unknown" %></td>
-      <% else %>
-        <td align="center">
-          <form name="fund_email_form-<%= gs.id %>">
-          <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
-          </form>
-        </td>
-      <% end %>
-    </tr>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Grant</th>
+    <th>$</th>
+    <th>Discussion / Supplements</th>
+    <% if @show_scores %>
+    <th>Avg T</th>
+    <th>Avg C</th>
+    <th>Avg F</th>
+    <th>Avg Score</th>
+    <th>#</th>
     <% end %>
-    <% unless @revealed %>
-    <% colspan = 6 + (@show_scores ? 5 : 0) + (@revealed ? 3 : 0) %>
-    <tr>
-      <td colspan="<%= colspan %>" align="right">
-        <form name="send_email_form">
-          <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
+    <th>Decision Finalized</th>
+    <th>Funding</th>
+    <% if @revealed %>
+    <th>Artist Name</th>
+    <th>Contact Name</th>
+    <th>Artist Email</th>
+    <% else %>
+    <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);", class: 'btn btn-default' %></th>
+    <% end %>
+  </tr>
+  </thead>
+  <tbody>
+  <% @grant_submissions.each do |gs| %>
+  <tr>
+    <td>
+      <%= gs.name %><br />
+      <div class="btn-toolbar">
+        <div class="btn-group">
+          <% if can? :edit, gs %>
+          <%= link_to "Edit", edit_grant_submission_path(id: gs.id), class: 'btn btn-xs btn-default' %>
+          <% end %>
+          <%= link_to "View", grant_submission_path(id: gs.id), class: 'btn btn-xs btn-default' %>
+        </div>
+        <div class="btn-group">
+          <%= link_to "Ask Questions", discuss_grant_submission_path(gs), class: 'btn btn-xs btn-primary' %>
+        </div>
+        <div class="btn-group">
+          <% if grant_submission_funded?(gs.id) %>
+            <%= link_to "Generate Contract", generate_contract_grant_submission_path(gs, format: 'pdf'), method: :post, class: 'btn btn-xs btn-success btn-inline' %>
+          <% end %>
+        </div>
+      </div>
+    </td>
+    <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
+    <td align="right">$<%= gs.requested_funding_dollars %></td>
+    <td><%= link_to "#{discussion_status(gs.id)}", discuss_grant_submission_path(gs) %></td>
+    <% if @show_scores %>
+    <td><%= @results[gs.id]['avg_t'] %></td>
+    <td><%= @results[gs.id]['avg_c'] %></td>
+    <td><%= @results[gs.id]['avg_f'] %></td>
+    <td><%= @results[gs.id]['avg_s'] %></td>
+    <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
+    <% end %>
+    <td><% if gs.funding_decision %>Yes<% else %>No<% end %></td>
+    <td>
+      <%= render partial: 'grant_submissions/funding_table', locals: { grant_submission: gs }%>
+    </td>
+    <% if @revealed %>
+      <td><%= (Artist.where(id: gs.artist_id).take).name rescue "Unknown" %></td>
+      <td><%= (Artist.where(id: gs.artist_id).take).contact_name rescue "Unknown" %></td>
+      <td><%= (Artist.where(id: gs.artist_id).take).email rescue "Unknown" %></td>
+    <% else %>
+      <td align="center">
+        <form name="fund_email_form-<%= gs.id %>">
+        <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
         </form>
       </td>
-      <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);", class: 'btn btn-warning' %></td>
-    </tr>
-    <tr>
-      <td colspan="<%= colspan %>" align="right">Total proposed grant money</td>
-      <td align="right">$<%= all_grant_funding_total(false) %></td>
-    </tr>
-    <tr>
-      <td colspan="<%= colspan %>" align="right">Total finalized grant money</td>
-      <td align="right">$<%= all_grant_funding_total(true) %></td>
-    </tr>
-    <tr>
-      <td colspan="<%= colspan %>" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
-      <td><%= button_to "Notify Questions", admins_send_question_emails_path, class: 'btn btn-warning' %></td>
-    </tr>
     <% end %>
-    </tbody>
-  </table>
+  </tr>
+  <% end %>
+  </tbody>
+  <tfoot>
+  <% unless @revealed %>
+  <% colspan = 6 + (@show_scores ? 5 : 0) + (@revealed ? 3 : 0) %>
+  <tr>
+    <td colspan="<%= colspan %>" align="right">
+      <form name="send_email_form">
+        <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
+      </form>
+    </td>
+    <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);", class: 'btn btn-warning' %></td>
+  </tr>
+  <tr>
+    <td colspan="<%= colspan %>" align="right">Total proposed grant money</td>
+    <td align="right">$<%= all_grant_funding_total(false) %></td>
+  </tr>
+  <tr>
+    <td colspan="<%= colspan %>" align="right">Total finalized grant money</td>
+    <td align="right">$<%= all_grant_funding_total(true) %></td>
+  </tr>
+  <tr>
+    <td colspan="<%= colspan %>" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
+    <td><%= button_to "Notify Questions", admins_send_question_emails_path, class: 'btn btn-warning' %></td>
+  </tr>
+  </tfoot>
+  <% end %>
+</table>
 
-  <P>
-  <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", admins_submissions_path(reveal: true, scores: false, scope: :active), class: 'btn btn-danger' %> <img src="/uploads/emot-siren.gif">
-  </p>
-<% end %>
+<P>
+<img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", admins_submissions_path(reveal: true, scores: false, scope: :active), class: 'btn btn-danger' %> <img src="/uploads/emot-siren.gif">
+</p>
 
 <script>
 function toggle_all_fund_emails(event) {
