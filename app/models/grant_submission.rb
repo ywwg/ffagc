@@ -7,6 +7,7 @@ class GrantSubmission < ActiveRecord::Base
   has_many :proposals, inverse_of: :grant_submission
   has_many :votes
   has_many :voter_submission_assignments
+  has_many :voters, through: :voter_submission_assignments
 
   delegate :max_funding_dollars, to: :grant
 
