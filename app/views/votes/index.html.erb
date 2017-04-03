@@ -16,8 +16,8 @@
 <% end %>
 
 <div class="btn-group">
-  <%= link_to "Assigned to you", votes_path(scope: :assigned), class: 'btn btn-default' %>
-  <%= link_to "All submissions", votes_path(scope: :all), class: 'btn btn-default' %>
+  <%= link_to "Assigned to you", votes_path(scope: :assigned), class: ['btn', 'btn-default', (@scope == 'assigned' ? 'active' : nil)] %>
+  <%= link_to "All submissions", votes_path(scope: :all), class: ['btn', 'btn-default', (@scope == 'all' ? 'active' : nil)] %>
 </div>
 
 <% if @grant_submissions.present? %>
