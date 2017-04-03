@@ -89,17 +89,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :discussion_status
 
-  def active_grant_funding_total(finalized)
-    total = 0
-    GrantSubmission.where(grant_id: active_vote_grants, funding_decision: finalized).each do |gs|
-      if gs.granted_funding_dollars != nil
-        total += gs.granted_funding_dollars
-      end
-    end
-    return total
-  end
-  helper_method :active_grant_funding_total
-
   def all_grant_funding_total(finalized)
     total = 0
     GrantSubmission.where(funding_decision: finalized).each do |gs|
