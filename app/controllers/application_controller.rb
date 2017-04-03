@@ -138,14 +138,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :artist_logged_in?
 
-  def artist_has_submission?
-    if current_artist
-      return true if GrantSubmission.where(artist_id: session[:artist_id]) != []
-    end
-    return false
-  end
-  helper_method :artist_has_submission?
-
   # /voters
 
   public
