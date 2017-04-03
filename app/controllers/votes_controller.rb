@@ -2,47 +2,24 @@ class VotesController < ApplicationController
   load_and_authorize_resource only: [:index, :update]
 
   def index
-    # TODO: use scope
-    @grant_submissions = GrantSubmission.where(grant_id: voter_active_vote_grants(current_voter.id))
+    @scope = 'assigned'
 
-    # TODO: sort in scope or add sorting scope
-    @grant_submissions = @grant_submissions.sort { |a,b| [a.name] <=> [b.name] }
-
-    @votes = Hash.new
-
-    @grant_submissions.each do |gs|
-      gs.class_eval do
-        attr_accessor :assigned
-      end
-
-      vote = current_voter.votes.where(grant_submission: gs).first_or_create
-
-      @votes[gs.id] = vote
-
-      #assignments
-      vsa = current_voter.voter_submission_assignments.where(grant_submission: gs)
-
-      if vsa.exists?
-        gs.assigned = 1
-      else
-        gs.assigned = 0
-      end
+    if params[:scope] == 'all'
+      @scope = 'all'
     end
 
-    # TODO: use scopes
-    @grant_submissions_assigned = @grant_submissions.select{|gs| gs.assigned == 1}
-    @grant_submissions_unassigned = @grant_submissions.select{|gs| gs.assigned == 0}
-
-    # TODO: sort in scope or add sorting scope
-    @grant_submissions_unassigned.sort_by {|gs| gs.grant_id}
-
-    if params[:all] == "true"
-      @show_all = true
-      @grant_submissions_display = @grant_submissions
+    @grant_submissions = if @scope == 'all'
+      @grant_submissions = GrantSubmission.accessible_by(current_ability)
     else
-      @show_all = false
-      @grant_submissions_display = @grant_submissions_assigned
+      @grant_submissions = current_voter.grant_submissions.accessible_by(current_ability)
     end
+
+    @votes = @grant_submissions.map do |gs|
+      vote = current_voter.votes.where(grant_submission: gs).first_or_create
+      [gs.id, vote]
+    end
+
+    @votes = @votes.to_h
   end
 
   def update
