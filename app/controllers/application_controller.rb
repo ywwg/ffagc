@@ -95,12 +95,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :submission_has_questions?
 
-  def grant_submission_funded?(id)
-    g = GrantSubmission.find(id)
-    return g.funding_decision && g.granted_funding_dollars > 0
-  end
-  helper_method :grant_submission_funded?
-
   def active_grant_funding_total(finalized)
     total = 0
     GrantSubmission.where(grant_id: active_vote_grants, funding_decision: finalized).each do |gs|

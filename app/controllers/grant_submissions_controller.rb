@@ -68,7 +68,7 @@ class GrantSubmissionsController < ApplicationController
     # TODO: use new Ability action
     authorize! :read, @grant_submission
 
-    if !grant_submission_funded?(@grant_submission.id)
+    unless @grant_submission.funded?
       flash[:danger] = "Grant Submission must be funded to create contract"
       logger.warn "tried to generate contract for non-funded grant"
       redirect_to "/"

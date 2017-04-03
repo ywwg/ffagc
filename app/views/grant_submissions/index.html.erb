@@ -46,7 +46,7 @@
             <%= link_to "View", grant_submission_path(id: gs.id), class: 'btn btn-default' %>
           </div>
           <div class="btn-group pull-right">
-            <% if grant_submission_funded?(gs.id) %>
+            <% if gs.funded? %>
               <%= link_to "Generate Contract", generate_contract_grant_submission_path(gs, format: 'pdf'), method: :post, class: 'btn btn-success btn-inline' %>
             <% elsif submission_has_questions?(gs.id) %>
               <%= link_to "Answer Questions", discuss_grant_submission_path(gs), class: 'btn btn-primary' %>

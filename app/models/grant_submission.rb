@@ -38,6 +38,10 @@ class GrantSubmission < ActiveRecord::Base
     errors[:proposal] << 'File must be less than 100MB'
   end
 
+  def funded?
+    funding_decision && (granted_funding_dollars || 0) > 0
+  end
+
   private
 
   def update_question_and_answer_dates

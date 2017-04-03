@@ -5,6 +5,24 @@ describe GrantSubmission do
     its(:max_funding_dollars) { is_expected.to eq(subject.grant.max_funding_dollars) }
   end
 
+  describe '#funded?' do
+    subject { FactoryGirl.create(:grant_submission, funding_decision: false, granted_funding_dollars: nil) }
+
+    it { is_expected.not_to be_funded }
+
+    context 'with funding_decision' do
+      subject { FactoryGirl.create(:grant_submission, funding_decision: true, granted_funding_dollars: nil) }
+
+      it { is_expected.not_to be_funded }
+
+      context 'with granted_funding_dollars' do
+        subject { FactoryGirl.create(:grant_submission, funding_decision: true, granted_funding_dollars: 1_00) }
+
+        it { is_expected.to be_funded }
+      end
+    end
+  end
+
   context 'validations' do
     context 'with requested_funding_dollars greater than grant limit' do
       it 'is not valid' do
