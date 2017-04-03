@@ -1,9 +1,9 @@
 class VotersController < ApplicationController
+  load_and_authorize_resource only: [:show]
+
   before_filter :initialize_grants
 
   def show
-    @voter = Voter.find(params[:id])
-    authorize! :show, @voter
   end
 
   def signup
