@@ -9,18 +9,18 @@
   </div>
 <% end %>
 
-<% if @grant_submissions.present? %>
-  <% unless @scope == 'all' %>
-    <div class="alert alert-info">
-      <p>Please vote on these before the meeting!</p>
-    </div>
-  <% end %>
-
-  <div class="btn-group">
-    <%= link_to "Assigned to you", voters_path(scope: :assigned), class: 'btn btn-default' %>
-    <%= link_to "All submissions", voters_path(scope: :all), class: 'btn btn-default' %>
+<% unless @scope == 'all' %>
+  <div class="alert alert-info">
+    <p>Please vote on these before the meeting!</p>
   </div>
+<% end %>
 
+<div class="btn-group">
+  <%= link_to "Assigned to you", votes_path(scope: :assigned), class: 'btn btn-default' %>
+  <%= link_to "All submissions", votes_path(scope: :all), class: 'btn btn-default' %>
+</div>
+
+<% if @grant_submissions.present? %>
   <%= form_tag("/voters/vote", authenticity_token: true, name: "vote_form") do %>
   <table class="table table-striped">
     <thead>
