@@ -56,13 +56,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :active_vote_names
 
-  def voter_active_vote_names(voter_id)
-    now = DateTime.current
-    return Grant.joins(:grants_voters).where('grants_voters.voter_id' => voter_id)
-        .where("vote_start <= datetime(?, ?)", now, timezone_string).where("vote_end >= datetime(?, ?)", now, timezone_string).select(:name)
-  end
-  helper_method :voter_active_vote_names
-
   def active_submit_names
     now = DateTime.current
     deadline_leniency_time = now - 1.hours
