@@ -48,6 +48,8 @@ describe Ability do
     it { is_expected.to be_able_to(:manage, VoterSurvey.new) }
     it { is_expected.to be_able_to(:manage, Voter.new) }
     it { is_expected.to be_able_to(:manage, Vote.new) }
+
+    it { is_expected.not_to be_able_to(:vote, GrantSubmission.new) }
   end
 
   context 'with artist' do
@@ -66,6 +68,8 @@ describe Ability do
     it { is_expected.to be_able_to(:edit_answers, grant_submission) }
     it { is_expected.not_to be_able_to(:edit_questions, grant_submission) }
     it { is_expected.to be_able_to(:manage, proposal) }
+    it { is_expected.not_to be_able_to(:index, Artist) }
+    it { is_expected.not_to be_able_to(:index, ArtistSurvey) }
 
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
     it { is_expected.not_to be_able_to(:manage, Artist.new) }
@@ -109,6 +113,8 @@ describe Ability do
     it { is_expected.to be_able_to(:read, GrantSubmission.new) }
     it { is_expected.to be_able_to(:discuss, GrantSubmission.new) }
     it { is_expected.to be_able_to(:read, Grant.new) }
+    it { is_expected.not_to be_able_to(:index, Voter) }
+    it { is_expected.not_to be_able_to(:index, VoterSurvey) }
 
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
     it { is_expected.not_to be_able_to(:manage, Artist.new) }

@@ -1,0 +1,153 @@
+<% if any_vote_open? %>
+  <div class="well">
+    <%= render partial: 'grants/sentence_list', locals: { process_type: 'voting', grant_names: active_vote_names } %>
+  </div>
+<% else %>
+  <div class="well">
+    Voting is not open at this time.
+  </div>
+<% end %>
+
+<% unless @scope == 'all' %>
+  <div class="alert alert-info">
+    <p>Please vote on these before the meeting!</p>
+  </div>
+<% end %>
+
+<div class="btn-group">
+  <%= link_to "Assigned to you", votes_path(scope: :assigned), class: ['btn', 'btn-default', (@scope == 'assigned' ? 'active' : nil)] %>
+  <%= link_to "All submissions", votes_path(scope: :all), class: ['btn', 'btn-default', (@scope == 'all' ? 'active' : nil)] %>
+</div>
+
+<% if @grant_submissions.present? %>
+  <%= form_tag("/voters/vote", authenticity_token: true, name: "vote_form") do %>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Project Name</th>
+      <th>Grant</th>
+      <th>Requested</th>
+      <th>Proposal Document</th>
+      <th>Discussion</th>
+      <th>T</th>
+      <th>C</th>
+      <th>F</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @grant_submissions.each do |gs| %>
+      <tr>
+        <td><%= gs.name %></td>
+        <td><%= gs.grant&.name || 'Unknown' %></td>
+        <td align="right"><%= number_to_currency gs.requested_funding_dollars %></td>
+        <td><%= link_to 'Open...', gs.proposal_url, target: :blank %></td>
+        <td>
+          <% if submission_has_questions?(gs.id) %>
+            <%= link_to "#{discussion_status(gs.id)}", discuss_grant_submission_path(gs) %>
+          <% else %>
+            None
+          <% end %>
+        </td>
+        <td align="center">
+          <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
+            <option></option>
+            <option <%= @votes[gs.id].score_t == 0 ? "selected" : "" %>>0</option>
+            <option <%= @votes[gs.id].score_t == 1 ? "selected" : "" %>>1</option>
+            <option <%= @votes[gs.id].score_t == 2 ? "selected" : "" %>>2</option>
+          </select>
+        </td>
+        <td align="center">
+          <select id="c[<%= gs.id %>]" name="c[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
+            <option></option>
+            <option <%= @votes[gs.id].score_c == 0 ? "selected" : "" %>>0</option>
+            <option <%= @votes[gs.id].score_c == 1 ? "selected" : "" %>>1</option>
+            <option <%= @votes[gs.id].score_c == 2 ? "selected" : "" %>>2</option>
+          </select>
+        </td>
+        <td align="center">
+          <select id="f[<%= gs.id %>]" name="f[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
+            <option></option>
+            <option <%= @votes[gs.id].score_f == 0 ? "selected" : "" %>>0</option>
+            <option <%= @votes[gs.id].score_f == 1 ? "selected" : "" %>>1</option>
+            <option <%= @votes[gs.id].score_f == 2 ? "selected" : "" %>>2</option>
+          </select>
+        </td>
+        <td><div id="save<%= gs.id %>" style="width: 60px"></div></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Voting</h3>
+  </div>
+  <div class="panel-body">
+    <dl class="dl-horizontal">
+      <dt>T</dt><dd>Thoughtfulness</dd>
+      <dt>C</dt><dd>Creativity</dd>
+      <dt>F</dt><dd>Feasibility</dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt>0</dt><dd>Fails to meet criteria</dd>
+      <dt>1</dt><dd>Meets criteria</dd>
+      <dt>2</dt><dd>Exceeds criteria</dd>
+    </dl>
+  </div>
+</div>
+<% end %>
+
+<script>
+  // TODO: make this take a form element name and just submit that
+  //       single thing instead of the whole form.
+  function ajax_submit(id, form_name) {
+    var valuesToSubmit = $('form[name=' + form_name + ']').serialize();
+    $.ajax({
+      type: "PUT",
+      url: "/votes", //submits it to the given url of the form
+      data: valuesToSubmit,
+      dataType: "JSON", // you want a difference between normal and ajax-calls, and json is standard
+    })
+    .done(function(){
+      if (saved_messages_shown < wacky_message_threshold) {
+        msg = "saved";
+        saved_messages_shown++;
+      } else {
+        msg = success_messages[Math.floor(Math.random() * success_messages.length)];
+      }
+      flash_element(id, msg);
+    })
+    .fail(function(){
+      flash_element(id, "failed");
+    });
+    return false; // prevents normal behaviour
+  }
+
+  function flash_element(id, msg) {
+    $(id).css({ opacity: 0.0 });
+    $(id).text(msg);
+    $(id).animate({
+      opacity: 1.0,
+    }, {
+      duration: 200,
+      complete: function() {
+        $(id).animate({
+          opacity: 0.0,
+        }, {
+          duration: 200,
+          complete: function() {
+            $(id).text("");
+          }
+        });
+      }
+    });
+  }
+
+  var success_messages = ["saved", "ok", "yup", "love it", "sweet", "crushed",
+                          "right", "swell", "sure"];
+
+  var saved_messages_shown = 0;
+  var wacky_message_threshold = 3;
+</script>

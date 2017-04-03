@@ -28,17 +28,17 @@
             <li><%= link_to 'Voter login', new_sessions_voter_path %></li>
             <li><%= link_to 'Admin login', new_sessions_admin_path %></li>
           <% end %>
-          <% if admin_logged_in? %>
+          <% if can? :manage, :all %>
             <li><%= link_to 'Admin Panel', admins_path %></li>
           <% end %>
-          <% if admin_logged_in? || artist_logged_in? %>
+          <% if can? :vote, GrantSubmission %>
+            <li><%= link_to 'Voting', votes_path %></li>
+          <% end %>
+          <% if can? :index, GrantSubmission %>
             <li><%= link_to 'Submissions', grant_submissions_path %></li>
           <% end %>
-          <% if admin_logged_in? %>
+          <% if can? :index, Artist %>
             <li><%= link_to 'Artists', artists_path %></li>
-          <% end %>
-          <% if voter_logged_in? %>
-            <li><%= link_to 'Voting', voters_path %></li>
           <% end %>
           <% if can? :index, Grant %>
             <li><%= link_to 'Grants', grants_path %></li>

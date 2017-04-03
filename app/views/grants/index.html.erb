@@ -3,20 +3,21 @@
   <li class="active">Overview</li>
 </ol>
 
+<div class="well">
 <% if any_submit_open? %>
-  <p>The submission process is active for <% active_submit_names.each_with_index do |g, i| %>
-  <% if i > 0 %> and<% end %>
-  <b><%= g.name %></b><% end %></p>
+   <%= render partial: 'grants/sentence_list', locals: { process_type: 'submission', grant_names: active_submit_names } %>
 <% else %>
   <p>No submission process open at this time.</p>
 <% end %>
+</div>
+
+<div class="well">
 <% if any_vote_open? %>
-  <p>The voting process is active for <% active_vote_names.each_with_index do |g, i| %>
-  <% if i > 0 %> and<% end %>
-  <b><%= g.name %></b><% end %></p>
+   <%= render partial: 'grants/sentence_list', locals: { process_type: 'voting', grant_names: active_vote_names } %>
 <% else %>
   <p>No voting process open at this time.</p>
 <% end %>
+</div>
 
 <table class="table table-striped">
   <thead>
@@ -40,18 +41,36 @@
   <tr>
     <td><%= g.name %></td>
     <td>$<%= g.max_funding_dollars %></td>
-    <td><%= Date::DAYNAMES[g.submit_start.wday] %>,
-        <%= g.submit_start.strftime("%Y/%m/%d") %></td>
-    <td><%= Date::DAYNAMES[g.submit_end.wday] %>,
-        <%= g.submit_end.strftime("%Y/%m/%d") %></td>
-    <td><%= Date::DAYNAMES[g.vote_start.wday] %>,
-        <%= g.vote_start.strftime("%Y/%m/%d") %></td>
-    <td><%= Date::DAYNAMES[g.meeting_one.wday] %>,
-        <%= g.meeting_one.strftime("%Y/%m/%d") %></td>
-    <td><%= Date::DAYNAMES[g.meeting_two.wday] %>,
-        <%= g.meeting_two.strftime("%Y/%m/%d") %></td>
-    <td><%= Date::DAYNAMES[g.vote_end.wday] %>,
-        <%= g.vote_end.strftime("%Y/%m/%d") %></td>
+    <td>
+      <%= Date::DAYNAMES[g.submit_start.wday] %>,
+      <%= g.submit_start.strftime("%Y/%m/%d") %><br />
+      <%= humanize_date g.submit_start %>
+    </td>
+    <td>
+      <%= Date::DAYNAMES[g.submit_end.wday] %>,
+      <%= g.submit_end.strftime("%Y/%m/%d") %><br />
+      <%= humanize_date g.submit_end %>
+    </td>
+    <td>
+      <%= Date::DAYNAMES[g.vote_start.wday] %>,
+      <%= g.vote_start.strftime("%Y/%m/%d") %><br />
+      <%= humanize_date g.vote_start %>
+    </td>
+    <td>
+      <%= Date::DAYNAMES[g.meeting_one.wday] %>,
+      <%= g.meeting_one.strftime("%Y/%m/%d") %><br />
+      <%= humanize_date g.meeting_one %>
+    </td>
+    <td>
+      <%= Date::DAYNAMES[g.meeting_two.wday] %>,
+      <%= g.meeting_two.strftime("%Y/%m/%d") %><br />
+      <%= humanize_date g.meeting_two %>
+    </td>
+    <td>
+      <%= Date::DAYNAMES[g.vote_end.wday] %>,
+      <%= g.vote_end.strftime("%Y/%m/%d") %><br />
+      <%= humanize_date g.vote_end %>
+    </td>
     <% if can? :modify, g %>
     <td align="center"><% if g.hidden %>Y<% end %></td>
     <td><%= link_to "Edit", edit_grant_path(g) %></td>

@@ -15,8 +15,6 @@ Rails.application.routes.draw do
   get 'admins/voters' => 'admins#voters'
   get 'admins/submissions' => 'admins#submissions'
 
-  post 'voters/vote' => 'voters#vote'
-
   post 'admins/assign' => 'admins#assign'
   post 'admins/clear_assignments' => 'admins#clear_assignments'
   post 'admins/verify' => 'admins#verify'
@@ -39,6 +37,9 @@ Rails.application.routes.draw do
   resources :proposals, only: [:destroy]
 
   resources :voters, only: [:create, :update, :index, :show]
+
+  resources :votes, only: [:index]
+  resource :votes, only: [:update]
 
   resources :account_activations, only: [:show, :create]
 

@@ -1,8 +1,42 @@
 describe VotersController do
+  subject { response }
+
   describe '#signup' do
     it 'returns ok' do
       get 'signup'
       expect(response).to be_ok
+    end
+  end
+
+  describe '#show' do
+    let!(:voter) { FactoryGirl.create(:voter, :activated) }
+
+    def go!(id)
+      get :show, id: id
+    end
+
+    context 'with activated voter' do
+      before do
+        sign_in voter
+      end
+
+      it { go! voter.id; is_expected.to be_ok }
+
+      context 'for another voter' do
+        let!(:another_voter) { FactoryGirl.create(:voter) }
+
+        it { go! another_voter.id; is_expected.to be_forbidden }
+      end
+    end
+
+    context 'with user who cannot a voter' do
+      let!(:user) { FactoryGirl.create(:artist) }
+
+      before do
+        sign_in user
+      end
+
+      it { go! voter.id; is_expected.to be_forbidden }
     end
   end
 
@@ -37,35 +71,6 @@ describe VotersController do
       it 'returns an error' do
         post 'create', voter: { email: existing_voter.email }
         expect(response).to render_template('signup_failure')
-      end
-    end
-  end
-
-  describe '#index' do
-    context 'with activated voter' do
-      let!(:voter) { FactoryGirl.create(:voter, :activated) }
-
-      before do
-        sign_in voter
-      end
-
-      it 'shows index template' do
-        get 'index'
-        assert_template 'index'
-      end
-    end
-
-    context 'with user who cannot vote' do
-      let!(:user) { FactoryGirl.create(:artist) }
-
-      before do
-        sign_in user
-      end
-
-      it 'redirects with flash' do
-        get 'index'
-        expect(response).to redirect_to('/')
-        expect(flash).not_to be_empty
       end
     end
   end
