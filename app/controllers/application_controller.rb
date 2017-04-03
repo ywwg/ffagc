@@ -153,11 +153,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :voter_logged_in?
 
-  def verified_voter_logged_in?
-    true if current_voter && current_voter.verified
-  end
-  helper_method :verified_voter_logged_in?
-
   def participating_checked(voter_id, grant_id)
     if GrantsVoter.exists?(voter_id: voter_id, grant_id: grant_id)
       return "checked"

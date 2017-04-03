@@ -4,7 +4,7 @@
   <li class="active">Discussion</li>
 </ol>
 
-<% if artist_logged_in? || admin_logged_in? || verified_voter_logged_in? %>
+<% if artist_logged_in? || admin_logged_in? || current_voter&.verified %>
   <%= simple_form_for @grant_submission do |f| %>
     <div class="row">
       <div class="col-md-6">
