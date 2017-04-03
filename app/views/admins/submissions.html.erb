@@ -88,6 +88,8 @@
     <% end %>
   </tr>
   <% end %>
+  </tbody>
+  <tfoot>
   <% unless @revealed %>
   <% colspan = 6 + (@show_scores ? 5 : 0) + (@revealed ? 3 : 0) %>
   <tr>
@@ -110,8 +112,8 @@
     <td colspan="<%= colspan %>" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
     <td><%= button_to "Notify Questions", admins_send_question_emails_path, class: 'btn btn-warning' %></td>
   </tr>
+  </tfoot>
   <% end %>
-  </tbody>
 </table>
 
 <P>
