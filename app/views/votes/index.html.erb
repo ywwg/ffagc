@@ -1,7 +1,6 @@
 <% if any_vote_open? %>
   <div class="well">
-    The voting process is active for
-    <% active_vote_names.each_with_index do |g, i| %><% if i > 0 %>, and<% end %> <strong><%= g.name %></strong><% end %>.
+    <%= render partial: 'grants/sentence_list', locals: { process_type: 'voting', grant_names: active_vote_names } %>
   </div>
 <% else %>
   <div class="well">

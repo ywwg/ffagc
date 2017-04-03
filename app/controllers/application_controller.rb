@@ -41,12 +41,12 @@ class ApplicationController < ActionController::Base
   helper_method :any_vote_open?
 
   def active_vote_names
-    active_vote_grants.select(&:name)
+    active_vote_grants.select(&:name).map(&:name)
   end
   helper_method :active_vote_names
 
   def active_submit_names
-    active_submit_grants.select(&:name)
+    active_submit_grants.select(&:name).map(&:name)
   end
   helper_method :active_submit_names
 

@@ -5,13 +5,7 @@
 
 <div class="alert alert-info">
   <% if any_submit_open? %>
-    <p>The submission process is active for:
-    <ul>
-      <% active_submit_names.each_with_index do |g| %>
-        <li><%= g.name %></li>
-      <% end %>
-    </ul>
-    </p>
+    <p><%= render partial: 'grants/sentence_list', locals: { process_type: 'submission', grant_names: active_submit_names } %></p>
     <% if can? :new, GrantSubmission %>
     <p><%= link_to "Submit Grant Proposal", new_grant_submission_path, class: 'btn btn-primary' %></p>
     <% end%>
