@@ -34,12 +34,6 @@ class ApplicationController < ActionController::Base
     return Grant.where("vote_start <= datetime(?, ?)", now, timezone_string).where("vote_end >= datetime(?, ?)", now, timezone_string).select(:id)
   end
 
-  def voter_active_vote_grants(voter_id)
-    now = DateTime.current
-    return Grant.joins(:grants_voters).where('grants_voters.voter_id' => voter_id)
-        .where("vote_start <= datetime(?, ?)", now, timezone_string).where("vote_end >= datetime(?, ?)", now, timezone_string).select(:id)
-  end
-
   def any_submit_open?
     return active_submit_grants.count > 0
   end
