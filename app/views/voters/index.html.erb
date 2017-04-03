@@ -15,8 +15,10 @@
     <p>| <% if @show_all %><%= link_to "Assigned To You", :controller => "voters", :action => "index" %><% else %><b>Assigned To You</b><% end %>
        | <% if @show_all %><b>All Submissions</b><% else %><%= link_to "All Submissions", :controller => "voters", :action => "index", :all => "true" %><% end %>
     |</p>
-  <% if !@show_all %>
-  <p>Please vote on these before the meeting!</p>
+  <% unless @scope == 'all' %>
+    <div class="alert alert-info">
+      <p>Please vote on these before the meeting!</p>
+    </div>
   <% end %>
   <br />
   <table class="table table-striped">
