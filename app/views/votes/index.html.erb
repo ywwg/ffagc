@@ -106,8 +106,8 @@
   function ajax_submit(id, form_name) {
     var valuesToSubmit = $('form[name=' + form_name + ']').serialize();
     $.ajax({
-      type: "POST",
-      url: "/voters/vote", //submits it to the given url of the form
+      type: "PUT",
+      url: "/votes", //submits it to the given url of the form
       data: valuesToSubmit,
       dataType: "JSON", // you want a difference between normal and ajax-calls, and json is standard
     })

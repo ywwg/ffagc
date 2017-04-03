@@ -37,7 +37,9 @@ Rails.application.routes.draw do
   resources :proposals, only: [:destroy]
 
   resources :voters, only: [:create, :update, :index, :show]
-  resources :votes, only: [:index, :update]
+
+  resources :votes, only: [:index]
+  resource :votes, only: [:update]
 
   resources :account_activations, only: [:show, :create]
 
