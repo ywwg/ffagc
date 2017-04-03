@@ -48,6 +48,8 @@ describe Ability do
     it { is_expected.to be_able_to(:manage, VoterSurvey.new) }
     it { is_expected.to be_able_to(:manage, Voter.new) }
     it { is_expected.to be_able_to(:manage, Vote.new) }
+
+    it { is_expected.not_to be_able_to(:vote, GrantSubmission.new) }
   end
 
   context 'with artist' do
