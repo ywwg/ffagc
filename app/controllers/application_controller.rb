@@ -116,12 +116,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :grant_max_funding_dollars_json
 
-  def voter_verified?(id)
-    return Voter.find(id).verified
-  end
-  helper_method :voter_verified?
-
-
   # /artists, /voters, /admins
   public
   # This method is expected by CanCan
