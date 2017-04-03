@@ -30,10 +30,13 @@ class Ability
       can :manage, Artist, id: user.id
       can :manage, ArtistSurvey, artist_id: user.id
 
+      cannot :index, [Artist, ArtistSurvey]
+
       if  user.activated?
         can [:manage, :discuss, :edit_answers], GrantSubmission, artist_id: user.id
-        cannot :edit_questions, GrantSubmission, artist_id: user.id
         can :manage, Proposal, grant_submission_id: user.grant_submission_ids
+
+        cannot [:vote, :edit_questions], GrantSubmission
       end
     end
 
@@ -41,13 +44,13 @@ class Ability
       can :manage, Voter, id: user.id
       can :manage, VoterSurvey, voter_id: user.id
 
-      if user.activated?
-        can :vote, GrantSubmission
+      cannot :index, [Voter, VoterSurvey]
 
+      if user.activated?
         can :manage, Vote, voter_id: user.id
         # TODO: should voters be able to change their 'GrantVoter`s?
 
-        can [:read, :discuss], GrantSubmission
+        can [:vote, :read, :discuss], GrantSubmission
         can :read, VoterSubmissionAssignment, voter_id: user.id
       end
     end
