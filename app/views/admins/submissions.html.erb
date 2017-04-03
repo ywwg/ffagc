@@ -1,20 +1,20 @@
 <% if admin_logged_in? %>
   <h2>Grants</h2>
 
-  <div class="btn-group">
-    <%= link_to "All", admins_submissions_path(scores: @show_scores, scope: :all, order: @order), class: ['btn', (@scope == 'all' ? 'btn-primary' : 'btn-default')] %>
-    <%= link_to "Active", admins_submissions_path(scores: @show_scores, scope: :active, order: @order), class: ['btn', (@scope == 'active' ? 'btn-primary' : 'btn-default')] %>
-  </div>
-
-  <div class="btn-group">
-    <%= link_to "Show scores", admins_submissions_path(scores: true, scope: @scope, order: @order), class: ['btn', (@show_scores ? 'btn-primary' : 'btn-default')] %>
-    <%= link_to "Hide scores", admins_submissions_path(scores: false, scope: @scope, order: @order), class: ['btn', (@show_scores ? 'btn-default' : 'btn-primary')] %>
-  </div>
-
-  <div class="btn-group">
-    <%= link_to "By Score", admins_submissions_path(scores: @show_scores, scope: @scope, order: :score), class: ['btn', (@order == 'score' ? 'btn-primary' : 'btn-default')] %>
-    <%= link_to "By Date", admins_submissions_path(scores: @show_scores, scope: @scope, order: :date), class: ['btn', (@order == 'date' ? 'btn-primary' : 'btn-default')] %>
-    <%= link_to "By Name", admins_submissions_path(scores: @show_scores, scope: @scope, order: :name), class: ['btn', (@order == 'name' ? 'btn-primary' : 'btn-default')] %>
+  <div class="btn-toolbar">
+    <div class="btn-group">
+      <%= link_to "All", admins_submissions_path(scores: @show_scores, scope: :all, order: @order), class: ['btn', 'btn-default', (@scope == 'all' ? 'active' : nil)] %>
+      <%= link_to "Active", admins_submissions_path(scores: @show_scores, scope: :active, order: @order), class: ['btn', 'btn-default', (@scope == 'active' ? 'active' : nil)] %>
+    </div>
+    <div class="btn-group">
+      <%= link_to "Show scores", admins_submissions_path(scores: true, scope: @scope, order: @order), class: ['btn', 'btn-default', (@show_scores ? 'active' : nil)] %>
+      <%= link_to "Hide scores", admins_submissions_path(scores: false, scope: @scope, order: @order), class: ['btn', 'btn-default', (@show_scores ? nil : 'active')] %>
+    </div>
+    <div class="btn-group">
+      <%= link_to "By Score", admins_submissions_path(scores: @show_scores, scope: @scope, order: :score), class: ['btn', 'btn-default', (@order == 'score' ? 'active' : nil)] %>
+      <%= link_to "By Date", admins_submissions_path(scores: @show_scores, scope: @scope, order: :date), class: ['btn', 'btn-default', (@order == 'date' ? 'active' : nil)] %>
+      <%= link_to "By Name", admins_submissions_path(scores: @show_scores, scope: @scope, order: :name), class: ['btn', 'btn-default', (@order == 'name' ? 'active' : nil)] %>
+    </div>
   </div>
 
   <table class="table table-striped">
