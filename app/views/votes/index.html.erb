@@ -43,7 +43,7 @@
         <td align="right"><%= number_to_currency gs.requested_funding_dollars %></td>
         <td><%= link_to 'Open...', gs.proposal_url, target: :blank %></td>
         <td>
-          <% if submission_has_questions?(gs.id) %>
+          <% if gs.has_questions? %>
             <%= link_to "#{discussion_status(gs.id)}", discuss_grant_submission_path(gs) %>
           <% else %>
             None

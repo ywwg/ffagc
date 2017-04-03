@@ -89,12 +89,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :discussion_status
 
-  def submission_has_questions?(grant_id)
-    g = GrantSubmission.find(grant_id)
-    g.questions != nil && !g.questions.empty?
-  end
-  helper_method :submission_has_questions?
-
   def active_grant_funding_total(finalized)
     total = 0
     GrantSubmission.where(grant_id: active_vote_grants, funding_decision: finalized).each do |gs|

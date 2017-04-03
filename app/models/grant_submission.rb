@@ -42,6 +42,10 @@ class GrantSubmission < ActiveRecord::Base
     funding_decision && (granted_funding_dollars || 0) > 0
   end
 
+  def has_questions?
+    questions.present?
+  end
+
   private
 
   def update_question_and_answer_dates

@@ -23,6 +23,24 @@ describe GrantSubmission do
     end
   end
 
+  describe '#has_questions?' do
+    subject { FactoryGirl.create(:grant_submission, questions: nil) }
+
+    it { is_expected.not_to have_questions }
+
+    context 'with blank questions' do
+      subject { FactoryGirl.create(:grant_submission, questions: '       ') }
+
+      it { is_expected.not_to have_questions }
+    end
+
+    context 'with questions' do
+      subject { FactoryGirl.create(:grant_submission, questions: 'Fake questions') }
+
+      it { is_expected.to have_questions }
+    end
+  end
+
   context 'validations' do
     context 'with requested_funding_dollars greater than grant limit' do
       it 'is not valid' do
