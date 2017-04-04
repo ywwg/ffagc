@@ -102,11 +102,11 @@
   </tr>
   <tr>
     <td colspan="<%= colspan %>" align="right">Total proposed grant money</td>
-    <td align="right">$<%= all_grant_funding_total(false) %></td>
+    <td align="right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(funding_decision: false) %></td>
   </tr>
   <tr>
     <td colspan="<%= colspan %>" align="right">Total finalized grant money</td>
-    <td align="right">$<%= all_grant_funding_total(true) %></td>
+    <td align="right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(funding_decision: true) %></td>
   </tr>
   <tr>
     <td colspan="<%= colspan %>" align="right"><b>Sends emails to artists with non-empty Questions</b></td>

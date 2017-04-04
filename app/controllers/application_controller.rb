@@ -89,17 +89,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :discussion_status
 
-  def all_grant_funding_total(finalized)
-    total = 0
-    GrantSubmission.where(funding_decision: finalized).each do |gs|
-      if gs.granted_funding_dollars != nil
-        total += gs.granted_funding_dollars
-      end
-    end
-    return total
-  end
-  helper_method :all_grant_funding_total
-
   def grant_max_funding_dollars_json
     Grant.all.select(:id, :max_funding_dollars).to_json
   end
@@ -156,14 +145,12 @@ class ApplicationController < ActionController::Base
   def current_admin
     @current_admin ||= Admin.find_by_id(session[:admin_id]) if session[:admin_id]
   end
-
   helper_method :current_admin
 
   private
   def admin_logged_in?
     true if current_admin
   end
-
   helper_method :admin_logged_in?
 
   public
