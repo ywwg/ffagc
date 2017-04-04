@@ -1,6 +1,22 @@
 describe VotersController do
   subject { response }
 
+  describe '#index' do
+    def go!
+      get 'index'
+    end
+
+    it { go!; is_expected.to be_forbidden }
+
+    context 'with admin signed in' do
+      let!(:admin) { FactoryGirl.create(:admin) }
+
+      before { sign_in admin }
+
+      it { go!; is_expected.to be_ok }
+    end
+  end
+
   describe '#signup' do
     it 'returns ok' do
       get 'signup'

@@ -1,7 +1,10 @@
 class VotersController < ApplicationController
-  load_and_authorize_resource only: [:new, :show]
+  load_and_authorize_resource only: [:index, :show, :new]
 
   before_filter :initialize_grants
+
+  def index
+  end
 
   def show
   end
@@ -90,7 +93,7 @@ class VotersController < ApplicationController
       end
     end
 
-    redirect_to controller: 'admins', action: 'voters'
+    redirect_to after_update_path(@voter)
   end
 
   private
@@ -121,5 +124,15 @@ class VotersController < ApplicationController
 
   def voter_participation_params
     params.require(:grants_voters)
+  end
+
+  def after_update_path(voter)
+    if can? :index, Voter
+      voters_path
+    elsif can? :show, voter
+      voter_path(voter)
+    else
+      root_path
+    end
   end
 end
