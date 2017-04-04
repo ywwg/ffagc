@@ -17,6 +17,7 @@ class Ability
 
     can [:new, :create], Artist
     can [:new, :create], Voter
+    can [:new], GrantSubmission
 
     can :read, Grant, hidden: false
 
