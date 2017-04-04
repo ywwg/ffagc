@@ -1,5 +1,5 @@
 class VotersController < ApplicationController
-  load_and_authorize_resource only: [:index, :show, :new]
+  load_and_authorize_resource
 
   before_filter :initialize_grants
 
