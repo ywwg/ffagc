@@ -73,10 +73,10 @@ class ApplicationController < ActionController::Base
   def discussion_status(grant_id)
     discuss = []
     g = GrantSubmission.find(grant_id)
-    if g.questions != nil && !g.questions.empty?
+    if g.has_questions?
       discuss.push("Q")
     end
-    if g.answers != nil && !g.answers.empty?
+    if g.has_answers?
       discuss.push("A")
     end
     status = discuss.join('&').squeeze(' ')
@@ -89,50 +89,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :discussion_status
 
-  def submission_has_questions?(grant_id)
-    g = GrantSubmission.find(grant_id)
-    g.questions != nil && !g.questions.empty?
-  end
-  helper_method :submission_has_questions?
-
-  def grant_submission_funded?(id)
-    g = GrantSubmission.find(id)
-    return g.funding_decision && g.granted_funding_dollars > 0
-  end
-  helper_method :grant_submission_funded?
-
-  def active_grant_funding_total(finalized)
-    total = 0
-    GrantSubmission.where(grant_id: active_vote_grants, funding_decision: finalized).each do |gs|
-      if gs.granted_funding_dollars != nil
-        total += gs.granted_funding_dollars
-      end
-    end
-    return total
-  end
-  helper_method :active_grant_funding_total
-
-  def all_grant_funding_total(finalized)
-    total = 0
-    GrantSubmission.where(funding_decision: finalized).each do |gs|
-      if gs.granted_funding_dollars != nil
-        total += gs.granted_funding_dollars
-      end
-    end
-    return total
-  end
-  helper_method :all_grant_funding_total
-
   def grant_max_funding_dollars_json
     Grant.all.select(:id, :max_funding_dollars).to_json
   end
   helper_method :grant_max_funding_dollars_json
-
-  def voter_verified?(id)
-    return Voter.find(id).verified
-  end
-  helper_method :voter_verified?
-
 
   # /artists, /voters, /admins
   public
@@ -156,21 +116,12 @@ class ApplicationController < ActionController::Base
   end
   helper_method :artist_logged_in?
 
-  def artist_has_submission?
-    if current_artist
-      return true if GrantSubmission.where(artist_id: session[:artist_id]) != []
-    end
-    return false
-  end
-  helper_method :artist_has_submission?
-
   # /voters
 
   public
   def current_voter
     @current_voter ||= Voter.find_by_id(session[:voter_id]) if session[:voter_id]
   end
-
   helper_method :current_voter
 
   private
@@ -178,11 +129,6 @@ class ApplicationController < ActionController::Base
     true if current_voter
   end
   helper_method :voter_logged_in?
-
-  def verified_voter_logged_in?
-    true if current_voter && current_voter.verified
-  end
-  helper_method :verified_voter_logged_in?
 
   def participating_checked(voter_id, grant_id)
     if GrantsVoter.exists?(voter_id: voter_id, grant_id: grant_id)
@@ -198,14 +144,12 @@ class ApplicationController < ActionController::Base
   def current_admin
     @current_admin ||= Admin.find_by_id(session[:admin_id]) if session[:admin_id]
   end
-
   helper_method :current_admin
 
   private
   def admin_logged_in?
     true if current_admin
   end
-
   helper_method :admin_logged_in?
 
   public

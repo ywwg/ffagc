@@ -91,7 +91,7 @@ class AdminsController < ApplicationController
     submissions = GrantSubmission.where(grant_id: active_vote_grants)
     sent = 0
     submissions.each do |gs|
-      if gs.questions != nil && !gs.questions.empty?
+      if gs.questions != nil && gs.has_questions?
         artist = Artist.where(id: gs.artist_id).take
         grant = Grant.where(id: gs.grant_id).take
         begin
