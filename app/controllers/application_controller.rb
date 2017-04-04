@@ -18,6 +18,19 @@ class ApplicationController < ActionController::Base
     ActiveSupport::TimeZone[Rails.configuration.event_timezone].formatted_offset
   end
 
+  # Password token generation helpers
+  def self.new_token
+    SecureRandom.urlsafe_base64
+  end
+
+  def self.digest(secret)
+    return BCrypt::Password.create(secret)
+  end
+
+  def self.activate_succeed?(user, token)
+    BCrypt::Password.new(user.activation_digest).is_password?(token)
+  end
+
   private
 
   def active_vote_grants
@@ -70,101 +83,46 @@ class ApplicationController < ActionController::Base
   end
   helper_method :collated_meetings
 
-  def discussion_status(grant_id)
-    discuss = []
-    g = GrantSubmission.find(grant_id)
-    if g.has_questions?
-      discuss.push("Q")
-    end
-    if g.has_answers?
-      discuss.push("A")
-    end
-    status = discuss.join('&').squeeze(' ')
-    if status == ""
-      status = "None"
-    end
-    supplement_count = Proposal.where(:grant_submission_id => g.id).count
-    status += ", #{pluralize(supplement_count, 'doc')}"
-    return status
-  end
-  helper_method :discussion_status
-
   def grant_max_funding_dollars_json
     Grant.all.select(:id, :max_funding_dollars).to_json
   end
   helper_method :grant_max_funding_dollars_json
 
-  # /artists, /voters, /admins
-  public
   # This method is expected by CanCan
   def current_user
     current_admin || current_artist || current_voter
   end
   helper_method :current_user
 
-  # /artists
-
-  public #why
   def current_artist
     @current_artist ||= Artist.find_by_id(session[:artist_id]) if session[:artist_id]
   end
   helper_method :current_artist
 
-  private
   def artist_logged_in?
     true if current_artist
   end
   helper_method :artist_logged_in?
 
-  # /voters
-
-  public
   def current_voter
     @current_voter ||= Voter.find_by_id(session[:voter_id]) if session[:voter_id]
   end
   helper_method :current_voter
 
-  private
   def voter_logged_in?
     true if current_voter
   end
   helper_method :voter_logged_in?
 
-  def participating_checked(voter_id, grant_id)
-    if GrantsVoter.exists?(voter_id: voter_id, grant_id: grant_id)
-      return "checked"
-    end
-    return nil
-  end
-  helper_method :participating_checked
-
-  # /admins
-
-  public
   def current_admin
     @current_admin ||= Admin.find_by_id(session[:admin_id]) if session[:admin_id]
   end
   helper_method :current_admin
 
-  private
   def admin_logged_in?
     true if current_admin
   end
   helper_method :admin_logged_in?
-
-  public
-  # Password token generation helpers
-  def self.new_token
-    SecureRandom.urlsafe_base64
-  end
-
-  def self.digest(secret)
-    return BCrypt::Password.create(secret)
-  end
-
-  def self.activate_succeed?(user, token)
-    BCrypt::Password.new(user.activation_digest).is_password?(token)
-  end
 
   protected
 

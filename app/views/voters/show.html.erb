@@ -56,7 +56,7 @@
           <% @grants.each do |g| %>
             <div class="checkbox">
               <label>
-                <%= check_box :grants_voters, g.id, :checked => participating_checked(@voter.id, g.id) %>
+                <%= check_box :grants_voters, g.id, checked: @voter.grants_voters.where(grant: g).exists? %>
                   <strong><%= g.name %> Grant</strong>
                   (voting period: <%= g.vote_start.strftime("%Y/%m/%d") %> to
                   <%= g.vote_end.strftime("%Y/%m/%d") %>)

@@ -46,6 +46,10 @@ class GrantSubmission < ActiveRecord::Base
     questions.present?
   end
 
+  def has_answers?
+    answers.present?
+  end
+
   def self.granted_funding_dollars_total(query)
     GrantSubmission.where(query).sum(:granted_funding_dollars)
   end
