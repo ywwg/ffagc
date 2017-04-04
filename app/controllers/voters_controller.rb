@@ -7,25 +7,20 @@ class VotersController < ApplicationController
   end
 
   def new
+    @voter.voter_survey ||= @voter.build_voter_survey
   end
 
   def create
-    if Voter.exists?(email: voter_params[:email.downcase])
-      flash[:warning] = "The email address #{voter_params[:email.downcase]} already exists in our system"
-      render "signup_failure"
+    @voter = Voter.new(voter_params)
+    @voter.email = @voter.email.downcase
+
+    if Voter.exists?(email: @voter.email)
+      flash[:warning] = "The email address #{@voter.email} already exists in our system"
+      render 'new'
       return
     end
 
-    @voter = Voter.new(voter_params)
-
-    @voter.email = @voter.email.downcase
-
     if @voter.save
-      # save survey
-      voter_survey = VoterSurvey.new(voter_survey_params)
-      voter_survey.voter_id = @voter.id
-      voter_survey.save
-
       # save participation info
       meetings = collated_meetings
 
@@ -105,14 +100,23 @@ class VotersController < ApplicationController
   end
 
   def voter_params
-    params.require(:voter).permit(:name, :password_digest, :password, :password_confirmation, :email)
+    params.require(:voter).permit(:name, :password, :password_confirmation, :email,
+                                 voter_survey_attributes: voter_survey_attributes)
   end
 
-  def voter_survey_params
-    params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year,
-        :will_read, :will_meet, :has_been_voter, :has_participated_other,
-        :has_received_grant, :has_received_other_grant, :how_many_fireflies,
-        :signed_agreement)
+  def voter_survey_attributes
+    [
+      :has_attended_firefly,
+      :not_applying_this_year,
+      :will_read,
+      :will_meet,
+      :has_been_voter,
+      :has_participated_other,
+      :has_received_grant,
+      :has_received_other_grant,
+      :how_many_fireflies,
+      :signed_agreement
+    ]
   end
 
   def voter_participation_params
