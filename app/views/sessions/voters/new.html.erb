@@ -1,4 +1,6 @@
-<%= link_to "Register", new_voter_path %> as a member of the voting committee.
+<% if can? :new, Voter %>
+  <%= link_to "Register", new_voter_path %> as a member of the voting committee.
+<% end %>
 
 <h2>Have an account?</h2>
 
