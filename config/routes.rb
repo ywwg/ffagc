@@ -7,9 +7,6 @@ Rails.application.routes.draw do
   get 'password_resets/new'
   get 'password_resets/edit'
 
-  get 'voters/signup' => 'voters#signup'
-  post 'voters/signup' => 'voters#create'
-
   get 'admins/' => 'admins#index'
   post 'admins/index' => 'admins#index'
   get 'admins/voters' => 'admins#voters'
@@ -36,7 +33,7 @@ Rails.application.routes.draw do
 
   resources :proposals, only: [:destroy]
 
-  resources :voters, only: [:create, :update, :index, :show]
+  resources :voters, only: [:new, :create, :update, :index, :show]
 
   resources :votes, only: [:index]
   resource :votes, only: [:update]

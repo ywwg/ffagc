@@ -1,12 +1,12 @@
 class VotersController < ApplicationController
-  load_and_authorize_resource only: [:show]
+  load_and_authorize_resource only: [:new, :show]
 
   before_filter :initialize_grants
 
   def show
   end
 
-  def signup
+  def new
   end
 
   def create
