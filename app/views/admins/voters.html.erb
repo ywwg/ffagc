@@ -1,7 +1,7 @@
-<% if admin_logged_in? %>
-  <h2>Voters</h2>
-  <table class="table table-striped">
-    <thead>
+<h2>Voters</h2>
+
+<table class="table table-striped">
+  <thead>
     <tr>
       <th>Name</th>
       <th>Email</th>
@@ -11,8 +11,8 @@
           send email when verifying <input type="checkbox" id="send_verify_email_checkbox" checked="true">
           </form></th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <% @voters.each do |v| %>
     <tr>
       <td><%= link_to v.name, voter_path(v) %></td>
@@ -28,9 +28,8 @@
       </td>
     </tr>
     <% end %>
-    </tbody>
-  </table>
-<% end %>
+  </tbody>
+</table>
 
 <script>
 function do_verify(event, id) {
