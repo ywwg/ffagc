@@ -111,14 +111,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :voter_logged_in?
 
-  def participating_checked(voter_id, grant_id)
-    if GrantsVoter.exists?(voter_id: voter_id, grant_id: grant_id)
-      return "checked"
-    end
-    return nil
-  end
-  helper_method :participating_checked
-
   # /admins
 
   public
