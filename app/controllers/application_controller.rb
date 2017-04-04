@@ -70,25 +70,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :collated_meetings
 
-  def discussion_status(grant_id)
-    discuss = []
-    g = GrantSubmission.find(grant_id)
-    if g.has_questions?
-      discuss.push("Q")
-    end
-    if g.has_answers?
-      discuss.push("A")
-    end
-    status = discuss.join('&').squeeze(' ')
-    if status == ""
-      status = "None"
-    end
-    supplement_count = Proposal.where(:grant_submission_id => g.id).count
-    status += ", #{pluralize(supplement_count, 'doc')}"
-    return status
-  end
-  helper_method :discussion_status
-
   def grant_max_funding_dollars_json
     Grant.all.select(:id, :max_funding_dollars).to_json
   end
