@@ -4,58 +4,52 @@
   <li class="active">Discussion</li>
 </ol>
 
-<% if artist_logged_in? || admin_logged_in? || current_voter&.verified %>
-  <%= simple_form_for @grant_submission do |f| %>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Questions from Committee</h3>
-          </div>
-          <div class="panel-body">
-            <% if can? :edit_questions, @grant_submission %>
-              <%= f.text_area :questions, class: 'form-control', rows: '20' %>
-            <% else %>
-              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
-            <% end %>
-          </div>
+<%= simple_form_for @grant_submission do |f| %>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Questions from Committee</h3>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Answers from Artist</h3>
-          </div>
-          <div class="panel-body">
-            <% if can? :edit_answers, @grant_submission %>
-              <%= f.text_area :answers, class: 'form-control', rows: '20' %>
-            <% else %>
-              <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
-            <% end %>
-          </div>
-          <div class="panel-heading">
-            <h3 class="panel-title">Supplemental documents</h3>
-          </div>
-          <div class="panel-body">
-            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
-
-            <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
-              <%= f_proposal.input :file, as: :file, label: 'Anonymized Supplemental PDF', required: false %>
-            <% end %>
-          </div>
+        <div class="panel-body">
+          <% if can? :edit_questions, @grant_submission %>
+            <%= f.text_area :questions, class: 'form-control', rows: '20' %>
+          <% else %>
+            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
+          <% end %>
         </div>
       </div>
     </div>
-    <p class="text-center">
-      <% if can? :edit, @grant_submission %>
-        <%= f.button :submit, 'Update Discussion', class: 'btn btn-primary' %>
-        <br />
-      <% end %>
-      <%= link_to 'Back', :back %>
-    </p>
-  <% end %>
-<% else %>
-  You must be logged in to view discussions. (<%= link_to "Log In", :controller => "home", :action => "index" %>)
-  <br />
-  <br />
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Answers from Artist</h3>
+        </div>
+        <div class="panel-body">
+          <% if can? :edit_answers, @grant_submission %>
+            <%= f.text_area :answers, class: 'form-control', rows: '20' %>
+          <% else %>
+            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
+          <% end %>
+        </div>
+        <div class="panel-heading">
+          <h3 class="panel-title">Supplemental documents</h3>
+        </div>
+        <div class="panel-body">
+          <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
+
+          <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
+            <%= f_proposal.input :file, as: :file, label: 'Anonymized Supplemental PDF', required: false %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="text-center">
+    <% if can? :edit, @grant_submission %>
+      <%= f.button :submit, 'Update Discussion', class: 'btn btn-primary' %>
+      <br />
+    <% end %>
+    <%= link_to 'Back', :back %>
+  </p>
 <% end %>
