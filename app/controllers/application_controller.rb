@@ -88,51 +88,37 @@ class ApplicationController < ActionController::Base
   end
   helper_method :grant_max_funding_dollars_json
 
-  # /artists, /voters, /admins
-  public
   # This method is expected by CanCan
   def current_user
     current_admin || current_artist || current_voter
   end
   helper_method :current_user
 
-  # /artists
-
-  public #why
   def current_artist
     @current_artist ||= Artist.find_by_id(session[:artist_id]) if session[:artist_id]
   end
   helper_method :current_artist
 
-  private
   def artist_logged_in?
     true if current_artist
   end
   helper_method :artist_logged_in?
 
-  # /voters
-
-  public
   def current_voter
     @current_voter ||= Voter.find_by_id(session[:voter_id]) if session[:voter_id]
   end
   helper_method :current_voter
 
-  private
   def voter_logged_in?
     true if current_voter
   end
   helper_method :voter_logged_in?
 
-  # /admins
-
-  public
   def current_admin
     @current_admin ||= Admin.find_by_id(session[:admin_id]) if session[:admin_id]
   end
   helper_method :current_admin
 
-  private
   def admin_logged_in?
     true if current_admin
   end
