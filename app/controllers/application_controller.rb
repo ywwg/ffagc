@@ -18,6 +18,19 @@ class ApplicationController < ActionController::Base
     ActiveSupport::TimeZone[Rails.configuration.event_timezone].formatted_offset
   end
 
+  # Password token generation helpers
+  def self.new_token
+    SecureRandom.urlsafe_base64
+  end
+
+  def self.digest(secret)
+    return BCrypt::Password.create(secret)
+  end
+
+  def self.activate_succeed?(user, token)
+    BCrypt::Password.new(user.activation_digest).is_password?(token)
+  end
+
   private
 
   def active_vote_grants
@@ -124,20 +137,6 @@ class ApplicationController < ActionController::Base
     true if current_admin
   end
   helper_method :admin_logged_in?
-
-  public
-  # Password token generation helpers
-  def self.new_token
-    SecureRandom.urlsafe_base64
-  end
-
-  def self.digest(secret)
-    return BCrypt::Password.create(secret)
-  end
-
-  def self.activate_succeed?(user, token)
-    BCrypt::Password.new(user.activation_digest).is_password?(token)
-  end
 
   protected
 
