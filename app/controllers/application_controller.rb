@@ -73,10 +73,10 @@ class ApplicationController < ActionController::Base
   def discussion_status(grant_id)
     discuss = []
     g = GrantSubmission.find(grant_id)
-    if g.questions != nil && !g.questions.empty?
+    if g.has_questions?
       discuss.push("Q")
     end
-    if g.answers != nil && !g.answers.empty?
+    if g.has_answers?
       discuss.push("A")
     end
     status = discuss.join('&').squeeze(' ')
@@ -122,7 +122,6 @@ class ApplicationController < ActionController::Base
   def current_voter
     @current_voter ||= Voter.find_by_id(session[:voter_id]) if session[:voter_id]
   end
-
   helper_method :current_voter
 
   private
