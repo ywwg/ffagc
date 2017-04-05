@@ -144,4 +144,60 @@ describe VotersController do
       end
     end
   end
+
+  describe '#verify' do
+    let!(:voter) { FactoryGirl.create(:voter) }
+
+    before { sign_in user }
+
+    def go!
+      post 'verify', id: voter.id
+    end
+
+    context 'when voter signed in' do
+      let!(:user) { voter }
+
+      it { go!; is_expected.to be_forbidden }
+    end
+
+    context 'when admin logged in' do
+      let!(:user) { FactoryGirl.create(:admin) }
+
+      it 'verifies voter' do
+        expect { go! }.to change { voter.reload.verified }.to true
+      end
+
+      context 'with send_email param' do
+        def go!
+          post 'verify', id: voter.id, send_email: 'true'
+        end
+
+        it 'verifies voter' do
+          expect { go! }.to change { voter.reload.verified }.to true
+          expect(flash[:info]).to be_present
+        end
+
+        it 'sends email' do
+          expect(UserMailer).to receive(:voter_verified)
+          go!
+        end
+      end
+
+      context 'with params verify: 0' do
+        def go!
+          post 'verify', id: voter.id, verify: '0', send_email: 'true'
+        end
+
+        it 'unverifies voter' do
+          expect { go! }.to change { voter.reload.verified }.to false
+          expect(flash[:info]).to be_present
+        end
+
+        it 'does not send email' do
+          go!
+          expect(UserMailer).not_to receive(:voter_verified)
+        end
+      end
+    end
+  end
 end
