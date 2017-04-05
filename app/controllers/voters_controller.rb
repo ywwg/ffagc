@@ -72,6 +72,28 @@ class VotersController < ApplicationController
     redirect_to after_update_path(@voter)
   end
 
+  def verify
+    @send_email = params[:send_email] == 'true'
+    @voter.verified = params[:verify] != '0'
+
+    if @voter.save!
+      if @send_email
+        begin
+          UserMailer.voter_verified(@voter, event_year).deliver_now
+          logger.info "email: voter verification sent to #{@voter.email}"
+        rescue
+          flash[:warning] = "Error sending email"
+          redirect_to action: "voters"
+          return
+        end
+
+        flash[:info] = "Voter notified by email"
+      end
+    end
+
+    redirect_to voters_path
+  end
+
   private
 
   def initialize_grants

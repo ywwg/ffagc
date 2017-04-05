@@ -32,31 +32,6 @@ class AdminsController < ApplicationController
     render 'new'
   end
 
-  # TODO: endpoint does not belong here
-  def verify
-    @voter = Voter.find(params[:id])
-    authorize! :verify, @voter
-
-    @voter.verified = params[:verify]
-
-    if @voter.save
-      send_email = params[:send_email] == "true"
-      if send_email
-        begin
-          UserMailer.voter_verified(@voter, event_year).deliver_now
-          logger.info "email: voter verification sent to #{@voter.email}"
-        rescue
-          flash[:warning] = "Error sending email"
-          redirect_to action: "voters"
-          return
-        end
-        flash[:info] = "Voter notified by email"
-      end
-    end
-
-    redirect_to action: "voters"
-  end
-
   def send_fund_emails
     submissions = GrantSubmission.where(id: params[:ids].split(','))
     sent = 0
