@@ -154,28 +154,6 @@ class AdminsController < ApplicationController
   def voters
   end
 
-  # TODO: endpoint does not belong here
-  def submissions
-    @scope = params[:scope] || 'active'
-    @order = params[:order] || 'name'
-    @revealed = params[:reveal] == 'true'
-    @show_scores = params[:scores] == 'true'
-
-    if @scope == 'active'
-      @grant_submissions = GrantSubmission.where(grant_id: active_vote_grants)
-    else
-      @grant_submissions = GrantSubmission.all
-    end
-
-    @results = VoteResult.results(@grant_submissions)
-
-    if @order == 'score'
-      @grant_submissions = @grant_submissions.to_a.sort_by { |gs| [gs.grant_id, -gs.avg_score] }
-    elsif @order == 'name'
-      @grant_submissions = @grant_submissions.to_a.sort_by { |gs| gs.name }
-    end
-  end
-
   private
 
   def admin_params
@@ -207,10 +185,6 @@ class AdminsController < ApplicationController
       end
     end
     return fewest
-  end
-
-  def verify_admin
-    authorize! :manage, :all
   end
 
   def init_admin

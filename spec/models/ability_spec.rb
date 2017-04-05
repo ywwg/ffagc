@@ -67,10 +67,13 @@ describe Ability do
     it_behaves_like 'signup Voter and Artist'
 
     it { is_expected.to be_able_to(:manage, artist_survey) }
-    it { is_expected.to be_able_to(:manage, grant_submission) }
-    it { is_expected.to be_able_to(:discuss, grant_submission) }
-    it { is_expected.to be_able_to(:edit_answers, grant_submission) }
+    [:index, :show, :new, :create, :edit, :update, :discuss, :edit_answers].each do |action|
+      it { is_expected.to be_able_to(action, grant_submission) }
+    end
+    it { is_expected.not_to be_able_to(:destroy, grant_submission) }
+    it { is_expected.not_to be_able_to(:vote, grant_submission) }
     it { is_expected.not_to be_able_to(:edit_questions, grant_submission) }
+    it { is_expected.not_to be_able_to(:index, GrantSubmission.new) }
     it { is_expected.to be_able_to(:manage, proposal) }
     it { is_expected.not_to be_able_to(:index, Artist) }
     it { is_expected.not_to be_able_to(:index, ArtistSurvey) }
@@ -78,6 +81,7 @@ describe Ability do
     it { is_expected.not_to be_able_to(:manage, ArtistSurvey.new) }
     it { is_expected.not_to be_able_to(:manage, Artist.new) }
     it { is_expected.not_to be_able_to(:manage, GrantSubmission.new) }
+    it { is_expected.not_to be_able_to(:reveal_identities, GrantSubmission) }
     it { is_expected.not_to be_able_to(:manage, Grant.new) }
     it { is_expected.not_to be_able_to(:manage, GrantsVoter.new) }
     it { is_expected.not_to be_able_to(:manage, Proposal.new) }
@@ -135,6 +139,7 @@ describe Ability do
     it { is_expected.not_to be_able_to(:manage, Vote.new) }
     it { is_expected.not_to be_able_to(:new, GrantSubmission.new) }
     it { is_expected.not_to be_able_to(:create, GrantSubmission.new) }
+    it { is_expected.not_to be_able_to(:reveal_identities, GrantSubmission) }
 
     context 'when not activated' do
       let(:user) { FactoryGirl.create(:voter) }
