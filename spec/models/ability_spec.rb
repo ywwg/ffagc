@@ -109,6 +109,9 @@ describe Ability do
 
     it { is_expected.to be_able_to(:vote, GrantSubmission.new) }
 
+    [:show, :new, :create, :edit, :update].each do |action|
+      it { is_expected.to be_able_to(action, user) }
+    end
     it { is_expected.to be_able_to(:manage, vote) }
     it { is_expected.to be_able_to(:manage, voter_survey) }
     it { is_expected.to be_able_to(:read, voter_submission_assignment) }
@@ -132,7 +135,9 @@ describe Ability do
     context 'when not activated' do
       let(:user) { FactoryGirl.create(:voter) }
 
-      it { is_expected.to be_able_to(:manage, user) }
+      [:show, :new, :create, :edit, :update].each do |action|
+        it { is_expected.to be_able_to(action, user) }
+      end
       it { is_expected.to be_able_to(:manage, voter_survey) }
 
       it { is_expected.not_to be_able_to(:vote, GrantSubmission.new) }
