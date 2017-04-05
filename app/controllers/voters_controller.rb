@@ -70,11 +70,6 @@ class VotersController < ApplicationController
     # could allow for (timing based) Voter enumeration
     @voter = Voter.find(params[:id])
 
-    unless can? :manage, GrantsVoter.new(voter: @voter)
-      redirect_to '/'
-      return
-    end
-
     voter_participation_params.each do |grant_id, can_do|
       unless Grant.find(grant_id).present?
         next
