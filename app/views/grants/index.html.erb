@@ -73,7 +73,11 @@
     </td>
     <% if can? :modify, g %>
     <td align="center"><% if g.hidden %>Y<% end %></td>
-    <td><%= link_to "Edit", edit_grant_path(g) %></td>
+    <td>
+      <div class="btn-group">
+        <%= link_to "Edit", edit_grant_path(g), class: 'btn btn-default' %>
+      </div>
+    </td>
     <% end %>
   </tr>
   <% end %>
