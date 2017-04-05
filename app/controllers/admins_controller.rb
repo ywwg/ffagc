@@ -209,10 +209,6 @@ class AdminsController < ApplicationController
     return fewest
   end
 
-  def verify_admin
-    authorize! :manage, :all
-  end
-
   def init_admin
     @admin = Admin.new
   end

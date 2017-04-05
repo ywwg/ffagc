@@ -124,6 +124,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :admin_logged_in?
 
+  def verify_admin
+    authorize! :manage, :all
+  end
+
   protected
 
   def deny_access
