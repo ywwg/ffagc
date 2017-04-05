@@ -3,16 +3,27 @@
   <li class="active">Overview</li>
 </ol>
 
-<div class="alert alert-info">
+<%= content_tag :div, class: (any_submit_open? && can?(:new, GrantSubmission)) ? 'alert alert-info' : 'well' do %>
   <% if any_submit_open? %>
-    <p><%= render partial: 'grants/sentence_list', locals: { process_type: 'submission', grant_names: active_submit_names } %></p>
+    <%= render partial: 'grants/sentence_list', locals: { process_type: 'submission', grant_names: active_submit_names } %>
     <% if can? :new, GrantSubmission %>
-    <p><%= link_to "Submit Grant Proposal", new_grant_submission_path, class: 'btn btn-primary' %></p>
-    <% end%>
+      <%= link_to "Submit Grant Proposal", new_grant_submission_path, class: 'btn btn-primary' %>
+    <% end %>
   <% else %>
-    No submissions open at this time.
+    No grants open for submission at this time.
   <% end %>
-</div>
+<% end %>
+
+<%= content_tag :div, class: (any_vote_open? && can?(:vote, GrantSubmission)) ? 'alert alert-info' : 'well' do %>
+  <% if any_vote_open? %>
+    <%= render partial: 'grants/sentence_list', locals: { process_type: 'voting', grant_names: active_vote_names } %>
+    <% if can? :vote, GrantSubmission %>
+      <%= link_to "Vote on submissions", votes_path, class: 'btn btn-primary' %>
+    <% end %>
+  <% else %>
+    No grants open for voting at this time.
+  <% end %>
+<% end %>
 
 <% if @celebrate_funded %>
   <div class="alert alert-success text-center">
