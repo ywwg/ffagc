@@ -10,18 +10,19 @@ Rails.application.routes.draw do
   get 'admins/' => 'admins#index'
   post 'admins/index' => 'admins#index'
   get 'admins/voters' => 'admins#voters'
-  get 'admins/submissions' => 'admins#submissions'
 
   post 'admins/assign' => 'admins#assign'
   post 'admins/clear_assignments' => 'admins#clear_assignments'
   post 'admins/send_fund_emails' => 'admins#send_fund_emails'
   post 'admins/send_question_emails' => 'admins#send_question_emails'
 
-
   resources :artists, :grant_submissions
   resources :grants, except: [:show]
 
   resources :admins, only: [:new, :create, :index]
+  namespace :admins do
+    resources :grant_submissions, only: [:index]
+  end
 
   resources :grant_submissions do
     member do
