@@ -76,18 +76,19 @@ class VotersController < ApplicationController
     @send_email = params[:send_email] == 'true'
     @voter.verified = params[:verify] != '0'
 
-    if @voter.save!
-      if @send_email
+    if @voter.save
+      flash[:info] = 'Voter verification status updated'
+
+      if @send_email && @voter.verified?
         begin
           UserMailer.voter_verified(@voter, event_year).deliver_now
+          flash[:info] = 'Voter verified and notified by email'
           logger.info "email: voter verification sent to #{@voter.email}"
         rescue
-          flash[:warning] = "Error sending email"
-          redirect_to action: "voters"
+          flash[:warning] = 'Error sending email'
+          redirect_to action: 'index'
           return
         end
-
-        flash[:info] = "Voter notified by email"
       end
     end
 
