@@ -19,6 +19,10 @@
 <% end %>
 </div>
 
+<% if can? :new, Grant %>
+  <%= link_to "Create Grant", new_grant_path, class: 'btn btn-primary' %>
+<% end %>
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -83,7 +87,3 @@
   <% end %>
   </tbody>
 </table>
-
-<% if can? :modify, Grant %>
-  <%= link_to "Create Grant", new_grant_path, class: 'btn btn-primary' %>
-<% end %>
