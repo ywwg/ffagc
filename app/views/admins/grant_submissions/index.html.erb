@@ -116,9 +116,11 @@
   <% end %>
 </table>
 
-<P>
+<% if can? :reveal_identities, GrantSubmission %>
+<p>
 <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", admins_grant_submissions_path(reveal: true, scores: false, scope: :active), class: 'btn btn-danger' %> <img src="/uploads/emot-siren.gif">
 </p>
+<% end %>
 
 <script>
 function toggle_all_fund_emails(event) {

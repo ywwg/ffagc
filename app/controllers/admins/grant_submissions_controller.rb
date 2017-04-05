@@ -12,8 +12,11 @@ class Admins::GrantSubmissionsController < ApplicationController
   def index
     @scope = params[:scope] || 'active'
     @order = params[:order] || 'name'
-    @revealed = params[:reveal] == 'true'
     @show_scores = params[:scores] == 'true'
+
+    if can? :reveal_identities, GrantSubmission
+      @revealed = params[:reveal] == 'true'
+    end
 
     if @scope == 'active'
       @grant_submissions = @grant_submissions.where(grant_id: active_vote_grants)
