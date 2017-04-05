@@ -57,13 +57,13 @@ describe VotersController do
   end
 
   describe '#create' do
-    let(:voter_params) { FactoryGirl.attributes_for(:voter) }
+    let(:voter_attributes) { FactoryGirl.attributes_for(:voter) }
     let(:voter_survey_attributes) { FactoryGirl.attributes_for(:voter_survey) }
-    let(:grants_voter) { FactoryGirl.attributes_for(:grants_voter) }
+    let(:grants_voter_attributes) { FactoryGirl.attributes_for(:grants_voter) }
     let(:params) do
       {
-        voter: voter_params.merge(voter_survey_attributes: voter_survey_attributes),
-        grants_voters: [grants_voter]
+        voter: voter_attributes.merge(voter_survey_attributes: voter_survey_attributes),
+        grants_voters: [grants_voter_attributes]
       }
     end
 
@@ -76,12 +76,18 @@ describe VotersController do
       expect(response).to be_ok
     end
 
-    it 'creates a voter' do
+    it 'creates correct Voter' do
       expect { go! }.to change(Voter, :count).by(1)
+      # don't include password attributes as those are not stored directly in the db
+      expected_attributes = voter_attributes.reject { |k| k.to_s.start_with? 'password' }
+      expect(HashWithIndifferentAccess.new(Voter.last.attributes)).to include(expected_attributes)
     end
 
-    it 'creates a VoterSurvey' do
+    it 'creates correct VoterSurvey' do
       expect { go! }.to change(VoterSurvey, :count).by(1)
+      voter_survey = VoterSurvey.last
+      expect(HashWithIndifferentAccess.new(voter_survey.attributes)).to include(voter_survey_attributes)
+      expect(voter_survey.voter).to eq(Voter.last)
     end
 
     context 'with existing voter email' do
