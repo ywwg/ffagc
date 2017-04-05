@@ -63,26 +63,20 @@
     </div>
   </div>
 
+  <%= f.simple_fields_for :voter_survey do |f_voter_survey| %>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Optional Survey</h3>
     </div>
     <div class="panel-body">
-      <div class="checkbox">
-        <label><%= check_box :survey, :has_been_voter, :style => "width: 50px;" %> I have been a member of the Firefly art grant voting committee in previous years</label>
-      </div>
-      <div class="checkbox">
-        <label><%= check_box :survey, :has_participated_other, :style => "width: 50px;" %> I have been on art grant voting/judging committees for other institutions</label>
-      </div>
-      <div class="checkbox">
-        <label><%= check_box :survey, :has_received_grant, :style => "width: 50px;" %> I have been awarded a Firefly art grant in previous years</label>
-      </div>
-      <div class="checkbox">
-        <label><%= check_box :survey, :has_received_other_grant, :style => "width: 50px;" %> I have been awarded art grants from other institutions</label>
-      </div>
-      How many Fireflies have you attended? <%= number_field :survey, :how_many_fireflies, :min => 0, :style => "width: 50px;" %>
+      <%= f_voter_survey.input :has_been_voter, as: :radio_buttons, label: 'I have been a member of the Firefly art grant voting committee in previous years' %>
+      <%= f_voter_survey.input :has_participated_other, as: :radio_buttons, label: 'I have been on art grant voting/judging committees for other institutions' %>
+      <%= f_voter_survey.input :has_received_grant, as: :radio_buttons, label: 'I have been awarded a Firefly art grant in previous years' %>
+      <%= f_voter_survey.input :has_received_other_grant, as: :radio_buttons, label: 'I have been awarded art grants from other institutions' %>
+      <%= f_voter_survey.input :how_many_fireflies, label: 'How many Fireflies have you attended?', as: :integer, min: 0 %>
     </div>
   </div>
+  <% end %>
 
   <p>
   <%= submit_tag("Sign Up!", class: "btn btn-primary")%>

@@ -1,35 +1,33 @@
 class VotersController < ApplicationController
-  load_and_authorize_resource only: [:show]
+  load_and_authorize_resource
 
   before_filter :initialize_grants
+
+  def index
+  end
 
   def show
   end
 
-  def signup
+  def new
+    @voter.voter_survey ||= @voter.build_voter_survey
   end
 
   def create
-    if Voter.exists?(email: voter_params[:email.downcase])
-      flash[:warning] = "The email address #{voter_params[:email.downcase]} already exists in our system"
-      render "signup_failure"
+    @voter = Voter.new(voter_params)
+    @voter.email = @voter.email.downcase
+
+    if Voter.exists?(email: @voter.email)
+      flash[:warning] = "The email address #{@voter.email} already exists in our system"
+      render 'new'
       return
     end
 
-    @voter = Voter.new(voter_params)
-
-    @voter.email = @voter.email.downcase
-
     if @voter.save
-      # save survey
-      voter_survey = VoterSurvey.new(voter_survey_params)
-      voter_survey.voter_id = @voter.id
-      voter_survey.save
-
       # save participation info
       meetings = collated_meetings
 
-      voter_participation_params.each do |collated_id, can_do|
+      params.require(:grants_voters).each do |collated_id, can_do|
         if can_do == "0"
           next
         end
@@ -57,46 +55,21 @@ class VotersController < ApplicationController
       begin
         UserMailer.account_activation("voters", @voter).deliver_now
         logger.info "email: voter account activation sent to #{@voter.email}"
+
+        render 'create_success'
+        return
       rescue
         flash[:warning] = "Error sending email confirmation"
-        render "signup_failure"
-        return
       end
-
-      render "signup_success"
-    else
-      render "signup_failure"
     end
+
+    render 'new'
   end
 
   def update
-    # could allow for (timing based) Voter enumeration
-    @voter = Voter.find(params[:id])
+    process_grants_voter(@voter, params.require(:grants_voters))
 
-    unless can? :manage, GrantsVoter.new(voter: @voter)
-      redirect_to '/'
-      return
-    end
-
-    voter_participation_params.each do |grant_id, can_do|
-      unless Grant.find(grant_id).present?
-        next
-      end
-
-      if can_do == '0'
-        if GrantsVoter.exists?(voter_id: @voter.id, grant_id: grant_id)
-          GrantsVoter.find_by(voter_id: @voter.id, grant_id: grant_id).destroy
-        end
-      else
-        if GrantsVoter.exists?(voter_id: @voter.id, grant_id: grant_id)
-          next
-        end
-
-        grants_voter = GrantsVoter.create!(voter: @voter, grant_id: grant_id)
-      end
-    end
-
-    redirect_to controller: 'admins', action: 'voters'
+    redirect_to after_update_path(@voter)
   end
 
   private
@@ -106,17 +79,47 @@ class VotersController < ApplicationController
   end
 
   def voter_params
-    params.require(:voter).permit(:name, :password_digest, :password, :password_confirmation, :email)
+    params.require(:voter).permit(:name, :password, :password_confirmation, :email,
+                                  voter_survey_attributes: voter_survey_attributes)
   end
 
-  def voter_survey_params
-    params.require(:survey).permit(:has_attended_firefly, :not_applying_this_year,
-        :will_read, :will_meet, :has_been_voter, :has_participated_other,
-        :has_received_grant, :has_received_other_grant, :how_many_fireflies,
-        :signed_agreement)
+  def voter_survey_attributes
+    [
+      :has_attended_firefly,
+      :not_applying_this_year,
+      :will_read,
+      :will_meet,
+      :has_been_voter,
+      :has_participated_other,
+      :has_received_grant,
+      :has_received_other_grant,
+      :how_many_fireflies,
+      :signed_agreement
+    ]
   end
 
-  def voter_participation_params
-    params.require(:grants_voters)
+  def after_update_path(voter)
+    if can? :index, Voter
+      voters_path
+    elsif can? :show, voter
+      voter_path(voter)
+    else
+      root_path
+    end
+  end
+
+  def process_grants_voter(voter, grants_voters_params)
+    grants_voters_params.each do |grant_id, can_do|
+      grant = Grant.find(grant_id)
+      next unless grant.present?
+
+      if can_do == '0'
+        if GrantsVoter.exists?(voter: voter, grant: grant)
+          GrantsVoter.find_by(voter: voter, grant: grant).destroy
+        end
+      else
+        GrantsVoter.first_or_create!(voter: voter, grant: grant)
+      end
+    end
   end
 end

@@ -42,6 +42,9 @@
           <% if can? :index, Artist %>
             <li><%= link_to 'Artists', artists_path %></li>
           <% end %>
+          <% if can? :index, Voter %>
+            <li><%= link_to 'Voters', voters_path %></li>
+          <% end %>
           <% if can? :index, Grant %>
             <li><%= link_to 'Grants', grants_path %></li>
           <% end %>

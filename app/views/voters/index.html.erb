@@ -1,0 +1,21 @@
+<ol class="breadcrumb">
+  <li>Voters</li>
+  <li class="active">Overview</li>
+</ol>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @voters.each do |voter| %>
+  <tr>
+    <td><%= link_to voter.name, voter_path(voter) %></td>
+    <td><%= voter.email %></td>
+  </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -1,9 +1,25 @@
 describe VotersController do
   subject { response }
 
-  describe '#signup' do
+  describe '#index' do
+    def go!
+      get 'index'
+    end
+
+    it { go!; is_expected.to be_forbidden }
+
+    context 'with admin signed in' do
+      let!(:admin) { FactoryGirl.create(:admin) }
+
+      before { sign_in admin }
+
+      it { go!; is_expected.to be_ok }
+    end
+  end
+
+  describe '#new' do
     it 'returns ok' do
-      get 'signup'
+      get 'new'
       expect(response).to be_ok
     end
   end
@@ -41,14 +57,13 @@ describe VotersController do
   end
 
   describe '#create' do
-    let(:voter_params) { FactoryGirl.attributes_for(:voter) }
-    let(:voter_survey_params) { FactoryGirl.attributes_for(:voter_survey) }
-    let(:grants_voter) { FactoryGirl.attributes_for(:grants_voter) }
+    let(:voter_attributes) { FactoryGirl.attributes_for(:voter) }
+    let(:voter_survey_attributes) { FactoryGirl.attributes_for(:voter_survey) }
+    let(:grants_voter_attributes) { FactoryGirl.attributes_for(:grants_voter) }
     let(:params) do
       {
-        voter: voter_params,
-        survey: voter_survey_params,
-        grants_voters: [grants_voter]
+        voter: voter_attributes.merge(voter_survey_attributes: voter_survey_attributes),
+        grants_voters: [grants_voter_attributes]
       }
     end
 
@@ -61,16 +76,26 @@ describe VotersController do
       expect(response).to be_ok
     end
 
-    it 'creates a voter' do
+    it 'creates correct Voter' do
       expect { go! }.to change(Voter, :count).by(1)
+      # don't include password attributes as those are not stored directly in the db
+      expected_attributes = voter_attributes.reject { |k| k.to_s.start_with? 'password' }
+      expect(HashWithIndifferentAccess.new(Voter.last.attributes)).to include(expected_attributes)
     end
 
-    context 'with existing voter' do
+    it 'creates correct VoterSurvey' do
+      expect { go! }.to change(VoterSurvey, :count).by(1)
+      voter_survey = VoterSurvey.last
+      expect(HashWithIndifferentAccess.new(voter_survey.attributes)).to include(voter_survey_attributes)
+      expect(voter_survey.voter).to eq(Voter.last)
+    end
+
+    context 'with existing voter email' do
       let!(:existing_voter) { FactoryGirl.create(:voter, :activated) }
 
       it 'returns an error' do
         post 'create', voter: { email: existing_voter.email }
-        expect(response).to render_template('signup_failure')
+        expect(response).to render_template('new')
       end
     end
   end
@@ -98,10 +123,7 @@ describe VotersController do
     context 'when voter signed in' do
       let!(:user) { FactoryGirl.create(:voter) }
 
-      it 'redirects to root' do
-        go!
-        expect(response).to redirect_to('/')
-      end
+      it { go!; is_expected.to be_forbidden }
     end
 
     context 'when admin logged in' do
