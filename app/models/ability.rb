@@ -24,7 +24,7 @@ class Ability
     if user.is_a?(Admin)
       can :manage, :all
 
-      cannot :vote, GrantSubmission
+      cannot [:new, :create, :vote], GrantSubmission
     end
 
     if user.is_a?(Artist)
@@ -46,6 +46,7 @@ class Ability
       can :manage, VoterSurvey, voter_id: user.id
 
       cannot :index, VoterSurvey
+      cannot [:new, :create], GrantSubmission
 
       if user.activated?
         can :manage, Vote, voter_id: user.id
