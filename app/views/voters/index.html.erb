@@ -8,14 +8,54 @@
   <tr>
     <th>Name</th>
     <th>Email</th>
+    <th>Grants</th>
+    <% if can? :verify, Voter %>
+    <th class="text-center">Verified</th>
+    <% end %>
+    <th class="text-right">
+      <% if can? :verify, Voter %>
+      <form name="send_email_form">
+        <input type="checkbox" id="send_verify_email_checkbox" checked="true">
+        send email when verifying
+      </form>
+      <% end %>
+    </th>
   </tr>
   </thead>
   <tbody>
   <% @voters.each do |voter| %>
   <tr>
-    <td><%= link_to voter.name, voter_path(voter) %></td>
+    <td><%= voter.name %></td>
     <td><%= voter.email %></td>
+    <td><%= voter.grants.pluck(:name).join(", ") %></td>
+    <% if can? :verify, voter %>
+    <td class="text-center"><%if voter.verified? %>Yes<% else %>No<% end %></td>
+    <% end %>
+    <td class="text-right">
+      <div class="btn-group">
+      <% if can? :verify, Voter %>
+        <% if voter.verified? %>
+          <%= link_to "Unverify", verify_voter_path(voter, verify: 0), method: :post, class: 'btn btn-warning' %>
+        <% else %>
+          <%= link_to "Verify", verify_voter_path(voter, verify: 'true'), method: :post, class: 'btn btn-primary', onclick: "do_verify(event, #{voter.id});" %>
+        <% end %>
+      <% end %>
+      <% if can? :edit, voter %>
+        <%= link_to 'Edit', voter_path(voter), class: "btn btn-default" %>
+      <% end %>
+      </div>
+    </td>
+    <% end %>
   </tr>
-  <% end %>
   </tbody>
 </table>
+<% if can? :verify, Voter %>
+<script>
+function do_verify(event, id) {
+  event.preventDefault();
+  var send_email = document.getElementById('send_verify_email_checkbox').checked;
+  $.post("/voters/"+ id +"/verify?send_email=" + send_email);
+  return false;
+}
+</script>
+<% end %>

@@ -14,7 +14,6 @@ Rails.application.routes.draw do
 
   post 'admins/assign' => 'admins#assign'
   post 'admins/clear_assignments' => 'admins#clear_assignments'
-  post 'admins/verify' => 'admins#verify'
   post 'admins/send_fund_emails' => 'admins#send_fund_emails'
   post 'admins/send_question_emails' => 'admins#send_question_emails'
 
@@ -33,7 +32,11 @@ Rails.application.routes.draw do
 
   resources :proposals, only: [:destroy]
 
-  resources :voters, only: [:new, :create, :update, :index, :show]
+  resources :voters, only: [:new, :create, :update, :index, :show] do
+    member do
+      post 'verify'
+    end
+  end
 
   resources :votes, only: [:index]
   resource :votes, only: [:update]

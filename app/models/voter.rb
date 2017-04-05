@@ -5,6 +5,7 @@ class Voter < ActiveRecord::Base
   has_secure_password
 
   has_many :grants_voters
+  has_many :grants, through: :grants_voters
   has_many :votes
   has_one :voter_survey, inverse_of: :voter
   has_many :voter_submission_assignments
