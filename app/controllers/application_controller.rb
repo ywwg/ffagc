@@ -34,13 +34,13 @@ class ApplicationController < ActionController::Base
   private
 
   def active_vote_grants
-    Grant.voting_active(DateTime.current, timezone_string)
+    Grant.voting_active(DateTime.current, timezone_string).accessible_by(current_ability)
   end
 
   def active_submit_grants
     now = DateTime.current
     deadline_leniency_time = now - 1.hours
-    Grant.submission_active(now, deadline_leniency_time, timezone_string)
+    Grant.submission_active(now, deadline_leniency_time, timezone_string).accessible_by(current_ability)
   end
 
   def any_submit_open?
