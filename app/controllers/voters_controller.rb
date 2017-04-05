@@ -27,7 +27,7 @@ class VotersController < ApplicationController
       # save participation info
       meetings = collated_meetings
 
-      voter_participation_params.each do |collated_id, can_do|
+      params.require(:grants_voters).each do |collated_id, can_do|
         if can_do == "0"
           next
         end
@@ -67,26 +67,7 @@ class VotersController < ApplicationController
   end
 
   def update
-    # could allow for (timing based) Voter enumeration
-    @voter = Voter.find(params[:id])
-
-    voter_participation_params.each do |grant_id, can_do|
-      unless Grant.find(grant_id).present?
-        next
-      end
-
-      if can_do == '0'
-        if GrantsVoter.exists?(voter_id: @voter.id, grant_id: grant_id)
-          GrantsVoter.find_by(voter_id: @voter.id, grant_id: grant_id).destroy
-        end
-      else
-        if GrantsVoter.exists?(voter_id: @voter.id, grant_id: grant_id)
-          next
-        end
-
-        grants_voter = GrantsVoter.create!(voter: @voter, grant_id: grant_id)
-      end
-    end
+    process_grants_voter(@voter, params.require(:grants_voters))
 
     redirect_to after_update_path(@voter)
   end
@@ -117,10 +98,6 @@ class VotersController < ApplicationController
     ]
   end
 
-  def voter_participation_params
-    params.require(:grants_voters)
-  end
-
   def after_update_path(voter)
     if can? :index, Voter
       voters_path
@@ -128,6 +105,21 @@ class VotersController < ApplicationController
       voter_path(voter)
     else
       root_path
+    end
+  end
+
+  def process_grants_voter(voter, grants_voters_params)
+    grants_voters_params.each do |grant_id, can_do|
+      grant = Grant.find(grant_id)
+      next unless grant.present?
+
+      if can_do == '0'
+        if GrantsVoter.exists?(voter: voter, grant: grant)
+          GrantsVoter.find_by(voter: voter, grant: grant).destroy
+        end
+      else
+        GrantsVoter.first_or_create!(voter: voter, grant: grant)
+      end
     end
   end
 end
