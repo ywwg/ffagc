@@ -48,8 +48,6 @@
   <p class="text-center">
     <% if can? :edit, @grant_submission %>
       <%= f.button :submit, 'Update Discussion', class: 'btn btn-primary' %>
-      <br />
     <% end %>
-    <%= link_to 'Back', :back %>
   </p>
 <% end %>
