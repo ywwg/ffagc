@@ -9,14 +9,22 @@
     <th>Name</th>
     <th>Contact</th>
     <th>Email</th>
+    <th></th>
   </tr>
   </thead>
   <tbody>
   <% @artists.each do |artist| %>
   <tr>
-    <td><%= link_to artist.name, artist_path(artist) %></td>
+    <td><%= artist.name %></td>
     <td><%= artist.contact_name %></td>
     <td><%= artist.email %></td>
+    <td class="text-right">
+      <div class="btn-group">
+      <% if can? :show, artist %>
+        <%= link_to 'View', artist_path(artist), class: 'btn btn-default' %>
+      <% end %>
+      </div>
+    </td>
   </tr>
   <% end %>
   </tbody>

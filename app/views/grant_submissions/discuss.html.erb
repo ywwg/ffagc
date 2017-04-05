@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
   <li><%= link_to "Grant Submissions", grant_submissions_path %></li>
-  <li><%= link_to @grant_submission.name, edit_grant_submission_path(@grant_submission) %></li>
+  <li><%= link_to @grant_submission.name, grant_submission_path(@grant_submission) %></li>
   <li class="active">Discussion</li>
 </ol>
 
@@ -48,8 +48,6 @@
   <p class="text-center">
     <% if can? :edit, @grant_submission %>
       <%= f.button :submit, 'Update Discussion', class: 'btn btn-primary' %>
-      <br />
     <% end %>
-    <%= link_to 'Back', :back %>
   </p>
 <% end %>

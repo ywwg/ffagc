@@ -1,4 +1,9 @@
-<% title = controller.action_name == 'edit' ? 'Modify a Grant Type' : 'Create a Grant Type' %>
+<% title = controller.action_name == 'edit' ? 'Modify Grant' : 'Create Grant' %>
+
+<ol class="breadcrumb">
+  <li><%= link_to 'Grants', grants_path %></li>
+  <li class="active"><%= title %></li>
+</ol>
 
 <div class="panel panel-default">
   <div class="panel-heading">

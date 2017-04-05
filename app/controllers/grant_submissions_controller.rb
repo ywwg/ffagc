@@ -3,8 +3,6 @@ require 'grant_contract'
 class GrantSubmissionsController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_back_link
-
   def create
     @grant_submission.artist_id = current_artist.id
 
@@ -124,15 +122,5 @@ class GrantSubmissionsController < ApplicationController
 
   def grant_contract_params
     params.permit(:id, :format, :submission_id, :authenticity_token)
-  end
-
-  def set_back_link
-    @back_link = if admin_logged_in?
-      admins_submissions_path
-    elsif artist_logged_in?
-      artists_path
-    else
-      grant_submissions_path
-    end
   end
 end
