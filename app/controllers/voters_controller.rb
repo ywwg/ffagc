@@ -104,7 +104,7 @@ class VotersController < ApplicationController
 
   def voter_params
     params.require(:voter).permit(:name, :password, :password_confirmation, :email,
-                                 voter_survey_attributes: voter_survey_attributes)
+                                  voter_survey_attributes: voter_survey_attributes)
   end
 
   def voter_survey_attributes
