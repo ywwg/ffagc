@@ -15,13 +15,17 @@ describe Admins::VoterSubmissionAssignmentsController do
 
     context 'logged in' do
       let!(:admin) { FactoryGirl.create(:admin) }
+      let!(:voter_submission_assignment) { FactoryGirl.create(:voter_submission_assignment) }
 
       before do
         sign_in_admin(admin.id)
-        go!
       end
 
-      it { is_expected.to be_redirect }
+      it { go!; is_expected.to be_redirect }
+
+      it 'destroys VoterSubmissionAssignments' do
+        expect { go! }.to change { VoterSubmissionAssignment.count }.to 0
+      end
     end
   end
 
