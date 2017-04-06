@@ -44,16 +44,13 @@ gem 'therubyracer'
 
 # gem 'clearance'
 
-gem 'formtastic'
 gem 'simple_form'
 
 # Form validation
 gem 'judge', '~> 2.0.5'
-gem 'judge-formtastic', git: 'https://github.com/joecorcoran/judge-formtastic.git'
-
-# gem 'judge-formtastic'
 
 gem 'carrierwave'
+
 # pdf generation
 gem 'prawn'
 gem 'pdf-inspector', :require => "pdf/inspector"
