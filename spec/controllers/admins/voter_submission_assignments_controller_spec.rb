@@ -1,4 +1,6 @@
 describe Admins::VoterSubmissionAssignmentsController do
+  let!(:admin) { FactoryGirl.create(:admin, :activated) }
+
   subject { response }
 
   describe '#destroy' do
@@ -14,11 +16,10 @@ describe Admins::VoterSubmissionAssignmentsController do
     end
 
     context 'logged in' do
-      let!(:admin) { FactoryGirl.create(:admin) }
       let!(:voter_submission_assignment) { FactoryGirl.create(:voter_submission_assignment) }
 
       before do
-        sign_in_admin(admin.id)
+        sign_in admin
       end
 
       it { go!; is_expected.to be_redirect }
@@ -42,7 +43,6 @@ describe Admins::VoterSubmissionAssignmentsController do
     end
 
     context 'logged in' do
-      let!(:admin) { FactoryGirl.create(:admin, :activated) }
       let!(:grant) { FactoryGirl.create(:grant) }
       let!(:grant_2) { FactoryGirl.create(:grant) }
 
@@ -66,7 +66,7 @@ describe Admins::VoterSubmissionAssignmentsController do
       end
 
       before do
-        sign_in_admin(admin.id)
+        sign_in admin
         go!
       end
 
