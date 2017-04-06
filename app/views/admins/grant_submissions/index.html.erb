@@ -110,7 +110,7 @@
   </tr>
   <tr>
     <td colspan="<%= colspan %>" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
-    <td><%= button_to "Notify Questions", admins_send_question_emails_path, class: 'btn btn-warning' %></td>
+    <td><%= button_to "Notify Questions", send_question_emails_admins_grant_submissions_path, class: 'btn btn-warning' %></td>
   </tr>
   </tfoot>
   <% end %>
@@ -147,9 +147,7 @@ function confirm_selected(event) {
     return false;
   }
   var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
-  var admin_js = '<%= raw @admin.to_json %>';
-  $.post("/admins/send_fund_emails?ids=" + selected + "&send_email=" + send_email,
-      {"admin": admin_js});
+  $.post("<%= escape_javascript(send_fund_emails_admins_grant_submissions_path) %>?ids=" + selected + "&send_email=" + send_email);
   return false;
 }
 </script>

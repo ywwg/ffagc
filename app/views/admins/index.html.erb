@@ -17,22 +17,46 @@
 <% if any_vote_open? %>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Assignments</h3>
+      <h3 class="panel-title">Verified Voter Assignments</h3>
     </div>
       <table class="table">
         <thead>
         <tr>
           <th>Name</th>
-          <th>Email</th>
+          <th>Grants</th>
           <th>Assigned</th>
         </tr>
         </thead>
         <tbody>
-        <% @verified_voters.each do |vv| %>
+        <% @verified_voters.each do |voter| %>
         <tr>
-          <td><%= vv.name %></td>
-          <td><%= vv.email %></td>
-          <td><%= vv.assigned.join(', ').html_safe %></td>
+          <td>
+            <% if can? :edit, voter %>
+              <%= link_to voter.name, voter_path(voter) %>
+            <% else %>
+              <%= voter.name %>
+            <% end %>
+            <br />
+            <%= voter.email %>
+          </td>
+          <td>
+            <% if voter.grants.count > 0 %>
+              <%= voter.grants.pluck(:name).join(", ") %>
+            <% else %>
+              <em>None</em>
+            <% end %>
+          </td>
+          <td>
+            <% if voter.grant_submissions.count > 0 %>
+            <ul class="list-unstyled">
+              <% voter.grant_submissions.map do |grant_submission| %>
+                <li><%= "#{grant_submission.name}(##{grant_submission.id})" %></li>
+              <% end %>
+            </ul>
+            <% else %>
+              <em>None</em>
+            <% end %>
+          </td>
         </tr>
         <% end %>
         </tbody>
