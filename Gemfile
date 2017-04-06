@@ -24,6 +24,10 @@ gem 'simple_form'
 gem 'judge', '~> 2.0.5' # front-end form validation
 gem 'country_select'
 
+# File upload
+gem 'carrierwave'
+gem 'file_validators' # file upload size validation
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -34,17 +38,12 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'carrierwave'
-
 # pdf generation
 gem 'prawn'
 gem 'pdf-inspector', require: 'pdf/inspector'
 
 # logging
 gem 'log4r'
-
-# file upload size validation
-gem 'file_validators'
 
 gem 'dotenv'
 
