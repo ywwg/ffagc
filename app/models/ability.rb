@@ -34,7 +34,7 @@ class Ability
       cannot :index, [Artist, ArtistSurvey]
 
       if  user.activated?
-        can [:index, :show, :new, :create, :edit, :update, :discuss, :edit_answers], GrantSubmission, artist_id: user.id
+        can [:index, :show, :new, :create, :edit, :update, :destroy, :discuss, :edit_answers], GrantSubmission, artist_id: user.id
         can :manage, Proposal, grant_submission_id: user.grant_submission_ids
       end
     end
