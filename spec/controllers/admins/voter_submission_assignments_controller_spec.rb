@@ -70,11 +70,10 @@ describe Admins::VoterSubmissionAssignmentsController do
         go!
       end
 
-      it 'is redirected' do
+      it 'matches expectations' do
         expect(response).to redirect_to('/admins')
-      end
 
-      it 'assigns expected number of voters to each submission' do
+        # assigns expected number of voters to each submission
         GrantSubmission.all.each do |gs|
           vsas = VoterSubmissionAssignment.where(grant_submission_id: gs.id)
 
@@ -86,32 +85,27 @@ describe Admins::VoterSubmissionAssignmentsController do
 
           verify_assignments(gs)
         end
-      end
 
-      it 'has no duplicate assignments' do
+        # has no duplicate assignments
         Voter.all.each do |v|
           vsas_ids = VoterSubmissionAssignment.where(voter_id: v.id).pluck(:id)
           expect(vsas_ids).to eq(vsas_ids.uniq)
         end
-      end
 
-      it 'assigns 4 or 5 submissions to the first voter' do
+        # assigns 4 or 5 submissions to the first voter
         expect(VoterSubmissionAssignment.where(voter_id: 1).count).to be_between(4, 5)
-      end
 
-      it 'does not assign submissions to inactive voters' do
+        # does not assign submissions to inactive voters
         Voter.where('id >= 2 AND id <= 5').each do |v|
           expect(VoterSubmissionAssignment.where(voter_id: v.id).count).to eq(0)
         end
-      end
 
-      it 'assigns first batch voters 4 or 5 submissions each' do
+        # assigns first batch voters 4 or 5 submissions each
         Voter.where('id >= 8').each do |v|
           expect(VoterSubmissionAssignment.where(voter_id: v.id).count).to be_between(4, 5)
         end
-      end
 
-      it 'assigns more to voters active in second batch' do
+        # assigns more to voters active in second batch
         Voter.where('id >= 6 AND id <= 7').each do |v|
           expect(VoterSubmissionAssignment.where(voter_id: v.id).count).to be_between(14, 15)
         end
