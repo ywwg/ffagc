@@ -3,7 +3,7 @@ class AdminsController < ApplicationController
 
   before_filter :init_admin
   before_filter :init_artists
-  before_filter :verify_admin, except: [:index, :new, :create, :verify]
+  before_filter :verify_admin
 
   def index
     @verified_voters = Voter.where(verified: true)
