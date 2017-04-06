@@ -3,6 +3,7 @@
   <li class="active">Overview</li>
 </ol>
 
+<% if @voters.present? %>
 <table class="table table-striped">
   <thead>
   <tr>
@@ -49,6 +50,12 @@
   </tr>
   </tbody>
 </table>
+<% else %>
+  <div class="well">
+    There are no voters to display.
+  </div>
+<% end %>
+
 <% if can? :verify, Voter %>
 <%= javascript_include_tag 'voters/index', 'data-turbolinks-track': true %>
 <% end %>
