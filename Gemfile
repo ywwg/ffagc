@@ -1,10 +1,16 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.7.1'
+# Define Abilites of Models in one place
+gem 'cancancan'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
+
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+gem 'therubyracer'
+gem 'execjs'
+
 # Use SCSS for stylesheets
 gem 'sass-rails'
 gem 'bootstrap-sass', '~> 3.3.6'
@@ -12,11 +18,18 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer',  platforms: :ruby
-
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+
+# Forms
+gem 'simple_form'
+gem 'judge', '~> 2.0.5' # front-end form validation
+gem 'country_select'
+
+# File upload
+gem 'carrierwave'
+gem 'file_validators' # file upload size validation
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -24,57 +37,26 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
-# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
-
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-
-gem 'execjs'
-gem 'therubyracer'
-
-# gem 'clearance'
-
-gem 'formtastic'
-gem 'simple_form'
-
-# Form validation
-gem 'judge', '~> 2.0.5'
-gem 'judge-formtastic', git: 'https://github.com/joecorcoran/judge-formtastic.git'
-
-# gem 'judge-formtastic'
-
-gem 'carrierwave'
 # pdf generation
 gem 'prawn'
-gem 'pdf-inspector', :require => "pdf/inspector"
+gem 'pdf-inspector', require: 'pdf/inspector'
 
 # logging
 gem 'log4r'
 
-# file upload size validation
-gem 'file_validators'
-
-gem 'country_select'
-
+# Load ENV from a `.env` file`
 gem 'dotenv'
 
-gem 'cancancan'
-
+# Automatically create text emails from HTML ones
 gem 'premailer-rails'
 
 group :test, :development do
   gem 'pry'
 
+  # Create fake models with data
   gem 'factory_girl_rails'
   gem 'faker'
 
@@ -82,9 +64,12 @@ group :test, :development do
   gem 'rspec-its'
   gem 'guard-rspec'
 
+  # Freeze / travel time in tests
   gem 'timecop'
 
+  # Lint code
   gem 'rubocop', require: false
+  # Check for gems with CVEs
   gem 'bundler-audit', require: false
 end
 
@@ -94,4 +79,7 @@ end
 
 group :development do
   gem 'letter_opener'
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
 end

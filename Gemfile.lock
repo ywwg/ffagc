@@ -1,11 +1,3 @@
-GIT
-  remote: https://github.com/joecorcoran/judge-formtastic.git
-  revision: d21265c697e5c0e926ad8eab75c242b73a05d647
-  specs:
-    judge-formtastic (0.2.0)
-      formtastic (~> 3.1)
-      judge (~> 2.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -99,8 +91,6 @@ GEM
       activemodel (>= 3.0)
       mime-types (>= 1.0)
     formatador (0.2.5)
-    formtastic (3.1.5)
-      actionpack (>= 3.2.13)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     guard (2.14.0)
@@ -319,12 +309,10 @@ DEPENDENCIES
   factory_girl_rails
   faker
   file_validators
-  formtastic
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
   judge (~> 2.0.5)
-  judge-formtastic!
   letter_opener
   log4r
   pdf-inspector
