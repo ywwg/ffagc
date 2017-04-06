@@ -2,7 +2,6 @@ class AdminsController < ApplicationController
   load_and_authorize_resource
 
   before_filter :init_admin
-  before_filter :init_artists
   before_filter :verify_admin
 
   def index
@@ -132,9 +131,5 @@ class AdminsController < ApplicationController
 
   def init_admin
     @admin = Admin.new
-  end
-
-  def init_artists
-    @artists = Artist.all
   end
 end
