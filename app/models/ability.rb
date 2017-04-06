@@ -36,6 +36,10 @@ class Ability
       if  user.activated?
         can [:index, :show, :new, :create, :edit, :update, :destroy, :discuss, :edit_answers], GrantSubmission, artist_id: user.id
         can :manage, Proposal, grant_submission_id: user.grant_submission_ids
+
+        cannot :destroy, GrantSubmission do |grant_submission|
+          grant_submission.funded?
+        end
       end
     end
 
