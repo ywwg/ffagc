@@ -31,10 +31,10 @@ gem 'spring',        group: :development
 gem 'bcrypt', '~> 3.1.7'
 
 
+## forms
 gem 'simple_form'
-
-# Form validation
-gem 'judge', '~> 2.0.5'
+gem 'judge', '~> 2.0.5' # front-end form validation
+gem 'country_select'
 
 gem 'carrierwave'
 
@@ -47,8 +47,6 @@ gem 'log4r'
 
 # file upload size validation
 gem 'file_validators'
-
-gem 'country_select'
 
 gem 'dotenv'
 
