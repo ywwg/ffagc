@@ -1,5 +1,5 @@
 class AdminsController < ApplicationController
-  load_and_authorize_resource only: [:index, :new, :create]
+  load_and_authorize_resource
 
   before_filter :init_admin
   before_filter :init_artists
