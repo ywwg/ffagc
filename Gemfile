@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.7.1'
+# Define Abilites of Models in one place
+gem 'cancancan'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 
@@ -46,8 +48,6 @@ gem 'pdf-inspector', require: 'pdf/inspector'
 gem 'log4r'
 
 gem 'dotenv'
-
-gem 'cancancan'
 
 gem 'premailer-rails'
 
