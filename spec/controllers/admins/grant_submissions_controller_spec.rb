@@ -41,7 +41,7 @@ describe Admins::GrantSubmissionsController do
         go!
       end
 
-      it { is_expected.to be_ok }
+      it { is_expected.to be_redirect }
     end
   end
 
@@ -65,7 +65,7 @@ describe Admins::GrantSubmissionsController do
         go!
       end
 
-      it { is_expected.to be_ok }
+      it { is_expected.to be_redirect }
     end
   end
 end

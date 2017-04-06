@@ -2,6 +2,8 @@ class Grant < ActiveRecord::Base
   has_many :grants_voters
   has_many :grant_submissions
 
+  has_many :voters, through: :grants_voters
+
   validates :name, presence: true
   validates :max_funding_dollars, presence: true, numericality: { greater_than: 0, only_integer: true }
   validates :submit_start, presence: true

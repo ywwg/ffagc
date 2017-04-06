@@ -50,6 +50,14 @@ class GrantSubmission < ActiveRecord::Base
     answers.present?
   end
 
+  def max_voters
+    3
+  end
+
+  def num_voters_to_assign
+    [max_voters - voter_submission_assignments.count, 0].max
+  end
+
   def self.granted_funding_dollars_total(query)
     GrantSubmission.where(query).sum(:granted_funding_dollars)
   end

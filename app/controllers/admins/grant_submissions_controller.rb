@@ -7,8 +7,6 @@
 class Admins::GrantSubmissionsController < ApplicationController
   load_and_authorize_resource
 
-  before_filter :verify_admin
-
   def index
     @scope = params[:scope] || 'active'
     @order = params[:order] || 'name'
@@ -86,5 +84,4 @@ class Admins::GrantSubmissionsController < ApplicationController
     flash[:info] = "#{sent} Question Notification Emails Sent"
     redirect_to action: 'index'
   end
-
 end

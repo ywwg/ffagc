@@ -11,8 +11,6 @@ Rails.application.routes.draw do
   post 'admins/index' => 'admins#index'
   get 'admins/voters' => 'admins#voters'
 
-  post 'admins/assign' => 'admins#assign'
-  post 'admins/clear_assignments' => 'admins#clear_assignments'
   resources :artists, :grant_submissions
   resources :grants, except: [:show]
 
@@ -22,6 +20,12 @@ Rails.application.routes.draw do
       collection do
         post 'send_fund_emails'
         post 'send_question_emails'
+      end
+    end
+    resources :voter_submission_assignments, only: [] do
+      collection do
+        post 'assign'
+        delete 'destroy'
       end
     end
   end
