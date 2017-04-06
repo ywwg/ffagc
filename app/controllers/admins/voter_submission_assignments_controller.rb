@@ -7,46 +7,51 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
 
   before_filter :verify_admin
 
-  # distributes voter assignments fairly and can handle newly-added voters and
-  # submissions without blowing up existing assignments.
+  # Distributes voter assignments fairly. Can handle newly-added Voters and
+  # GrantSubmissions without changing existing assignments.
   #
-  # First cleans out the assignments from invalid entries.
+  # Does NOT guarantee that a new Voter will get any assignments if all
+  # GrantSubmissions already have enough Voters.
   #
-  # Goes through all grants and for each one gets a list of voters who are
-  # verified and are available to vote on that grant.  Then goes through each
-  # submission for that grant.  If the submission has fewer assignments than
-  # max_voters_per_submission (or the number of voters), we find the voter with
-  # the fewest total assignments and give the submission to them.
+  # Cleans any existing invalid VoterSubmissionAssignments.
+  #
+  # Goes through each unique GrantSubmission and assigns eligible voters to that
+  # GrantSubmission choosing Voters with fewest VoterSubmissionAssignments first.
+  # Will not assign more than Grantsubmission#max_voters Voters to a GrantSubmission.
+  #
+  # If a GrantSubmission needs more Voters but non are eligible nothing happens for
+  # that GrantSubmission.
+  #
+  # Will not assign a Voter the same GrantSubmission more than once.
   def assign
     clean_assignments
 
-    # TEMP HACK
-    # NOTE: Keep a list of seen grant submission titles, and if we
-    # see a duplicate, skip it. This way artists that submitted at more than
-    # one grant level won't appear twice in the voting assignments. This
-    # should be removed once we have proper tier selection.
-    seen = Set.new
+    unique_grant_submissions.each do |grant_submission|
+      # find voters not assigned this grant
+      voters = grant_submission.grant.voters
+        .includes(:voter_submission_assignments, :grant_submissions)
+        .where(verified: true)
 
-    Grant.includes(:grant_submissions, grants_voters: [:voter]).find_each do |grant|
-      voters = grant.voters.where(verified: true).includes(:voter_submission_assignments)
+      # eligible_voters must not already be assigned to this grant_submission
+      eligible_voters = voters.reject do |voter|
+        voter.grant_submissions.include?(grant_submission)
+      end
 
-      grant.grant_submissions.each do |gs|
-        gs_uid = grant_submission_artist_unique_name(gs)
+      # Sort by least number of voter_submission_assignments. The order for
+      # voters with the same number of voter_submission_assignment is randomized.
+      #
+      # Take only as many as are required to give grant_submission the desired
+      # number of voters.
+      voters_to_assign = eligible_voters
+        .shuffle
+        .sort_by { |voter| voter.voter_submission_assignments.count }
+        .take(grant_submission.num_voters_to_assign)
 
-        if seen.include?(gs_uid)
-          next
-        else
-          seen.add(gs_uid)
-        end
-
-        while assigned_count(gs.id) < [max_voters_per_submission, voters.count].min
-          voter = fewest_assigned_voter(voters, gs.id)
-
-          VoterSubmissionAssignment.create(
-            grant_submission: gs,
-            voter: voter
-          )
-        end
+      voters_to_assign.each do |voter|
+        VoterSubmissionAssignment.create!(
+          grant_submission: grant_submission,
+          voter: voter
+        )
       end
     end
 
@@ -61,14 +66,30 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
 
   private
 
-  def max_voters_per_submission
-    3
-  end
+  def unique_grant_submissions
+    # TEMP HACK
+    # NOTE: Keep a list of seen grant submission titles, and if we
+    # see a duplicate, skip it. This way artists that submitted at more than
+    # one grant level won't appear twice in the voting assignments. This
+    # should be removed once we have proper tier selection.
+    seen = Set.new
 
-  # Include the Grantsubmission#name *and* artist_id
-  # in case two Artists picked the GrantSubmission#name
-  def grant_submission_artist_unique_name(grant_submission)
-    [grant_submission.name, grant_submission.artist_id]
+    unique_grant_submissions = []
+
+    Grant.includes(grant_submissions: [:artist]).find_each do |grant|
+      unique_grant_submissions << grant.grant_submissions.select do |grant_submission|
+        # Include the Grantsubmission#name *and* artist_id in case
+        # two Artists picked the same GrantSubmission#name
+        gs_uid = [grant_submission.name, grant_submission.artist_id]
+
+        unless seen.include?(gs_uid)
+          seen.add(gs_uid)
+          true
+        end
+      end
+    end
+
+    unique_grant_submissions.flatten
   end
 
   # Goes through the voter assignments, and deletes entries if the
@@ -82,30 +103,5 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
         vsa.destroy
       end
     end
-  end
-
-  # counts the number of voters a submission is assigned to
-  def assigned_count(submission_id)
-    VoterSubmissionAssignment.where(grant_submission_id: submission_id).count
-  end
-
-  # given a list of voters, returns the voter with the fewest assignments.
-  def fewest_assigned_voter(voters, grant_submission)
-    fewest = nil
-    low_count = -1
-
-    # Randomize order to spread submissions around.
-    voters.shuffle.each do |voter|
-      next if voter.grant_submissions.include? grant_submission
-
-      count = voter.voter_submission_assignments.count
-
-      if low_count < 0 || count < low_count
-        fewest = voter
-        low_count = count
-      end
-    end
-
-    return fewest
   end
 end
