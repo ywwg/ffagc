@@ -60,6 +60,7 @@ describe Ability do
     let!(:user) { FactoryGirl.create(:artist, :activated) }
     let!(:artist_survey) { FactoryGirl.create(:artist_survey, artist: user) }
     let!(:grant_submission) { FactoryGirl.create(:grant_submission, artist: user) }
+    let!(:funded_grant_submission) { FactoryGirl.create(:grant_submission, :funded, artist: user) }
     let!(:proposal) { FactoryGirl.create(:proposal, grant_submission: grant_submission) }
 
     it_behaves_like 'can manage Admin unless Admin.exists?'
@@ -67,12 +68,12 @@ describe Ability do
     it_behaves_like 'signup Voter and Artist'
 
     it { is_expected.to be_able_to(:manage, artist_survey) }
-    [:index, :show, :new, :create, :edit, :update, :discuss, :edit_answers].each do |action|
+    [:index, :show, :new, :create, :edit, :update, :destroy, :discuss, :edit_answers].each do |action|
       it { is_expected.to be_able_to(action, grant_submission) }
     end
-    it { is_expected.not_to be_able_to(:destroy, grant_submission) }
     it { is_expected.not_to be_able_to(:vote, grant_submission) }
     it { is_expected.not_to be_able_to(:edit_questions, grant_submission) }
+    it { is_expected.not_to be_able_to(:destroy, funded_grant_submission) }
     it { is_expected.not_to be_able_to(:index, GrantSubmission.new) }
     it { is_expected.to be_able_to(:manage, proposal) }
     it { is_expected.not_to be_able_to(:index, Artist) }
