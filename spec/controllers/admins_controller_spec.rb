@@ -108,7 +108,7 @@ describe AdminsController do
     end
   end
 
-  xdescribe '#assign' do
+  describe '#assign' do
     def go!
       post 'assign'
     end
