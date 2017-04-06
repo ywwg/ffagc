@@ -13,15 +13,17 @@ Rails.application.routes.draw do
 
   post 'admins/assign' => 'admins#assign'
   post 'admins/clear_assignments' => 'admins#clear_assignments'
-  post 'admins/send_fund_emails' => 'admins#send_fund_emails'
-  post 'admins/send_question_emails' => 'admins#send_question_emails'
-
   resources :artists, :grant_submissions
   resources :grants, except: [:show]
 
   resources :admins, only: [:new, :create, :index]
   namespace :admins do
-    resources :grant_submissions, only: [:index]
+    resources :grant_submissions, only: [:index] do
+      collection do
+        post 'send_fund_emails'
+        post 'send_question_emails'
+      end
+    end
   end
 
   resources :grant_submissions do

@@ -32,59 +32,6 @@ class AdminsController < ApplicationController
     render 'new'
   end
 
-  def send_fund_emails
-    submissions = GrantSubmission.where(id: params[:ids].split(','))
-    sent = 0
-    submissions.each do |gs|
-      if params[:send_email] == "true"
-        artist = Artist.where(id: gs.artist_id).take
-        grant = Grant.where(id: gs.grant_id).take
-        begin
-          if gs.granted_funding_dollars == 0
-            UserMailer.grant_not_funded(gs, artist, grant, event_year).deliver
-            logger.info "email: grant not funded sent to #{artist.email}"
-          else
-            UserMailer.grant_funded(gs, artist, grant, event_year).deliver
-            logger.info "email: grant funded sent to #{artist.email}"
-          end
-        rescue
-          flash[:warning] = "Error sending email (#{sent} sent)"
-          redirect_to action: "index"
-          return
-        end
-        sent += 1
-      end
-      gs.funding_decision = true
-      gs.save
-    end
-
-    flash[:info] = "#{sent} Funding Emails Sent"
-    redirect_to action: "index"
-  end
-
-  def send_question_emails
-    submissions = GrantSubmission.where(grant_id: active_vote_grants)
-    sent = 0
-    submissions.each do |gs|
-      if gs.questions != nil && gs.has_questions?
-        artist = Artist.where(id: gs.artist_id).take
-        grant = Grant.where(id: gs.grant_id).take
-        begin
-          UserMailer.notify_questions(gs, artist, grant, event_year).deliver
-          logger.info "email: questions notification sent to #{artist.email}"
-        rescue
-          flash[:warning] = "Error sending emails (#{sent} sent)"
-          redirect_to action: "index"
-          return
-        end
-        sent += 1
-      end
-    end
-
-    flash[:info] = "#{sent} Question Notification Emails Sent"
-    redirect_to action: "index"
-  end
-
   def clear_assignments
     if admin_logged_in?
       VoterSubmissionAssignment.destroy_all
