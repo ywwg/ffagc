@@ -19,29 +19,33 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
   # the fewest total assignments and give the submission to them.
   def assign
     clean_assignments
-    max_voters_per_submission = 3
-    # NOTE: TEMP HACK: Keep a list of seen grant submission titles, and if we
-    # see a duplicate, skip it.  This way artists that submitted at more than
-    # one grant level won't appear twice in the voting assignments.  This
+
+    # TEMP HACK
+    # NOTE: Keep a list of seen grant submission titles, and if we
+    # see a duplicate, skip it. This way artists that submitted at more than
+    # one grant level won't appear twice in the voting assignments. This
     # should be removed once we have proper tier selection.
     seen = Set.new
-    Grant.all.each do |g|
-      voters = Voter.joins(:grants_voters)
-          .where('grants_voters.grant_id' => g.id, 'voters.verified' => true)
-          .all
-      GrantSubmission.where(grant_id: g.id).each do |gs|
-        # Only skip if the name *and* artist id are the same, in case two
-        # artists picked the same name.
-        gs_uid = [gs.name, gs.artist_id]
+
+    Grant.includes(:grant_submissions, grants_voters: [:voter]).find_each do |grant|
+      voters = grant.voters.where(verified: true).includes(:voter_submission_assignments)
+
+      grant.grant_submissions.each do |gs|
+        gs_uid = grant_submission_artist_unique_name(gs)
+
         if seen.include?(gs_uid)
           next
+        else
+          seen.add(gs_uid)
         end
-        seen.add(gs_uid)
+
         while assigned_count(gs.id) < [max_voters_per_submission, voters.count].min
-          vsa = VoterSubmissionAssignment.new
-          vsa.voter_id = fewest_assigned_voter(voters, gs.id).id
-          vsa.grant_submission_id = gs.id
-          vsa.save
+          voter = fewest_assigned_voter(voters, gs.id)
+
+          VoterSubmissionAssignment.create(
+            grant_submission: gs,
+            voter: voter
+          )
         end
       end
     end
@@ -57,17 +61,24 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
 
   private
 
+  def max_voters_per_submission
+    3
+  end
+
+  # Include the Grantsubmission#name *and* artist_id
+  # in case two Artists picked the GrantSubmission#name
+  def grant_submission_artist_unique_name(grant_submission)
+    [grant_submission.name, grant_submission.artist_id]
+  end
+
   # Goes through the voter assignments, and deletes entries if the
   # grant no longer exists or the voter no longer exists.  Unverified voters
   # keep their assignments because their values are ignored, so they can be
   # readded (which happens).
   def clean_assignments
-    VoterSubmissionAssignment.all.each do |vsa|
-      if Voter.find_by_id(vsa.voter_id) == nil
-        vsa.destroy
-        next
-      end
-      if GrantSubmission.find_by_id(vsa.grant_submission_id) == nil
+    VoterSubmissionAssignment.find_each do |vsa|
+      unless Voter.find_by_id(vsa.voter_id).exist? \
+        && GrantSubmission.find_by_id(vsa.grant_submission_id).exist?
         vsa.destroy
       end
     end
@@ -79,24 +90,22 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
   end
 
   # given a list of voters, returns the voter with the fewest assignments.
-  def fewest_assigned_voter(voters, submission_id)
+  def fewest_assigned_voter(voters, grant_submission)
     fewest = nil
     low_count = -1
+
     # Randomize order to spread submissions around.
-    voters.shuffle.each do |v|
-      # skip if this voter has already been assigned this submission
-      if VoterSubmissionAssignment.exists?(voter_id: v.id, grant_submission_id: submission_id)
-        # Could return nil if all voters have already been assigned
-        # this submission, but that shouldn't happen because of the max count
-        # check in the caller.
-        next
-      end
-      count = VoterSubmissionAssignment.where(voter_id: v.id).count
+    voters.shuffle.each do |voter|
+      next if voter.grant_submissions.include? grant_submission
+
+      count = voter.voter_submission_assignments.count
+
       if low_count < 0 || count < low_count
-        fewest = v
+        fewest = voter
         low_count = count
       end
     end
+
     return fewest
   end
 end
