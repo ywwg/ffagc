@@ -1,7 +1,6 @@
 class AdminsController < ApplicationController
   load_and_authorize_resource
 
-  before_filter :init_admin
   before_filter :verify_admin
 
   def index
@@ -127,9 +126,5 @@ class AdminsController < ApplicationController
       end
     end
     return fewest
-  end
-
-  def init_admin
-    @admin = Admin.new
   end
 end
