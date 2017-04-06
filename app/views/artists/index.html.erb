@@ -3,6 +3,7 @@
   <li class="active">Overview</li>
 </ol>
 
+<% if @artists.present? %>
 <table class="table table-striped">
   <thead>
   <tr>
@@ -29,3 +30,8 @@
   <% end %>
   </tbody>
 </table>
+<% else %>
+  <div class="well">
+    There are no artists to display.
+  </div>
+<% end %>

@@ -14,21 +14,24 @@
   <% end %>
 <% end %>
 
-<% if any_vote_open? %>
-  <%= content_tag :div, class: (any_vote_open? && can?(:vote, GrantSubmission)) ? 'alert alert-info' : 'well' do %>
+<%= content_tag :div, class: (any_vote_open? && can?(:vote, GrantSubmission)) ? 'alert alert-info' : 'well' do %>
+  <% if any_vote_open? %>
     <%= render partial: 'grants/sentence_list', locals: { process_type: 'voting', grant_names: active_vote_names } %>
     <% if can? :vote , GrantSubmission %>
       <%= link_to "Vote on submissions", votes_path, class: 'btn btn-primary' %>
     <% end %>
+  <% else %>
+    No grants open for voting at this time.
   <% end %>
-<% else %>
-  No grants open for voting at this time.
 <% end %>
 
 <% if can? :new, Grant %>
-  <%= link_to "Create Grant", new_grant_path, class: 'btn btn-primary' %>
+  <p>
+    <%= link_to "Create Grant", new_grant_path, class: 'btn btn-primary' %>
+  </p>
 <% end %>
 
+<% if @grants.present? %>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -94,3 +97,4 @@
   <% end %>
   </tbody>
 </table>
+<% end %>
