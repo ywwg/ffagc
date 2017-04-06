@@ -97,10 +97,6 @@ class AdminsController < ApplicationController
     end
   end
 
-  # TODO: endpoint does not belong here
-  def voters
-  end
-
   private
 
   def admin_params
