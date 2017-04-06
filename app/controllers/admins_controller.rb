@@ -3,10 +3,10 @@ class AdminsController < ApplicationController
 
   before_filter :init_admin
   before_filter :init_artists
-  before_filter :init_voters
   before_filter :verify_admin, except: [:index, :new, :create, :verify]
 
   def index
+    @verified_voters = Voter.where(verified: true)
   end
 
   def new
@@ -136,24 +136,5 @@ class AdminsController < ApplicationController
 
   def init_artists
     @artists = Artist.all
-  end
-
-  def init_voters
-    @voters = Voter.all
-    @verified_voters = Voter.where(verified: true)
-    # builds a run-time array to map assignments to voters for easy display
-    @verified_voters.each do |vv|
-      vv.class_eval do
-        attr_accessor :assigned
-      end
-
-      vv.assigned = Array.new
-      VoterSubmissionAssignment.where("voter_id = ?",vv.id).each do |vsa|
-        gs = GrantSubmission.find_by_id(vsa.grant_submission_id)
-        if gs != nil
-          vv.assigned.push("#{gs.name}(#{gs.id})")
-        end
-      end
-    end
   end
 end

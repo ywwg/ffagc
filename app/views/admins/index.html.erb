@@ -17,7 +17,7 @@
 <% if any_vote_open? %>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Assignments</h3>
+      <h3 class="panel-title">Verified Voter Assignments</h3>
     </div>
       <table class="table">
         <thead>
@@ -32,7 +32,9 @@
         <tr>
           <td><%= vv.name %></td>
           <td><%= vv.email %></td>
-          <td><%= vv.assigned.join(', ').html_safe %></td>
+          <td>
+            <%= vv.grant_submissions.map { |gs| "#{gs.name}(#{gs.id})" }.join(', ').html_safe %>
+          </td>
         </tr>
         <% end %>
         </tbody>
