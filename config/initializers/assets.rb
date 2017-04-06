@@ -9,3 +9,4 @@ Rails.application.config.assets.version = '1.0'
 
 # Exclude my hacky templates from precompilation
 Rails.application.config.assets.precompile = [ Proc.new{ |path| !File.extname(path).in?(['.js', '.css', '.tmpl']) }, /application.(css|js)$/ ]
+Rails.application.config.assets.precompile += %w( votes/index.js voters/index.js admins/grant_submissions/index.js )

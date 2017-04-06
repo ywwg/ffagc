@@ -50,12 +50,5 @@
   </tbody>
 </table>
 <% if can? :verify, Voter %>
-<script>
-function do_verify(event, id) {
-  event.preventDefault();
-  var send_email = document.getElementById('send_verify_email_checkbox').checked;
-  $.post("/voters/"+ id +"/verify?send_email=" + send_email);
-  return false;
-}
-</script>
+<%= javascript_include_tag 'voters/index', 'data-turbolinks-track': true %>
 <% end %>
