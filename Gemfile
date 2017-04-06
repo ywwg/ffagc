@@ -47,13 +47,16 @@ gem 'pdf-inspector', require: 'pdf/inspector'
 # logging
 gem 'log4r'
 
+# Load ENV from a `.env` file`
 gem 'dotenv'
 
+# Automatically create text emails from HTML ones
 gem 'premailer-rails'
 
 group :test, :development do
   gem 'pry'
 
+  # Create fake models with data
   gem 'factory_girl_rails'
   gem 'faker'
 
@@ -61,9 +64,12 @@ group :test, :development do
   gem 'rspec-its'
   gem 'guard-rspec'
 
+  # Freeze / travel time in tests
   gem 'timecop'
 
+  # Lint code
   gem 'rubocop', require: false
+  # Check for gems with CVEs
   gem 'bundler-audit', require: false
 end
 
