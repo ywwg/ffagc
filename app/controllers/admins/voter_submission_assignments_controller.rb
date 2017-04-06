@@ -5,8 +5,6 @@
 class Admins::VoterSubmissionAssignmentsController < ApplicationController
   load_and_authorize_resource
 
-  before_filter :verify_admin
-
   # Distributes voter assignments fairly. Can handle newly-added Voters and
   # GrantSubmissions without changing existing assignments.
   #

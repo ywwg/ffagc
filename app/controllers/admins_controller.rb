@@ -1,8 +1,6 @@
 class AdminsController < ApplicationController
   load_and_authorize_resource
 
-  before_filter :verify_admin
-
   def index
     @verified_voters = Voter.where(verified: true)
   end
