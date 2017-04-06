@@ -1,0 +1,102 @@
+#
+# Provides endpoints for an admin to assign GrantSubmissions to verified Voters
+# and to delete destroy all VoterSubmissionAssignments
+#
+class Admins::VoterSubmissionAssignmentsController < ApplicationController
+  load_and_authorize_resource
+
+  before_filter :verify_admin
+
+  # distributes voter assignments fairly and can handle newly-added voters and
+  # submissions without blowing up existing assignments.
+  #
+  # First cleans out the assignments from invalid entries.
+  #
+  # Goes through all grants and for each one gets a list of voters who are
+  # verified and are available to vote on that grant.  Then goes through each
+  # submission for that grant.  If the submission has fewer assignments than
+  # max_voters_per_submission (or the number of voters), we find the voter with
+  # the fewest total assignments and give the submission to them.
+  def assign
+    clean_assignments
+    max_voters_per_submission = 3
+    # NOTE: TEMP HACK: Keep a list of seen grant submission titles, and if we
+    # see a duplicate, skip it.  This way artists that submitted at more than
+    # one grant level won't appear twice in the voting assignments.  This
+    # should be removed once we have proper tier selection.
+    seen = Set.new
+    Grant.all.each do |g|
+      voters = Voter.joins(:grants_voters)
+          .where('grants_voters.grant_id' => g.id, 'voters.verified' => true)
+          .all
+      GrantSubmission.where(grant_id: g.id).each do |gs|
+        # Only skip if the name *and* artist id are the same, in case two
+        # artists picked the same name.
+        gs_uid = [gs.name, gs.artist_id]
+        if seen.include?(gs_uid)
+          next
+        end
+        seen.add(gs_uid)
+        while assigned_count(gs.id) < [max_voters_per_submission, voters.count].min
+          vsa = VoterSubmissionAssignment.new
+          vsa.voter_id = fewest_assigned_voter(voters, gs.id).id
+          vsa.grant_submission_id = gs.id
+          vsa.save
+        end
+      end
+    end
+
+    redirect_to admins_path
+  end
+
+  def destroy
+    VoterSubmissionAssignment.destroy_all
+
+    redirect_to admins_path
+  end
+
+  private
+
+  # Goes through the voter assignments, and deletes entries if the
+  # grant no longer exists or the voter no longer exists.  Unverified voters
+  # keep their assignments because their values are ignored, so they can be
+  # readded (which happens).
+  def clean_assignments
+    VoterSubmissionAssignment.all.each do |vsa|
+      if Voter.find_by_id(vsa.voter_id) == nil
+        vsa.destroy
+        next
+      end
+      if GrantSubmission.find_by_id(vsa.grant_submission_id) == nil
+        vsa.destroy
+      end
+    end
+  end
+
+  # counts the number of voters a submission is assigned to
+  def assigned_count(submission_id)
+    VoterSubmissionAssignment.where(grant_submission_id: submission_id).count
+  end
+
+  # given a list of voters, returns the voter with the fewest assignments.
+  def fewest_assigned_voter(voters, submission_id)
+    fewest = nil
+    low_count = -1
+    # Randomize order to spread submissions around.
+    voters.shuffle.each do |v|
+      # skip if this voter has already been assigned this submission
+      if VoterSubmissionAssignment.exists?(voter_id: v.id, grant_submission_id: submission_id)
+        # Could return nil if all voters have already been assigned
+        # this submission, but that shouldn't happen because of the max count
+        # check in the caller.
+        next
+      end
+      count = VoterSubmissionAssignment.where(voter_id: v.id).count
+      if low_count < 0 || count < low_count
+        fewest = v
+        low_count = count
+      end
+    end
+    return fewest
+  end
+end
