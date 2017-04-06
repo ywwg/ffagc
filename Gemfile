@@ -37,7 +37,7 @@ gem 'carrierwave'
 
 # pdf generation
 gem 'prawn'
-gem 'pdf-inspector', :require => "pdf/inspector"
+gem 'pdf-inspector', require: 'pdf/inspector'
 
 # logging
 gem 'log4r'
