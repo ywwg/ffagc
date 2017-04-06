@@ -8,21 +8,22 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<%= render partial: 'navbar' %>
+<div class="main-container">
+  <%= render partial: 'layouts/navbar' %>
 
-<div class="main-container container">
-  <% if current_user && !current_user&.activated? %>
-    <%= render partial: 'account_activations/unactivated_alert' %>
-  <% end %>
-
-  <% if flash.any? %>
-    <% flash.each do |name, msg| %>
-      <%= content_tag :div, msg, class: "alert alert-#{name}" %>
+  <div class="container-fluid">
+    <% if current_user && !current_user&.activated? %>
+      <%= render partial: 'account_activations/unactivated_alert' %>
     <% end %>
-  <% end %>
 
-  <%= yield %>
+    <% if flash.any? %>
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, msg, class: "alert alert-#{name}" %>
+      <% end %>
+    <% end %>
+
+    <%= yield %>
+  </div>
 </div>
-
 </body>
 </html>
