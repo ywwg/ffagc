@@ -125,7 +125,7 @@ class ApplicationController < ActionController::Base
 
   def grant_submission_funded?(id)
     g = GrantSubmission.find(id)
-    return g.funding_decision && g.granted_funding_dollars > 0
+    return g.funding_decision && g.granted_funding_dollars != nil && g.granted_funding_dollars > 0
   end
   helper_method :grant_submission_funded?
 

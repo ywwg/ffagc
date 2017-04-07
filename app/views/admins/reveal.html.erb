@@ -32,7 +32,10 @@
           <td><%= (Grant.where(id: gs.grant_id).take).name rescue "Unknown" %></td>
           <td align="right">
             <% if grant_submission_funded?(gs.id) %>
-              $<%= gs.granted_funding_dollars%>
+              <% if gs.granted_funding_dollars != nil %>
+                $<%= gs.granted_funding_dollars %>
+              <% else %>$0
+              <% end %>
             <% else %>$0
             <% end %></td>
           <td><%= (Artist.where(id: gs.artist_id).take).name rescue "Unknown" %></td>

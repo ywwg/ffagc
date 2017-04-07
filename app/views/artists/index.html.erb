@@ -47,7 +47,10 @@
             </td>
             <% if any_grant_submission_funded?(current_artist.id) %>
               <td align="right"><% if grant_submission_funded?(gs.id) %>
-                  $<%= gs.granted_funding_dollars %>
+                  <% if gs.granted_funding_dollars != nil %>
+                    $<%= gs.granted_funding_dollars %>
+                  <% else %>$0
+                  <% end %>
                   <% end %></td>
             <% end %>
             <td><%= button_to "Modify", :controller => "grant_submissions", :action => "modify", :id => gs.id %></td>
