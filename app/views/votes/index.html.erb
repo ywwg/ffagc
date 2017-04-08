@@ -42,7 +42,7 @@
       <tr>
         <td><%= gs.name %></td>
         <td><%= gs.grant&.name || 'Unknown' %></td>
-        <td align="right"><%= number_to_currency gs.requested_funding_dollars %></td>
+        <td class="text-right"><%= number_to_currency gs.requested_funding_dollars %></td>
         <td><%= link_to 'Open...', gs.proposal_url, target: :blank %></td>
         <td>
           <% if gs.has_questions? %>
@@ -51,7 +51,7 @@
             None
           <% end %>
         </td>
-        <td align="center">
+        <td class="text-center">
           <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
             <option></option>
             <option <%= @votes[gs.id].score_t == 0 ? "selected" : "" %>>0</option>
@@ -59,7 +59,7 @@
             <option <%= @votes[gs.id].score_t == 2 ? "selected" : "" %>>2</option>
           </select>
         </td>
-        <td align="center">
+        <td class="text-center">
           <select id="c[<%= gs.id %>]" name="c[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
             <option></option>
             <option <%= @votes[gs.id].score_c == 0 ? "selected" : "" %>>0</option>
@@ -67,7 +67,7 @@
             <option <%= @votes[gs.id].score_c == 2 ? "selected" : "" %>>2</option>
           </select>
         </td>
-        <td align="center">
+        <td class="text-center">
           <select id="f[<%= gs.id %>]" name="f[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
             <option></option>
             <option <%= @votes[gs.id].score_f == 0 ? "selected" : "" %>>0</option>
