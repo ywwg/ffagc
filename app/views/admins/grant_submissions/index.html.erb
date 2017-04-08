@@ -19,8 +19,7 @@
   <tr>
     <th>Name</th>
     <th>Grant</th>
-    <th>$</th>
-    <th>Discussion / Supplements</th>
+    <th>Discussion</th>
     <% if @show_scores %>
     <th>Avg T</th>
     <th>Avg C</th>
@@ -35,7 +34,7 @@
     <th>Contact Name</th>
     <th>Artist Email</th>
     <% else %>
-    <th align="center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);", class: 'btn btn-default' %></th>
+    <th class="text-center"><%= button_to "Toggle All", '#', :onclick => "toggle_all_fund_emails(event);", class: 'btn btn-default' %></th>
     <% end %>
   </tr>
   </thead>
@@ -54,27 +53,26 @@
         <div class="btn-group">
           <%= link_to "Ask Questions", discuss_grant_submission_path(gs), class: 'btn btn-xs btn-primary' %>
         </div>
-        <% if can? :destroy, gs %>
-        <div class="btn-group pull-right">
-          <%= link_to "Delete", grant_submission_path(gs), class: 'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %>
-        </div>
-        <% end %>
         <div class="btn-group">
           <% if gs.funded? %>
             <%= link_to "Generate Contract", generate_contract_grant_submission_path(gs, format: 'pdf'), method: :post, class: 'btn btn-xs btn-success btn-inline' %>
           <% end %>
         </div>
+        <% if can? :destroy, gs %>
+        <div class="btn-group">
+          <%= link_to "Delete", grant_submission_path(gs), class: 'btn btn-xs btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %>
+        </div>
+        <% end %>
       </div>
     </td>
     <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
-    <td align="right">$<%= gs.requested_funding_dollars %></td>
     <td><%= link_to discussion_status(gs), discuss_grant_submission_path(gs) %></td>
     <% if @show_scores %>
     <td><%= @results[gs.id]['avg_t'] %></td>
     <td><%= @results[gs.id]['avg_c'] %></td>
     <td><%= @results[gs.id]['avg_f'] %></td>
     <td><%= @results[gs.id]['avg_s'] %></td>
-    <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_s %></td>
+    <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_i %></td>
     <% end %>
     <td><% if gs.funding_decision %>Yes<% else %>No<% end %></td>
     <td>
@@ -96,9 +94,9 @@
   </tbody>
   <tfoot>
   <% unless @revealed %>
-  <% colspan = 6 + (@show_scores ? 5 : 0) + (@revealed ? 3 : 0) %>
+  <% colspan = 5 + (@show_scores ? 5 : 0) + (@revealed ? 3 : 0) %>
   <tr>
-    <td colspan="<%= colspan %>" align="right">
+    <td colspan="<%= colspan %>" class="text-right">
       <form name="send_email_form">
         <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
       </form>
@@ -106,15 +104,17 @@
     <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);", class: 'btn btn-warning' %></td>
   </tr>
   <tr>
-    <td colspan="<%= colspan %>" align="right">Total proposed grant money</td>
-    <td align="right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(funding_decision: false) %></td>
+    <td colspan="<%= colspan - 1 %>" class="text-right">Total proposed grant money</td>
+    <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(funding_decision: false) %></td>
+    <td></td>
   </tr>
   <tr>
-    <td colspan="<%= colspan %>" align="right">Total finalized grant money</td>
-    <td align="right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(funding_decision: true) %></td>
+    <td colspan="<%= colspan - 1 %>" class="text-right">Total finalized grant money</td>
+    <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(funding_decision: true) %></td>
+    <td></td>
   </tr>
   <tr>
-    <td colspan="<%= colspan %>" align="right"><b>Sends emails to artists with non-empty Questions</b></td>
+    <td colspan="<%= colspan %>" class="text-right"><b>Sends emails to artists with non-empty Questions</b></td>
     <td><%= button_to "Notify Questions", send_question_emails_admins_grant_submissions_path, class: 'btn btn-warning' %></td>
   </tr>
   </tfoot>
