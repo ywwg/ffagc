@@ -1,6 +1,6 @@
 module GrantSubmissionsHelper
   def discussion_status(grant_submission)
-    "#{q_and_a_status(grant_submission)} (#{pluralize(grant_submission.proposals.count, 'doc')})"
+    "#{q_and_a_status(grant_submission)} (#{grant_submission.proposals.count}&nbsp;#{'doc'.pluralize(grant_submission.proposals.count)})".html_safe
   end
 
   def q_and_a_status(grant_submission)
