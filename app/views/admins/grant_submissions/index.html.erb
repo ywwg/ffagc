@@ -83,7 +83,7 @@
       <td><%= (Artist.where(id: gs.artist_id).take).contact_name rescue "Unknown" %></td>
       <td><%= (Artist.where(id: gs.artist_id).take).email rescue "Unknown" %></td>
     <% else %>
-      <td align="center">
+      <td class="text-center">
         <form name="fund_email_form-<%= gs.id %>">
         <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
         </form>
@@ -101,7 +101,7 @@
         <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
       </form>
     </td>
-    <td align="center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);", class: 'btn btn-warning' %></td>
+    <td class="text-center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);", class: 'btn btn-warning' %></td>
   </tr>
   <tr>
     <td colspan="<%= colspan - 1 %>" class="text-right">Total proposed grant money</td>
