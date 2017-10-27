@@ -61,3 +61,8 @@ I had problems with bundle install not working, and I had to do:
 ```sh
   bundle install --deployment
 ```
+
+If you find that some assets are not updating, like css, they have probably been precompiled
+with a command like:
+
+    RAILS_ENV=production bundle exec rake assets:precompile
