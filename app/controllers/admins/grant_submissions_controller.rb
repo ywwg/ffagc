@@ -39,12 +39,12 @@ class Admins::GrantSubmissionsController < ApplicationController
         artist = Artist.where(id: gs.artist_id).take
         grant = Grant.where(id: gs.grant_id).take
         begin
-          if gs.granted_funding_dollars == 0
-            UserMailer.grant_not_funded(gs, artist, grant, event_year).deliver
-            logger.info "email: grant not funded sent to #{artist.email}"
-          else
+          if gs.granted_funding_dollars != nil && gs.granted_funding_dollars > 0
             UserMailer.grant_funded(gs, artist, grant, event_year).deliver
             logger.info "email: grant funded sent to #{artist.email}"
+          else
+            UserMailer.grant_not_funded(gs, artist, grant, event_year).deliver
+            logger.info "email: grant not funded sent to #{artist.email}"
           end
         rescue
           flash[:warning] = "Error sending email (#{sent} sent)"

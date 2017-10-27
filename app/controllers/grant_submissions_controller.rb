@@ -80,7 +80,7 @@ class GrantSubmissionsController < ApplicationController
       format.pdf do
         now = DateTime.current
         pdf = GrantContract.new(grant_name, @grant_submission.name, artist_name,
-            @grant_submission.requested_funding_dollars, now)
+            @grant_submission.granted_funding_dollars, now)
         send_data pdf.render, filename:
           "#{@grant_submission.name}_#{grant_name}_Contract_#{now.strftime("%Y%m%d")}.pdf",
           type: "application/pdf"
