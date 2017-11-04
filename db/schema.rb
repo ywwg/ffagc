@@ -14,25 +14,25 @@
 ActiveRecord::Schema.define(version: 20161211193734) do
 
   create_table "admins", force: :cascade do |t|
-    t.string   "name",              limit: 255
-    t.string   "email",             limit: 255
+    t.string   "name"
+    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "password_digest",   limit: 255
-    t.string   "activation_digest", limit: 255
-    t.boolean  "activated",                     default: false
+    t.string   "password_digest"
+    t.string   "activation_digest"
+    t.boolean  "activated",         default: false
     t.datetime "activated_at"
-    t.string   "reset_digest",      limit: 255
+    t.string   "reset_digest"
     t.datetime "reset_sent_at"
   end
 
   create_table "artist_surveys", force: :cascade do |t|
     t.boolean  "has_attended_firefly"
-    t.string   "has_attended_firefly_desc",  limit: 255
+    t.string   "has_attended_firefly_desc"
     t.boolean  "has_attended_regional"
-    t.string   "has_attended_regional_desc", limit: 255
+    t.string   "has_attended_regional_desc"
     t.boolean  "has_attended_bm"
-    t.string   "has_attended_bm_desc",       limit: 255
+    t.string   "has_attended_bm_desc"
     t.boolean  "can_use_as_example"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -42,38 +42,38 @@ ActiveRecord::Schema.define(version: 20161211193734) do
   add_index "artist_surveys", ["artist_id"], name: "index_artist_surveys_on_artist_id"
 
   create_table "artists", force: :cascade do |t|
-    t.string   "name",              limit: 255
-    t.string   "email",             limit: 255
+    t.string   "name"
+    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "password_digest",   limit: 255
-    t.string   "contact_name",      limit: 255
-    t.string   "contact_phone",     limit: 255
-    t.string   "contact_street",    limit: 255
-    t.string   "contact_city",      limit: 255
-    t.string   "contact_state",     limit: 255
-    t.string   "contact_country",   limit: 255
-    t.string   "activation_digest", limit: 255
-    t.boolean  "activated",                     default: false
+    t.string   "password_digest"
+    t.string   "contact_name"
+    t.string   "contact_phone"
+    t.string   "contact_street"
+    t.string   "contact_city"
+    t.string   "contact_state"
+    t.string   "contact_country"
+    t.string   "activation_digest"
+    t.boolean  "activated",         default: false
     t.datetime "activated_at"
-    t.string   "reset_digest",      limit: 255
+    t.string   "reset_digest"
     t.datetime "reset_sent_at"
-    t.string   "contact_zipcode",   limit: 255
+    t.string   "contact_zipcode"
   end
 
   create_table "grant_submissions", force: :cascade do |t|
-    t.string   "name",                      limit: 255
-    t.string   "description",               limit: 255
+    t.string   "name"
+    t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "grant_id"
     t.integer  "artist_id"
-    t.string   "proposal",                  limit: 255
+    t.string   "proposal"
     t.integer  "requested_funding_dollars"
     t.integer  "granted_funding_dollars"
     t.boolean  "funding_decision"
-    t.string   "questions",                 limit: 255
-    t.string   "answers",                   limit: 255
+    t.string   "questions"
+    t.string   "answers"
     t.datetime "questions_updated_at"
     t.datetime "answers_updated_at"
   end
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20161211193734) do
   add_index "grant_submissions", ["grant_id"], name: "index_grant_submissions_on_grant_id"
 
   create_table "grants", force: :cascade do |t|
-    t.string   "name",                limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "max_funding_dollars"
@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(version: 20161211193734) do
     t.datetime "vote_end"
     t.datetime "meeting_one"
     t.datetime "meeting_two"
-    t.boolean  "hidden",                          default: false
+    t.boolean  "hidden",              default: false
   end
 
   create_table "grants_voters", force: :cascade do |t|
@@ -103,7 +103,7 @@ ActiveRecord::Schema.define(version: 20161211193734) do
   end
 
   create_table "proposals", force: :cascade do |t|
-    t.string  "file",                limit: 255
+    t.string  "file"
     t.integer "grant_submission_id"
   end
 
@@ -135,16 +135,16 @@ ActiveRecord::Schema.define(version: 20161211193734) do
   add_index "voter_surveys", ["voter_id"], name: "index_voter_surveys_on_voter_id"
 
   create_table "voters", force: :cascade do |t|
-    t.string   "name",              limit: 255
-    t.string   "email",             limit: 255
+    t.string   "name"
+    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "password_digest",   limit: 255
+    t.string   "password_digest"
     t.boolean  "verified"
-    t.string   "activation_digest", limit: 255
-    t.boolean  "activated",                     default: false
+    t.string   "activation_digest"
+    t.boolean  "activated",         default: false
     t.datetime "activated_at"
-    t.string   "reset_digest",      limit: 255
+    t.string   "reset_digest"
     t.datetime "reset_sent_at"
   end
 
