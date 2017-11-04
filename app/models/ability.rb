@@ -11,6 +11,8 @@ class Ability
     # after models are unified
 
     # TODO: why do admins not require activation?
+    # A: Generally because admins create other admins, but there's no good
+    #    reason for this exception.
 
     # Allow an initial Admin to be crated by anyone
     can :manage, Admin unless Admin.exists?
@@ -23,8 +25,6 @@ class Ability
 
     if user.is_a?(Admin)
       can :manage, :all
-
-      cannot [:new, :create, :vote], GrantSubmission
     end
 
     if user.is_a?(Artist)
@@ -33,7 +33,7 @@ class Ability
 
       cannot :index, [Artist, ArtistSurvey]
 
-      if  user.activated?
+      if user.activated?
         can [:index, :show, :new, :create, :edit, :update, :destroy, :discuss, :edit_answers], GrantSubmission, artist_id: user.id
         can :manage, Proposal, grant_submission_id: user.grant_submission_ids
 
@@ -53,6 +53,7 @@ class Ability
       if user.activated?
         can :manage, Vote, voter_id: user.id
         # TODO: should voters be able to change their 'GrantVoter`s?
+        # A: No, these are assigned by the system.
 
         can [:vote, :read, :discuss], GrantSubmission
         can :read, VoterSubmissionAssignment, voter_id: user.id
