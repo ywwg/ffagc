@@ -23,5 +23,6 @@ function confirm_selected(event) {
   }
   var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
   $.post("<%= escape_javascript(send_fund_emails_admins_grant_submissions_path) %>?ids=" + selected + "&send_email=" + send_email);
+  <!-- even if we don't send emails we need to set the funding_decision var -->
   return false;
 }
