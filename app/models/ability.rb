@@ -25,6 +25,7 @@ class Ability
 
     if user.is_a?(Admin)
       can :manage, :all
+      can [:grant], GrantSubmission
     end
 
     if user.is_a?(Artist)
