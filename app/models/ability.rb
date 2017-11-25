@@ -25,7 +25,8 @@ class Ability
 
     if user.is_a?(Admin)
       can :manage, :all
-      can [:grant], GrantSubmission
+      can [:grant, :edit_questions], GrantSubmission
+      # TODO: Why can the admin edit answers?
     end
 
     if user.is_a?(Artist)
