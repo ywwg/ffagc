@@ -22,6 +22,8 @@ function confirm_selected(event) {
     return false;
   }
   var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
-  $.post("<%= escape_javascript(send_fund_emails_admins_grant_submissions_path) %>?ids=" + selected + "&send_email=" + send_email);
+  // Replace with proper escape_javascript(send_fund_emails_admins_grant_submissions_path)
+  // which may require js-routes gem.
+  $.post("grant_submissions/send_fund_emails?ids=" + selected + "&send_email=" + send_email);
   return false;
 }

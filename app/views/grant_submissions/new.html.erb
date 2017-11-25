@@ -47,6 +47,7 @@
             
             <% if can? :grant, GrantSubmission %>
               <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, :input_html => { :onInput => "numericFilter();" }, as: :integer, html5: true  %>
+              <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
             <% end %>
           </div>
         </div>
