@@ -26,7 +26,8 @@ class Ability
     if user.is_a?(Admin)
       can :manage, :all
       can [:grant, :edit_questions], GrantSubmission
-      # TODO: Why can the admin edit answers?
+      # TODO: Why can the admin edit answers?  It seems to get
+      # implied from the statement above somehow.
     end
 
     if user.is_a?(Artist)
@@ -36,7 +37,7 @@ class Ability
       cannot :index, [Artist, ArtistSurvey]
 
       if user.activated?
-        can [:index, :show, :new, :create, :edit, :update, :destroy, :discuss, :edit_answers], GrantSubmission, artist_id: user.id
+        can [:index, :show, :new, :create, :edit, :update, :destroy, :discuss, :edit_answers, :generate_contract], GrantSubmission, artist_id: user.id
         can :manage, Proposal, grant_submission_id: user.grant_submission_ids
 
         cannot :destroy, GrantSubmission do |grant_submission|
@@ -50,13 +51,12 @@ class Ability
       can :manage, VoterSurvey, voter_id: user.id
 
       cannot :index, VoterSurvey
-      cannot [:new, :create], GrantSubmission
+      cannot [:new, :create, :edit_questions, :edit_answers], GrantSubmission
 
       if user.activated?
         can :manage, Vote, voter_id: user.id
         # TODO: should voters be able to change their 'GrantVoter`s?
         # A: No, these are assigned by the system.
-
         can [:vote, :read, :discuss], GrantSubmission
         can :read, VoterSubmissionAssignment, voter_id: user.id
       end
