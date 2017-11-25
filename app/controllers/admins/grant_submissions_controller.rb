@@ -30,7 +30,7 @@ class Admins::GrantSubmissionsController < ApplicationController
   end
 
   def send_fund_emails
-    ids = params[:ids].split(',') || []
+    ids = params[:ids]&.split(',') || []
     @grant_submissions = GrantSubmission.where(id: ids)
 
     sent = 0
