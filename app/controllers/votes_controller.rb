@@ -11,7 +11,7 @@ class VotesController < ApplicationController
     @grant_submissions = if @scope == 'assigned' && current_voter.present?
       @grant_submissions = current_voter.grant_submissions.accessible_by(current_ability)
     else
-      @grant_submissions = GrantSubmission.accessible_by(current_ability)
+      @grant_submissions = []
     end
 
     if current_voter.present?
@@ -19,7 +19,6 @@ class VotesController < ApplicationController
         vote = current_voter.votes.where(grant_submission: gs).first_or_create
         [gs.id, vote]
       end
-
       @votes = @votes.to_h
     end
   end
