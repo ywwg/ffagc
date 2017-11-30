@@ -23,8 +23,7 @@ class GrantContract < Prawn::Document
         write_templated_line line
       end
     rescue
-      # TODO maybe actually handle errors
-      return
+      raise "Could not find template"
     end
   end
 
