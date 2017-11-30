@@ -60,7 +60,7 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def generate_contract
-    @grant_submission = GrantSubmission.find(params[:grant_submission_id])
+    @grant_submission = GrantSubmission.find(params[:id])
     # TODO: use new Ability action
     authorize! :read, @grant_submission
 
@@ -68,6 +68,7 @@ class GrantSubmissionsController < ApplicationController
       flash[:danger] = "Grant Submission must be funded to create contract"
       logger.warn "tried to generate contract for non-funded grant"
       redirect_to "/"
+      return
     end
 
     grant_name = @grant_submission.grant.name
