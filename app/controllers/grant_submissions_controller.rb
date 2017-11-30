@@ -61,8 +61,6 @@ class GrantSubmissionsController < ApplicationController
 
   def generate_contract
     @grant_submission = GrantSubmission.find(params[:id])
-    # TODO: use new Ability action
-    authorize! :read, @grant_submission
 
     unless @grant_submission.funded?
       flash[:danger] = "Grant Submission must be funded to create contract"
