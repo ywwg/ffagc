@@ -23,8 +23,7 @@ class GrantContract < Prawn::Document
         write_templated_line line
       end
     rescue
-      # TODO maybe actually handle errors
-      return
+      raise "Could not find template"
     end
   end
 
@@ -128,16 +127,15 @@ class GrantContract < Prawn::Document
     end
   end
 
-  def self.template_dir
-    File.join(Rails.root, 'app', 'assets', 'contract_templates')
+  def template_dir
+    File.join(Rails.root, 'lib', 'contract_templates')
   end
 
-
-  def self.template_files
+  def template_files
     Dir[File.join(template_dir, '*.tmpl.erb')]
   end
 
-  def self.grant_names
+  def grant_names
     template_files.map do |f|
       /contract_templates\/(.*)\.tmpl/.match(f)[1]
     end
