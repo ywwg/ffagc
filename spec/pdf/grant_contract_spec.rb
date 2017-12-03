@@ -1,5 +1,5 @@
 # If this test fails the grant contracts were probably updated without updating
-# the golden files. To fix run `bundle exec rake grant_contracts:create_golden
+# the golden files. To fix run `bundle exec rake grant_contracts:create_golden`
 # to create new golden files. You should hand-inspect the pdf output to make
 # sure it appears correct.
 
