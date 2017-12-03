@@ -17,7 +17,7 @@ class GrantContract < Prawn::Document
     begin
       # XXX hardcoding alert! Template filename must be the same as the grant name,
       # except all lowercase.
-      filename = File.join(template_dir, "#{@grant.downcase}.tmpl.erb")
+      filename = File.join(GrantContract.template_dir, "#{@grant.downcase}.tmpl.erb")
       template = File.open(filename, "rb").read
       template.each_line do |line|
         write_templated_line line
@@ -127,17 +127,19 @@ class GrantContract < Prawn::Document
     end
   end
 
-  def template_dir
-    File.join(Rails.root, 'lib', 'contract_templates')
-  end
-
-  def template_files
-    Dir[File.join(template_dir, '*.tmpl.erb')]
-  end
-
-  def grant_names
-    template_files.map do |f|
-      /contract_templates\/(.*)\.tmpl/.match(f)[1]
+  class << self
+    def template_dir
+      File.join(Rails.root, 'lib', 'contract_templates')
     end
-  end
+  
+    def template_files
+      Dir[File.join(template_dir, '*.tmpl.erb')]
+    end
+  
+    def grant_names
+      template_files.map do |f|
+        /contract_templates\/(.*)\.tmpl/.match(f)[1]
+      end
+    end
+end
 end
