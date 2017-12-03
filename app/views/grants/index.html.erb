@@ -39,10 +39,16 @@
       <th>Max Funding</th>
       <th>Submission Start</th>
       <th>Submission End</th>
+      <% if can? :vote, GrantSubmission %>
       <th>Vote Start</th>
+      <% end %>
+      <% if current_admin %>
       <th>Meeting One</th>
       <th>Meeting Two</th>
+      <% end %>
+      <% if can? :vote, GrantSubmission %>
       <th>Vote End</th>
+      <% end %>
       <% if can? :modify, Grant %>
       <th></th>
       <% end %>
@@ -66,11 +72,14 @@
       <%= g.submit_end.strftime("%Y/%m/%d") %><br />
       <%= humanize_date g.submit_end %>
     </td>
+    <% if can? :vote, GrantSubmission %>
     <td>
       <%= Date::DAYNAMES[g.vote_start.wday] %>,
       <%= g.vote_start.strftime("%Y/%m/%d") %><br />
       <%= humanize_date g.vote_start %>
     </td>
+    <% end %>
+    <% if current_admin %>
     <td>
       <%= Date::DAYNAMES[g.meeting_one.wday] %>,
       <%= g.meeting_one.strftime("%Y/%m/%d") %><br />
@@ -81,11 +90,14 @@
       <%= g.meeting_two.strftime("%Y/%m/%d") %><br />
       <%= humanize_date g.meeting_two %>
     </td>
+    <% end %>
+    <% if can? :vote, GrantSubmission %>
     <td>
       <%= Date::DAYNAMES[g.vote_end.wday] %>,
       <%= g.vote_end.strftime("%Y/%m/%d") %><br />
       <%= humanize_date g.vote_end %>
     </td>
+    <% end %>
     <% if can? :modify, g %>
     <td>
       <div class="btn-group">
