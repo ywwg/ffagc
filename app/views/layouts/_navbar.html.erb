@@ -26,7 +26,7 @@
         <% if can? :manage, :all %>
           <li><%= link_to 'Grant Meeting', admins_grant_submissions_path %></li>
         <% end %>
-        <% if can? :index, GrantSubmission %>
+        <% if can? :new, GrantSubmission %>
           <li><%= link_to 'My Submissions', grant_submissions_path %></li>
         <% end %>
         <% if can? :index, Artist %>
