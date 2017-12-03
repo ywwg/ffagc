@@ -90,6 +90,8 @@ class ApplicationController < ActionController::Base
 
   # This method is expected by CanCan
   def current_user
+    # NOTE: This logic means that if multiple users are logged in,
+    # Admin takes precedence over artist over voter.
     current_admin || current_artist || current_voter
   end
   helper_method :current_user
