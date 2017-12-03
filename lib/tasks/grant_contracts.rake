@@ -16,6 +16,8 @@ namespace :grant_contracts do
         'RequestedFundingDollars',
         Time.parse('2017-01-07 20:17:40')
       )
+      text_analysis = PDF::Inspector::Text.analyze(pdf.render)
+      full_text = text_analysis.strings.join("\n").strip
 
       # create golden_file from generated
       File.write(golden_file, full_text)
