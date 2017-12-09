@@ -52,7 +52,7 @@ class Ability
       cannot :index, VoterSurvey
       cannot [:new, :create, :edit_questions, :edit_answers], GrantSubmission
 
-      if user.activated?
+      if user.activated? and user.verified?
         can :manage, Vote, voter_id: user.id
         # TODO: should voters be able to change their 'GrantVoter`s?
         # A: No, these are assigned by the system.
