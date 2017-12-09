@@ -8,6 +8,8 @@ class GrantSubmissionsController < ApplicationController
 
     if @grant_submission.save
       redirect_to action: 'index'
+    else
+      render 'failure'
     end
   end
 
