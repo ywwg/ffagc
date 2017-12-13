@@ -118,7 +118,7 @@ describe Ability do
 
     it { is_expected.to be_able_to(:vote, GrantSubmission.new) }
 
-    [:show, :new, :create, :edit, :update].each do |action|
+    [:show, :new, :create, :edit, :update, :request_activation].each do |action|
       it { is_expected.to be_able_to(action, user) }
     end
     it { is_expected.to be_able_to(:manage, vote) }
