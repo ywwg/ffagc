@@ -69,6 +69,7 @@ describe Ability do
     it_behaves_like 'can read non-hidden Grants'
     it_behaves_like 'signup Voter and Artist'
 
+    it { is_expected.to be_able_to(:request_activation, user) }
     it { is_expected.to be_able_to(:manage, artist_survey) }
     [:index, :show, :new, :create, :edit, :update, :destroy, :discuss, :edit_answers].each do |action|
       it { is_expected.to be_able_to(action, grant_submission) }
