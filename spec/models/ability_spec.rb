@@ -106,7 +106,7 @@ describe Ability do
   end
 
   context 'with voter' do
-    let(:user) { FactoryGirl.create(:voter, :activated) }
+    let(:user) { FactoryGirl.create(:voter, :activated, :verified) }
 
     let(:voter_submission_assignment) { FactoryGirl.build(:voter_submission_assignment, voter: user) }
     let(:voter_survey) { FactoryGirl.create(:voter_survey, voter: user) }
@@ -144,7 +144,7 @@ describe Ability do
     it { is_expected.not_to be_able_to(:create, GrantSubmission.new) }
     it { is_expected.not_to be_able_to(:reveal_identities, GrantSubmission) }
 
-    context 'when not activated' do
+    context 'when not activated or verified' do
       let(:user) { FactoryGirl.create(:voter) }
 
       [:show, :new, :create, :edit, :update].each do |action|

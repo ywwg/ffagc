@@ -9,7 +9,6 @@ FactoryGirl.define do
     end
 
     trait :activated do
-      verified
       activated true
     end
   end

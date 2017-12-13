@@ -50,9 +50,9 @@ describe Admins::VoterSubmissionAssignmentsController do
         FactoryGirl.create_list(:grant_submission, 16, funding_decision: false, grant: grant)
         FactoryGirl.create_list(:grant_submission, 10, funding_decision: false, grant: grant_2)
 
-        FactoryGirl.create(:voter, :activated)
-        FactoryGirl.create_list(:voter, 4, :activated, verified: false)
-        FactoryGirl.create_list(:voter, 10, :activated)
+        FactoryGirl.create(:voter, :activated, :verified)
+        FactoryGirl.create_list(:voter, 4, :activated)
+        FactoryGirl.create_list(:voter, 10, :activated, :verified)
 
         # assign to first grant
         15.times do |n|
