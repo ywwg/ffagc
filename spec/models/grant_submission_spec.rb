@@ -70,18 +70,20 @@ describe GrantSubmission do
   end
 
   context 'before_save' do
+    let(:frozen_time) { Time.zone.now.round(0) }
+
     context 'with questions changed' do
       it 'updates questions_updated_at' do
-        Timecop.freeze do
-          expect { subject.update(questions: 'New questions.') }.to change { subject.reload.questions_updated_at }.to(Time.zone.now)
+        Timecop.freeze(frozen_time) do
+          expect { subject.update(questions: 'New questions.') }.to change { subject.reload.questions_updated_at }.to(frozen_time)
         end
       end
     end
 
     context 'with answers changed' do
       it 'updates answers_updated_at' do
-        Timecop.freeze do
-          expect { subject.update(answers: 'New answers.') }.to change { subject.reload.answers_updated_at }.to(Time.zone.now)
+        Timecop.freeze(frozen_time) do
+          expect { subject.update(answers: 'New answers.') }.to change { subject.reload.answers_updated_at }.to(frozen_time)
         end
       end
     end
