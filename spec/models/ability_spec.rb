@@ -29,8 +29,6 @@ describe Ability do
 
     it_behaves_like 'can manage Admin unless Admin.exists?'
     it_behaves_like 'can read non-hidden Grants'
-
-    it { is_expected.to be_able_to(:new, GrantSubmission) }
   end
 
   context 'with admin' do
