@@ -19,7 +19,7 @@ class AccountActivationsController < ApplicationController
   # Reset activation token and send activation email
   def create
     @user = current_user
-    authorize! :manage, @user
+    authorize! :request_activation, @user
 
     @type = UserFinder.type_from_user(@user)
 

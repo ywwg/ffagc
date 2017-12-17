@@ -46,7 +46,7 @@ class Ability
     end
 
     if user.is_a?(Voter)
-      can [:show, :new, :create, :edit, :update], Voter, id: user.id # cannot index or destroy
+      can [:show, :new, :create, :edit, :update, :request_activation], Voter, id: user.id # cannot index or destroy
       can :manage, VoterSurvey, voter_id: user.id
 
       cannot :index, VoterSurvey
