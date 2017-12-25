@@ -11,10 +11,13 @@ class VotesController < ApplicationController
     @grant_submissions = if @scope == 'assigned' && current_voter.present?
       current_voter.grant_submissions.where(grant_id: active_vote_grants).accessible_by(current_ability)
     else
-      GrantSubmission.where(grant_id: active_vote_grants).accessible_by(current_ability)
-      # TODO: Create a join-like statement that collects all
-      # grant submissions and filters by active grants and also which grants
-      # this voter is signed up for (grants_voters table).
+      # Filter active grants by the ones that this voter is participating in.
+      current_voter_grants = active_vote_grants.map do |g|
+        if GrantsVoter.find_by(voter: current_voter, grant: g) != nil
+          g
+        end
+      end
+      GrantSubmission.where(grant_id: current_voter_grants).accessible_by(current_ability)
     end
 
     if current_voter.present?
