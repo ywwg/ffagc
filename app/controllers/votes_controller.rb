@@ -11,7 +11,7 @@ class VotesController < ApplicationController
     @grant_submissions = if @scope == 'assigned' && current_voter.present?
       @grant_submissions = current_voter.grant_submissions.accessible_by(current_ability)
     else
-      @grant_submissions = []
+      @grant_submissions = GrantSubmission.all
     end
 
     if current_voter.present?
