@@ -26,8 +26,12 @@
         <% if can? :manage, :all %>
           <li><%= link_to 'Grant Meeting', admins_grant_submissions_path %></li>
         <% end %>
-        <% if can? :new, GrantSubmission %>
+        <%# This is tricksy... admins can :new and :edit but only artists
+        can :edit_answers %>
+        <% if can? :edit_answers, GrantSubmission %>
           <li><%= link_to 'My Submissions', grant_submissions_path %></li>
+        <% elsif can? :read, GrantSubmission %>
+          <li><%= link_to 'All Submissions', grant_submissions_path %></li>
         <% end %>
         <% if can? :index, Artist %>
           <li><%= link_to 'Artists', artists_path %></li>

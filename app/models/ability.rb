@@ -24,9 +24,8 @@ class Ability
 
     if user.is_a?(Admin)
       can :manage, :all
-      can [:grant, :edit_questions], GrantSubmission
-      # TODO: Why can the admin edit answers?  It seems to get
-      # implied from the statement above somehow.
+      can [:grant, :edit_questions, :edit], GrantSubmission
+      cannot [:vote, :edit_answers], GrantSubmission
     end
 
     if user.is_a?(Artist)

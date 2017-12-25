@@ -19,6 +19,6 @@ class Sessions::AdminsController < Sessions::BaseController
   end
 
   def after_create_path
-    grant_submissions_path
+    admins_grant_submissions_path
   end
 end

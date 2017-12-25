@@ -29,7 +29,7 @@ class GrantSubmissionsController < ApplicationController
 
     if @grant_submission.save
       if admin_logged_in?
-        redirect_to admins_path
+        redirect_to admins_grant_submissions_path
       else
         redirect_to action: 'index'
       end
