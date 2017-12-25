@@ -96,8 +96,8 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
   # readded (which happens).
   def clean_assignments
     VoterSubmissionAssignment.find_each do |vsa|
-      unless Voter.find_by_id(vsa.voter_id).exist? \
-        && GrantSubmission.find_by_id(vsa.grant_submission_id).exist?
+      unless Voter.find_by_id(vsa.voter_id) != nil \
+        && GrantSubmission.find_by_id(vsa.grant_submission_id) != nil
         vsa.destroy
       end
     end
