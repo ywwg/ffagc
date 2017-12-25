@@ -13,9 +13,7 @@ class VotesController < ApplicationController
     else
       # Filter active grants by the ones that this voter is participating in.
       current_voter_grants = active_vote_grants.map do |g|
-        if GrantsVoter.find_by(voter: current_voter, grant: g) != nil
-          g
-        end
+        g if GrantsVoter.where(voter: current_voter, grant: g).exists?
       end
       GrantSubmission.where(grant_id: current_voter_grants).accessible_by(current_ability)
     end
