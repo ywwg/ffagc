@@ -22,7 +22,7 @@ class Sessions::VotersController < Sessions::BaseController
     if !current_voter.verified?
       sessions_voters_unverified_path
     else
-      grant_submissions_path
+      votes_path
     end
   end
 end

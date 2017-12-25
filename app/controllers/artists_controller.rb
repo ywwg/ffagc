@@ -22,7 +22,7 @@ class ArtistsController < ApplicationController
       begin
         UserMailer.account_activation('artists', @artist).deliver_now
         logger.info "email: artist account activation sent to #{@artist.email}"
-        
+
         render 'create_success'
         return
       rescue

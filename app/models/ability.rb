@@ -26,6 +26,7 @@ class Ability
       can :manage, :all
       can [:grant, :edit_questions, :edit], GrantSubmission
       cannot [:vote, :edit_answers], GrantSubmission
+      can :all, GrantsVoter
     end
 
     if user.is_a?(Artist)
