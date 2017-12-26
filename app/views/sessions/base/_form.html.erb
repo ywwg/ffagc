@@ -17,6 +17,12 @@
 
   <div class="form-group">
     <%= submit_tag("Sign in", class: "btn btn-primary") %>
-    <%= link_to "Forgot password?", new_password_reset_path(type: "artists") %>
+    <% if @form_action_path.ends_with? "artist" %>
+      <%= link_to "Forgot password?", new_password_reset_path(type: "artists") %>
+    <% elsif @form_action_path.ends_with? "voter" %>
+      <%= link_to "Forgot password?", new_password_reset_path(type: "voters") %>
+    <% elsif @form_action_path.ends_with? "admin" %>
+      <%= link_to "Forgot password?", new_password_reset_path(type: "admins") %>
+    <% end %>
   </div>
 <% end %>
