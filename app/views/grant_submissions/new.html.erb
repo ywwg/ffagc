@@ -31,7 +31,7 @@
 <% end %>
 
 <% if can? :create, GrantSubmission %>
-  <%= simple_form_for @grant_submission do |f| %>
+  <%= simple_form_for @grant_submission, :html => { :onsubmit => "return validate();"} do |f| %>
     <div class="row">
       <div class="col-md-6">
         <div class="panel panel-default">
@@ -77,3 +77,36 @@
     Please log in as an artist to create a submission.
   </div>
 <% end %>
+
+<script>
+  function validate() {
+    errors = 0;
+
+    if(document.getElementById("grant_submission_name").value != "") {
+      document.getElementById("grant_submission_name").style.border = '1px solid green';
+    } else {
+      errors++;
+      alert('error: please choose a name for your proposal')
+      document.getElementById("grant_submission_name").style.border = '1px solid red';
+    }
+
+    // TODO: restore validation for requested amount and grant name.
+
+    if(document.getElementById("grant_submission_proposal").value != "") {
+      document.getElementById("grant_submission_proposal").style.border = '1px solid green';
+    } else {
+      errors++;
+      alert('error: please select your application PDF')
+      document.getElementById("grant_submission_proposal").style.border = '1px solid red';
+    }
+
+    if (errors == 0) {
+      var anon = confirm("Did you make sure your proposal is anonymous and DOES NOT include any identifying information?");
+      if (!anon) {
+        errors++;
+      }
+    }
+
+    return errors===0;
+  }
+</script>
