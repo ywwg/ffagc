@@ -112,9 +112,10 @@
       // Here's where the YIKES pays off.  We get the value in the hidden div based on which grant
       // they chose.
       var max_funding_dollars = parseInt(document.getElementById('grant_' + chosen_grant + '_max_funding_dollars').textContent);
-      if (document.getElementById('grant_submission_requested_funding_dollars').value > max_funding_dollars) {
+      var requested_funding_dollars = document.getElementById('grant_submission_requested_funding_dollars').value;
+      if (requested_funding_dollars <= 0 || requested_funding_dollars > max_funding_dollars) {
         errors++;
-        alert('Error: Invalid amount entered for requested amount');
+        alert('Error: Invalid amount entered for requested amount.  Must be up to $' + max_funding_dollars);
         document.getElementById("grant_submission_requested_funding_dollars").style.border = '1px solid red';
       }
     }
