@@ -41,7 +41,9 @@
           <div class="panel-body">
             <%= f.input :name, label: "Name of Piece", required: true, validate: true %>
 
+            <div id="grant_submission_grant_selectors">
             <%= f.association :grant, as: :radio_buttons %>
+            </div>
 
             <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }, as: :integer, html5: true  %>
 
@@ -82,29 +84,39 @@
   function validate() {
     errors = 0;
 
-    if(document.getElementById("grant_submission_name").value != "") {
-      document.getElementById("grant_submission_name").style.border = '1px solid green';
-    } else {
+    if (document.getElementById("grant_submission_name").value == "") {
       errors++;
-      alert('error: please choose a name for your proposal')
+      alert('Error: Please choose a name for your proposal');
       document.getElementById("grant_submission_name").style.border = '1px solid red';
     }
 
-    // TODO: restore validation for requested amount and grant name.
-
-    if(document.getElementById("grant_submission_proposal").value != "") {
-      document.getElementById("grant_submission_proposal").style.border = '1px solid green';
-    } else {
+    var grantRadios = document.querySelectorAll('[id^=grant_submission_grant_id]');
+    var found = false;
+    for (var i in grantRadios) {
+      if (grantRadios[i].checked) {
+        found = true;
+      }
+    }
+    if (!found) {
       errors++;
-      alert('error: please select your application PDF')
-      document.getElementById("grant_submission_proposal").style.border = '1px solid red';
+      alert('Error: Please select a grant for your proposal');
+      document.getElementById("grant_submission_grant_selectors").style.border = '1px solid red';
     }
 
-    if (errors == 0) {
+    // TODO: restore validation for requested amount
+
+    if (document.getElementById("grant_submission_proposal").value != "") {
+      // Ask for confirmation if they are uploading a new document.
       var anon = confirm("Did you make sure your proposal is anonymous and DOES NOT include any identifying information?");
       if (!anon) {
         errors++;
       }
+    } else if (document.getElementById("grant_submission_proposal_original_doc") == null) {
+      // If they didn't specify a new doc and there wasn't an existing doc,
+      // then it's an error.
+      errors++;
+      alert('Error: Please select your application PDF');
+      document.getElementById("grant_submission_proposal").style.border = '1px solid red';
     }
 
     return errors===0;

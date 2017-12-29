@@ -1,7 +1,7 @@
 <% unless grant_submission.proposals.empty? && grant_submission.proposal.nil? %>
   <ul class="list-group">
     <% if grant_submission.proposal.present? %>
-      <li class="list-group-item">
+      <li class="list-group-item" id="grant_submission_proposal_original_doc">
         Original document: <%= link_to grant_submission.proposal_identifier, grant_submission.proposal_url, target: :blank %>
     </li>
     <% end %>
