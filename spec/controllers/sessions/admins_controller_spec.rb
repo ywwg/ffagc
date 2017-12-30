@@ -3,14 +3,14 @@ describe Sessions::AdminsController do
   let!(:inactive_user) { FactoryGirl.create(:admin) }
 
   describe '#new' do
-    it_behaves_like 'sessions new endpoind'
+    it_behaves_like 'sessions new endpoint'
   end
 
   describe '#create' do
-    it_behaves_like 'sessions create endpoind', 'admins', 'admin_id', '/grant_submissions'
+    it_behaves_like 'sessions create endpoint', 'admins', 'admin_id', '/admins/grant_submissions'
   end
 
   describe '#destroy' do
-    it_behaves_like 'sessions destroy endpoind', 'admin_id', '/'
+    it_behaves_like 'sessions destroy endpoint', 'admin_id', '/'
   end
 end
