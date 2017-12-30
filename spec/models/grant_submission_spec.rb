@@ -69,11 +69,13 @@ describe GrantSubmission do
     end
   end
 
+  # Time comparisons lose precision when saved to the db:
+  # https://stackoverflow.com/questions/20403063/trouble-comparing-time-with-rspec
   context 'before_save' do
     context 'with questions changed' do
       it 'updates questions_updated_at' do
         Timecop.freeze do
-          expect { subject.update(questions: 'New questions.') }.to change { subject.reload.questions_updated_at }.to(Time.zone.now)
+          expect { subject.update(questions: 'New questions.') }.to change { subject.reload.questions_updated_at }.to(be_within(1.second).of(Time.zone.now))
         end
       end
     end
@@ -81,7 +83,7 @@ describe GrantSubmission do
     context 'with answers changed' do
       it 'updates answers_updated_at' do
         Timecop.freeze do
-          expect { subject.update(answers: 'New answers.') }.to change { subject.reload.answers_updated_at }.to(Time.zone.now)
+          expect { subject.update(answers: 'New answers.') }.to change { subject.reload.answers_updated_at }.to(be_within(1.second).of(Time.zone.now))
         end
       end
     end

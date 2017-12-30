@@ -11,9 +11,9 @@ describe Ability do
     end
   end
 
-  shared_examples 'can read non-hidden Grants' do
+  shared_examples 'can read hidden and hidden Grants' do
     it { is_expected.to be_able_to(:read, Grant) }
-    it { is_expected.not_to be_able_to(:read, FactoryGirl.build(:grant, hidden: true)) }
+    it { is_expected.to be_able_to(:read, FactoryGirl.build(:grant, hidden: true)) }
   end
 
   shared_examples 'signup Voter and Artist' do
@@ -28,7 +28,7 @@ describe Ability do
     let(:user) { nil }
 
     it_behaves_like 'can manage Admin unless Admin.exists?'
-    it_behaves_like 'can read non-hidden Grants'
+    it_behaves_like 'can read hidden and hidden Grants'
 
     it { is_expected.not_to be_able_to(:new, GrantSubmission) }
   end
@@ -64,7 +64,7 @@ describe Ability do
     let!(:proposal) { FactoryGirl.create(:proposal, grant_submission: grant_submission) }
 
     it_behaves_like 'can manage Admin unless Admin.exists?'
-    it_behaves_like 'can read non-hidden Grants'
+    it_behaves_like 'can read hidden and hidden Grants'
     it_behaves_like 'signup Voter and Artist'
 
     it { is_expected.to be_able_to(:request_activation, user) }
@@ -112,7 +112,7 @@ describe Ability do
     let(:vote) { FactoryGirl.build(:vote, voter: user) }
 
     it_behaves_like 'can manage Admin unless Admin.exists?'
-    it_behaves_like 'can read non-hidden Grants'
+    it_behaves_like 'can read hidden and hidden Grants'
     it_behaves_like 'signup Voter and Artist'
 
     it { is_expected.to be_able_to(:vote, GrantSubmission.new) }
