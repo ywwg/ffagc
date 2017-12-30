@@ -20,7 +20,7 @@ class Ability
     can [:new, :create], Artist
     can [:new, :create], Voter
 
-    can :read, Grant, hidden: false
+    can :read, Grant
 
     if user.is_a?(Admin)
       can :manage, :all
