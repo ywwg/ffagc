@@ -19,7 +19,9 @@ class Sessions::VotersController < Sessions::BaseController
   end
 
   def after_create_path
-    if !current_voter.verified?
+    if !current_voter.activated?
+      votes_path
+    elsif !current_voter.verified?
       sessions_voters_unverified_path
     else
       votes_path

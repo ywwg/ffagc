@@ -3,10 +3,10 @@
   <li class="active">Overview</li>
 </ol>
 
-<%= content_tag :div, class: (any_submit_open? && can?(:create, GrantSubmission)) ? 'alert alert-info' : 'well' do %>
+<%= content_tag :div, class: (any_submit_open? && artist_logged_in?) ? 'alert alert-info' : 'well' do %>
   <% if any_submit_open? %>
     <%= render partial: 'grants/sentence_list', locals: { process_type: 'submission', grant_names: active_submit_names } %>
-    <% if can? :create, GrantSubmission %>
+    <% if artist_logged_in? %>
       <%= link_to "Submit Grant Proposal", new_grant_submission_path, class: 'btn btn-primary' %>
     <% end %>
   <% else %>
@@ -61,7 +61,6 @@
   <tr>
     <td>
       <%= g.name %>
-      <% if g.hidden %><strong>(hidden)<strong><% end %>
     </td>
     <td>$<%= g.max_funding_dollars %></td>
     <td>

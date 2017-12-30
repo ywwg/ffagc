@@ -1,4 +1,4 @@
-shared_examples 'sessions new endpoind' do
+shared_examples 'sessions new endpoint' do
   describe '#new' do
     it 'not logged in' do
       get 'new'
@@ -18,7 +18,7 @@ shared_examples 'sessions new endpoind' do
   end
 end
 
-shared_examples 'sessions create endpoind' do |type_name, session_key, redirect_path|
+shared_examples 'sessions create endpoint' do |type_name, session_key, redirect_path|
   describe '#create' do
     def go!(user)
       post 'create', session: { email: user.email.upcase, password: user.password }
@@ -27,6 +27,16 @@ shared_examples 'sessions create endpoind' do |type_name, session_key, redirect_
     it 'allows logging in with case-insensitive email' do
       expect { go! user }.to change { session[session_key] }.from(nil)
       expect(response).to redirect_to(redirect_path)
+    end
+
+    # FIXME: I don't know the right way to do this so I'm hard coding it.
+    if type_name == 'voters'
+      context 'with unverified user' do
+        it 'show unverified screen' do
+          expect { go! unverified_user }.to change { session[session_key] }.from(nil)
+          expect(response).to redirect_to('/sessions/voters/unverified')
+        end
+      end
     end
 
     context 'with inactive user' do
@@ -38,7 +48,7 @@ shared_examples 'sessions create endpoind' do |type_name, session_key, redirect_
   end
 end
 
-shared_examples 'sessions destroy endpoind' do |session_key, redirect_path|
+shared_examples 'sessions destroy endpoint' do |session_key, redirect_path|
   describe '#destroy' do
     def go!
       delete 'destroy'
