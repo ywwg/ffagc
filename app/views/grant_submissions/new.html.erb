@@ -45,10 +45,10 @@
             <%= f.association :grant, as: :radio_buttons %>
             </div>
 
-            <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, :input_html => { :onInput => "numericFilter();" }, as: :integer, html5: true  %>
+            <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, as: :integer, html5: true  %>
 
             <% if can? :grant, GrantSubmission %>
-              <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, :input_html => { :onInput => "numericFilter();" }, as: :integer, html5: true  %>
+              <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true  %>
               <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
             <% end %>
           </div>
@@ -80,6 +80,13 @@
   </div>
 <% end %>
 
+<%# BEGIN YIKES %>
+<%# We need to embed all the max funding dollarses here so we can check them below %>
+<% Grant.all.each do |grant| -%>
+<div style="display:none" id="<%= "grant_" + grant.id.to_s + "_max_funding_dollars"%>"><%= grant.max_funding_dollars.to_s %></div>
+<% end %>
+<%# END YIKES %>
+
 <script>
   function validate() {
     errors = 0;
@@ -91,19 +98,27 @@
     }
 
     var grantRadios = document.querySelectorAll('[id^=grant_submission_grant_id]');
-    var found = false;
+    var chosen_grant = -1;
     for (var i in grantRadios) {
       if (grantRadios[i].checked) {
-        found = true;
+        chosen_grant = grantRadios[i].value;
       }
     }
-    if (!found) {
+    if (chosen_grant === -1) {
       errors++;
       alert('Error: Please select a grant for your proposal');
       document.getElementById("grant_submission_grant_selectors").style.border = '1px solid red';
+    } else {
+      // Here's where the YIKES pays off.  We get the value in the hidden div based on which grant
+      // they chose.
+      var max_funding_dollars = parseInt(document.getElementById('grant_' + chosen_grant + '_max_funding_dollars').textContent);
+      var requested_funding_dollars = document.getElementById('grant_submission_requested_funding_dollars').value;
+      if (requested_funding_dollars <= 0 || requested_funding_dollars > max_funding_dollars) {
+        errors++;
+        alert('Error: Invalid amount entered for requested amount.  Must be up to $' + max_funding_dollars);
+        document.getElementById("grant_submission_requested_funding_dollars").style.border = '1px solid red';
+      }
     }
-
-    // TODO: restore validation for requested amount
 
     if (document.getElementById("grant_submission_proposal").value != "") {
       // Ask for confirmation if they are uploading a new document.
