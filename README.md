@@ -61,3 +61,11 @@ I had problems with bundle install not working, and I had to do:
 ```sh
   bundle install --deployment
 ```
+
+# Static assets look wrong or are missing
+
+You may need to precompile them for some production environments:
+
+```sh
+RAILS_ENV=production bundle exec rake assets:precompile
+```
