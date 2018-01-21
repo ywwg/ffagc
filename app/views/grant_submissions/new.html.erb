@@ -121,10 +121,12 @@
     }
 
     if (document.getElementById("grant_submission_proposal").value != "") {
-      // Ask for confirmation if they are uploading a new document.
-      var anon = confirm("Did you make sure your proposal is anonymous and DOES NOT include any identifying information?");
-      if (!anon) {
-        errors++;
+      if (errors === 0) {
+        // Ask for confirmation if they are uploading a new document, but only if there are no other errors.
+        var anon = confirm("Did you make sure your proposal is anonymous and DOES NOT include any identifying information?");
+        if (!anon) {
+          errors++;
+        }
       }
     } else if (document.getElementById("grant_submission_proposal_original_doc") == null) {
       // If they didn't specify a new doc and there wasn't an existing doc,
@@ -133,7 +135,6 @@
       alert('Error: Please select your application PDF');
       document.getElementById("grant_submission_proposal").style.border = '1px solid red';
     }
-
     return errors===0;
   }
 </script>
