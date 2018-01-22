@@ -1,4 +1,4 @@
-Temple Grant Contract
+Tea (Anniversary) Grant Contract
 SubmissionName
 Dated: 2017-01-07
 Overview
@@ -16,9 +16,10 @@ All parties agree to the terms presented below.  Violation of any of the followi
 Funding
 1. The project SubmissionName will be completed as described in the proposal.  The project will be
 deemed approved upon completion of the artist's signature on this contract.
-2. Firefly Arts Collective will retain 25% of the grant funding as a performance deposit.  The first payment
-(75% of the total allotted funding) will be disbursed upon receiving the signed contract; the second payment
-(25%) will be disbursed upon completion of all requirements outlined in this document.
+2. Firefly Arts Collective will retain 30% of the grant funding as a performance deposit.  The first payment
+(70% of the total allotted funding) will be disbursed upon receiving the signed contract; the second payment
+(20% of the total funding) will be disbursed upon completion of Firefly Arts Festival 2018; the third payment
+(10%) will be disbursed after completion of all requirements outlined in this document.
 3. The artist agrees that this grant of RequestedFundingDollars USD shall represent the total sum they will
 receive from Firefly Arts Collective and the artist hereby agrees to assume responsibility for any additional
 costs beyond the the grant amount incurred in the production of SubmissionName for Firefly Arts Festival
@@ -29,7 +30,7 @@ Firefly Arts Collective can generate a 1099 tax form to properly report this tax
 responsible for complying with the tax laws of their locale.
 Events
 5. The artist agrees to meet the following schedule of events, under the given schedule:
-1. Project Installation (Friday, July 6, 2018)]
+Project Installation (Friday, July 6, 2018)
 The funded project will be completed and fully operational by sunset on Friday, July 6, 2018.  If the
 artist would like to arrive at Firefly Arts Festival before its official start date, the artist must apply for Early
 Arrival and comply with all Early Arrival policies.
