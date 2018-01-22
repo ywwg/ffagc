@@ -54,7 +54,7 @@ class GrantSubmissionsController < ApplicationController
       @grant_change_disable = true
     end
 
-    render 'new'
+    render 'edit'
   end
 
   def discuss
