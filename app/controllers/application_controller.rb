@@ -42,6 +42,7 @@ class ApplicationController < ActionController::Base
     deadline_leniency_time = now - 1.hours
     Grant.submission_active(now, deadline_leniency_time, timezone_string).accessible_by(current_ability)
   end
+  helper_method :active_submit_grants
 
   def any_submit_open?
     active_submit_grants.exists?
