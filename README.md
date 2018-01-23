@@ -69,3 +69,11 @@ You may need to precompile them for some production environments:
 ```sh
 RAILS_ENV=production bundle exec rake assets:precompile
 ```
+
+# The site isn't updating?
+
+You may need to tell apache to reload
+
+```sh
+sudo service apache2 reload
+```
