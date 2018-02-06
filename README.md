@@ -66,3 +66,7 @@ You may need to precompile them for some production environments:
 ```sh
 RAILS_ENV=production bundle exec rake assets:precompile
 ```
+
+# Secrets
+
+See `config/secrets.yml` for the various environment variables that must configured in proudction. `.env.sample` is provided as an example.
