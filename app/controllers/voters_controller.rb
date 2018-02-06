@@ -7,6 +7,7 @@ class VotersController < ApplicationController
   end
 
   def show
+    @voter_survey = @voter.voter_survey
   end
 
   def new
