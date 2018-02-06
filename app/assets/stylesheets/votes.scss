@@ -1,0 +1,25 @@
+.grant-submission-summary {
+  display: flex;
+  flex-direction: row;
+
+  table {
+    th {
+      text-align: center;
+    }
+    td {
+      padding: 5px;
+    }
+  }
+
+  .save-message {
+    width: 60px;
+    height: 1em;
+  }
+
+  .grant-submission-description {
+    flex-grow: 1;
+  }
+
+  .grant-submission-voting {
+  }
+}
