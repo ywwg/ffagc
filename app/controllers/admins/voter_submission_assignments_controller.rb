@@ -90,15 +90,26 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
     unique_grant_submissions.flatten
   end
 
-  # Goes through the voter assignments, and deletes entries if the
-  # grant no longer exists or the voter no longer exists.  Unverified voters
-  # keep their assignments because their values are ignored, so they can be
-  # readded (which happens).
+  # Goes through the voter assignments and delete extraneous entries.
+  # Unverified voters keep their assignments because their values are
+  # ignored, so they can be readded (which happens).
   def clean_assignments
     VoterSubmissionAssignment.find_each do |vsa|
-      unless Voter.find_by_id(vsa.voter_id).exist? \
-        && GrantSubmission.find_by_id(vsa.grant_submission_id).exist?
+      # Delete if the voter is gone
+      if Voter.find_by_id(vsa.voter_id) == nil
         vsa.destroy
+        next
+      end
+      # Delete if the submission is gone
+      gs = GrantSubmission.find_by_id(vsa.grant_submission_id)
+      if gs == nil
+        vsa.destroy
+        next
+      end
+      # Delete if the voter is not part of this grant any more
+      if GrantsVoter.find_by(grant: gs.grant_id, voter: vsa.voter_id) == nil
+        vsa.destroy
+        next
       end
     end
   end

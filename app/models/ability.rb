@@ -20,13 +20,13 @@ class Ability
     can [:new, :create], Artist
     can [:new, :create], Voter
 
-    can :read, Grant, hidden: false
+    can :read, Grant
 
     if user.is_a?(Admin)
       can :manage, :all
-      can [:grant, :edit_questions], GrantSubmission
-      # TODO: Why can the admin edit answers?  It seems to get
-      # implied from the statement above somehow.
+      can [:grant, :edit_questions, :edit], GrantSubmission
+      cannot [:vote, :edit_answers], GrantSubmission
+      can :all, GrantsVoter
     end
 
     if user.is_a?(Artist)
@@ -46,13 +46,13 @@ class Ability
     end
 
     if user.is_a?(Voter)
-      can [:show, :new, :create, :edit, :update], Voter, id: user.id # cannot index or destroy
+      can [:show, :new, :create, :edit, :update, :request_activation], Voter, id: user.id # cannot index or destroy
       can :manage, VoterSurvey, voter_id: user.id
 
       cannot :index, VoterSurvey
       cannot [:new, :create, :edit_questions, :edit_answers], GrantSubmission
 
-      if user.activated?
+      if user.activated? and user.verified?
         can :manage, Vote, voter_id: user.id
         # TODO: should voters be able to change their 'GrantVoter`s?
         # A: No, these are assigned by the system.

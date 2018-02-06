@@ -69,6 +69,8 @@ describe GrantSubmission do
     end
   end
 
+  # Time comparisons lose precision when saved to the db:
+  # https://stackoverflow.com/questions/20403063/trouble-comparing-time-with-rspec
   context 'before_save' do
     let(:frozen_time) { Time.zone.now.round(0) }
 

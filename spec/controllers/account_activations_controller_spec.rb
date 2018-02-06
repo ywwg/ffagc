@@ -75,40 +75,64 @@ describe AccountActivationsController do
   end
 
   describe '#create' do
-    let(:artist) { FactoryGirl.create(:artist) }
-
     subject { response }
 
     def go!
       put 'create'
     end
 
+    shared_examples 'sends new activation token' do
+      it 'creates new activation_digest' do
+        expect { go! }.to change { user.reload.activation_digest }
+      end
+
+      it 'sends email' do
+        expect(UserMailer).to receive(:account_activation)
+        go!
+      end
+    end
+
+    shared_examples 'shows already activated message' do
+      it 'shows flash' do
+        go!
+        expect(flash[:info]).to be_present
+        expect(response).to redirect_to root_path
+      end
+    end
+
     context 'when not logged in' do
       it { go!; is_expected.to be_forbidden }
     end
 
-    context 'when signed in' do
-      before { sign_in artist }
+    context 'when artist signed in' do
+      let(:user) { FactoryGirl.create(:artist) }
+
+      before { sign_in user }
 
       context 'with inactive user' do
-        it 'creates new activation_digest' do
-          expect { go! }.to change { artist.reload.activation_digest }
-        end
-
-        it 'sends email' do
-          expect(UserMailer).to receive(:account_activation)
-          go!
-        end
+        it_behaves_like 'sends new activation token'
       end
 
       context 'with activated user' do
-        let(:artist) { FactoryGirl.create(:artist, :activated) }
+        let(:user) { FactoryGirl.create(:artist, :activated) }
 
-        it 'shows flash' do
-          go!
-          expect(flash[:info]).to be_present
-          expect(response).to redirect_to root_path
-        end
+        it_behaves_like 'shows already activated message'
+      end
+    end
+
+    context 'when voter signed in' do
+      let(:user) { FactoryGirl.create(:voter) }
+
+      before { sign_in user }
+
+      context 'with inactive user' do
+        it_behaves_like 'sends new activation token'
+      end
+
+      context 'with activated user' do
+        let(:user) { FactoryGirl.create(:artist, :activated) }
+
+        it_behaves_like 'shows already activated message'
       end
     end
   end

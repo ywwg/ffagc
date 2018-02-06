@@ -131,11 +131,11 @@ class GrantContract < Prawn::Document
     def template_dir
       File.join(Rails.root, 'lib', 'contract_templates')
     end
-  
+
     def template_files
       Dir[File.join(template_dir, '*.tmpl.erb')]
     end
-  
+
     def grant_names
       template_files.map do |f|
         /contract_templates\/(.*)\.tmpl/.match(f)[1]

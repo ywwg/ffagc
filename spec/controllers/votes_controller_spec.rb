@@ -2,8 +2,8 @@ describe VotesController do
   subject { response }
 
   describe '#index' do
-    context 'with activated voter' do
-      let!(:voter) { FactoryGirl.create(:voter, :activated) }
+    context 'with activated and verified voter' do
+      let!(:voter) { FactoryGirl.create(:voter, :activated, :verified) }
 
       before do
         sign_in voter

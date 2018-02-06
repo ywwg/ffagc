@@ -8,26 +8,6 @@
    for information on the grant submission process, rules, and funding guidelines.</p>
 </div>
 
-<div class="alert alert-info">
-  <strong>Important Notes</strong>
-  <ul><li>This year the <strong>Anniversary Grants</strong> are called the
-     <strong>Tea Grants</strong>.
-   </li>
-   <li>Please choose an <strong>approved funding level</strong> for the Grant you're applying
-     for.  Funding requests at values between grant levels
-     will be rounded down.</li>
-   <li>If you'd like to apply for <strong>more than one funding level</strong>,
-     select the highest level you're applying for, and then list the other
-     levels you'd consider inside your application.  Please don't submit more
-     than one application for the same project.</li>
-   <li><strong>Do not</strong> include any information identifying the artist(s)
-     (such as name, alias, contact information, etc) in the submission document
-     itself.  The review process can't be blind if your name is at the top
-     of the document. Therefore <strong>we will reject your proposal</strong>
-     if it contains identifying information!
-  </ul>
-</div>
-
 <% unless any_submit_open? %>
   <div class="alert alert-warning">
     <p>There are no open submissions at this time.</p>
@@ -46,7 +26,7 @@
             <%= f.input :name, label: "Name of Piece", required: true, validate: true %>
 
             <div id="grant_submission_grant_selectors">
-            <%= f.association :grant, as: :radio_buttons, collection: Grant.where(id: active_submit_grants) %>
+            <%= f.association :grant, as: :radio_buttons %>
             </div>
 
             <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, as: :integer, html5: true  %>

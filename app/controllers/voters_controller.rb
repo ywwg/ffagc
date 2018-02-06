@@ -7,6 +7,7 @@ class VotersController < ApplicationController
   end
 
   def show
+    @voter_survey = @voter.voter_survey
   end
 
   def new
@@ -140,8 +141,8 @@ class VotersController < ApplicationController
         if GrantsVoter.exists?(voter: voter, grant: grant)
           GrantsVoter.find_by(voter: voter, grant: grant).destroy
         end
-      else
-        GrantsVoter.first_or_create!(voter: voter, grant: grant)
+      elsif not GrantsVoter.exists?(voter: voter, grant: grant)
+        GrantsVoter.create!(voter: voter, grant: grant)
       end
     end
   end

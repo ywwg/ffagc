@@ -1,5 +1,9 @@
 <ol class="breadcrumb">
-  <li><%= link_to "Submissions", grant_submissions_path %></li>
+  <% if artist_logged_in? %>
+    <li><%= link_to "My Submissions", grant_submissions_path %></li>
+  <% else %>
+    <li><%= link_to "All Submissions", grant_submissions_path %></li>
+  <% end %>
   <li class="active"><%= @grant_submission.name %></li>
 </ol>
 

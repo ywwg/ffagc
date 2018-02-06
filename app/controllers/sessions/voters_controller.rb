@@ -19,6 +19,12 @@ class Sessions::VotersController < Sessions::BaseController
   end
 
   def after_create_path
-    grant_submissions_path
+    if !current_voter.activated?
+      votes_path
+    elsif !current_voter.verified?
+      sessions_voters_unverified_path
+    else
+      votes_path
+    end
   end
 end

@@ -9,9 +9,13 @@ class VotesController < ApplicationController
     end
 
     @grant_submissions = if @scope == 'assigned' && current_voter.present?
-      @grant_submissions = current_voter.grant_submissions.accessible_by(current_ability)
+      current_voter.grant_submissions.where(grant_id: active_vote_grants).accessible_by(current_ability)
     else
-      @grant_submissions = []
+      # Filter active grants by the ones that this voter is participating in.
+      current_voter_grants = active_vote_grants.map do |g|
+        g if GrantsVoter.where(voter: current_voter, grant: g).exists?
+      end
+      GrantSubmission.where(grant_id: current_voter_grants).accessible_by(current_ability)
     end
 
     if current_voter.present?

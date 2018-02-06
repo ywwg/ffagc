@@ -45,6 +45,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'sessions/voters/unverified'
+
   resources :votes, only: [:index]
   resource :votes, only: [:update]
 
