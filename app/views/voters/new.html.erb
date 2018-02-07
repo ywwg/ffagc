@@ -8,6 +8,7 @@
 </div>
 
 <%= simple_form_for @voter do |f| %>
+  <%= f.simple_fields_for :voter_survey do |f_voter_survey| %>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Basic Details</h3>
@@ -26,16 +27,16 @@
     </div>
     <div class="panel-body">
       <div class="checkbox">
-        <label><%= check_box :survey, :has_attended_firefly %> I have attended at least one previous Firefly</label>
+        <%= f_voter_survey.input :has_attended_firefly, label: 'I have attended at least one previous Firefly' %>
       </div>
       <div class="checkbox">
-        <label><%= check_box :survey, :not_applying_this_year %> I am NOT applying for a Firefly Art Grant in <%= event_year %></label>
+        <label><%= f_voter_survey.input :not_applying_this_year %>I am NOT applying for a Firefly Art Grant in <%= event_year %></label>
       </div>
       <div class="checkbox">
-        <label><%= check_box :survey, :will_read %> I commit to reading and considering > 35 applications (~4-6 hours of brain time)</label>
+        <%= f_voter_survey.input :will_read, label: 'I commit to reading and considering > 35 applications (~4-6 hours of brain time)' %>
       </div>
       <div class="checkbox">
-        <label><%= check_box :survey, :signed_agreement %>
+        <label><%= f_voter_survey.input :signed_agreement %>
           <%# TODO Link to the actual agreement! %>
           <strong>I have read and agree to abide by the
           <a href="https://www.fireflyartscollective.org/wp-content/uploads/2017/01/FireflyArtGrantCommitteeCodeofEthics.pdf">
@@ -63,7 +64,7 @@
     </div>
   </div>
 
-  <%= f.simple_fields_for :voter_survey do |f_voter_survey| %>
+  
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Optional Survey</h3>
