@@ -14,12 +14,7 @@ If you are running this project in production you'll need to set environment var
 
 ## Email Setup
 
-If you're using SMTP to send emails, set the required ENV variables in config/secrets.yml or create a hidden file /[your repo]/.env (and do not add it to the repository) that overrides the values you want to set like so:
-
-```sh
-SMTP_PASSWORD='this_is_not_the_password'
-# ... more values as you need
-```
+If you're using SMTP to send emails, create a hidden file `.env` (it is already ignored by git) that overrides the values you want to set. See `.env.sample` for an example.
 
 ## Event-Specific Setup (do this every year)
 
@@ -66,7 +61,3 @@ You may need to precompile them for some production environments:
 ```sh
 RAILS_ENV=production bundle exec rake assets:precompile
 ```
-
-# Secrets
-
-See `config/secrets.yml` for the various environment variables that must configured in proudction. `.env.sample` is provided as an example.
