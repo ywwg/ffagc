@@ -9,74 +9,73 @@
 
 <%= simple_form_for @voter do |f| %>
   <%= f.simple_fields_for :voter_survey do |f_voter_survey| %>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Basic Details</h3>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Basic Details</h3>
+      </div>
+      <div class="panel-body">
+        <%= f.input :name, label: "Full Name", required: true, validate: true %>
+        <%= f.input :email, label: "Email Address (this is your login)", required: true, validate: true %>
+        <%= f.input :password, label: "Password", required: true, validate: true %>
+        <%= f.input :password_confirmation, label: "Password Confirmation", required: true, validate: true %>
+      </div>
     </div>
-    <div class="panel-body">
-      <%= f.input :name, label: "Full Name", required: true, validate: true %>
-      <%= f.input :email, label: "Email Address (this is your login)", required: true, validate: true %>
-      <%= f.input :password, label: "Password", required: true, validate: true %>
-      <%= f.input :password_confirmation, label: "Password Confirmation", required: true, validate: true %>
-    </div>
-  </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Requirements</h3>
-    </div>
-    <div class="panel-body">
-      <div class="checkbox">
-        <label><%= f_voter_survey.check_box :has_attended_firefly %>I have attended at least one previous Firefly</label>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Requirements</h3>
       </div>
-      <div class="checkbox">
-        <label><%= f_voter_survey.check_box :not_applying_this_year %>I am NOT applying for a Firefly Art Grant in <%= event_year %></label>
-      </div>
-      <div class="checkbox">
-        <label><%= f_voter_survey.check_box :will_read %>I commit to reading and considering > 35 applications (~4-6 hours of brain time)</label>
-      </div>
-      <div class="checkbox">
-        <label><%= f_voter_survey.check_box :signed_agreement %>
-          <%# TODO Link to the actual agreement! %>
-          <strong>I have read and agree to abide by the
-          <a href="https://www.fireflyartscollective.org/wp-content/uploads/2017/01/FireflyArtGrantCommitteeCodeofEthics.pdf">
-            Firefly Art Grant Code of Ethics</a>.
-        </strong></label>
-      </div>
+      <div class="panel-body">
+        <div class="checkbox">
+          <label><%= f_voter_survey.check_box :has_attended_firefly %>I have attended at least one previous Firefly</label>
+        </div>
+        <div class="checkbox">
+          <label><%= f_voter_survey.check_box :not_applying_this_year %>I am NOT applying for a Firefly Art Grant in <%= event_year %></label>
+        </div>
+        <div class="checkbox">
+          <label><%= f_voter_survey.check_box :will_read %>I commit to reading and considering > 35 applications (~4-6 hours of brain time)</label>
+        </div>
+        <div class="checkbox">
+          <label><%= f_voter_survey.check_box :signed_agreement %>
+            <%# TODO Link to the actual agreement! %>
+            <strong>I have read and agree to abide by the
+            <a href="https://www.fireflyartscollective.org/wp-content/uploads/2017/01/FireflyArtGrantCommitteeCodeofEthics.pdf">
+              Firefly Art Grant Code of Ethics</a>.
+          </strong></label>
+        </div>
 
-      <p>I am willing and able to make all of the meeting discussion dates within one or more of the following groups:</p>
-      <ul class="list-unstyled">
-        <% collated_meetings.each do |dates, data| %>
-          <li>
-            <div class="checkbox">
-              <label>
-              <%= check_box :grants_voters, data['id'] %>
-              <strong><%= data['names'].join(", ") %></strong><br/>
-              (First meeting: <%= Date::DAYNAMES[dates[0].wday] %>,
-                              <%= dates[0].strftime("%b %-d, %Y") %>;
-              Second meeting: <%= Date::DAYNAMES[dates[1].wday] %>,
-                              <%= dates[1].strftime("%b %-d, %Y") %>)
-              </label>
-            </div>
-          </li>
-        <% end %>
-      </ul>
+        <p>I am willing and able to make all of the meeting discussion dates within one or more of the following groups:</p>
+        <ul class="list-unstyled">
+          <% collated_meetings.each do |dates, data| %>
+            <li>
+              <div class="checkbox">
+                <label>
+                <%= check_box :grants_voters, data['id'] %>
+                <strong><%= data['names'].join(", ") %></strong><br/>
+                (First meeting: <%= Date::DAYNAMES[dates[0].wday] %>,
+                                <%= dates[0].strftime("%b %-d, %Y") %>;
+                Second meeting: <%= Date::DAYNAMES[dates[1].wday] %>,
+                                <%= dates[1].strftime("%b %-d, %Y") %>)
+                </label>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     </div>
-  </div>
 
-  
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Optional Survey</h3>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Optional Survey</h3>
+      </div>
+      <div class="panel-body">
+        <%= f_voter_survey.input :has_been_voter, as: :radio_buttons, label: 'I have been a member of the Firefly art grant voting committee in previous years' %>
+        <%= f_voter_survey.input :has_participated_other, as: :radio_buttons, label: 'I have been on art grant voting/judging committees for other institutions' %>
+        <%= f_voter_survey.input :has_received_grant, as: :radio_buttons, label: 'I have been awarded a Firefly art grant in previous years' %>
+        <%= f_voter_survey.input :has_received_other_grant, as: :radio_buttons, label: 'I have been awarded art grants from other institutions' %>
+        <%= f_voter_survey.input :how_many_fireflies, label: 'How many Fireflies have you attended?', as: :integer, min: 0 %>
+      </div>
     </div>
-    <div class="panel-body">
-      <%= f_voter_survey.input :has_been_voter, as: :radio_buttons, label: 'I have been a member of the Firefly art grant voting committee in previous years' %>
-      <%= f_voter_survey.input :has_participated_other, as: :radio_buttons, label: 'I have been on art grant voting/judging committees for other institutions' %>
-      <%= f_voter_survey.input :has_received_grant, as: :radio_buttons, label: 'I have been awarded a Firefly art grant in previous years' %>
-      <%= f_voter_survey.input :has_received_other_grant, as: :radio_buttons, label: 'I have been awarded art grants from other institutions' %>
-      <%= f_voter_survey.input :how_many_fireflies, label: 'How many Fireflies have you attended?', as: :integer, min: 0 %>
-    </div>
-  </div>
   <% end %>
 
   <p>
