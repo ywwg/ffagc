@@ -1,7 +1,4 @@
-ffagc
-=====
-
-# Firefly Art Grant Core Website
+# Firefly Art Grant Core Website [![CircleCI](https://circleci.com/gh/FireflyArtsCollective/ffagc.svg?style=svg)](https://circleci.com/gh/FireflyArtsCollective/ffagc)
 
 ## Initial Environment Setup
 
