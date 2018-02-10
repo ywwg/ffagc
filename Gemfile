@@ -46,7 +46,7 @@ gem 'pdf-inspector', require: 'pdf/inspector'
 gem 'log4r'
 
 # Load ENV from a `.env` file`
-gem 'dotenv'
+gem 'dotenv-rails'
 
 # Automatically create text emails from HTML ones
 gem 'premailer-rails'
