@@ -37,6 +37,24 @@
       </div>
     </div>
   </div>
+  <% if can? :edit_questions, GrantSubmission or can? :vote, GrantSubmission %>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Other Submissions by This Artist</h3>
+      </div>
+      <div class="panel-body">
+        <dl>
+          <% @other_submissions.each do |s| %>
+            <% if s.name != @grant_submission.name %>
+              <dd><%= s.name %> &mdash; <%= Grant.find(s.grant_id).name %></dd>
+            <% end %>
+          <% end %>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <% end %>
 </div>
 
 <div class="row">
