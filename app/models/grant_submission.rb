@@ -50,6 +50,10 @@ class GrantSubmission < ActiveRecord::Base
     answers.present?
   end
 
+  def has_other_submissions?
+    GrantSubmission.where(artist_id: artist_id).count > 1
+  end
+
   def max_voters
     3
   end
