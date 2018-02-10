@@ -72,7 +72,7 @@
         <%= f_voter_survey.input :has_participated_other, as: :radio_buttons, label: 'I have been on art grant voting/judging committees for other institutions' %>
         <%= f_voter_survey.input :has_received_grant, as: :radio_buttons, label: 'I have been awarded a Firefly art grant in previous years' %>
         <%= f_voter_survey.input :has_received_other_grant, as: :radio_buttons, label: 'I have been awarded art grants from other institutions' %>
-        <%= f_voter_survey.input :how_many_fireflies, label: 'How many Fireflies have you attended?', as: :integer, min: 0 %>
+        <%= f_voter_survey.input :how_many_fireflies, label: 'How many Fireflies have you attended?', as: :integer, input_html: { min: '0' } %>
       </div>
     </div>
   <% end %>
