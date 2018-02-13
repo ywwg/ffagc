@@ -1,25 +1,28 @@
-.grant-submission-summary {
-  display: flex;
-  flex-direction: row;
+.vote-column {
+  text-align: center;
+  width: 2em;
+}
 
-  table {
-    th {
-      text-align: center;
-    }
-    td {
-      padding: 5px;
-    }
+.save-msg {
+  width: 4em;
+  height: 1em;
+}
+
+.grant-submission-description {
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  .grant-submission-name {
+    display: none;
   }
-
-  .save-message {
-    width: 60px;
-    height: 1em;
+  .hide-mobile {
+    display: none
   }
-
+  .grant-submission-name {
+    display: none;
+  }
   .grant-submission-description {
-    flex-grow: 1;
-  }
-
-  .grant-submission-voting {
+    display: block;
   }
 }

@@ -23,66 +23,76 @@
 
 <% if @grant_submissions.present? %>
   <%= form_tag("/voters/vote", authenticity_token: true, name: "vote_form") do %>
-    <% @grant_submissions.each do |gs| %>
-      <div class="grant-submission-summary well">
-        <div class="grant-submission-description">
-          Submission: <strong><%= gs.name %></strong><br />
-          Grant: <%= gs.grant&.name || 'Unknown' %> for <%= number_to_currency gs.requested_funding_dollars %><br />
-          <%= link_to 'PDF Submission', gs.proposal_url, target: :blank %><br />
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th class="hide-mobile">Grant</th>
+          <th class="hide-mobile">Requested</th>
+          <th class="hide-mobile">Proposal Document</th>
+          <th class="hide-mobile">Discussion</th>
+          <th class="vote-column">T</th>
+          <th class="vote-column">C</th>
+          <th class="vote-column">F</th>
+          <th class="hide-mobile"></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @grant_submissions.each do |gs| %>
+        <tr>
+          <td>
+            <div class="grant-submission-name"><%= gs.name %></div>
+            <div class="grant-submission-description">
+              Submission: <strong><%= gs.name %></strong><br />
+              Grant: <%= gs.grant&.name || 'Unknown' %> for <%= number_to_currency gs.requested_funding_dollars %><br />
+              <%= link_to 'PDF Submission', gs.proposal_url, target: :blank %><br />
 
-          <% if gs.has_questions? %>
-            <%= link_to discussion_status(gs), discuss_grant_submission_path(gs) %>
-          <% else %>
-            No discussion
-          <% end %>
-        </div>
-
-        <div class="grant-submission-voting">
-          <table class="">
-            <thead>
-            <tr>
-              <th>T</th>
-              <th>C</th>
-              <th>F</th>
-            </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
-                    <option></option>
-                    <option <%= @votes[gs.id].score_t == 0 ? "selected" : "" %>>0</option>
-                    <option <%= @votes[gs.id].score_t == 1 ? "selected" : "" %>>1</option>
-                    <option <%= @votes[gs.id].score_t == 2 ? "selected" : "" %>>2</option>
-                  </select>
-                </td>
-                <td>
-                  <select id="c[<%= gs.id %>]" name="c[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
-                    <option></option>
-                    <option <%= @votes[gs.id].score_c == 0 ? "selected" : "" %>>0</option>
-                    <option <%= @votes[gs.id].score_c == 1 ? "selected" : "" %>>1</option>
-                    <option <%= @votes[gs.id].score_c == 2 ? "selected" : "" %>>2</option>
-                  </select>
-                </td>
-                <td>
-                  <select id="f[<%= gs.id %>]" name="f[<%= gs.id %>]" onchange="ajax_submit('#save<%= gs.id %>', 'vote_form')">
-                    <option></option>
-                    <option <%= @votes[gs.id].score_f == 0 ? "selected" : "" %>>0</option>
-                    <option <%= @votes[gs.id].score_f == 1 ? "selected" : "" %>>1</option>
-                    <option <%= @votes[gs.id].score_f == 2 ? "selected" : "" %>>2</option>
-                  </select>
-                </td>
-                <tr>
-                  <td colspan="3">
-                    <div id="save<%= gs.id %>" class="save-message"></div>
-                  </td>
-                </tr>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    <% end %>
+              <% if gs.has_questions? %>
+                <%= link_to discussion_status(gs), discuss_grant_submission_path(gs) %>
+              <% else %>
+                No discussion
+              <% end %>
+            </div>
+          </td>
+          <td class="hide-mobile"><%= gs.grant&.name || 'Unknown' %></td>
+          <td class="text-right hide-mobile"><%= number_to_currency gs.requested_funding_dollars %></td>
+          <td class="hide-mobile"><%= link_to 'Open...', gs.proposal_url, target: :blank %></td>
+          <td class="hide-mobile">
+            <% if gs.has_questions? %>
+              <%= link_to discussion_status(gs), discuss_grant_submission_path(gs) %>
+            <% else %>
+              None
+            <% end %>
+          </td>
+          <td class="vote-column text-center">
+            <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('.save-msg-<%= gs.id %>', 'vote_form')">
+              <option></option>
+              <option <%= @votes[gs.id].score_t == 0 ? "selected" : "" %>>0</option>
+              <option <%= @votes[gs.id].score_t == 1 ? "selected" : "" %>>1</option>
+              <option <%= @votes[gs.id].score_t == 2 ? "selected" : "" %>>2</option>
+            </select>
+          </td>
+          <td class="vote-column text-center">
+            <select id="c[<%= gs.id %>]" name="c[<%= gs.id %>]" onchange="ajax_submit('.save-msg-<%= gs.id %>', 'vote_form')">
+              <option></option>
+              <option <%= @votes[gs.id].score_c == 0 ? "selected" : "" %>>0</option>
+              <option <%= @votes[gs.id].score_c == 1 ? "selected" : "" %>>1</option>
+              <option <%= @votes[gs.id].score_c == 2 ? "selected" : "" %>>2</option>
+            </select>
+          </td>
+          <td class="vote-column text-center">
+            <select id="f[<%= gs.id %>]" name="f[<%= gs.id %>]" onchange="ajax_submit('.save-msg-<%= gs.id %>', 'vote_form')">
+              <option></option>
+              <option <%= @votes[gs.id].score_f == 0 ? "selected" : "" %>>0</option>
+              <option <%= @votes[gs.id].score_f == 1 ? "selected" : "" %>>1</option>
+              <option <%= @votes[gs.id].score_f == 2 ? "selected" : "" %>>2</option>
+            </select>
+          </td>
+          <td class="hide-mobile"><div class="save-msg save-msg-<%= gs.id %>"></div></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
 <% end %>
 
 <div class="panel panel-default">
