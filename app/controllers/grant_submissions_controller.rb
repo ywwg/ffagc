@@ -39,6 +39,7 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def show
+    @other_submissions = GrantSubmission.where(artist_id: @grant_submission.artist_id)
   end
 
   def index
