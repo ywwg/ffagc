@@ -20,4 +20,12 @@ class Artist < ActiveRecord::Base
     country = ISO3166::Country[contact_country]
     country&.translations[I18n.locale.to_s] || country.name
   end
+
+  def self.activated_emails
+    email_list = []
+    Artist.where(activated: true).each do |a|
+      email_list.push("#{a.name} <#{a.email}>")
+    end
+    return email_list
+  end
 end
