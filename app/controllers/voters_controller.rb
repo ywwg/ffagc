@@ -6,8 +6,8 @@ class VotersController < ApplicationController
   before_filter :initialize_grants
 
   def index
-    @scope = params[:scope]
-    if @scope == 'verified'
+    if params[:scope] == 'verified'
+      @scope = params[:scope]
       @voters = @voters.verified
     end
 
