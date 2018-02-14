@@ -28,4 +28,16 @@ class Artist < ActiveRecord::Base
     end
     return email_list
   end
+
+  def self.funded_emails
+    email_list = []
+    Artist.joins(:grant_submissions)
+          .select('artists.name, artists.email')
+          .where("grant_submissions.funding_decision == 't' AND grant_submissions.granted_funding_dollars || 0 > 0")
+          .uniq()
+          .each do |a|
+      email_list.push("#{a.name} <#{a.email}>")
+    end
+    return email_list
+  end
 end
