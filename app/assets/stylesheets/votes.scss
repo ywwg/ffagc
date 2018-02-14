@@ -1,0 +1,28 @@
+.vote-column {
+  text-align: center;
+  width: 2em;
+}
+
+.save-msg {
+  width: 4em;
+  height: 1em;
+}
+
+.grant-submission-description {
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  .grant-submission-name {
+    display: none;
+  }
+  .hide-mobile {
+    display: none
+  }
+  .grant-submission-name {
+    display: none;
+  }
+  .grant-submission-description {
+    display: block;
+  }
+}
