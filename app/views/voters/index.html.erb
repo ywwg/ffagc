@@ -63,10 +63,10 @@
 </table>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Verified Voter Emails</h3>
+    <h3 class="panel-title">Voter Emails</h3>
   </div>
   <div class="panel-body">
-    <%= Voter.verified.map(&:as_email_recipient).join(", ") %>
+    <%= @voters.map(&:as_email_recipient).join(", ") %>
   </div>
 </div>
 <% else %>
