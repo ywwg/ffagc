@@ -19,13 +19,10 @@ class Voter < ActiveRecord::Base
 
   validates_confirmation_of :password, on: :create
 
-  scope :verified, -> { where(verified: true) }
+  scope :activated, -> { where(activated: true) }
+  scope :verified, -> { activated.where(verified: true) }
 
-  def self.verified_emails
-    email_list = []
-    Voter.where(activated: true, verified: true).each do |v|
-      email_list.push("#{v.name} <#{v.email}>")
-    end
-    return email_list
+  def as_email_recipient
+    "#{self.name} <#{self.email}>"
   end
 end
