@@ -61,6 +61,14 @@
   </tr>
   </tbody>
 </table>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Verified Voter Emails</h3>
+  </div>
+  <div class="panel-body">
+    <%= Voter.verified_emails.join(", ") %>
+  </div>
+</div>
 <% else %>
   <div class="well">
     There are no voters to display.
