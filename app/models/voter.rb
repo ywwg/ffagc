@@ -18,4 +18,12 @@ class Voter < ActiveRecord::Base
   validates :password, length: { minimum: 4 }, on: :create
 
   validates_confirmation_of :password, on: :create
+
+  def self.verified_emails
+    email_list = []
+    Voter.where(activated: true, verified: true).each do |v|
+      email_list.push("#{v.name} <#{v.email}>")
+    end
+    return email_list
+  end
 end
