@@ -18,4 +18,6 @@ class Voter < ActiveRecord::Base
   validates :password, length: { minimum: 4 }, on: :create
 
   validates_confirmation_of :password, on: :create
+
+  scope :verified, -> { where(verified: true) }
 end

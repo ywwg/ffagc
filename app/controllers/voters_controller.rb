@@ -1,9 +1,29 @@
+require 'csv'
+
 class VotersController < ApplicationController
   load_and_authorize_resource
 
   before_filter :initialize_grants
 
   def index
+    @scope = params[:scope]
+    if @scope == 'verified'
+      @voters = @voters.verified
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        csv_string = CSV.generate do |csv|
+          csv << ['Name', 'Email', 'Verified']
+          @voters.each do |voter|
+            csv << [voter.name, voter.email, voter.verified]
+          end
+        end
+
+        render text: csv_string
+      end
+    end
   end
 
   def show
