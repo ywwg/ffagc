@@ -16,28 +16,20 @@ class Artist < ActiveRecord::Base
 
   validates_confirmation_of :password, on: :create
 
+  scope :activated, -> { where(activated: true) }
+  scope :funded, -> do
+    joins(:grant_submissions)
+      .where("grant_submissions.funding_decision == 't'")
+      .where("grant_submissions.granted_funding_dollars || 0 > 0")
+      .uniq()
+  end
+
   def country_name
     country = ISO3166::Country[contact_country]
     country&.translations[I18n.locale.to_s] || country.name
   end
 
-  def self.activated_emails
-    email_list = []
-    Artist.where(activated: true).each do |a|
-      email_list.push("#{a.name} <#{a.email}>")
-    end
-    return email_list
-  end
-
-  def self.funded_emails
-    email_list = []
-    Artist.joins(:grant_submissions)
-          .select('artists.name, artists.email')
-          .where("grant_submissions.funding_decision == 't' AND grant_submissions.granted_funding_dollars || 0 > 0")
-          .uniq()
-          .each do |a|
-      email_list.push("#{a.name} <#{a.email}>")
-    end
-    return email_list
+  def as_email_recipient
+    "#{self.name} <#{self.email}>"
   end
 end
