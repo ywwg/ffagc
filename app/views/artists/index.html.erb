@@ -35,7 +35,7 @@
     <h3 class="panel-title">Activated Artist Emails</h3>
   </div>
   <div class="panel-body">
-    <%= Artist.activated_emails.join(", ") %>
+    <%= Artist.activated.map(&:as_email_recipient).join(", ") %>
   </div>
 </div>
 <div class="panel panel-default">
@@ -43,7 +43,7 @@
     <h3 class="panel-title">Funded Artist Emails</h3>
   </div>
   <div class="panel-body">
-    <%= Artist.funded_emails.join(", ") %>
+    <%= Artist.funded.map(&:as_email_recipient).join(", ") %>
   </div>
 </div>
 <% else %>
