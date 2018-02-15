@@ -19,8 +19,7 @@ class Artist < ActiveRecord::Base
   scope :activated, -> { where(activated: true) }
   scope :funded, -> do
     joins(:grant_submissions)
-      .where("grant_submissions.funding_decision == 't'")
-      .where("grant_submissions.granted_funding_dollars || 0 > 0")
+      .merge(GrantSubmission.funded)
       .uniq()
   end
 
