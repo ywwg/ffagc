@@ -18,8 +18,8 @@ class GrantsController < ApplicationController
 end
 
   def create
-    adjust_grant_deadline
     if @grant.save
+      adjust_grant_deadline
       redirect_to action: 'index'
     else
       render 'failure'
