@@ -65,9 +65,9 @@
       <%= humanize_date g.submit_start %>
     </td>
     <td>
-      <%= Date::DAYNAMES[g.submit_end.wday] %>,
+      2AM the night of <%= Date::DAYNAMES[g.submit_end.wday] %>,
       <%= g.submit_end.strftime("%Y/%m/%d") %><br />
-      <%= humanize_date g.submit_end %>
+      <%= humanize_date g.submit_end + 26.hours %>
     </td>
     <% if can? :vote, GrantSubmission or current_admin %>
     <td>
@@ -88,7 +88,7 @@
     <td>
       <%= Date::DAYNAMES[g.vote_end.wday] %>,
       <%= g.vote_end.strftime("%Y/%m/%d") %><br />
-      <%= humanize_date g.vote_end %>
+      <%= humanize_date g.vote_end + 24.hours %>
     </td>
     <% end %>
     <% if can? :modify, g %>
