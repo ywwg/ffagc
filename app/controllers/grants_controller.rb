@@ -6,9 +6,20 @@ class GrantsController < ApplicationController
 
   def new
   end
+  
+  def adjust_grant_deadline
+    date_attributes = %i[submit_start submit_end vote_start vote_end meeting_one meeting_two]
+    date_attributes.each do |date_attr|
+      date = @grant.send(date_attr)
+      local_date = ActiveSupport::TimeZone.new('America/New_York').local_to_utc(date)
+      @grant.send("#{date_attr}=", local_date)
+    end
+    @grant.save!
+end
 
   def create
     if @grant.save
+      adjust_grant_deadline
       redirect_to action: 'index'
     else
       render 'failure'
@@ -21,6 +32,7 @@ class GrantsController < ApplicationController
 
   def update
     if @grant.update(resource_params)
+      adjust_grant_deadline
       redirect_to action: 'index'
     else
       render 'new'
