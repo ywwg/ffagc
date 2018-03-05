@@ -301,6 +301,7 @@ DEPENDENCIES
   cancancan
   carrierwave
   country_select
+  dotenv
   dotenv-rails
   execjs
   factory_girl_rails
