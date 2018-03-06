@@ -49,7 +49,9 @@
             <%= f.association :grant, as: :radio_buttons, collection: Grant.where(id: active_submit_grants) %>
             </div>
 
-            <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, as: :integer, html5: true  %>
+            <%= f.input :requested_funding_dollars, :label => "Highest Requested Funding Level ($)", :required => true, :validate => true, as: :integer, html5: true  %>
+            <h5>If you are applying for more than one funding level, put the <b>highest level</b> here and
+            list the other levels in your proposal.</h5>
 
             <% if can? :grant, GrantSubmission %>
               <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true  %>
