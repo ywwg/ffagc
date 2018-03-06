@@ -6,7 +6,7 @@ class GrantsController < ApplicationController
 
   def new
   end
-  
+
   def adjust_grant_deadline
     date_attributes = %i[submit_start submit_end vote_start vote_end meeting_one meeting_two]
     date_attributes.each do |date_attr|
