@@ -46,7 +46,7 @@
       <div class="panel-body">
         <dl>
           <% @other_submissions.each do |s| %>
-            <% if s.name != @grant_submission.name %>
+            <% if s != @grant_submission %>
               <dd><%= s.name %> &mdash; <%= Grant.find(s.grant_id).name %></dd>
             <% end %>
           <% end %>
