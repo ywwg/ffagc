@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
 
   def active_vote_grants
     now = DateTime.current
-    # Adjust the deadline so that voting is still open on the deadline date. 
+    # Adjust the deadline so that voting is still open on the deadline date.
     deadline = now - 24.hours
     Grant.voting_active(DateTime.current, deadline, timezone_string).accessible_by(current_ability)
   end
@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
   def active_submit_grants
     now = DateTime.current
     # Deadline is fudged by a day and two hours so that submissions close
-    # at 2am the *next* day. 
+    # at 2am the *next* day.
     deadline_leniency_time = now - 26.hours
     Grant.submission_active(now, deadline_leniency_time, timezone_string).accessible_by(current_ability)
   end
