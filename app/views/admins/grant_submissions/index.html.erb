@@ -58,11 +58,6 @@
             <%= link_to "Generate Contract", generate_contract_grant_submission_path(gs, format: 'pdf'), method: :post, class: 'btn btn-xs btn-success btn-inline' %>
           <% end %>
         </div>
-        <% if can? :destroy, gs %>
-        <div class="btn-group">
-          <%= link_to "Delete", grant_submission_path(gs), class: 'btn btn-xs btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %>
-        </div>
-        <% end %>
       </div>
     </td>
     <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
