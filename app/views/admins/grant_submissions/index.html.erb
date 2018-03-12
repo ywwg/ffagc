@@ -118,7 +118,11 @@
 
 <% if can? :reveal_identities, GrantSubmission %>
 <p>
-<img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", admins_grant_submissions_path(reveal: true, scores: false, scope: :active), class: 'btn btn-danger' %> <img src="/uploads/emot-siren.gif">
+<% if @revealed %>
+  <%= link_to "HIDE IDENTITIES", admins_grant_submissions_path(reveal: false, scores: @show_scores, scope: @scope), class: 'btn btn-danger' %>
+<% else %>
+  <img src="/uploads/emot-siren.gif"> <%= link_to "REVEAL IDENTITIES", admins_grant_submissions_path(reveal: true, scores: @show_scores, scope: @scope), class: 'btn btn-danger' %> <img src="/uploads/emot-siren.gif">
+<% end %>
 </p>
 <% end %>
 
