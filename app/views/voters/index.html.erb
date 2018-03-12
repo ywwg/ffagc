@@ -12,7 +12,7 @@
   <div class="btn-group">
     <%= link_to "All Grants", voters_path(scope: @scope), class: ['btn', 'btn-default', (@grantscope == nil ? 'active' : nil)] %>
     <% @grants.each do |grant| %>
-      <%= link_to grant.name, voters_path(scope: @scope, grantscope: 'grant-' + grant.name), class: ['btn', 'btn-default', (@grantscope == 'grant-' + grant.name ? 'active' : nil)] %>
+      <%= link_to grant.name, voters_path(scope: @scope, grantscope: grant.name), class: ['btn', 'btn-default', (@grantscope == grant.name ? 'active' : nil)] %>
     <% end %>
   </div>
 
