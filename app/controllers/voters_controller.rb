@@ -10,10 +10,9 @@ class VotersController < ApplicationController
       @scope = params[:scope]
       @voters = @voters.verified
     end
-    if params[:grantscope] != nil and params[:grantscope].starts_with? 'grant-'
-      filter_grant = /grant-(.*)/.match(params[:grantscope])[1]
+    if params[:grantscope] != nil
       @grantscope = params[:grantscope]
-      @voters = @voters.joins(:grants).where("grants.name = ?", filter_grant)
+      @voters = @voters.joins(:grants).where("grants.name = ?", params[:grantscope])
     else
       @grantscope = nil
     end
