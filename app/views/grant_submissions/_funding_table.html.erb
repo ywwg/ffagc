@@ -7,14 +7,16 @@
       <%= number_to_currency grant_submission.requested_funding_dollars %>
     </td>
   </tr>
-  <% if grant_submission.funded? %>
-    <tr>
-      <td>
-        Granted:
-      </td>
-      <td>
-          <%= number_to_currency grant_submission.granted_funding_dollars %>
-      </td>
-    </tr>
-  <% end %>
+  <tr>
+    <td>
+    <% if grant_submission.funded? %>
+      Granted:
+    <% elsif grant_submission.granted_funding_dollars && grant_submission.granted_funding_dollars > 0 %>
+      Proposed:
+    <% end %>
+    </td>
+    <td>
+      <%= number_to_currency grant_submission.granted_funding_dollars %>
+    </td>
+  </tr>
 </table>
