@@ -8,21 +8,21 @@ install_day: "Friday, July 6, 2018"
 skill_attend_day: "Friday, June 29, 2018"
 figment_dates: "TBD FIGMENT DATES (Usually end of July)"
 creativity:
-  contract_deadline: "Monday, March 5, 2018"
-  schedule: ["Monday, March 5, 2018: Signed Contracts Due",
-             "Tuesday, March 6, 2018: First check cut and sent",
+  contract_deadline: "Monday, April 2, 2018"
+  schedule: ["Monday, April 2, 2018: Signed Contracts Due",
+             "Tuesday, April 3, 2018: First check cut and sent",
              "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!",
              "Monday, July 23, 2018: Firefly documentation due",
              "Tuesday, July 31, 2018: Second check cut and sent",]
 legacy:
-  contract_deadline: "Monday, March 5, 2018"
-  schedule: ["Monday, March 5, 2018: Signed Contracts Due",
-             "Tuesday, March 6, 2018: Check cut and sent",
+  contract_deadline: "Monday, April 2, 2018"
+  schedule: ["Monday, April 2, 2018: Signed Contracts Due",
+             "Tuesday, April 3, 2018: Check cut and sent",
              "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
 temple:
-  contract_deadline: "Monday, March 19, 2018"
-  schedule: ["Monday, March 19, 2018: Signed Contracts Due",
-             "Tuesday, March 20, 2018: Check cut and sent",
+  contract_deadline: "Friday, March 23, 2018"
+  schedule: ["Friday, March 23, 2018: Signed Contracts Due",
+             "Tuesday, March 26, 2018: Check cut and sent",
              "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
 anniversary:
   contract_deadline: "Monday, March 19, 2018"
@@ -33,18 +33,18 @@ anniversary:
              "Tuesday, July 31, 2018: Second check cut and sent",
              "Wednesday, August 15, 2018: Third check cut and sent"]
 skillshare:
-  contract_deadline: "Monday, April 2, 2018"
-  schedule: ["Monday, April 2, 2018: Signed Contracts Due",
-             "Tuesday, April 3, 2018: Check cut and sent",
+  contract_deadline: "Monday, April 16, 2018"
+  schedule: ["Monday, April 16, 2018: Signed Contracts Due",
+             "Tuesday, April 17, 2018: Check cut and sent",
              "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
 bex:
-  contract_deadline: "Monday, April 2, 2018"
-  schedule: ["Monday, April 2, 2018: Signed Contracts Due",
-             "Tuesday, April 3, 2018: Check cut and sent",
+  contract_deadline: "Monday, April 16, 2018"
+  schedule: ["Monday, April 16, 2018: Signed Contracts Due",
+             "Tuesday, April 17, 2018: Check cut and sent",
              "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
 
 smol:
-  contract_deadline: "Monday, April 2, 2018"
-  schedule: ["Monday, April 2, 2018: Signed Contracts Due",
-             "Tuesday, April 3, 2018: Check cut and sent",
+  contract_deadline: "Monday, April 16, 2018"
+  schedule: ["Monday, April 16, 2018: Signed Contracts Due",
+             "Tuesday, April 17, 2018: Check cut and sent",
              "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
