@@ -7,8 +7,15 @@
 class Admins::GrantSubmissionsController < ApplicationController
   load_and_authorize_resource
 
+  before_filter :initialize_grants
+
+  def initialize_grants
+    @grants = Grant.all
+  end
+
   def index
     @scope = params[:scope] || 'active'
+    @grantscope = params[:grantscope] || 'all'
     @order = params[:order] || 'name'
     @show_scores = params[:scores] == 'true'
 
@@ -18,6 +25,10 @@ class Admins::GrantSubmissionsController < ApplicationController
 
     if @scope == 'active'
       @grant_submissions = @grant_submissions.where(grant_id: active_vote_grants)
+    end
+
+    if @grantscope != 'all'
+      @grant_submissions = @grant_submissions.joins(:grant).where("grants.name = ?", @grantscope)
     end
 
     @results = VoteResult.results(@grant_submissions)
