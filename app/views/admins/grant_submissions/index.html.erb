@@ -18,6 +18,7 @@
     <%= link_to "By Score", admins_grant_submissions_path(scores: @show_scores, scope: @scope, grantscope: @grantscope, order: :score), class: ['btn', 'btn-default', (@order == 'score' ? 'active' : nil)] %>
     <%= link_to "By Date", admins_grant_submissions_path(scores: @show_scores, scope: @scope, grantscope: @grantscope, order: :date), class: ['btn', 'btn-default', (@order == 'date' ? 'active' : nil)] %>
     <%= link_to "By Name", admins_grant_submissions_path(scores: @show_scores, scope: @scope, grantscope: @grantscope, order: :name), class: ['btn', 'btn-default', (@order == 'name' ? 'active' : nil)] %>
+    <%= link_to "By Grant", admins_grant_submissions_path(scores: @show_scores, scope: @scope, grantscope: @grantscope, order: :grant), class: ['btn', 'btn-default', (@order == 'grant' ? 'active' : nil)] %>
   </div>
 </div>
 
