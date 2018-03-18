@@ -37,6 +37,8 @@ class Admins::GrantSubmissionsController < ApplicationController
       @grant_submissions = @grant_submissions.to_a.sort_by { |gs| [gs.grant_id, -gs.avg_score] }
     elsif @order == 'name'
       @grant_submissions = @grant_submissions.to_a.sort_by { |gs| gs.name }
+    elsif @order == 'grant'
+      @grant_submissions = @grant_submissions.to_a.sort_by { |gs| Grant.where("id = ?",gs.grant_id).take.name }
     end
   end
 
