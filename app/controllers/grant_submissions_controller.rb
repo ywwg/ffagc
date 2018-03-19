@@ -3,6 +3,12 @@ require 'grant_contract'
 class GrantSubmissionsController < ApplicationController
   load_and_authorize_resource
 
+  before_filter :initialize_grants
+
+  def initialize_grants
+    @grants = Grant.all
+  end
+
   def create
     @grant_submission.artist_id = current_artist.id
 
@@ -43,6 +49,11 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def index
+    @grantscope = params[:grantscope] || 'all'
+    if @grantscope != 'all'
+      @grant_submissions = @grant_submissions.joins(:grant).where("grants.name = ?", @grantscope)
+    end
+
     @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
   end
 
