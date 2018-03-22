@@ -13,10 +13,14 @@
       Granted:
     <% elsif grant_submission.granted_funding_dollars && grant_submission.granted_funding_dollars > 0 %>
       Proposed:
+    <% elsif grant_submission.funding_decision %>
+      Not Funded
     <% end %>
     </td>
     <td>
-      <%= number_to_currency grant_submission.granted_funding_dollars %>
+      <% if grant_submission.funded? %>
+        <%= number_to_currency grant_submission.granted_funding_dollars %>
+      <% end %>
     </td>
   </tr>
 </table>
