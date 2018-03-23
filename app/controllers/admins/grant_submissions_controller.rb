@@ -73,7 +73,8 @@ class Admins::GrantSubmissionsController < ApplicationController
   end
 
   def send_question_emails
-    @grant_submissions = GrantSubmission.where(grant_id: active_vote_grants)
+    ids = params[:ids]&.split(',') || []
+    @grant_submissions = GrantSubmission.where(id: ids)
 
     sent = 0
     @grant_submissions.each do |gs|

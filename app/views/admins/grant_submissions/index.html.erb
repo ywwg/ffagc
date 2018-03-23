@@ -87,7 +87,7 @@
     <% else %>
       <td class="text-center">
         <form name="fund_email_form-<%= gs.id %>">
-        <input type="checkbox" id="fund_email_checkbox-<%= gs.id %>" name="fund_email_checkbox">
+        <input type="checkbox" id="send_email_checkbox-<%= gs.id %>" name="send_email_checkbox">
         </form>
       </td>
     <% end %>
@@ -116,8 +116,8 @@
     <td></td>
   </tr>
   <tr>
-    <td colspan="<%= colspan %>" class="text-right"><b>Sends emails to artists with non-empty Questions</b></td>
-    <td><%= button_to "Notify Questions", send_question_emails_admins_grant_submissions_path, class: 'btn btn-warning' %></td>
+    <td colspan="<%= colspan %>" class="text-right"><b>Sends emails to selected artists with non-empty Questions</b></td>
+    <td><%= button_to "Notify Questions", '#', :onclick => "notify_selected(event);", class: 'btn btn-warning' %></td>
   </tr>
   </tfoot>
   <% end %>
