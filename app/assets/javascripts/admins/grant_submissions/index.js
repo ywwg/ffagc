@@ -19,12 +19,20 @@ function confirm_selected(event) {
     }
   }
   if (selected.length == 0) {
+    alert("Please select the grants you wish to finalize.");
     return false;
   }
   var send_email = document.getElementById('send_grant_fund_email_checkbox').checked;
-  // Replace with proper escape_javascript(send_fund_emails_admins_grant_submissions_path)
-  // which may require js-routes gem.
-  $.post("grant_submissions/send_fund_emails?ids=" + selected + "&send_email=" + send_email);
+  var msg = "Are you sure you want to finalize " + selected.length + " grants and";
+  if (!send_email) {
+    msg += " not";
+  }
+  msg += " send emails?";
+  if (confirm(msg)) {
+    // Replace with proper escape_javascript(send_fund_emails_admins_grant_submissions_path)
+    // which may require js-routes gem.
+    $.post("grant_submissions/send_fund_emails?ids=" + selected + "&send_email=" + send_email);
+  }
   return false;
 }
 
@@ -39,8 +47,11 @@ function notify_selected(event) {
     }
   }
   if (selected.length == 0) {
+    alert("Please select the grants you want to notify.");
     return false;
   }
+  if (confirm("Are you sure you want to notify " + selected.length +
+              " grant submissions about questions (if any) by email?"))
   // Replace with proper escape_javascript(send_question_emails_admins_grant_submissions_path)
   // which may require js-routes gem.
   $.post("grant_submissions/send_question_emails?ids=" + selected);
