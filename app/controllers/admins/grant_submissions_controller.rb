@@ -1,3 +1,5 @@
+require 'csv'
+
 #
 # Allows for Artist identities to be revealed and more fully featured
 # order/scope options.
@@ -16,8 +18,10 @@ class Admins::GrantSubmissionsController < ApplicationController
   def index
     @scope = params[:scope] || 'active'
     @grantscope = params[:grantscope] || 'all'
-    @order = params[:order] || 'name'
     @show_scores = params[:scores] == 'true'
+    @show_funded = params[:funded] || 'all'
+    @order = params[:order] || 'name'
+
 
     if can? :reveal_identities, GrantSubmission
       @revealed = params[:reveal] == 'true'
@@ -31,12 +35,38 @@ class Admins::GrantSubmissionsController < ApplicationController
       @grant_submissions = @grant_submissions.joins(:grant).where("grants.name = ?", @grantscope)
     end
 
+    if @show_funded != 'all'
+      @grant_submissions = @grant_submissions.where("granted_funding_dollars > 0")
+    end
+
     @results = VoteResult.results(@grant_submissions)
 
     if @order == 'score'
       @grant_submissions = @grant_submissions.to_a.sort_by { |gs| [gs.grant_id, -gs.avg_score] }
     elsif @order == 'name'
       @grant_submissions = @grant_submissions.to_a.sort_by { |gs| [gs.grant_id, gs.name] }
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        csv_string = CSV.generate do |csv|
+          csv << ['Grant', 'Name', 'Funding Amount', 'Artist Nickname',
+                  'Contact Name', 'Contact Email', 'Street', 'City',
+                  'State/Province', 'Country', 'Postal Code']
+          @grant_submissions.each do |gs|
+            grant = Grant.where(id: gs.grant_id).take
+            artist = Artist.where(id: gs.artist_id).take
+            funding = gs.granted_funding_dollars || 0
+            csv << [grant.name, gs.name, funding, artist.name,
+                    artist.contact_name, artist.email, artist.contact_street,
+                    artist.contact_city, artist.contact_state,
+                    artist.contact_country, artist.contact_zipcode]
+          end
+        end
+
+        render text: csv_string
+      end
     end
   end
 
