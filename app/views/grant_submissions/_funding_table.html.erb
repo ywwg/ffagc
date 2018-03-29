@@ -18,7 +18,7 @@
     <% end %>
     </td>
     <td>
-      <% if grant_submission.funded? %>
+      <% if grant_submission.granted_funding_dollars && grant_submission.granted_funding_dollars > 0 %>
         <%= number_to_currency grant_submission.granted_funding_dollars %>
       <% end %>
     </td>

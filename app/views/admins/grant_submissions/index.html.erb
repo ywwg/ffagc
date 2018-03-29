@@ -108,12 +108,12 @@
   </tr>
   <tr>
     <td colspan="<%= colspan - 1 %>" class="text-right">Total proposed grant money</td>
-    <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(funding_decision: false) %></td>
+    <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(@grant_submissions.map {|gs| gs.id}, funding_decision: false) %></td>
     <td></td>
   </tr>
   <tr>
     <td colspan="<%= colspan - 1 %>" class="text-right">Total finalized grant money</td>
-    <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(funding_decision: true) %></td>
+    <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(@grant_submissions.map {|gs| gs.id}, funding_decision: true) %></td>
     <td></td>
   </tr>
   <tr>
