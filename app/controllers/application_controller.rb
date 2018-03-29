@@ -135,7 +135,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def deny_access
-    flash[:danger] = "503 Forbidden"
+    flash[:danger] = "503 Forbidden — You may have been logged out or do not have access to this page"
     render 'errors/503', status: :forbidden
   end
 end
