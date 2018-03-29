@@ -62,8 +62,10 @@ class GrantSubmission < ActiveRecord::Base
     [max_voters - voter_submission_assignments.count, 0].max
   end
 
-  def self.granted_funding_dollars_total(query)
-    GrantSubmission.where(query).sum(:granted_funding_dollars)
+  # Sum up granted dollars for the provided grant ids (for filtering) and
+  # by query (for further filtering).
+  def self.granted_funding_dollars_total(id_list, query)
+    grant_submissions = GrantSubmission.where(id: id_list).where(query).sum(:granted_funding_dollars)
   end
 
   private
