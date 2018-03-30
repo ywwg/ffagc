@@ -23,11 +23,17 @@ class GrantContract < Prawn::Document
         write_templated_line line
       end
     rescue
-      raise "Could not find template"
+      raise "Could not generate pdf"
     end
   end
 
   def write_templated_line(line)
+    font_families.update("TimesNewRomanTTF" => {
+        :normal => Rails.root.join("app/assets/fonts/Times_New_Roman.ttf"),
+        :italic => Rails.root.join("app/assets/fonts/Times_New_Roman_Italic.ttf"),
+        :bold => Rails.root.join("app/assets/fonts/Times_New_Roman_Bold.ttf"),
+        :bold_italic => Rails.root.join("app/assets/fonts/Times_New_Roman_Bold_Italic.ttf")
+      })
     # This is a super simple templating system based on ERB and keywords.
     # Leading spaces (including spaces after the comma following a token)
     # are converted to indentation.  More spaces, more indents.
@@ -80,8 +86,8 @@ class GrantContract < Prawn::Document
     return if line == nil
 
     # Render the line
-    template = ERB.new line
-    font("Times-Roman") do
+    template = ERB.new line.force_encoding("utf-8")
+    font "TimesNewRomanTTF" do
       indent(indent_amount) do
          text template.result(binding), :align => align, :size => size, :style => style, :indent_paragraphs => indent_amount
       end
@@ -90,7 +96,7 @@ class GrantContract < Prawn::Document
 
   def write_signatures()
     move_down 100
-    font("Times-Roman") do
+    font "TimesNewRomanTTF" do
       float do
         bounding_box([50, cursor], :width => 200, :height => cursor) do
           stroke_horizontal_rule
