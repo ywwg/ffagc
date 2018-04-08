@@ -1,8 +1,11 @@
 <ol class="breadcrumb">
-  <% if voter_logged_in? %>
+  <%# Sigh, we need a way to do this better %>
+  <% if admin_logged_in? %>
+    <li><%= link_to "Grant Meeting", admins_grant_submissions_path %></li>
+  <% elsif voter_logged_in? %>
     <li><%= link_to "Voting", votes_path %></li>
-  <% else %>
-    <li><%= link_to "Grant Submissions", grant_submissions_path %></li>
+  <% elsif artist_logged_in? %>
+    <li><%= link_to "My Submissions", grant_submissions_path %></li>
   <% end %>
   <li class="active"><%= @grant_submission.name %></li>
   <li class="active">Discussion</li>
@@ -23,6 +26,11 @@
             <dd><%= @grant_submission.grant.name %></dd>
             <dt>Requested Funding</dt>
             <dd><%= number_to_currency @grant_submission.requested_funding_dollars %></dd>
+            <% if can? :grant, @grant_submission %>
+              <br/>
+              <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true, :input_html => {:maxlength => 5,:style=> 'width: 80px'}  %>
+              <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
+            <% end %>
           </dl>
         </div>
       </div>
@@ -33,7 +41,16 @@
           <h3 class="panel-title">Documents</h3>
         </div>
         <div class="panel-body">
-          <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
+          <% if can? :edit_questions, GrantSubmission %>
+            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
+          <% else %>
+            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
+          <% end %>
+          <% if can? :edit_answers, GrantSubmission %>
+            <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
+              <%= f_proposal.input :file, as: :file, label: 'Supplemental PDF', required: false %>
+            <% end %>
+          <% end %>
         </div>
       </div>
       <% if can? :edit_questions, GrantSubmission or can? :vote, GrantSubmission %>
@@ -62,7 +79,11 @@
           <h3 class="panel-title">Questions from Committee</h3>
         </div>
         <div class="panel-body">
-          <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
+          <% if can? :edit_questions, @grant_submission %>
+            <%= f.text_area :questions, class: 'form-control', rows: '20' %>
+          <% else %>
+            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -72,9 +93,17 @@
           <h3 class="panel-title">Answers from Artist</h3>
         </div>
         <div class="panel-body">
-          <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
+          <% if can? :edit_answers, @grant_submission %>
+            <%= f.text_area :answers, class: 'form-control', rows: '20' %>
+          <% else %>
+            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
+
+  <p class="text-center">
+    <%= f.button :submit, 'Update Submission', class: 'btn btn-primary' %>
+  </p>
 <% end %>

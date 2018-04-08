@@ -32,7 +32,7 @@ Rails.application.routes.draw do
 
   resources :grant_submissions do
     member do
-      get 'show'
+      get 'discuss'
       post 'generate_contract'
     end
   end

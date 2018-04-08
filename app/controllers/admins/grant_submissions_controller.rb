@@ -16,6 +16,7 @@ class Admins::GrantSubmissionsController < ApplicationController
   end
 
   def index
+    # TODO: should be handled by Ability somehow.
     if !admin_logged_in?
       deny_access
       return

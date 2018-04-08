@@ -62,6 +62,15 @@ class GrantSubmissionsController < ApplicationController
     initialize_other_submissions
   end
 
+  def discuss
+    # TODO: should be handled by Ability somehow.
+    if voter_logged_in?
+      deny_access
+      return
+    end
+    initialize_other_submissions
+  end
+
   def edit
     # Don't allow an artist to decide post-decision that they want a different
     # grant category.
