@@ -1,10 +1,71 @@
 <ol class="breadcrumb">
   <li><%= link_to "Grant Submissions", grant_submissions_path %></li>
-  <li><%= link_to @grant_submission.name, grant_submission_path(@grant_submission) %></li>
+  <li><%= @grant_submission.name %></li>
   <li class="active">Discussion</li>
 </ol>
 
-<%= simple_form_for @grant_submission do |f| %>
+<%= simple_form_for @grant_submission, :html => { :onsubmit => "return validate();"} do |f| %>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Grant Submission</h3>
+        </div>
+        <div class="panel-body">
+          <dl>
+            <dt>Name</dt>
+            <dd><%= @grant_submission.name %></dd>
+  
+            <dt>Grant</dt>
+            <dd><%= @grant_submission.grant.name %></dd>
+  
+            <dt>Requested Funding</dt>
+            <dd><%= number_to_currency @grant_submission.requested_funding_dollars %></dd>
+            
+            <br/>
+            
+            <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true, :input_html => {:maxlength => 5,:style=> 'width: 80px'}  %>
+            <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Supplemental Documents</h3>
+        </div>
+        <div class="panel-body">
+          <% if can? :edit_questions, GrantSubmission %>
+            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
+  
+            <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
+              <%= f_proposal.input :file, as: :file, label: 'Anonymized Supplemental PDF', required: false %>
+            <% end %>
+          <% else %>
+            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
+          <% end %>
+        </div>
+      </div>
+      <% if can? :edit_questions, GrantSubmission or can? :vote, GrantSubmission %>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Other Submissions by This Artist</h3>
+          </div>
+          <div class="panel-body">
+            <dl>
+              <% @other_submissions.each do |s| %>
+                <% if s != @grant_submission %>
+                  <dd><%= s.name %> &mdash; <%= Grant.find(s.grant_id).name %></dd>
+                <% end %>
+              <% end %>
+            </dl>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
   <div class="row">
     <div class="col-md-6">
       <div class="panel panel-default">
@@ -32,22 +93,13 @@
             <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
           <% end %>
         </div>
-        <div class="panel-heading">
-          <h3 class="panel-title">Supplemental documents</h3>
-        </div>
-        <div class="panel-body">
-          <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
-
-          <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
-            <%= f_proposal.input :file, as: :file, label: 'Anonymized Supplemental PDF', required: false %>
-          <% end %>
-        </div>
       </div>
     </div>
-  </div>
+  </div>  
+  
   <p class="text-center">
     <% if can? :edit, @grant_submission %>
-      <%= f.button :submit, 'Update Discussion', class: 'btn btn-primary' %>
+      <%= f.button :submit, 'Update Grant', class: 'btn btn-primary' %>
     <% end %>
   </p>
 <% end %>

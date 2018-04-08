@@ -25,6 +25,8 @@ class VotesController < ApplicationController
       end
       @votes = @votes.to_h
     end
+    
+    @grant_submissions = @grant_submissions.to_a.sort_by { |gs| [gs.grant_id, gs.name] }
   end
 
   def update

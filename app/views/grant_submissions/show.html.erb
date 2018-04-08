@@ -30,7 +30,7 @@
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Documents</h3>
+        <h3 class="panel-title">Supplemental Documents</h3>
       </div>
       <div class="panel-body">
         <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
@@ -61,7 +61,7 @@
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Questions</h3>
+        <h3 class="panel-title">Questions from Committee</h3>
       </div>
       <div class="panel-body">
         <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
@@ -71,7 +71,7 @@
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Answers</h3>
+        <h3 class="panel-title">Answers from Artist</h3>
       </div>
       <div class="panel-body">
         <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
