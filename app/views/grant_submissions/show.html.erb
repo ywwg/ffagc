@@ -1,81 +1,111 @@
 <ol class="breadcrumb">
-  <% if artist_logged_in? %>
-    <li><%= link_to "My Submissions", grant_submissions_path %></li>
+  <% if can? :edit_questsions, @grant_submission %>
+    <li><%= link_to "Grant Meeting", admins_grant_submissions_path %></li>
   <% else %>
-    <li><%= link_to "All Submissions", grant_submissions_path %></li>
+    <li><%= link_to "Grant Submissions", grant_submissions_path %></li>
   <% end %>
   <li class="active"><%= @grant_submission.name %></li>
+  <li class="active">Discussion</li>
 </ol>
 
-<div class="row">
-  <div class="col-md-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Grant Submission</h3>
-      </div>
-      <div class="panel-body">
-        <dl>
-          <dt>Name</dt>
-          <dd><%= @grant_submission.name %></dd>
-
-          <dt>Grant</dt>
-          <dd><%= @grant_submission.grant.name %></dd>
-
-          <dt>Requested Funding</dt>
-          <dd><%= number_to_currency @grant_submission.requested_funding_dollars %></dd>
-        </dl>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Supplemental Documents</h3>
-      </div>
-      <div class="panel-body">
-        <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
-      </div>
-    </div>
-  </div>
-  <% if can? :edit_questions, GrantSubmission or can? :vote, GrantSubmission %>
-  <div class="col-md-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Other Submissions by This Artist</h3>
-      </div>
-      <div class="panel-body">
-        <dl>
-          <% @other_submissions.each do |s| %>
-            <% if s != @grant_submission %>
-              <dd><%= s.name %> &mdash; <%= Grant.find(s.grant_id).name %></dd>
+<%= simple_form_for @grant_submission, :html => { :onsubmit => "return validate();"} do |f| %>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Grant Submission</h3>
+        </div>
+        <div class="panel-body">
+          <dl>
+            <dt>Name</dt>
+            <dd><%= @grant_submission.name %></dd>
+  
+            <dt>Grant</dt>
+            <dd><%= @grant_submission.grant.name %></dd>
+  
+            <dt>Requested Funding</dt>
+            <dd><%= number_to_currency @grant_submission.requested_funding_dollars %></dd>
+            
+            <% if can? :edit_questions, @grant_submission %>
+            <br/>
+            
+            <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true, :input_html => {:maxlength => 5,:style=> 'width: 80px'}  %>
+            <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
             <% end %>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Supplemental Documents</h3>
+        </div>
+        <div class="panel-body">
+          <% if can? :edit_questions, GrantSubmission %>
+            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
+  
+            <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
+              <%= f_proposal.input :file, as: :file, label: 'Anonymized Supplemental PDF', required: false %>
+            <% end %>
+          <% else %>
+            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
           <% end %>
-        </dl>
+        </div>
       </div>
+      <% if can? :edit_questions, GrantSubmission or can? :vote, GrantSubmission %>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Other Submissions by This Artist</h3>
+          </div>
+          <div class="panel-body">
+            <dl>
+              <% @other_submissions.each do |s| %>
+                <% if s != @grant_submission %>
+                  <dd><%= s.name %> &mdash; <%= Grant.find(s.grant_id).name %></dd>
+                <% end %>
+              <% end %>
+            </dl>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
-  <% end %>
-</div>
-
-<div class="row">
-  <div class="col-md-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Questions from Committee</h3>
-      </div>
-      <div class="panel-body">
-        <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Answers from Artist</h3>
-      </div>
-      <div class="panel-body">
-        <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Questions from Committee</h3>
+        </div>
+        <div class="panel-body">
+          <% if can? :edit_questions, @grant_submission %>
+            <%= f.text_area :questions, class: 'form-control', rows: '20' %>
+          <% else %>
+            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
+          <% end %>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Answers from Artist</h3>
+        </div>
+        <div class="panel-body">
+          <% if can? :edit_answers, @grant_submission %>
+            <%= f.text_area :answers, class: 'form-control', rows: '20' %>
+          <% else %>
+            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.answers } %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>  
+  
+  <p class="text-center">
+    <% if can? :edit, @grant_submission %>
+      <%= f.button :submit, 'Update Submission', class: 'btn btn-primary' %>
+    <% end %>
+  </p>
+<% end %>
