@@ -16,12 +16,22 @@ class Admins::GrantSubmissionsController < ApplicationController
   end
 
   def index
-    @scope = params[:scope] || 'active'
-    @grantscope = params[:grantscope] || 'all'
-    @show_scores = params[:scores] == 'true'
-    @show_funded = params[:funded] || 'all'
-    @order = params[:order] || 'name'
+    # TODO: should be handled by Ability somehow.
+    if !admin_logged_in?
+      deny_access
+      return
+    end
+    @scope = params[:scope] || cookies[:scope] || 'active'
+    @grantscope = params[:grantscope] || cookies[:grantscope] || 'all'
+    @show_scores = params[:scores] == 'true' || cookies[:show_scores] == 'true'
+    @show_funded = params[:funded] || cookies[:show_funded] || 'all'
+    @order = params[:order] || cookies[:order] || 'name'
 
+    cookies[:scope] = @scope
+    cookies[:grantscope] = @grantscope
+    cookies[:show_scores] = @show_scores
+    cookies[:show_funded] = @show_funded
+    cookies[:order] = @order
 
     if can? :reveal_identities, GrantSubmission
       @revealed = params[:reveal] == 'true'

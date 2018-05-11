@@ -48,7 +48,7 @@
               <%= link_to 'PDF Submission', gs.proposal_url, target: :blank %><br />
 
               <% if gs.has_questions? %>
-                <%= link_to discussion_status(gs), discuss_grant_submission_path(gs) %>
+                <%= link_to discussion_status(gs), grant_submission_path(gs) %>
               <% else %>
                 No discussion
               <% end %>
@@ -59,7 +59,7 @@
           <td class="hide-mobile"><%= link_to 'Open...', gs.proposal_url, target: :blank %></td>
           <td class="hide-mobile">
             <% if gs.has_questions? %>
-              <%= link_to discussion_status(gs), discuss_grant_submission_path(gs) %>
+              <%= link_to discussion_status(gs), grant_submission_path(gs) %>
             <% else %>
               None
             <% end %>
