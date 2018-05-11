@@ -69,18 +69,10 @@
       <td>
         <div class="btn-toolbar">
           <div class="btn-group pull-right">
+            <%= link_to "View", grant_submission_path(id: gs.id), class: 'btn btn-default' %>
             <% if can? :edit, gs %>
             <%= link_to "Edit", edit_grant_submission_path(id: gs.id), class: 'btn btn-default' %>
             <% end %>
-            <%= link_to "View", grant_submission_path(id: gs.id), class: 'btn btn-default' %>
-          </div>
-          <% if can? :destroy, gs %>
-          <div class="btn-group pull-right">
-            <%= link_to "Delete", grant_submission_path(gs), class: 'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %>
-          </div>
-          <% end %>
-          <br/>
-          <div class="btn-group pull-right">
             <% if gs.funded? and can? :generate_contract, GrantSubmission %>
               <%= link_to "Generate Contract", generate_contract_grant_submission_path(gs, format: 'pdf'), method: :post, class: 'btn btn-success btn-inline' %>
             <% end %>

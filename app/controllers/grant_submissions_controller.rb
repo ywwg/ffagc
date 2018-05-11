@@ -9,6 +9,11 @@ class GrantSubmissionsController < ApplicationController
     @grants = Grant.all
   end
 
+  def initialize_other_submissions
+    @other_submissions = GrantSubmission.where(artist_id: @grant_submission.artist_id)
+  end
+
+
   def create
     @grant_submission.artist_id = current_artist.id
 
@@ -44,10 +49,6 @@ class GrantSubmissionsController < ApplicationController
     end
   end
 
-  def show
-    @other_submissions = GrantSubmission.where(artist_id: @grant_submission.artist_id)
-  end
-
   def index
     @grantscope = params[:grantscope] || 'all'
     if @grantscope != 'all'
@@ -55,6 +56,19 @@ class GrantSubmissionsController < ApplicationController
     end
 
     @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
+  end
+
+  def show
+    initialize_other_submissions
+  end
+
+  def discuss
+    # TODO: should be handled by Ability somehow.
+    if voter_logged_in?
+      deny_access
+      return
+    end
+    initialize_other_submissions
   end
 
   def edit
@@ -66,11 +80,10 @@ class GrantSubmissionsController < ApplicationController
       @grant_change_disable = true
     end
 
-    render 'edit'
-  end
-
-  def discuss
     @proposal = Proposal.new
+    initialize_other_submissions
+
+    render 'edit'
   end
 
   def generate_contract

@@ -30,11 +30,6 @@
             </div>
 
             <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, as: :integer, html5: true  %>
-
-            <% if can? :grant, GrantSubmission %>
-              <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true  %>
-              <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
-            <% end %>
           </div>
         </div>
       </div>
@@ -45,17 +40,18 @@
           </div>
           <div class="panel-body">
             <div class="alert alert-warning">Make sure your proposal is <strong>anonymous</strong> and DOES NOT include any identifying information!</div>
-
-            <%= f.input :proposal, as: :file, label: 'Anonymized Application PDF' %>
-
             <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
+            <%= f.input :proposal, as: :file, label: 'Replace Master Application PDF' %>
+            <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
+              <%= f_proposal.input :file, as: :file, label: 'Add Supplemental PDF', required: false %>
+            <% end %>
           </div>
         </div>
       </div>
     </div>
-
     <p class="text-center">
-      <%= f.button :submit, class: 'btn btn-primary' %>
+        <%= f.button :submit, 'Update Submission', class: 'btn btn-primary' %>
+        <%= link_to "Delete", grant_submission_path(@grant_submission), class: 'btn btn-danger', method: :delete, data: { confirm: 'Are you sure you want to delete this entire submission?  This cannot be undone!' } %>
     </p>
   <% end %>
 <% else %>
