@@ -4,6 +4,10 @@
 
 <p>Competition this year was unprecedented! Careful and tough decisions had to be made by the committee, and we hope you are not discouraged by this news.</p>
 
+<%if @submission.public_funding_notes.present? %>
+<p><%= @submission.public_funding_notes %></p>
+<% end %>
+
 <p>Please don’t let lack of funding from this source stop you from bringing your vision to the woods, or from applying for a grant next year. If you would like specific feedback on your project regarding this funding decision, please let us know and we’ll get back to you as soon as possible.</p>
 
 <p>- Firefly Art Grants Core</p>

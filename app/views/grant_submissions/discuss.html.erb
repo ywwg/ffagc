@@ -30,6 +30,14 @@
               <br/>
               <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true, :input_html => {:maxlength => 5,:style=> 'width: 80px'}  %>
               <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Funding Notes For Artist</h3>
+                </div>
+                <div class="panel-body">
+                  <%= f.text_area :public_funding_notes, class: 'form-control', rows: '3' %>
+                  </div>
+              </div>
             <% end %>
           </dl>
         </div>
@@ -83,6 +91,18 @@
             <%= f.text_area :questions, class: 'form-control', rows: '20' %>
           <% else %>
             <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
+          <% end %>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Private Funding Notes</h3>
+        </div>
+        <div class="panel-body">
+          <% if can? :edit_questions, @grant_submission %>
+            <%= f.text_area :private_funding_notes, class: 'form-control', rows: '20' %>
+          <% else %>
+            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.private_funding_notes } %>
           <% end %>
         </div>
       </div>

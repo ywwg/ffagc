@@ -126,7 +126,7 @@ class GrantSubmissionsController < ApplicationController
     end
 
     if can? :edit_questions, GrantSubmission
-      allowed_params.push(:questions)
+      allowed_params.push(:questions, :private_funding_notes, :public_funding_notes)
     end
 
     if can? :edit_answers, GrantSubmission

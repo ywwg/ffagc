@@ -7,6 +7,10 @@
 <p>Thanks for your efforts -- the competition was fierce and there were a number
   of really impressive projects to choose from this year!</p>
 
+<%if @submission.public_funding_notes.present? %>
+<p><%= @submission.public_funding_notes %></p>
+<% end %>
+
 <p>Please visit your page on the Art Grant website and click the button to
   generate a contract for your project.</p>
 
