@@ -56,7 +56,7 @@ group :test, :development do
   gem 'pry'
 
   # Create fake models with data
-  gem 'factory_bot'
+  gem 'factory_girl_rails'
   gem 'faker'
 
   gem 'rspec-rails'
