@@ -1,4 +1,6 @@
 class UserMailer < ActionMailer::Base
+  add_template_helper(ApplicationHelper)
+
   default from: "grants@fireflyartscollective.org"
 
   # Subject can be set in your I18n file at config/locales/en.yml

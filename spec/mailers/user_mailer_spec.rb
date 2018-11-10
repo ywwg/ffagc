@@ -39,32 +39,104 @@ describe UserMailer do
 
   describe '#grant_funded' do
     let!(:grant) { FactoryGirl.create(:grant, name: 'Creativity') }
-    let!(:grant_submission) { FactoryGirl.create(:grant_submission, artist: artist, grant: grant, granted_funding_dollars: 800) }
 
-    subject { UserMailer.grant_funded(grant_submission, artist, grant, '2020') }
+    context 'without notes' do
+      let!(:grant_submission) {
+        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
+          requested_funding_dollars: 5000, granted_funding_dollars: 800) }
 
-    its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{grant_submission.name}") }
-    its(:from) { is_expected.to include('grants@fireflyartscollective.org') }
-    its(:to) { is_expected.to eq([artist.email]) }
+      subject { UserMailer.grant_funded(grant_submission, artist, grant, '2020') }
 
-    it do
-      expect(subject.body.encoded).to include('Congratulations')
-      expect(subject.body.encoded).to include('$800')
+      its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{grant_submission.name}") }
+      its(:from) { is_expected.to include('grants@fireflyartscollective.org') }
+      its(:to) { is_expected.to eq([artist.email]) }
+
+      it do
+        expect(subject.body.encoded).to include('Congratulations')
+        expect(subject.body.encoded).to include('$800')
+      end
+    end
+
+    context 'with blank notes' do
+      let!(:grant_submission) {
+        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
+          requested_funding_dollars: 5000, granted_funding_dollars: 800,
+          public_funding_notes: "") }
+
+      subject { UserMailer.grant_funded(grant_submission, artist, grant, '2020') }
+
+      its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{grant_submission.name}") }
+      its(:from) { is_expected.to include('grants@fireflyartscollective.org') }
+      its(:to) { is_expected.to eq([artist.email]) }
+
+      it do
+        expect(subject.body.encoded).to include('Congratulations')
+        expect(subject.body.encoded).to include('$800')
+        # Shouldn't include empty paragraph
+        expect(subject.body.encoded).not_to include('<p></p>')
+      end
+    end
+
+    context 'with notes' do
+      let!(:grant_submission) {
+        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
+          requested_funding_dollars: 5000, granted_funding_dollars: 800,
+          private_funding_notes: "NOTINCLUDED",
+          public_funding_notes: "SOMENOTES") }
+
+      subject { UserMailer.grant_funded(grant_submission, artist, grant, '2020') }
+
+      its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{grant_submission.name}") }
+      its(:from) { is_expected.to include('grants@fireflyartscollective.org') }
+      its(:to) { is_expected.to eq([artist.email]) }
+
+      it do
+        expect(subject.body.encoded).to include('Congratulations')
+        expect(subject.body.encoded).to include('$800')
+        expect(subject.body.encoded).not_to include('NOTINCLUDED')
+        expect(subject.body.encoded).to include('<p>SOMENOTES</p>')
+      end
     end
   end
 
   describe '#grant_not_funded' do
     let!(:grant) { FactoryGirl.create(:grant, name: 'Creativity') }
-    let!(:grant_submission) { FactoryGirl.create(:grant_submission, artist: artist, grant: grant) }
 
-    subject { UserMailer.grant_not_funded(grant_submission, artist, grant, '2020') }
+    context 'without notes' do
+      let!(:grant_submission) {
+        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
+          requested_funding_dollars: 5000)
+        }
 
-    its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{grant_submission.name}") }
-    its(:from) { is_expected.to include('grants@fireflyartscollective.org') }
-    its(:to) { is_expected.to eq([artist.email]) }
+      subject { UserMailer.grant_not_funded(grant_submission, artist, grant, '2020') }
 
-    it do
-      expect(subject.body.encoded).to include('regret')
+      its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{grant_submission.name}") }
+      its(:from) { is_expected.to include('grants@fireflyartscollective.org') }
+      its(:to) { is_expected.to eq([artist.email]) }
+
+      it do
+        expect(subject.body.encoded).to include('regret')
+      end
+    end
+
+    context 'with notes' do
+      let!(:grant_submission) {
+        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
+          requested_funding_dollars: 5000, private_funding_notes: "NOTINCLUDED",
+          public_funding_notes: "SOMENOTES")
+        }
+
+      subject { UserMailer.grant_not_funded(grant_submission, artist, grant, '2020') }
+
+      its(:subject) { is_expected.to eq("2020 Firefly Creativity Grant Decision: #{grant_submission.name}") }
+      its(:from) { is_expected.to include('grants@fireflyartscollective.org') }
+      its(:to) { is_expected.to eq([artist.email]) }
+
+      it do
+        expect(subject.body.encoded).to include('regret')
+        expect(subject.body.encoded).not_to include('NOTINCLUDED')
+        expect(subject.body.encoded).to include('SOMENOTES')
+      end
     end
   end
 end
