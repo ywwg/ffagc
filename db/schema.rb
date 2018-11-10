@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161211193734) do
+ActiveRecord::Schema.define(version: 20181110191858) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "name"
@@ -76,6 +76,8 @@ ActiveRecord::Schema.define(version: 20161211193734) do
     t.string   "answers"
     t.datetime "questions_updated_at"
     t.datetime "answers_updated_at"
+    t.string   "private_funding_notes"
+    t.string   "public_funding_notes"
   end
 
   add_index "grant_submissions", ["artist_id"], name: "index_grant_submissions_on_artist_id"
