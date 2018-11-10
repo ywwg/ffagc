@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7.1'
+gem 'rails', '~> 4.2.10'
 # Define Abilites of Models in one place
 gem 'cancancan'
 # Use sqlite3 as the database for Active Record
@@ -12,7 +12,7 @@ gem 'therubyracer'
 gem 'execjs'
 
 # Use SCSS for stylesheets
-gem 'sass-rails'
+gem 'sassc-rails'
 gem 'bootstrap-sass', '~> 3.3.6'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -56,7 +56,7 @@ group :test, :development do
   gem 'pry'
 
   # Create fake models with data
-  gem 'factory_girl_rails'
+  gem 'factory_bot'
   gem 'faker'
 
   gem 'rspec-rails'

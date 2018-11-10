@@ -34,3 +34,6 @@ bower.json
 config/initializers/smtp_secret.rb
 
 .DS_Store
+
+# VSCode workspace
+ffagc.code-workspace
