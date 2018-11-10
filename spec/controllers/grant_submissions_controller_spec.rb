@@ -88,15 +88,10 @@ describe GrantSubmissionsController do
         render_views
 
         it 'shows discussion page' do
+          # "Discussion" now refers to granting/funding, which is led by the
+          # admin, so voters are not allowed.
           go! grant_submission.id
-          expect(response).to render_template('grant_submissions/discuss')
-
-          # this is a voter, can't edit either
-          expect(css_select('textarea#grant_submission_questions')).to be_empty
-          expect(css_select('textarea#grant_submission_answers')).to be_empty
-
-          # test that both blockquotes are present
-          expect(css_select('blockquote').size).to eq(2)
+          is_expected.not_to be_ok
         end
       end
 
