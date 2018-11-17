@@ -1,4 +1,12 @@
 FactoryGirl.define do
+  factory :submissions_tag do
+    tag nil
+    grant_submissions nil
+  end
+  factory :tag do
+    name "MyString"
+    description "MyText"
+  end
   sequence :email do |n|
     "email-#{n}@example.com"
   end

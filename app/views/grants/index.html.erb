@@ -27,18 +27,34 @@
   <% end %>
 <% end %>
 
+<% if can? :new, Grant %>
+  <p><%= link_to "New Tag", new_tag_path, class: 'btn btn-primary' %></p>
+<% end %>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Tags</h3>
+    <h3 class="panel-title">Submission Tags</h3>
   </div>
-  <div class="panel-body">
-      <%= Tags.map(&:name).join(", ") %>
-  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% Tag.all.each do |t| %>
+      <tr>
+        <td><%= t.name %></td>
+        <td><%= t.description %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
 </div>
 
 <% if can? :new, Grant %>
   <p>
-    <%= link_to "Create Grant", new_grant_path, class: 'btn btn-primary' %>
+    <%= link_to "New Grant", new_grant_path, class: 'btn btn-primary' %>
   </p>
 <% end %>
 
