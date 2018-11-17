@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181110191858) do
+ActiveRecord::Schema.define(version: 20181117181149) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "name"
@@ -78,10 +78,12 @@ ActiveRecord::Schema.define(version: 20181110191858) do
     t.datetime "answers_updated_at"
     t.string   "private_funding_notes"
     t.string   "public_funding_notes"
+    t.integer  "tags_id"
   end
 
   add_index "grant_submissions", ["artist_id"], name: "index_grant_submissions_on_artist_id"
   add_index "grant_submissions", ["grant_id"], name: "index_grant_submissions_on_grant_id"
+  add_index "grant_submissions", ["tags_id"], name: "index_grant_submissions_on_tags_id"
 
   create_table "grants", force: :cascade do |t|
     t.string   "name"
@@ -110,6 +112,20 @@ ActiveRecord::Schema.define(version: 20181110191858) do
   end
 
   add_index "proposals", ["grant_submission_id"], name: "index_proposals_on_grant_submission_id"
+
+  create_table "submissions_tags", force: :cascade do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "grant_submissions_id"
+    t.integer  "tags_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "voter_submission_assignments", force: :cascade do |t|
     t.datetime "created_at"
