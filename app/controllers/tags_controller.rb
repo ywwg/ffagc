@@ -11,7 +11,6 @@ class TagsController < ApplicationController
   end
 
   def create
-    Rails.logger.debug("tags create!")
     if @tag.save
       redirect_to grants_path
     else
