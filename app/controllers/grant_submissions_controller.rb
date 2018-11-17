@@ -13,11 +13,20 @@ class GrantSubmissionsController < ApplicationController
     @other_submissions = GrantSubmission.where(artist_id: @grant_submission.artist_id)
   end
 
+  def new
+    @submissions_tags = SubmissionsTag.new()
+  end
 
   def create
     @grant_submission.artist_id = current_artist.id
-
     if @grant_submission.save
+      params["submissions_tags"].each do |t|
+        SubmissionsTag.create!(
+          tag: Tag.find(t[1].to_i),
+          grant_submission: GrantSubmission.find(@grant_submission.id),
+        )
+      end
+
       redirect_to action: 'index'
     else
       render 'failure'
@@ -115,7 +124,7 @@ class GrantSubmissionsController < ApplicationController
   private
 
   def grant_submission_params
-    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars)
+    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars, :submissions_tags)
   end
 
   def grant_update_params

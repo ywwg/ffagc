@@ -61,6 +61,29 @@
         </div>
       </div>
       <div class="col-md-6">
+        <%#= simple_form_for @submissions_tags do |st| %>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              Special Submission Traits
+            </div>
+            <div class="panel-body">
+            <%#= f.association_check_boxes :tag, :name, :description %>
+              <table class="table table-striped">
+                <tbody>
+                <% Tag.all.each do |t| %>
+                  <tr>
+                    <td>
+                      <%= check_box_tag "submissions_tags[tag_id]", t.id %>
+                    </td>
+                    <td><%= t.name %></td>
+                    <td><%= t.description %></td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        <%# end %>
         <div class="panel panel-default">
           <div class="panel-heading">
             Submission Documents

@@ -113,12 +113,12 @@ ActiveRecord::Schema.define(version: 20181117184835) do
 
   create_table "submissions_tags", force: :cascade do |t|
     t.integer  "tag_id"
-    t.integer  "grant_submissions_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.integer  "grant_submission_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
-  add_index "submissions_tags", ["grant_submissions_id"], name: "index_submissions_tags_on_grant_submissions_id"
+  add_index "submissions_tags", ["grant_submission_id"], name: "index_submissions_tags_on_grant_submission_id"
   add_index "submissions_tags", ["tag_id"], name: "index_submissions_tags_on_tag_id"
 
   create_table "tags", force: :cascade do |t|
