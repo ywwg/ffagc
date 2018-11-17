@@ -17,16 +17,21 @@ class GrantSubmissionsController < ApplicationController
     @submissions_tags = SubmissionsTag.new()
   end
 
+  def set_submission_tags(tag_id_list)
+    # Just delete existing tags and then recreate them
+    SubmissionsTag.where(grant_submission_id: @grant_submission.id).destroy_all
+    tag_id_list.each do |t|
+      SubmissionsTag.create!(
+        tag: Tag.find(t.to_i),
+        grant_submission: GrantSubmission.find(@grant_submission.id),
+      )
+    end
+  end
+
   def create
     @grant_submission.artist_id = current_artist.id
     if @grant_submission.save
-      params["submissions_tags"].each do |t|
-        SubmissionsTag.create!(
-          tag: Tag.find(t[1].to_i),
-          grant_submission: GrantSubmission.find(@grant_submission.id),
-        )
-      end
-
+      set_submission_tags(params["submissions_tags"])
       redirect_to action: 'index'
     else
       render 'failure'
@@ -48,6 +53,7 @@ class GrantSubmissionsController < ApplicationController
     end
 
     if @grant_submission.save
+      set_submission_tags(params["submissions_tags"])
       if admin_logged_in?
         redirect_to admins_grant_submissions_path
       else
