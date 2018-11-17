@@ -25,9 +25,7 @@
             <dd><%= number_to_currency @grant_submission.requested_funding_dollars %></dd>
             <dt>Tags</dt>
             <dd>
-            <%= SubmissionsTag.joins(:tag).where(grant_submission: @grant_submission).each do |st| %>
-              <%= Tag.find(st.tag_id).name %>
-            <% end %>
+            <%= Tag.joins(:submissions_tag).where(:submissions_tags => {:grant_submission_id => @grant_submission}).map(&:name).join(", ") %>
             </dd>
           </dl>
         </div>
