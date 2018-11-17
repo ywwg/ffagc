@@ -27,6 +27,15 @@
   <% end %>
 <% end %>
 
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Tags</h3>
+  </div>
+  <div class="panel-body">
+      <%= Tags.map(&:name).join(", ") %>
+  </div>
+</div>
+
 <% if can? :new, Grant %>
   <p>
     <%= link_to "Create Grant", new_grant_path, class: 'btn btn-primary' %>
@@ -34,72 +43,77 @@
 <% end %>
 
 <% if @grants.present? %>
-<table class="table table-striped">
-  <thead>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Grants</h3>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Max Funding</th>
+        <th>Submission Start</th>
+        <th>Submission End</th>
+        <% if can? :vote, GrantSubmission or current_admin %>
+        <th>Vote Start</th>
+        <th>Meeting One</th>
+        <th>Meeting Two</th>
+        <th>Vote End</th>
+        <% end %>
+        <% if can? :modify, Grant %>
+        <th></th>
+        <% end %>
+      </tr>
+    <thead>
+    <tbody>
+    <% @grants.each do |g| %>
     <tr>
-      <th>Name</th>
-      <th>Max Funding</th>
-      <th>Submission Start</th>
-      <th>Submission End</th>
+      <td>
+        <%= g.name %>
+      </td>
+      <td>$<%= g.max_funding_dollars %></td>
+      <td>
+        <%= Date::DAYNAMES[g.submit_start.wday] %>,
+        <%= g.submit_start.strftime("%Y/%m/%d") %><br />
+        <%= humanize_date g.submit_start %>
+      </td>
+      <td>
+        2AM the night of <%= Date::DAYNAMES[g.submit_end.wday] %>,
+        <%= g.submit_end.strftime("%Y/%m/%d") %><br />
+        <%= humanize_date g.submit_end + 26.hours %>
+      </td>
       <% if can? :vote, GrantSubmission or current_admin %>
-      <th>Vote Start</th>
-      <th>Meeting One</th>
-      <th>Meeting Two</th>
-      <th>Vote End</th>
+      <td>
+        <%= Date::DAYNAMES[g.vote_start.wday] %>,
+        <%= g.vote_start.strftime("%Y/%m/%d") %><br />
+        <%= humanize_date g.vote_start %>
+      </td>
+      <td>
+        <%= Date::DAYNAMES[g.meeting_one.wday] %>,
+        <%= g.meeting_one.strftime("%Y/%m/%d") %><br />
+        <%= humanize_date g.meeting_one %>
+      </td>
+      <td>
+        <%= Date::DAYNAMES[g.meeting_two.wday] %>,
+        <%= g.meeting_two.strftime("%Y/%m/%d") %><br />
+        <%= humanize_date g.meeting_two %>
+      </td>
+      <td>
+        <%= Date::DAYNAMES[g.vote_end.wday] %>,
+        <%= g.vote_end.strftime("%Y/%m/%d") %><br />
+        <%= humanize_date g.vote_end + 24.hours %>
+      </td>
       <% end %>
-      <% if can? :modify, Grant %>
-      <th></th>
+      <% if can? :modify, g %>
+      <td>
+        <div class="btn-group">
+          <%= link_to "Edit", edit_grant_path(g), class: 'btn btn-default' %>
+        </div>
+      </td>
       <% end %>
     </tr>
-  <thead>
-  <tbody>
-  <% @grants.each do |g| %>
-  <tr>
-    <td>
-      <%= g.name %>
-    </td>
-    <td>$<%= g.max_funding_dollars %></td>
-    <td>
-      <%= Date::DAYNAMES[g.submit_start.wday] %>,
-      <%= g.submit_start.strftime("%Y/%m/%d") %><br />
-      <%= humanize_date g.submit_start %>
-    </td>
-    <td>
-      2AM the night of <%= Date::DAYNAMES[g.submit_end.wday] %>,
-      <%= g.submit_end.strftime("%Y/%m/%d") %><br />
-      <%= humanize_date g.submit_end + 26.hours %>
-    </td>
-    <% if can? :vote, GrantSubmission or current_admin %>
-    <td>
-      <%= Date::DAYNAMES[g.vote_start.wday] %>,
-      <%= g.vote_start.strftime("%Y/%m/%d") %><br />
-      <%= humanize_date g.vote_start %>
-    </td>
-    <td>
-      <%= Date::DAYNAMES[g.meeting_one.wday] %>,
-      <%= g.meeting_one.strftime("%Y/%m/%d") %><br />
-      <%= humanize_date g.meeting_one %>
-    </td>
-    <td>
-      <%= Date::DAYNAMES[g.meeting_two.wday] %>,
-      <%= g.meeting_two.strftime("%Y/%m/%d") %><br />
-      <%= humanize_date g.meeting_two %>
-    </td>
-    <td>
-      <%= Date::DAYNAMES[g.vote_end.wday] %>,
-      <%= g.vote_end.strftime("%Y/%m/%d") %><br />
-      <%= humanize_date g.vote_end + 24.hours %>
-    </td>
     <% end %>
-    <% if can? :modify, g %>
-    <td>
-      <div class="btn-group">
-        <%= link_to "Edit", edit_grant_path(g), class: 'btn btn-default' %>
-      </div>
-    </td>
-    <% end %>
-  </tr>
+    </tbody>
+  </table>
   <% end %>
-  </tbody>
-</table>
-<% end %>
+</div>
