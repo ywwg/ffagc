@@ -24,7 +24,7 @@ class Admins::GrantSubmissionsController < ApplicationController
     @scope = params[:scope] || cookies[:scope] || 'active'
     @grantscope = params[:grantscope] || cookies[:grantscope] || 'none'
     @tagscope = params[:tagscope] || cookies[:tagscope] || 'any'
-    if params[:show_scores] != ''
+    if !params[:show_scores].to_s.empty?
       @show_scores = params[:show_scores] == 'true' || false
     else
       @show_scores = cookies[:show_scores] == 'true' || false
@@ -76,9 +76,9 @@ class Admins::GrantSubmissionsController < ApplicationController
                   'State/Province', 'Country', 'Postal Code']
           @grant_submissions.each do |gs|
             grant = Grant.where(id: gs.grant_id).take
-            artist = Artist.where(id: gs.artist_id).take
-            funding = gs.granted_funding_dollars || 0
             tags = Tag.joins(:submission_tag).where(:submission_tags => {:grant_submission_id => gs}).map(&:name).join(",")
+            funding = gs.granted_funding_dollars || 0
+            artist = Artist.where(id: gs.artist_id).take
             csv << [grant.name, gs.name, tags, funding, artist.name,
                     artist.contact_name, artist.email, artist.contact_street,
                     artist.contact_city, artist.contact_state,

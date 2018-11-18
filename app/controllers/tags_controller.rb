@@ -1,15 +1,6 @@
 class TagsController < ApplicationController
   load_and_authorize_resource
 
-  def index
-  end
-
-  def update
-  end
-
-  def new
-  end
-
   def create
     if @tag.save
       redirect_to grants_path

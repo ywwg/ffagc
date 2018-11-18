@@ -13,18 +13,18 @@ class GrantSubmissionsController < ApplicationController
     @other_submissions = GrantSubmission.where(artist_id: @grant_submission.artist_id)
   end
 
-  def new
-    @submission_tags = SubmissionTag.new()
-  end
-
   def set_submission_tags(tag_id_list)
     # Just delete existing tags and then recreate them
     SubmissionTag.where(grant_submission_id: @grant_submission.id).destroy_all
     tag_id_list.each do |t|
-      SubmissionTag.create!(
-        tag: Tag.find(t.to_i),
-        grant_submission: GrantSubmission.find(@grant_submission.id),
-      )
+      begin
+        SubmissionTag.create(
+          tag: Tag.find(t.to_i),
+          grant_submission: GrantSubmission.find(@grant_submission.id),
+        )
+      rescue
+        # Ignore exceptions due to bad params, etc.
+      end
     end
   end
 
