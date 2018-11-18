@@ -151,8 +151,9 @@ class VotersController < ApplicationController
   def after_update_path(voter)
     if can? :index, Voter
       voters_path
-    elsif can? :show, voter
-      voter_path(voter)
+    elsif can? :manage, Vote
+      # TODO: send email?
+      votes_path
     else
       root_path
     end

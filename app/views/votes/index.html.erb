@@ -13,7 +13,9 @@
     Voting is not open at this time.
   </div>
 <% end %>
-
+ <% if can? :edit, current_voter %>
+  <%= link_to 'Edit Meeting Availability', voter_path(current_voter), class: "btn btn-default" %>
+<% end %>
 <p>
 <div class="btn-group">
   <%= link_to "Assigned to you", votes_path(scope: :assigned), class: ['btn', 'btn-default', (@scope == 'assigned' ? 'active' : nil)] %>
