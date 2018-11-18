@@ -26,6 +26,10 @@
             <dd><%= @grant_submission.grant.name %></dd>
             <dt>Requested Funding</dt>
             <dd><%= number_to_currency @grant_submission.requested_funding_dollars %></dd>
+            <dt>Tags</dt>
+            <dd>
+            <%= Tag.joins(:submission_tag).where(:submission_tags => {:grant_submission_id => @grant_submission}).map(&:name).join(", ") %>
+            </dd>
             <% if can? :grant, @grant_submission %>
               <br/>
               <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true, :input_html => {:maxlength => 5,:style=> 'width: 80px'}  %>

@@ -34,6 +34,25 @@
         </div>
       </div>
       <div class="col-md-6">
+       <div class="panel panel-default">
+          <div class="panel-heading">
+            Submission Tags
+          </div>
+          <table class="table table-striped">
+            <tbody>
+            <% Tag.all.each do |t| %>
+              <tr>
+                <td>
+                  <%= check_box_tag "submission_tags[]", t.id,
+                  SubmissionTag.exists?(tag_id: t.id, grant_submission_id: @grant_submission.id) %>
+                </td>
+                <td><%= t.name %></td>
+                <td><%= t.description %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
         <div class="panel panel-default">
           <div class="panel-heading">
             Submission Documents

@@ -63,6 +63,26 @@
       <div class="col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading">
+            Special Submission Traits
+          </div>
+          <div class="panel-body">
+            <table class="table table-striped">
+              <tbody>
+              <% Tag.all.each do |t| %>
+                <tr>
+                  <td>
+                    <%= check_box_tag "submission_tags[]", t.id %>
+                  </td>
+                  <td><%= t.name %></td>
+                  <td><%= t.description %></td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
             Submission Documents
           </div>
           <div class="panel-body">

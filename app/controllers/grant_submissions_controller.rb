@@ -13,11 +13,25 @@ class GrantSubmissionsController < ApplicationController
     @other_submissions = GrantSubmission.where(artist_id: @grant_submission.artist_id)
   end
 
+  def set_submission_tags(tag_id_list)
+    # Just delete existing tags and then recreate them
+    SubmissionTag.where(grant_submission_id: @grant_submission.id).destroy_all
+    tag_id_list.each do |t|
+      begin
+        SubmissionTag.create(
+          tag: Tag.find(t.to_i),
+          grant_submission: GrantSubmission.find(@grant_submission.id),
+        )
+      rescue
+        # Ignore exceptions due to bad params, etc.
+      end
+    end
+  end
 
   def create
     @grant_submission.artist_id = current_artist.id
-
     if @grant_submission.save
+      set_submission_tags(params["submission_tags"])
       redirect_to action: 'index'
     else
       render 'failure'
@@ -39,6 +53,7 @@ class GrantSubmissionsController < ApplicationController
     end
 
     if @grant_submission.save
+      set_submission_tags(params["submission_tags"])
       if admin_logged_in?
         redirect_to admins_grant_submissions_path
       else
@@ -115,7 +130,7 @@ class GrantSubmissionsController < ApplicationController
   private
 
   def grant_submission_params
-    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars)
+    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars, :submission_tags)
   end
 
   def grant_update_params

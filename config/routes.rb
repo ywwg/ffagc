@@ -37,6 +37,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :tags, only: [:new, :create, :edit, :update]
+
+  resources :submission_tags, only: [:new, :create, :edit, :update]
+
   resources :proposals, only: [:destroy]
 
   resources :voters, only: [:new, :create, :update, :index, :show] do
