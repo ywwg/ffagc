@@ -43,8 +43,8 @@
             <% Tag.all.each do |t| %>
               <tr>
                 <td>
-                  <%= check_box_tag "submissions_tags[]", t.id,
-                  SubmissionsTag.exists?(tag_id: t.id, grant_submission_id: @grant_submission.id) %>
+                  <%= check_box_tag "submission_tags[]", t.id,
+                  SubmissionTag.exists?(tag_id: t.id, grant_submission_id: @grant_submission.id) %>
                 </td>
                 <td><%= t.name %></td>
                 <td><%= t.description %></td>

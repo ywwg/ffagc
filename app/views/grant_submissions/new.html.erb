@@ -71,7 +71,7 @@
               <% Tag.all.each do |t| %>
                 <tr>
                   <td>
-                    <%= check_box_tag "submissions_tags[]", t.id %>
+                    <%= check_box_tag "submission_tags[]", t.id %>
                   </td>
                   <td><%= t.name %></td>
                   <td><%= t.description %></td>

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :submissions_tag do
+  factory :submission_tag do
     tag nil
     grant_submissions nil
   end

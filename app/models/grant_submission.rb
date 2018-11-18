@@ -1,7 +1,7 @@
 class GrantSubmission < ActiveRecord::Base
   belongs_to :grant
   belongs_to :artist
-  has_many :submissions_tag
+  has_many :submission_tag
 
   scope :funded, -> { where('granted_funding_dollars > ?', 0).where(funding_decision: true) }
 

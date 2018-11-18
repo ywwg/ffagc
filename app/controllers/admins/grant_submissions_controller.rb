@@ -52,7 +52,7 @@ class Admins::GrantSubmissionsController < ApplicationController
     end
 
     if @tagscope != 'any'
-      @grant_submissions = @grant_submissions.joins(:submissions_tag).where("submissions_tags.tag_id = ?", @tagscope)
+      @grant_submissions = @grant_submissions.joins(:submission_tag).where("submission_tags.tag_id = ?", @tagscope)
     end
 
     if @show_funded != 'all'
@@ -78,7 +78,7 @@ class Admins::GrantSubmissionsController < ApplicationController
             grant = Grant.where(id: gs.grant_id).take
             artist = Artist.where(id: gs.artist_id).take
             funding = gs.granted_funding_dollars || 0
-            tags = Tag.joins(:submissions_tag).where(:submissions_tags => {:grant_submission_id => gs}).map(&:name).join(",")
+            tags = Tag.joins(:submission_tag).where(:submission_tags => {:grant_submission_id => gs}).map(&:name).join(",")
             csv << [grant.name, gs.name, tags, funding, artist.name,
                     artist.contact_name, artist.email, artist.contact_street,
                     artist.contact_city, artist.contact_state,

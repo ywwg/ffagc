@@ -1,4 +1,4 @@
-class SubmissionsTagsController < ApplicationController
+class SubmissionTagsController < ApplicationController
   load_and_authorize_resource
 
   def index

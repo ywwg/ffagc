@@ -111,15 +111,15 @@ ActiveRecord::Schema.define(version: 20181117184835) do
 
   add_index "proposals", ["grant_submission_id"], name: "index_proposals_on_grant_submission_id"
 
-  create_table "submissions_tags", force: :cascade do |t|
+  create_table "submission_tags", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "grant_submission_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
   end
 
-  add_index "submissions_tags", ["grant_submission_id"], name: "index_submissions_tags_on_grant_submission_id"
-  add_index "submissions_tags", ["tag_id"], name: "index_submissions_tags_on_tag_id"
+  add_index "submission_tags", ["grant_submission_id"], name: "index_submission_tags_on_grant_submission_id"
+  add_index "submission_tags", ["tag_id"], name: "index_submission_tags_on_tag_id"
 
   create_table "tags", force: :cascade do |t|
     t.string   "name"
