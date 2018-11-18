@@ -76,7 +76,7 @@ class Admins::GrantSubmissionsController < ApplicationController
                   'State/Province', 'Country', 'Postal Code']
           @grant_submissions.each do |gs|
             grant = Grant.where(id: gs.grant_id).take
-            tags = Tag.joins(:submission_tag).where(:submission_tags => {:grant_submission_id => gs}).map(&:name).join(",")
+            tags = Tag.tags_for_submission(gs).join(",")
             funding = gs.granted_funding_dollars || 0
             artist = Artist.where(id: gs.artist_id).take
             csv << [grant.name, gs.name, tags, funding, artist.name,
