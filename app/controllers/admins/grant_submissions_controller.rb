@@ -22,13 +22,19 @@ class Admins::GrantSubmissionsController < ApplicationController
       return
     end
     @scope = params[:scope] || cookies[:scope] || 'active'
-    @grantscope = params[:grantscope] || cookies[:grantscope] || 'all'
-    @show_scores = params[:scores] == 'true' || cookies[:show_scores] == 'true'
+    @grantscope = params[:grantscope] || cookies[:grantscope] || 'none'
+    @tagscope = params[:tagscope] || cookies[:tagscope] || 'any'
+    if params[:show_scores] != ''
+      @show_scores = params[:show_scores] == 'true' || false
+    else
+      @show_scores = cookies[:show_scores] == 'true' || false
+    end
     @show_funded = params[:funded] || cookies[:show_funded] || 'all'
     @order = params[:order] || cookies[:order] || 'name'
 
     cookies[:scope] = @scope
     cookies[:grantscope] = @grantscope
+    cookies[:tagscope] = @tagscope
     cookies[:show_scores] = @show_scores
     cookies[:show_funded] = @show_funded
     cookies[:order] = @order
@@ -43,6 +49,10 @@ class Admins::GrantSubmissionsController < ApplicationController
 
     if @grantscope != 'all'
       @grant_submissions = @grant_submissions.joins(:grant).where("grants.name = ?", @grantscope)
+    end
+
+    if @tagscope != 'any'
+      @grant_submissions = @grant_submissions.joins(:submissions_tag).where("submissions_tags.tag_id = ?", @tagscope)
     end
 
     if @show_funded != 'all'
@@ -61,14 +71,15 @@ class Admins::GrantSubmissionsController < ApplicationController
       format.html
       format.csv do
         csv_string = CSV.generate do |csv|
-          csv << ['Grant', 'Name', 'Funding Amount', 'Artist Nickname',
+          csv << ['Grant', 'Name', 'Tags', 'Funding Amount', 'Artist Nickname',
                   'Contact Name', 'Contact Email', 'Street', 'City',
                   'State/Province', 'Country', 'Postal Code']
           @grant_submissions.each do |gs|
             grant = Grant.where(id: gs.grant_id).take
             artist = Artist.where(id: gs.artist_id).take
             funding = gs.granted_funding_dollars || 0
-            csv << [grant.name, gs.name, funding, artist.name,
+            tags = Tag.joins(:submissions_tag).where(:submissions_tags => {:grant_submission_id => gs}).map(&:name).join(",")
+            csv << [grant.name, gs.name, tags, funding, artist.name,
                     artist.contact_name, artist.email, artist.contact_street,
                     artist.contact_city, artist.contact_state,
                     artist.contact_country, artist.contact_zipcode]
