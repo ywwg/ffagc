@@ -39,13 +39,19 @@
       <tr>
         <th>Name</th>
         <th>Description</th>
+        <% if can? :view_hidden, Tag %>
+        <th>Hidden</th>
+        <% end %>
       </tr>
     </thead>
     <tbody>
-    <% Tag.all.each do |t| %>
+    <% Tag.all_maybe_hidden(can? :view_hidden, Tag).each do |t| %>
       <tr>
         <td><%= t.name %></td>
         <td><%= t.description %></td>
+        <% if can? :view_hidden, Tag %>
+          <td><%= t.hidden ? "Yes" : "No" %></td>
+        <% end %>
       </tr>
     <% end %>
     </tbody>

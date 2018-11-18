@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181117184835) do
+ActiveRecord::Schema.define(version: 20181118151614) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "name"
@@ -124,8 +124,9 @@ ActiveRecord::Schema.define(version: 20181117184835) do
   create_table "tags", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "hidden",      default: false
   end
 
   create_table "voter_submission_assignments", force: :cascade do |t|

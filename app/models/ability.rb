@@ -21,12 +21,14 @@ class Ability
     can [:new, :create], Voter
 
     can :read, Grant
+    can :read, Tag
 
     if user.is_a?(Admin)
       can :manage, :all
       can [:grant, :edit_questions, :edit], GrantSubmission
       cannot [:vote, :edit_answers], GrantSubmission
       can :all, GrantsVoter
+      can [:all, :view_hidden], Tag
     end
 
     if user.is_a?(Artist)
@@ -34,6 +36,7 @@ class Ability
       can :manage, ArtistSurvey, artist_id: user.id
 
       cannot :index, [Artist, ArtistSurvey]
+      cannot :view_hidden, Tag
 
       if user.activated?
         can [:index, :show, :new, :create, :edit, :update, :destroy, :discuss, :edit_answers, :generate_contract], GrantSubmission, artist_id: user.id
@@ -48,6 +51,7 @@ class Ability
     if user.is_a?(Voter)
       can [:show, :new, :create, :edit, :update, :request_activation], Voter, id: user.id # cannot index or destroy
       can :manage, VoterSurvey, voter_id: user.id
+      can :view_hidden, Tag
 
       cannot :index, VoterSurvey
       cannot [:new, :create, :edit_questions, :edit_answers], GrantSubmission

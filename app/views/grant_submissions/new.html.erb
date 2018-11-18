@@ -68,7 +68,7 @@
           <div class="panel-body">
             <table class="table table-striped">
               <tbody>
-              <% Tag.all.each do |t| %>
+              <% Tag.all_maybe_hidden(can? :view_hidden, Tag).each do |t| %>
                 <tr>
                   <td>
                     <%= check_box_tag "submission_tags[]", t.id %>
