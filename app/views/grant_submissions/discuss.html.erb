@@ -28,7 +28,7 @@
             <dd><%= number_to_currency @grant_submission.requested_funding_dollars %></dd>
             <dt>Tags</dt>
             <dd>
-            <%= Tag.tags_for_submission(@grant_submission, can?(:view_hidden, Tag)).join(", ") %>
+            <%= @grant_submission.tags(can?(:view_hidden, Tag)).join(", ") %>
             </dd>
             <% if can? :grant, @grant_submission %>
               <br/>

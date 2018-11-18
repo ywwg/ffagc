@@ -63,6 +63,20 @@ class GrantSubmission < ActiveRecord::Base
     [max_voters - voter_submission_assignments.count, 0].max
   end
 
+  # Returns a list of strings for each tag on the grant submission.
+  def tags(can_view_hidden)
+    if !can_view_hidden
+      Tag.joins(:submission_tag)
+        .where(hidden: false,
+              :submission_tags => {:grant_submission_id => id})
+        .map(&:name)
+    else
+      Tag.joins(:submission_tag)
+        .where(:submission_tags => {:grant_submission_id => id})
+        .map(&:name)
+    end
+  end
+
   # Sum up granted dollars for the provided grant ids (for filtering) and
   # by query (for further filtering).
   def self.granted_funding_dollars_total(id_list, query)
