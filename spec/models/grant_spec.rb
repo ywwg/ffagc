@@ -37,5 +37,38 @@ describe Grant do
         end
       end
     end
+    context 'grant levels csv' do
+      context 'valid' do
+        subject { FactoryGirl.build(:grant, funding_levels_csv: '0,100, 400, 600-800') }
+
+        it 'succeeds' do
+          expect(subject).to be_valid
+        end
+      end
+      context 'invalid range' do
+        subject { FactoryGirl.build(:grant, funding_levels_csv: '0,600-500') }
+
+        it 'has expected error' do
+          expect(subject).not_to be_valid
+          expect(subject.errors.keys).to include(:funding_levels_csv)
+        end
+      end
+      context 'invalid input' do
+        subject { FactoryGirl.build(:grant, funding_levels_csv: '0-600-500') }
+
+        it 'has expected error' do
+          expect(subject).not_to be_valid
+          expect(subject.errors.keys).to include(:funding_levels_csv)
+        end
+      end
+      context 'more invalid input' do
+        subject { FactoryGirl.build(:grant, funding_levels_csv: '0,5--120') }
+
+        it 'has expected error' do
+          expect(subject).not_to be_valid
+          expect(subject.errors.keys).to include(:funding_levels_csv)
+        end
+      end
+    end
   end
 end

@@ -27,6 +27,8 @@ class Grant < ActiveRecord::Base
 
   validate :dates_ordering
 
+  validate :funding_levels_syntax
+
   private
 
   def dates_ordering
@@ -40,5 +42,36 @@ class Grant < ActiveRecord::Base
   def validate_date_order(first_date, second_date, error_key, error_message)
     return if second_date > first_date
     errors.add(error_key, error_message)
+  end
+
+  def funding_levels_syntax
+    if funding_levels_csv == nil
+      return
+    end
+
+    errmsg = 'must be comma separated single integers or hyphenated interger ranges'
+    tokens = funding_levels_csv.split(',')
+    tokens.each do |token|
+      limits = token.split("-")
+      if limits.length == 1
+        begin
+          Integer(limits[0])
+        rescue ArgumentError
+          errors.add(:funding_levels_csv, errmsg)
+        end
+      elsif limits.length == 2
+        begin
+          lower = Integer(limits[0])
+          upper = Integer(limits[1])
+          if lower > upper
+            errors.add(:funding_levels_csv, 'upper limit must be greater than lower limit')
+          end
+        rescue ArgumentError
+          errors.add(:funding_levels_csv, errmsg)
+        end
+      else
+        errors.add(:funding_levels_csv, errmsg)
+      end
+    end
   end
 end
