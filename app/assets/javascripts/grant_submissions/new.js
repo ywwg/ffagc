@@ -1,3 +1,5 @@
+// This global is set when the user clicks on a grant, and is read again when
+// they try to submit. It's used to validate the funding levels they choose.
 var levels_json = {};
 
 function validate() {
@@ -62,13 +64,16 @@ function get_chosen_grant() {
 // loads the funding levels for the provided grant into the global levels_json
 // object.
 function load_funding_levels(chosen_grant) {
+  if (chosen_grant === -1) {
+    return;
+  }
   $.ajax({
     type: 'GET',
     url: '/grants/levels',
     dataType: 'json',
     data: {id: chosen_grant},
     success: function(levels) {
-      var msg = 'Available funding levels: ' + levels.csv;
+      var msg = 'Available funding levels: ' + levels.pretty;
       $('#funding_level_text').text(msg);
       levels_json = levels;
     }
@@ -84,12 +89,11 @@ function validate_funding_levels() {
   var valid = true;
   $('#funding_levels').children().each(function(index) {
     if ($(this).is('input:text')) {
-      level_str = $(this).val();
+      level_str = $(this).val().replace('$', '');
       if (level_str === '') {
-        valid = false;
-        return false;
+        return true
       }
-      var level = parseInt(level_str);
+      var level = Number(level_str);
       if (isNaN(level) || level === 0) {
         valid = false;
         return false;
@@ -200,4 +204,7 @@ function removeLevel(levelIdx) {
 
 $(document).ready(function() {
   addLevel(0);
+  // In the case when this is called from edit, we want to preload the
+  // funding levels.
+  load_funding_levels(get_chosen_grant());
 });

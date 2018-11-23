@@ -61,7 +61,7 @@ end
     end
 
     render :json => {
-      csv: grant.funding_levels_csv,
+      pretty: grant.funding_levels_pretty,
       levels: levels_array
     }
   end

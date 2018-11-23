@@ -28,6 +28,17 @@ class Grant < ActiveRecord::Base
 
   validate :funding_levels_syntax
 
+  def funding_levels_pretty
+    if funding_levels_csv == nil || funding_levels_csv == ""
+      return ""
+    end
+    currency_list = []
+    funding_levels_csv.split(',').each do |level|
+      currency_list.append("$#{level.strip}")
+    end
+    return currency_list.join(", ")
+  end
+
   private
 
   def dates_ordering

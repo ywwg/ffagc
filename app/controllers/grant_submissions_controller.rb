@@ -31,9 +31,23 @@ class GrantSubmissionsController < ApplicationController
     end
   end
 
+  # We tolerate blank entries, entries with dollar signs, and entries with
+  # decimal points (which we destroy)
+  def clean_funding_values(levels)
+    normed_list = []
+    levels.each do |level|
+      if level == ""
+        next
+      end
+      level = level.gsub("$", "")
+      normed_list.append(level.to_i)
+    end
+    return normed_list.join(",")
+  end
+
   def create
     @grant_submission.artist_id = current_artist.id
-    @grant_submission.funding_requests_csv = params["funding_levels"].join(",")
+    @grant_submission.funding_requests_csv = clean_funding_values(params["funding_levels"])
     if @grant_submission.save
       set_submission_tags(params["submission_tags"])
       redirect_to action: 'index'
@@ -50,7 +64,7 @@ class GrantSubmissionsController < ApplicationController
 
   def update
     @grant_submission.attributes = grant_update_params
-    @grant_submission.funding_requests_csv = params["funding_levels"].join(",")
+    @grant_submission.funding_requests_csv = clean_funding_values(params["funding_levels"])
 
     if admin_logged_in?
       @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
@@ -65,7 +79,7 @@ class GrantSubmissionsController < ApplicationController
         redirect_to action: 'index'
       end
     else
-      render 'new'
+      render 'failure'
     end
   end
 
