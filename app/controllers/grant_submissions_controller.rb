@@ -64,15 +64,14 @@ class GrantSubmissionsController < ApplicationController
 
   def update
     @grant_submission.attributes = grant_update_params
-    @grant_submission.funding_requests_csv = clean_funding_values(params["funding_levels"])
-
-    if admin_logged_in?
-      @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
-      @grant_submission.funding_decision = grant_update_params[:funding_decision]
+    if params.has_key?(:funding_levels)
+      @grant_submission.funding_requests_csv = clean_funding_values(params["funding_levels"])
     end
 
     if @grant_submission.save
-      set_submission_tags(params["submission_tags"])
+      if params.has_key?(:submission_tags)
+        set_submission_tags(params["submission_tags"])
+      end
       if admin_logged_in?
         redirect_to admins_grant_submissions_path
       else
