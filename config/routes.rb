@@ -12,7 +12,13 @@ Rails.application.routes.draw do
   get 'admins/voters' => 'admins#voters'
 
   resources :artists, :grant_submissions
-  resources :grants, except: [:show]
+  resources :grants, except: [:show] do
+    collection do
+      get 'levels'
+    end
+  end
+
+  get 'grants/levels'
 
   resources :admins, only: [:new, :create, :index]
   namespace :admins do
@@ -48,8 +54,6 @@ Rails.application.routes.draw do
       post 'verify'
     end
   end
-
-  get 'sessions/voters/unverified'
 
   resources :votes, only: [:index]
   resource :votes, only: [:update]

@@ -39,6 +39,33 @@ end
     end
   end
 
+  def levels
+    grant_id = params[:id]
+    grant = Grant.find(grant_id)
+    if grant == nil
+      render :json => {}
+      return
+    end
+
+    levels_array = []
+    grant.funding_levels_csv.split(',').each do |token|
+      limits = token.split("-")
+      if limits.length == 1
+        limit = Integer(limits[0])
+        levels_array.append([limit, limit])
+      elsif limits.length == 2
+        lower = Integer(limits[0])
+        upper = Integer(limits[1])
+        levels_array.append(lower, upper)
+      end
+    end
+
+    render :json => {
+      csv: grant.funding_levels_csv,
+      levels: levels_array
+    }
+  end
+
   private
 
   def resource_params

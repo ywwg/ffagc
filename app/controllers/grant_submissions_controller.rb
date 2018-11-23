@@ -16,6 +16,9 @@ class GrantSubmissionsController < ApplicationController
   def set_submission_tags(tag_id_list)
     # Just delete existing tags and then recreate them
     SubmissionTag.where(grant_submission_id: @grant_submission.id).destroy_all
+    if tag_id_list == nil
+      return
+    end
     tag_id_list.each do |t|
       begin
         SubmissionTag.create(
@@ -30,6 +33,12 @@ class GrantSubmissionsController < ApplicationController
 
   def create
     @grant_submission.artist_id = current_artist.id
+    @grant_submission.requested_funding_dollars = 0
+    params["funding_levels"].each do |level|
+      if level.to_i > @grant_submission.requested_funding_dollars
+        @grant_submission.requested_funding_dollars = level.to_i
+      end
+    end
     if @grant_submission.save
       set_submission_tags(params["submission_tags"])
       redirect_to action: 'index'
@@ -130,11 +139,11 @@ class GrantSubmissionsController < ApplicationController
   private
 
   def grant_submission_params
-    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars, :submission_tags)
+    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :funding_levels, :submission_tags)
   end
 
   def grant_update_params
-    allowed_params = [:name, :grant_id, :requested_funding_dollars, :proposal]
+    allowed_params = [:name, :grant_id, :funding_levels, :proposal]
 
     if admin_logged_in?
       allowed_params.push(:granted_funding_dollars, :funding_decision)
