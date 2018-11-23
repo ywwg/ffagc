@@ -16,6 +16,9 @@ class GrantSubmissionsController < ApplicationController
   def set_submission_tags(tag_id_list)
     # Just delete existing tags and then recreate them
     SubmissionTag.where(grant_submission_id: @grant_submission.id).destroy_all
+    if tag_id_list == nil
+      return
+    end
     tag_id_list.each do |t|
       begin
         SubmissionTag.create(
@@ -28,8 +31,23 @@ class GrantSubmissionsController < ApplicationController
     end
   end
 
+  # We tolerate blank entries, entries with dollar signs, and entries with
+  # decimal points (which we destroy)
+  def clean_funding_values(levels)
+    normed_list = []
+    levels.each do |level|
+      if level == ""
+        next
+      end
+      level = level.gsub("$", "")
+      normed_list.append(level.to_i)
+    end
+    return normed_list.join(",")
+  end
+
   def create
     @grant_submission.artist_id = current_artist.id
+    @grant_submission.funding_requests_csv = clean_funding_values(params["funding_levels"])
     if @grant_submission.save
       set_submission_tags(params["submission_tags"])
       redirect_to action: 'index'
@@ -46,6 +64,7 @@ class GrantSubmissionsController < ApplicationController
 
   def update
     @grant_submission.attributes = grant_update_params
+    @grant_submission.funding_requests_csv = clean_funding_values(params["funding_levels"])
 
     if admin_logged_in?
       @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
@@ -60,7 +79,7 @@ class GrantSubmissionsController < ApplicationController
         redirect_to action: 'index'
       end
     else
-      render 'new'
+      render 'failure'
     end
   end
 
@@ -97,7 +116,7 @@ class GrantSubmissionsController < ApplicationController
 
     @proposal = Proposal.new
     initialize_other_submissions
-
+    @request_levels = @grant_submission.funding_requests_as_list
     render 'edit'
   end
 
@@ -130,11 +149,11 @@ class GrantSubmissionsController < ApplicationController
   private
 
   def grant_submission_params
-    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :requested_funding_dollars, :submission_tags)
+    params.require(:grant_submission).permit(:name, :proposal, :grant_id, :funding_levels, :submission_tags)
   end
 
   def grant_update_params
-    allowed_params = [:name, :grant_id, :requested_funding_dollars, :proposal]
+    allowed_params = [:name, :grant_id, :funding_levels, :proposal]
 
     if admin_logged_in?
       allowed_params.push(:granted_funding_dollars, :funding_decision)

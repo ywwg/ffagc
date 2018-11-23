@@ -73,7 +73,7 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Max Funding</th>
+        <th>Funding Levels</th>
         <th>Submission Start</th>
         <th>Submission End</th>
         <% if can? :vote, GrantSubmission or current_admin %>
@@ -93,7 +93,7 @@
       <td>
         <%= g.name %>
       </td>
-      <td>$<%= g.max_funding_dollars %></td>
+      <td><%= g.funding_levels_pretty %></td>
       <td>
         <%= Date::DAYNAMES[g.submit_start.wday] %>,
         <%= g.submit_start.strftime("%Y/%m/%d") %><br />

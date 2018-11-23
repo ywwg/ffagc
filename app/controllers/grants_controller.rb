@@ -39,10 +39,42 @@ end
     end
   end
 
+  # This is called via AJAX to make the forms useful. Returns the funding levels
+  # for the given grant id in two ways -- one pretty, for display, and the
+  # other as a list of founding lower and upper bounds. In the case of single
+  # values, we return the same value and the lower and upper bound.
+  def levels
+    grant_id = params[:id]
+    grant = Grant.find(grant_id)
+    if grant == nil
+      render :json => {}
+      return
+    end
+
+    levels_array = []
+    grant.funding_levels_csv.split(',').each do |token|
+      limits = token.split("-")
+      if limits.length == 1
+        limit = Integer(limits[0])
+        levels_array.append([limit, limit])
+      elsif limits.length == 2
+        lower = Integer(limits[0])
+        upper = Integer(limits[1])
+        levels_array.append(lower, upper)
+      end
+    end
+
+    render :json => {
+      pretty: grant.funding_levels_pretty,
+      levels: levels_array
+    }
+  end
+
   private
 
   def resource_params
-    params.require(:grant).permit(:name, :max_funding_dollars,
+    params.require(:grant).permit(:name,
+                                  :funding_levels_csv,
                                   :submit_start, :submit_end,
                                   :vote_start, :vote_end,
                                   :meeting_one, :meeting_two,

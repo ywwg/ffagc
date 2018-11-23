@@ -10,8 +10,6 @@ class GrantSubmission < ActiveRecord::Base
   has_many :voter_submission_assignments
   has_many :voters, through: :voter_submission_assignments
 
-  delegate :max_funding_dollars, to: :grant
-
   accepts_nested_attributes_for :proposals
 
   mount_uploader :proposal, GrantProposalUploader
@@ -22,8 +20,7 @@ class GrantSubmission < ActiveRecord::Base
 
   validates :grant, presence: true
 
-  # Max value depends on the grant
-  validates :requested_funding_dollars, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: :max_funding_dollars, only_integer: true }
+  validate :funding_requests_syntax
 
   # This is supposed to check size before upload but I don't think it does.
   # It does validate after upload, though, so it's not DDOS-proof but it will
@@ -83,6 +80,24 @@ class GrantSubmission < ActiveRecord::Base
     grant_submissions = GrantSubmission.where(id: id_list).where(query).sum(:granted_funding_dollars)
   end
 
+  def funding_requests_pretty
+    if funding_requests_csv == nil || funding_requests_csv == ""
+      return ""
+    end
+    currency_list = []
+    funding_requests_csv.split(',').each do |level|
+      currency_list.append("$#{level}")
+    end
+    return currency_list.join(", ")
+  end
+
+  def funding_requests_as_list
+    if funding_requests_csv == nil || funding_requests_csv == ""
+      return []
+    end
+    return funding_requests_csv.split(',')
+  end
+
   private
 
   def update_question_and_answer_dates
@@ -94,6 +109,18 @@ class GrantSubmission < ActiveRecord::Base
 
     if answers_changed?
       self.answers_updated_at = Time.zone.now
+    end
+  end
+
+  def funding_requests_syntax
+    errmsg = 'must be comma separated single integers'
+    tokens = funding_requests_csv.split(',')
+    tokens.each do |token|
+      begin
+        Integer(token)
+      rescue ArgumentError
+        errors.add(:funding_requests_csv, errmsg)
+      end
     end
   end
 end

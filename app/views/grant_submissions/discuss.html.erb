@@ -25,7 +25,7 @@
             <dt>Grant</dt>
             <dd><%= @grant_submission.grant.name %></dd>
             <dt>Requested Funding</dt>
-            <dd><%= number_to_currency @grant_submission.requested_funding_dollars %></dd>
+            <dd><%= @grant_submission.funding_requests_pretty %></dd>
             <dt>Tags</dt>
             <dd>
             <%= @grant_submission.tags(can?(:view_hidden, Tag)).join(", ") %>

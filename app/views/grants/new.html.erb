@@ -15,7 +15,8 @@
       <div class="row">
         <div class="col-md-6">
           <%= f.input :name %>
-          <%= f.input :max_funding_dollars %>
+          <%= f.input :funding_levels_csv, label: "Funding Levels", html5: true %>
+          <h6 style="margin-top: -12px">Enter funding levels as a comma-separated list of integers or dashed-ranges, like 150,300,500-600,1000</h6>
           <%= f.input :submit_start, as: :date, html5: true %>
           <%= f.input :submit_end, as: :date, html5: true %>
         </div>

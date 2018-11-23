@@ -89,11 +89,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :collated_meetings
 
-  def grant_max_funding_dollars_json
-    Grant.all.select(:id, :max_funding_dollars).to_json
-  end
-  helper_method :grant_max_funding_dollars_json
-
   # This method is expected by CanCan
   def current_user
     # NOTE: This logic means that if multiple users are logged in,
