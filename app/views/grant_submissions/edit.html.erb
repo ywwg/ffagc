@@ -26,8 +26,28 @@
             <%= f.input :name, label: "Name of Piece", required: true, validate: true %>
 
             <div id="grant_submission_grant_selectors">
-            <%= f.association :grant, as: :radio_buttons %>
+            <%= f.association :grant, as: :radio_buttons,
+                collection: Grant.where(id: active_submit_grants),
+                :input_html => { :onclick => "load_funding_levels(get_chosen_grant())" } %>
             </div>
+
+            <div id="funding_levels">
+              <%# This is probably not a good way of doing it.  We should probably call
+              addLevel with an extra param to preset the value of the field. %>
+              <% @request_levels.each_with_index do |level, idx| %>
+                <% if idx > 0 %><br id="funding_levels_br_<%= idx %>"/><% end %>
+                <%= text_field_tag "funding_levels[]", level, id: "funding_levels_text_#{idx}" %>
+              <% end %>
+              <% if @request_levels.length > 1 %>
+                <button name="button" type="button" id= "remove_level_button_<%= @request_levels.length-1 %>"
+                    onclick="removeLevel(<%= @request_levels.length-1 %>)" class = "btn btn-default btn-space">-</button>
+              <% end %>
+              <% if @request_levels.length <= 5 %>
+                <button name="button" type="button" id= "add_level_button_<%= @request_levels.length - 1 %>"
+                    onclick="addLevel(<%= @request_levels.length %>)" class = "btn btn-default btn-space">+</button>
+              <% end %>
+            </div>
+            <h5 id="funding_level_text"></h5>
           </div>
         </div>
       </div>
@@ -77,53 +97,5 @@
   </div>
 <% end %>
 
-<%# BEGIN YIKES %>
-<%# We need to embed all the max funding dollarses here so we can check them below %>
-<% Grant.all.each do |grant| -%>
-<div style="display:none" id="<%= "grant_" + grant.id.to_s + "_max_funding_dollars"%>"><%= grant.max_funding_dollars.to_s %></div>
-<% end %>
-<%# END YIKES %>
-
-<script>
-  function validate() {
-    errors = 0;
-
-    if (document.getElementById("grant_submission_name").value == "") {
-      errors++;
-      alert('Error: Please choose a name for your proposal');
-      document.getElementById("grant_submission_name").style.border = '1px solid red';
-    }
-
-    var grantRadios = document.querySelectorAll('[id^=grant_submission_grant_id]');
-    var chosen_grant = -1;
-    for (var i in grantRadios) {
-      if (grantRadios[i].checked) {
-        chosen_grant = grantRadios[i].value;
-      }
-    }
-    if (chosen_grant === -1) {
-      errors++;
-      alert('Error: Please select a grant for your proposal');
-      document.getElementById("grant_submission_grant_selectors").style.border = '1px solid red';
-    } else {
-      // TODO: validate levels again
-    }
-
-    if (document.getElementById("grant_submission_proposal").value != "") {
-      if (errors === 0) {
-        // Ask for confirmation if they are uploading a new document, but only if there are no other errors.
-        var anon = confirm("Did you make sure your proposal is anonymous and DOES NOT include any identifying information?");
-        if (!anon) {
-          errors++;
-        }
-      }
-    } else if (document.getElementById("grant_submission_proposal_original_doc") == null) {
-      // If they didn't specify a new doc and there wasn't an existing doc,
-      // then it's an error.
-      errors++;
-      alert('Error: Please select your application PDF');
-      document.getElementById("grant_submission_proposal").style.border = '1px solid red';
-    }
-    return errors===0;
-  }
-</script>
+<%# We reuse the js from new to reduce duplication%>
+<%= javascript_include_tag 'grant_submissions/new', 'data-turbolinks-track': true %>

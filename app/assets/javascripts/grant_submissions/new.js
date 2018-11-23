@@ -86,8 +86,8 @@ function validate_funding_levels() {
     if ($(this).is('input:text')) {
       level_str = $(this).val();
       if (level_str === '') {
-        // skip empty, because we don't have a delete button (yet?)
-        return true;
+        valid = false;
+        return false;
       }
       var level = parseInt(level_str);
       if (isNaN(level) || level === 0) {
@@ -115,18 +115,87 @@ function validate_level(level, levels_array) {
 }
 
 // Appends another entry box for funding levels
-function addLevel(nextLevel) {
-  if (nextLevel > 0) {
-    $('#add_level_button_' + (nextLevel - 1)).remove();
+function addLevel(levelIdx) {
+  // Escape hatch -- don't add if the text input already exists.
+  // This happens when edit.html.erb pre-creates the boxes
+  if ($('#funding_levels_text_' + levelIdx).length != 0) {
+    return;
   }
+  // Don't go crazy, user.
+  if (levelIdx > 5) {
+    return;
+  }
+  // Remove the buttons from the previous row
+  if (levelIdx > 0) {
+    $('#remove_level_button_' + (levelIdx - 1)).remove();
+    $('#add_level_button_' + (levelIdx - 1)).remove();
+  }
+
+  // line break
+  if (levelIdx > 0) {
+    $('#funding_levels')
+        .append('<br id="funding_levels_br_' + levelIdx + '"/>');
+  }
+
+  // Text box
   $('#funding_levels')
       .append(
-          '<br/>\
-    <input type="text" name="funding_levels[]" id="' +
-          nextLevel + '" />\
-    <button name="button" type="button" id="add_level_button_' +
-          nextLevel + '" onclick="addLevel(' + (nextLevel + 1) +
-          ')" class="btn btn-default">+</button>');
+          '<input type="text" name="funding_levels[]" id="funding_levels_text_' +
+          levelIdx + '" />');
+
+  // Removal button
+  if (levelIdx > 0 && levelIdx < 5) {
+    $('#funding_levels')
+        .append(
+            '<button name="button" type="button" id="remove_level_button_' +
+            levelIdx + '" onclick="removeLevel(' + levelIdx +
+            ')" class="btn btn-default btn-space">-</button>');
+  }
+
+  // Addition button
+  if (levelIdx < 4) {
+    $('#funding_levels')
+        .append(
+            '<button name="button" type="button" id="add_level_button_' +
+            levelIdx + '" onclick="addLevel(' + (levelIdx + 1) +
+            ')" class="btn btn-default btn-space">+</button>');
+  }
+}
+
+// Removes the corresponding funding level entry
+function removeLevel(levelIdx) {
+  // If this one doesn't exist, don't remove
+  if ($('#funding_levels_text_' + levelIdx).length == 0) {
+    return;
+  }
+  // Also don't remove if somehow it's not the last one
+  if ($('#funding_levels_text_' + (levelIdx + 1)).length != 0) {
+    return;
+  }
+
+  // Remove the row
+  if (levelIdx > 0) {
+    $('#funding_levels_br_' + levelIdx).remove();
+    $('#funding_levels_text_' + levelIdx).remove();
+    $('#remove_level_button_' + levelIdx).remove();
+    $('#add_level_button_' + levelIdx).remove();
+  }
+
+  // New removal button
+  if (levelIdx > 1) {
+    $('#funding_levels')
+        .append(
+            '<button name="button" type="button" id="remove_level_button_' +
+            (levelIdx - 1) + '" onclick="removeLevel(' + (levelIdx - 1) +
+            ')" class="btn btn-default btn-space">-</button>');
+  }
+
+  // New addition button
+  $('#funding_levels')
+      .append(
+          '<button name="button" type="button" id="add_level_button_' +
+          (levelIdx - 1) + '" onclick="addLevel(' + levelIdx +
+          ')" class="btn btn-default btn-space">+</button>');
 }
 
 $(document).ready(function() {

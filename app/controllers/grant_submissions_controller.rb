@@ -50,6 +50,7 @@ class GrantSubmissionsController < ApplicationController
 
   def update
     @grant_submission.attributes = grant_update_params
+    @grant_submission.funding_requests_csv = params["funding_levels"].join(",")
 
     if admin_logged_in?
       @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
@@ -101,7 +102,7 @@ class GrantSubmissionsController < ApplicationController
 
     @proposal = Proposal.new
     initialize_other_submissions
-
+    @request_levels = @grant_submission.funding_requests_as_list
     render 'edit'
   end
 

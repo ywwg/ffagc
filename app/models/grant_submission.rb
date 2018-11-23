@@ -93,6 +93,14 @@ class GrantSubmission < ActiveRecord::Base
     return currency_list.join(", ")
   end
 
+  def funding_requests_as_list
+    if funding_requests_csv == nil || funding_requests_csv == ""
+      return []
+    end
+    Rails.logger.debug("requests: #{funding_requests_csv}")
+    return funding_requests_csv.split(',')
+  end
+
   private
 
   def update_question_and_answer_dates
