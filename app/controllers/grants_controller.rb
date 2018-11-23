@@ -39,6 +39,10 @@ end
     end
   end
 
+  # This is called via AJAX to make the forms useful. Returns the funding levels
+  # for the given grant id in two ways -- one pretty, for display, and the
+  # other as a list of founding lower and upper bounds. In the case of single
+  # values, we return the same value and the lower and upper bound.
   def levels
     grant_id = params[:id]
     grant = Grant.find(grant_id)

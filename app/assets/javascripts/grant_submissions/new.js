@@ -89,10 +89,14 @@ function validate_funding_levels() {
   var valid = true;
   $('#funding_levels').children().each(function(index) {
     if ($(this).is('input:text')) {
+      // Ignore blanks
       level_str = $(this).val().replace('$', '');
       if (level_str === '') {
         return true
       }
+      // Javascript Number parsing is not precisely the same as Ruby's Integer
+      // parsing, but it's close enough and I've worked around some of the
+      // difficulties.
       var level = Number(level_str);
       if (isNaN(level) || level === 0) {
         valid = false;
@@ -107,6 +111,8 @@ function validate_funding_levels() {
   return valid;
 }
 
+// Validates a single level request against an array like the one returned
+// by grants_controller.rb:levels.
 function validate_level(level, levels_array) {
   for (var i = 0; i < levels_array.length; i++) {
     var lower = levels_array[i][0];

@@ -97,7 +97,6 @@ class GrantSubmission < ActiveRecord::Base
     if funding_requests_csv == nil || funding_requests_csv == ""
       return []
     end
-    Rails.logger.debug("requests: #{funding_requests_csv}")
     return funding_requests_csv.split(',')
   end
 
@@ -115,9 +114,8 @@ class GrantSubmission < ActiveRecord::Base
     end
   end
 
-  # funding requests must be single comma separated ints.
   def funding_requests_syntax
-    errmsg = 'must be comma separated single integers or hyphenated interger ranges'
+    errmsg = 'must be comma separated single integers'
     tokens = funding_requests_csv.split(',')
     tokens.each do |token|
       begin

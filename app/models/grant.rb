@@ -59,6 +59,7 @@ class Grant < ActiveRecord::Base
       return
     end
 
+    # Valid example: "0, 10-49, 500, 1000-2000"
     errmsg = 'must be comma separated single integers or hyphenated interger ranges'
     tokens = funding_levels_csv.split(',')
     tokens.each do |token|
