@@ -28,8 +28,6 @@
             <div id="grant_submission_grant_selectors">
             <%= f.association :grant, as: :radio_buttons %>
             </div>
-
-            <%= f.input :requested_funding_dollars, :label => "Requested Funding ($)", :required => true, :validate => true, as: :integer, html5: true  %>
           </div>
         </div>
       </div>
@@ -108,15 +106,7 @@
       alert('Error: Please select a grant for your proposal');
       document.getElementById("grant_submission_grant_selectors").style.border = '1px solid red';
     } else {
-      // Here's where the YIKES pays off.  We get the value in the hidden div based on which grant
-      // they chose.
-      var max_funding_dollars = parseInt(document.getElementById('grant_' + chosen_grant + '_max_funding_dollars').textContent);
-      var requested_funding_dollars = document.getElementById('grant_submission_requested_funding_dollars').value;
-      if (requested_funding_dollars <= 0 || requested_funding_dollars > max_funding_dollars) {
-        errors++;
-        alert('Error: Invalid amount entered for requested amount.  Must be up to $' + max_funding_dollars);
-        document.getElementById("grant_submission_requested_funding_dollars").style.border = '1px solid red';
-      }
+      // TODO: validate levels again
     }
 
     if (document.getElementById("grant_submission_proposal").value != "") {

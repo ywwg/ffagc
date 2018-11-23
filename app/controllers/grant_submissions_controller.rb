@@ -33,12 +33,7 @@ class GrantSubmissionsController < ApplicationController
 
   def create
     @grant_submission.artist_id = current_artist.id
-    @grant_submission.requested_funding_dollars = 0
-    params["funding_levels"].each do |level|
-      if level.to_i > @grant_submission.requested_funding_dollars
-        @grant_submission.requested_funding_dollars = level.to_i
-      end
-    end
+    @grant_submission.funding_requests_csv = params["funding_levels"].join(",")
     if @grant_submission.save
       set_submission_tags(params["submission_tags"])
       redirect_to action: 'index'
