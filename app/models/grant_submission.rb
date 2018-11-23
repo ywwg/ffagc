@@ -10,8 +10,6 @@ class GrantSubmission < ActiveRecord::Base
   has_many :voter_submission_assignments
   has_many :voters, through: :voter_submission_assignments
 
-  delegate :max_funding_dollars, to: :grant
-
   accepts_nested_attributes_for :proposals
 
   mount_uploader :proposal, GrantProposalUploader

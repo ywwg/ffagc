@@ -151,7 +151,7 @@ function addLevel(levelIdx) {
   $('#funding_levels')
       .append(
           '<input type="text" name="funding_levels[]" id="funding_levels_text_' +
-          levelIdx + '" />');
+          levelIdx + '" class="form-control string fund-entry" />');
 
   // Removal button
   if (levelIdx > 0 && levelIdx < 5) {

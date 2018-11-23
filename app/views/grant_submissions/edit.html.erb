@@ -27,16 +27,18 @@
 
             <div id="grant_submission_grant_selectors">
             <%= f.association :grant, as: :radio_buttons,
-                collection: Grant.where(id: active_submit_grants),
+                collection: Grant.where(hidden: false),
                 :input_html => { :onclick => "load_funding_levels(get_chosen_grant())" } %>
             </div>
 
             <div id="funding_levels">
-              <%# This is probably not a good way of doing it.  We should probably call
+              <%# This is not a good way of doing it.  We should probably call
               addLevel with an extra param to preset the value of the field. %>
               <% @request_levels.each_with_index do |level, idx| %>
                 <% if idx > 0 %><br id="funding_levels_br_<%= idx %>"/><% end %>
-                <%= text_field_tag "funding_levels[]", level, id: "funding_levels_text_#{idx}" %>
+                <%= text_field_tag "funding_levels[]", level,
+                    id: "funding_levels_text_#{idx}",
+                    class:"form-control string fund-entry" %>
               <% end %>
               <% if @request_levels.length > 1 %>
                 <button name="button" type="button" id= "remove_level_button_<%= @request_levels.length-1 %>"

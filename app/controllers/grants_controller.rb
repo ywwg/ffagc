@@ -73,7 +73,7 @@ end
   private
 
   def resource_params
-    params.require(:grant).permit(:name, :max_funding_dollars,
+    params.require(:grant).permit(:name,
                                   :funding_levels_csv,
                                   :submit_start, :submit_end,
                                   :vote_start, :vote_end,
