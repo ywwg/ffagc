@@ -34,7 +34,12 @@ class Grant < ActiveRecord::Base
     end
     currency_list = []
     funding_levels_csv.split(',').each do |level|
-      currency_list.append("$#{level.strip}")
+      row = level.strip.split("-")
+      if row.length == 1
+        currency_list.append("$#{level.strip}")
+      else
+        currency_list.append("$#{row[0].strip}-$#{row[1].strip}")
+      end
     end
     return currency_list.join(", ")
   end
