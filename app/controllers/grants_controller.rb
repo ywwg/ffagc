@@ -1,4 +1,6 @@
 class GrantsController < ApplicationController
+  include GrantHelper
+
   load_and_authorize_resource
 
   def index
@@ -64,8 +66,10 @@ end
       end
     end
 
+    # XXX: We're not supposed to be doing display formatting in the controller
+    # like this.
     render :json => {
-      pretty: grant.funding_levels_pretty,
+      pretty: funding_levels_pretty(grant),
       levels: levels_array
     }
   end

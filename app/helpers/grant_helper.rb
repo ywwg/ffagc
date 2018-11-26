@@ -1,10 +1,12 @@
+include ActionView::Helpers::NumberHelper
+
 module GrantHelper
-  def funding_levels_pretty(gs)
-    if gs.funding_levels_csv == nil || gs.funding_levels_csv == ""
+  def funding_levels_pretty(grant)
+    if grant.funding_levels_csv == nil || grant.funding_levels_csv == ""
       return ""
     end
     currency_list = []
-    gs.funding_levels_csv.split(',').each do |level|
+    grant.funding_levels_csv.split(',').each do |level|
       row = level.strip.split("-")
       if row.length == 1
         currency_list.append(number_to_currency(level, precision: 0))
