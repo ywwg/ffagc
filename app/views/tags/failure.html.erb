@@ -4,6 +4,18 @@
   <%= content_tag :div, msg, class: name %>
 <% end %>
 
+<% if @tag.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@tag.errors.count, "error") %> prohibited this tag from being saved:</h2>
+
+    <ul>
+    <% @tag.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
 Tag creation failed, check logs.
 
 <%= link_to "Back", grants_path %>
