@@ -60,7 +60,7 @@ end
       elsif limits.length == 2
         lower = Integer(limits[0])
         upper = Integer(limits[1])
-        levels_array.append(lower, upper)
+        levels_array.append([lower, upper])
       end
     end
 
