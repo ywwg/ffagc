@@ -1,5 +1,9 @@
 <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Failure!</h1>
 
+<% flash.each do |name, msg| -%>
+  <%= content_tag :div, msg, class: name %>
+<% end %>
+
 Tag creation failed, check logs.
 
 <%= link_to "Back", grants_path %>
