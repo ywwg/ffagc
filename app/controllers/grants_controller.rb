@@ -35,7 +35,7 @@ end
       adjust_grant_deadline
       redirect_to action: 'index'
     else
-      render 'new'
+      render 'failure'
     end
   end
 

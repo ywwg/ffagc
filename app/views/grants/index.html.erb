@@ -42,6 +42,9 @@
         <% if can? :view_hidden, Tag %>
         <th>Hidden</th>
         <% end %>
+        <% if can? :modify, Tag %>
+        <th></th>
+        <% end %>
       </tr>
     </thead>
     <tbody>
@@ -51,6 +54,13 @@
         <td><%= t.description %></td>
         <% if can? :view_hidden, Tag %>
           <td><%= t.hidden ? "Yes" : "No" %></td>
+        <% end %>
+        <% if can? :modify, t %>
+          <td>
+            <div class="btn-group">
+              <%= link_to "Edit", edit_tag_path(t), class: 'btn btn-default' %>
+            </div>
+          </td>
         <% end %>
       </tr>
     <% end %>
