@@ -66,7 +66,7 @@
                   <%= check_box_tag "submission_tags[]", t.id,
                   SubmissionTag.exists?(tag_id: t.id, grant_submission_id: @grant_submission.id) %>
                 </td>
-                <td><%= t.name %></td>
+                <td><h4><span class="label label-default"><%= t.name %></span></h4></td>
                 <td><%= t.description %></td>
               </tr>
             <% end %>

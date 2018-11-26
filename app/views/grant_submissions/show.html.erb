@@ -22,10 +22,12 @@
             <dt>Grant</dt>
             <dd><%= @grant_submission.grant.name %></dd>
             <dt>Requested Funding</dt>
-            <dd><%= @grant_submission.funding_requests_pretty %></dd>
+            <dd><%= funding_requests_pretty(@grant_submission) %></dd>
             <dt>Tags</dt>
             <dd>
-            <%= @grant_submission.tags(can?(:view_hidden, Tag)).join(", ") %>
+            <h4><% @grant_submission.tags(can?(:view_hidden, Tag)).each do |tag| %>
+            <span class="label label-default"><%= tag %></span>
+            <% end %></h4>
             </dd>
           </dl>
         </div>

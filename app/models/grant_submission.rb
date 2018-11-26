@@ -80,17 +80,6 @@ class GrantSubmission < ActiveRecord::Base
     grant_submissions = GrantSubmission.where(id: id_list).where(query).sum(:granted_funding_dollars)
   end
 
-  def funding_requests_pretty
-    if funding_requests_csv == nil || funding_requests_csv == ""
-      return ""
-    end
-    currency_list = []
-    funding_requests_csv.split(',').each do |level|
-      currency_list.append("$#{level}")
-    end
-    return currency_list.join(", ")
-  end
-
   def funding_requests_as_list
     if funding_requests_csv == nil || funding_requests_csv == ""
       return []
