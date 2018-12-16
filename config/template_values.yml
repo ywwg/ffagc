@@ -4,47 +4,38 @@
 # the db (famous last words).  Rule of thumb: If you need to know the value
 # behind the formatted text, don't put it here.
 
-install_day: "Friday, July 6, 2018"
-skill_attend_day: "Friday, June 29, 2018"
-figment_dates: "TBD FIGMENT DATES (Usually end of July)"
-creativity:
-  contract_deadline: "Monday, April 23, 2018"
-  schedule: ["Monday, April 23, 2018: Signed Contracts Due",
-             "Tuesday, April 24, 2018: First check cut and sent",
-             "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!",
-             "Monday, July 23, 2018: Firefly documentation due",
-             "Tuesday, July 31, 2018: Second check cut and sent",]
-legacy:
-  contract_deadline: "Monday, April 2, 2018"
-  schedule: ["Monday, April 2, 2018: Signed Contracts Due",
-             "Tuesday, April 3, 2018: Check cut and sent",
-             "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
+install_day: "Friday, July 5, 2019"
+skill_attend_day: "Friday, June 28, 2019"
 temple:
-  contract_deadline: "Friday, March 23, 2018"
-  schedule: ["Friday, March 23, 2018: Signed Contracts Due",
-             "Tuesday, March 26, 2018: Check cut and sent",
-             "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
-anniversary:
-  contract_deadline: "Monday, March 19, 2018"
-  schedule: ["Monday, March 19, 2018: Signed Contracts Due",
-             "Tuesday, March 20, 2018: First check cut and sent",
-             "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!",
-             "Monday, July 23, 2018: Firefly documentation due",
-             "Tuesday, July 31, 2018: Second check cut and sent",
-             "Wednesday, August 15, 2018: Third check cut and sent"]
+  contract_deadline: "Friday, February 22, 2019"
+  schedule: ["Friday, February 22, 2019: Signed Contracts Due",
+             "Tuesday, February 25, 2019: Check cut and sent",
+             "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!"]
+moonshot:
+  contract_deadline: "Friday, February 22, 2019"
+  schedule: ["Friday, February 22, 2019: Signed Contracts Due",
+             "Tuesday, February 25, 2019: Check cut and sent",
+             "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!",
+             "Monday, July 22, 2019: Firefly documentation due"]
+creativity:
+  contract_deadline: "Friday, April 5, 2019"
+  schedule: ["Friday, April 5, 2019: Signed Contracts Due",
+             "Monday, April 8, 2019: First check cut and sent",
+             "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!",
+             "Monday, July 22, 2019: Firefly documentation due",
+             "Tuesday, July 30, 2019: Second check cut and sent"]
+legacy:
+  contract_deadline: "Friday, April 19, 2019"
+  schedule: ["Friday, April 19, 2019: Signed Contracts Due",
+             "Monday, April 22, 2019: Check cut and sent",
+             "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!"]
 skillshare:
-  contract_deadline: "Monday, April 16, 2018"
-  schedule: ["Monday, April 16, 2018: Signed Contracts Due",
-             "Tuesday, April 17, 2018: Check cut and sent",
-             "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
+  contract_deadline: "Friday, April 19, 2019"
+  schedule: ["Friday, April 19, 2019: Signed Contracts Due",
+             "Monday, April 22, 2019: Check cut and sent",
+             "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!"]
 bex:
-  contract_deadline: "Monday, April 16, 2018"
-  schedule: ["Monday, April 16, 2018: Signed Contracts Due",
-             "Tuesday, April 17, 2018: Check cut and sent",
-             "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
-
-smol:
-  contract_deadline: "Monday, April 16, 2018"
-  schedule: ["Monday, April 16, 2018: Signed Contracts Due",
-             "Tuesday, April 17, 2018: Check cut and sent",
-             "Tuesday, July 3 - Sunday, July 8, 2018: Firefly!"]
+  contract_deadline: "Friday, April 19, 2019"
+  schedule: ["Friday, April 19, 2019: Signed Contracts Due",
+             "Monday, April 22, 2019: Check cut and sent",
+             "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!"]
