@@ -21,7 +21,7 @@ class GrantContract < Prawn::Document
         write_templated_line line
       end
     rescue
-      raise "Could not generate pdf"
+      raise "Could not generate pdf -- missing contract template?"
     end
   end
 
