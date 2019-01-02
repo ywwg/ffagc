@@ -5,6 +5,7 @@ class Grant < ActiveRecord::Base
   has_many :voters, through: :grants_voters
 
   validates :name, presence: true
+  validates :contract_template, presence: true
   validates :submit_start, presence: true
   validates :submit_end, presence: true
   validates :vote_start, presence: true

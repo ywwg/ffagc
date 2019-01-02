@@ -15,7 +15,7 @@ class GrantContract < Prawn::Document
     @values = YAML.load(File.open("#{Rails.root}/config/template_values.yml", "rb").read)
 
     begin
-      filename = File.join(GrantContract.template_dir, "#{@template.downcase}.tmpl.erb")
+      filename = File.join(GrantContract.template_dir, "#{@template}.tmpl.erb")
       template = File.open(filename, "rb").read
       template.each_line do |line|
         write_templated_line line
