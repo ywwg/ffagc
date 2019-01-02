@@ -12,7 +12,29 @@
     <%= link_to "Clear assignments", admins_voter_submission_assignments_path, class: 'btn btn-warning', method: :delete %>
   </div>
 </div>
-<br />
+<br/>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Admins</h3>
+  </div>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @admins.each do |admin| %>
+    <tr>
+      <td><%= admin.name %></td>
+      <td><%= admin.email %></td>
+    </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
 
 <% unless any_vote_open? %>
   <div class="well">

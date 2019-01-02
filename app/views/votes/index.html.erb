@@ -46,7 +46,7 @@
             <div class="grant-submission-name"><%= gs.name %></div>
             <div class="grant-submission-description">
               Submission: <strong><%= gs.name %></strong><br />
-              Grant: <%= gs.grant&.name || 'Unknown' %> for <%= gs.funding_requests_pretty %><br />
+              Grant: <%= gs.grant&.name || 'Unknown' %> for <%= funding_requests_pretty(gs) %><br />
               <%= link_to 'PDF Submission', gs.proposal_url, target: :blank %><br />
 
               <% if gs.has_questions? %>
@@ -57,7 +57,7 @@
             </div>
           </td>
           <td class="hide-mobile"><%= gs.grant&.name || 'Unknown' %></td>
-          <td class="text-right hide-mobile"><%= gs.funding_requests_pretty %></td>
+          <td class="text-right hide-mobile"><%= funding_requests_pretty(gs) %></td>
           <td class="hide-mobile"><%= link_to 'Open...', gs.proposal_url, target: :blank %></td>
           <td class="hide-mobile">
             <% if gs.has_questions? %>

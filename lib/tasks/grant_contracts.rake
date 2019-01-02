@@ -3,14 +3,14 @@ namespace :grant_contracts do
   task create_golden: :environment do
     pdf_fixtures_path = File.join(Rails.root, 'spec', 'fixtures', 'pdfs')
 
-    GrantContract.grant_names.map do |grant_name|
-      pdf_file = File.join(pdf_fixtures_path, "#{grant_name}.pdf")
-      golden_file = File.join(pdf_fixtures_path, "#{grant_name}.txt")
+    GrantContract.template_names.map do |template_name|
+      pdf_file = File.join(pdf_fixtures_path, "#{template_name}.pdf")
+      golden_file = File.join(pdf_fixtures_path, "#{template_name}.txt")
 
-      puts "Generating golden file for #{grant_name} [#{golden_file}, #{pdf_file}]"
+      puts "Generating golden file for #{template_name} [#{golden_file}, #{pdf_file}]"
 
       pdf = GrantContract.new(
-        grant_name,
+        template_name,
         'SubmissionName',
         'ArtistName',
         'RequestedFundingDollars',

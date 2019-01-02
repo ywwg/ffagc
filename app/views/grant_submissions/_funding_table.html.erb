@@ -4,7 +4,7 @@
       Requested:
     </td>
     <td>
-      <%= grant_submission.funding_requests_pretty %>
+      <%= funding_requests_pretty(grant_submission) %>
     </td>
   </tr>
   <tr>
@@ -19,7 +19,7 @@
     </td>
     <td>
       <% if grant_submission.granted_funding_dollars %>
-        <%= number_to_currency grant_submission.granted_funding_dollars %>
+        <%= number_to_currency(grant_submission.granted_funding_dollars, precision: 0) %>
       <% end %>
     </td>
   </tr>

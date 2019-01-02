@@ -10,4 +10,15 @@ module GrantSubmissionsHelper
     discuss.push("None") if discuss.empty?
     discuss.join('&').squeeze(' ')
   end
+
+  def funding_requests_pretty(gs)
+    if gs.funding_requests_csv == nil || gs.funding_requests_csv == ""
+      return ""
+    end
+    currency_list = []
+    gs.funding_requests_csv.split(',').each do |level|
+      currency_list.append(number_to_currency(level, precision: 0))
+    end
+    return currency_list.join(", ")
+  end
 end

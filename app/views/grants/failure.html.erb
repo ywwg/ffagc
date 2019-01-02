@@ -1,5 +1,21 @@
 <h1><%= link_to "Firefly Art Grants", :controller => "home", :action => "index" %>: Failure!</h1>
 
+<% flash.each do |name, msg| -%>
+  <%= content_tag :div, msg, class: name %>
+<% end %>
+
+<% if @grant.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@grant.errors.count, "error") %> prohibited this grant from being saved:</h2>
+
+    <ul>
+    <% @grant.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
 Grant creation/modification failed, check logs.
 
 <%= link_to "Back", grants_path %>

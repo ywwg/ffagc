@@ -64,15 +64,14 @@ class GrantSubmissionsController < ApplicationController
 
   def update
     @grant_submission.attributes = grant_update_params
-    @grant_submission.funding_requests_csv = clean_funding_values(params["funding_levels"])
-
-    if admin_logged_in?
-      @grant_submission.granted_funding_dollars = grant_update_params[:granted_funding_dollars]
-      @grant_submission.funding_decision = grant_update_params[:funding_decision]
+    if params.has_key?(:funding_levels)
+      @grant_submission.funding_requests_csv = clean_funding_values(params["funding_levels"])
     end
 
     if @grant_submission.save
-      set_submission_tags(params["submission_tags"])
+      if params.has_key?(:submission_tags)
+        set_submission_tags(params["submission_tags"])
+      end
       if admin_logged_in?
         redirect_to admins_grant_submissions_path
       else
@@ -131,22 +130,28 @@ class GrantSubmissionsController < ApplicationController
     end
 
     grant_name = @grant_submission.grant.name
+    contract_template = @grant_submission.grant.contract_template
     artist_name = @grant_submission.artist.name
 
     respond_to do |format|
       format.html
       format.pdf do
         now = DateTime.current
-        pdf = GrantContract.new(grant_name, @grant_submission.name, artist_name,
+        pdf = GrantContract.new(contract_template, @grant_submission.name, artist_name,
             @grant_submission.granted_funding_dollars, now)
         send_data pdf.render, filename:
-          "#{@grant_submission.name}_#{grant_name}_Contract_#{now.strftime("%Y%m%d")}.pdf",
+          contract_filename(@grant_submission, contract_template, now),
           type: "application/pdf"
       end
     end
   end
 
   private
+
+  def contract_filename(gs, contract_template, now)
+    title = @grant_submission.name.gsub!(/[^0-9A-Za-z.\-]/, '_')
+    "#{title}_#{contract_template}_Contract_#{now.strftime("%Y%m%d")}.pdf"
+  end
 
   def grant_submission_params
     params.require(:grant_submission).permit(:name, :proposal, :grant_id, :funding_levels, :submission_tags)

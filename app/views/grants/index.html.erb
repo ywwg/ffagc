@@ -42,15 +42,25 @@
         <% if can? :view_hidden, Tag %>
         <th>Hidden</th>
         <% end %>
+        <% if can? :modify, Tag %>
+        <th></th>
+        <% end %>
       </tr>
     </thead>
     <tbody>
     <% Tag.all_maybe_hidden(can? :view_hidden, Tag).each do |t| %>
       <tr>
-        <td><%= t.name %></td>
+        <td><h4><span class="label label-default"><%= t.name %></span></h4></td>
         <td><%= t.description %></td>
         <% if can? :view_hidden, Tag %>
           <td><%= t.hidden ? "Yes" : "No" %></td>
+        <% end %>
+        <% if can? :modify, t %>
+          <td>
+            <div class="btn-group">
+              <%= link_to "Edit", edit_tag_path(t), class: 'btn btn-default' %>
+            </div>
+          </td>
         <% end %>
       </tr>
     <% end %>
@@ -73,6 +83,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <% if current_admin %><th>Contract Template</th><% end %>
         <th>Funding Levels</th>
         <th>Submission Start</th>
         <th>Submission End</th>
@@ -90,10 +101,9 @@
     <tbody>
     <% @grants.each do |g| %>
     <tr>
-      <td>
-        <%= g.name %>
-      </td>
-      <td><%= g.funding_levels_pretty %></td>
+      <td><%= g.name %></td>
+      <% if current_admin %><td><%= g.contract_template %></td><% end %>
+      <td><%= funding_levels_pretty(g) %></td>
       <td>
         <%= Date::DAYNAMES[g.submit_start.wday] %>,
         <%= g.submit_start.strftime("%Y/%m/%d") %><br />

@@ -137,8 +137,7 @@ function addLevel(levelIdx) {
   }
   // Remove the buttons from the previous row
   if (levelIdx > 0) {
-    $('#remove_level_button_' + (levelIdx - 1)).remove();
-    $('#add_level_button_' + (levelIdx - 1)).remove();
+    $('#level_buttons_' + (levelIdx - 1)).remove();
   }
 
   // line break
@@ -153,22 +152,28 @@ function addLevel(levelIdx) {
           '<input type="text" name="funding_levels[]" id="funding_levels_text_' +
           levelIdx + '" class="form-control string fund-entry" />');
 
+  // Button group
+  $('#funding_levels')
+      .append(
+          '<div id="level_buttons_' + levelIdx +
+          '" class="btn-group btn-space" role="group">');
+
   // Removal button
   if (levelIdx > 0 && levelIdx < 5) {
-    $('#funding_levels')
+    $('#level_buttons_' + levelIdx)
         .append(
             '<button name="button" type="button" id="remove_level_button_' +
             levelIdx + '" onclick="removeLevel(' + levelIdx +
-            ')" class="btn btn-default btn-space">-</button>');
+            ')" class="btn btn-default">-</button>');
   }
 
   // Addition button
   if (levelIdx < 4) {
-    $('#funding_levels')
+    $('#level_buttons_' + levelIdx)
         .append(
             '<button name="button" type="button" id="add_level_button_' +
             levelIdx + '" onclick="addLevel(' + (levelIdx + 1) +
-            ')" class="btn btn-default btn-space">+</button>');
+            ')" class="btn btn-default">+</button>');
   }
 }
 
@@ -187,25 +192,30 @@ function removeLevel(levelIdx) {
   if (levelIdx > 0) {
     $('#funding_levels_br_' + levelIdx).remove();
     $('#funding_levels_text_' + levelIdx).remove();
-    $('#remove_level_button_' + levelIdx).remove();
-    $('#add_level_button_' + levelIdx).remove();
+    $('#level_buttons_' + levelIdx).remove();
   }
+
+  // Button group
+  $('#funding_levels')
+      .append(
+          '<div id="level_buttons_' + (levelIdx - 1) +
+          '" class="btn-group btn-space" role="group">');
 
   // New removal button
   if (levelIdx > 1) {
-    $('#funding_levels')
+    $('#level_buttons_' + (levelIdx - 1))
         .append(
             '<button name="button" type="button" id="remove_level_button_' +
             (levelIdx - 1) + '" onclick="removeLevel(' + (levelIdx - 1) +
-            ')" class="btn btn-default btn-space">-</button>');
+            ')" class="btn btn-default">-</button>');
   }
 
   // New addition button
-  $('#funding_levels')
+  $('#level_buttons_' + (levelIdx - 1))
       .append(
           '<button name="button" type="button" id="add_level_button_' +
           (levelIdx - 1) + '" onclick="addLevel(' + levelIdx +
-          ')" class="btn btn-default btn-space">+</button>');
+          ')" class="btn btn-default">+</button>');
 }
 
 $(document).ready(function() {

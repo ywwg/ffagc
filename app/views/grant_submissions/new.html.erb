@@ -66,9 +66,10 @@
       <div class="col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading">
-            Special Submission Traits
+            Submission Tags
           </div>
           <div class="panel-body">
+            <div class="alert alert-warning">Please mark any applicable items below.</div>
             <table class="table table-striped">
               <tbody>
               <% Tag.all_maybe_hidden(can? :view_hidden, Tag).each do |t| %>
@@ -76,7 +77,7 @@
                   <td>
                     <%= check_box_tag "submission_tags[]", t.id %>
                   </td>
-                  <td><%= t.name %></td>
+                  <td><h4><span class="label label-default"><%= t.name %></span></h3></td>
                   <td><%= t.description %></td>
                 </tr>
               <% end %>

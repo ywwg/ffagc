@@ -40,14 +40,16 @@
                     id: "funding_levels_text_#{idx}",
                     class:"form-control string fund-entry" %>
               <% end %>
-              <% if @request_levels.length > 1 %>
-                <button name="button" type="button" id= "remove_level_button_<%= @request_levels.length-1 %>"
-                    onclick="removeLevel(<%= @request_levels.length-1 %>)" class = "btn btn-default btn-space">-</button>
-              <% end %>
-              <% if @request_levels.length <= 5 %>
-                <button name="button" type="button" id= "add_level_button_<%= @request_levels.length - 1 %>"
-                    onclick="addLevel(<%= @request_levels.length %>)" class = "btn btn-default btn-space">+</button>
-              <% end %>
+              <div id="level_buttons_<%= @request_levels.length - 1 %>" class="btn-group btn-space" role="group">
+                <% if @request_levels.length > 1 %>
+                  <button name="button" type="button" id= "remove_level_button_<%= @request_levels.length-1 %>"
+                      onclick="removeLevel(<%= @request_levels.length-1 %>)" class = "btn btn-default">-</button>
+                <% end %>
+                <% if @request_levels.length <= 5 %>
+                  <button name="button" type="button" id= "add_level_button_<%= @request_levels.length - 1 %>"
+                      onclick="addLevel(<%= @request_levels.length %>)" class = "btn btn-default">+</button>
+                <% end %>
+              </div>
             </div>
             <h5 id="funding_level_text"></h5>
           </div>
@@ -66,7 +68,7 @@
                   <%= check_box_tag "submission_tags[]", t.id,
                   SubmissionTag.exists?(tag_id: t.id, grant_submission_id: @grant_submission.id) %>
                 </td>
-                <td><%= t.name %></td>
+                <td><h4><span class="label label-default"><%= t.name %></span></h4></td>
                 <td><%= t.description %></td>
               </tr>
             <% end %>

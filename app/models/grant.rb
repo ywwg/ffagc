@@ -5,6 +5,7 @@ class Grant < ActiveRecord::Base
   has_many :voters, through: :grants_voters
 
   validates :name, presence: true
+  validates :contract_template, presence: true
   validates :submit_start, presence: true
   validates :submit_end, presence: true
   validates :vote_start, presence: true
@@ -27,17 +28,6 @@ class Grant < ActiveRecord::Base
   validate :dates_ordering
 
   validate :funding_levels_syntax
-
-  def funding_levels_pretty
-    if funding_levels_csv == nil || funding_levels_csv == ""
-      return ""
-    end
-    currency_list = []
-    funding_levels_csv.split(',').each do |level|
-      currency_list.append("$#{level.strip}")
-    end
-    return currency_list.join(", ")
-  end
 
   private
 

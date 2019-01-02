@@ -9,7 +9,19 @@ class TagsController < ApplicationController
     end
   end
 
+  def edit
+    render 'new'
+  end
+
+  def update
+    if @tag.update(tag_params)
+      redirect_to grants_path
+    else
+      render 'failure'
+    end
+  end
+
   def tag_params
-    params.require(:tag).permit(:name, :description)
+    params.require(:tag).permit(:name, :description, :hidden)
   end
 end

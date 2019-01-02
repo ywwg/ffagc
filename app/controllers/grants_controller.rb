@@ -1,4 +1,6 @@
 class GrantsController < ApplicationController
+  include GrantHelper
+
   load_and_authorize_resource
 
   def index
@@ -35,7 +37,7 @@ end
       adjust_grant_deadline
       redirect_to action: 'index'
     else
-      render 'new'
+      render 'failure'
     end
   end
 
@@ -60,12 +62,14 @@ end
       elsif limits.length == 2
         lower = Integer(limits[0])
         upper = Integer(limits[1])
-        levels_array.append(lower, upper)
+        levels_array.append([lower, upper])
       end
     end
 
+    # XXX: We're not supposed to be doing display formatting in the controller
+    # like this.
     render :json => {
-      pretty: grant.funding_levels_pretty,
+      pretty: funding_levels_pretty(grant),
       levels: levels_array
     }
   end
@@ -73,7 +77,7 @@ end
   private
 
   def resource_params
-    params.require(:grant).permit(:name,
+    params.require(:grant).permit(:name, :contract_template,
                                   :funding_levels_csv,
                                   :submit_start, :submit_end,
                                   :vote_start, :vote_end,

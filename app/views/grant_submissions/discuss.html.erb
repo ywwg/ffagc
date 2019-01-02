@@ -25,10 +25,12 @@
             <dt>Grant</dt>
             <dd><%= @grant_submission.grant.name %></dd>
             <dt>Requested Funding</dt>
-            <dd><%= @grant_submission.funding_requests_pretty %></dd>
+            <dd><%= funding_requests_pretty(@grant_submission) %></dd>
             <dt>Tags</dt>
             <dd>
-            <%= @grant_submission.tags(can?(:view_hidden, Tag)).join(", ") %>
+            <h4><% @grant_submission.tags(can?(:view_hidden, Tag)).each do |tag| %>
+            <span class="label label-default"><%= tag %></span>
+            <% end %></h4>
             </dd>
             <% if can? :grant, @grant_submission %>
               <br/>
@@ -39,7 +41,8 @@
                   <h3 class="panel-title">Funding Notes For Artist</h3>
                 </div>
                 <div class="panel-body">
-                  <%= f.text_area :public_funding_notes, class: 'form-control', rows: '3' %>
+                  <div class="alert alert-warning">The text in the box below will be included in the notification email sent to the artist, whether they are funded or not. Linebreaks will be interpreted but no other formatting is recognized.</div>
+                  <%= f.text_area :public_funding_notes, class: 'form-control', rows: '5' %>
                   </div>
               </div>
             <% end %>
@@ -81,6 +84,19 @@
           </div>
         </div>
       <% end %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Private Funding Notes</h3>
+        </div>
+        <div class="panel-body">
+          <div class="alert alert-warning">These notes will only be visible to admins and voters.</div>
+          <% if can? :edit_questions, @grant_submission %>
+            <%= f.text_area :private_funding_notes, class: 'form-control', rows: '10' %>
+          <% else %>
+            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.private_funding_notes } %>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -95,18 +111,6 @@
             <%= f.text_area :questions, class: 'form-control', rows: '20' %>
           <% else %>
             <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.questions } %>
-          <% end %>
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Private Funding Notes</h3>
-        </div>
-        <div class="panel-body">
-          <% if can? :edit_questions, @grant_submission %>
-            <%= f.text_area :private_funding_notes, class: 'form-control', rows: '20' %>
-          <% else %>
-            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.private_funding_notes } %>
           <% end %>
         </div>
       </div>

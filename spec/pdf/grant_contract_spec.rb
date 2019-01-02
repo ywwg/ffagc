@@ -4,14 +4,14 @@
 # sure it appears correct.
 
 describe GrantContract do
-  shared_examples 'generates expected grant document' do |grant_name|
+  shared_examples 'generates expected grant document' do |template_name|
     it do
       pdf_fixtures_path = File.join(Rails.root, 'spec', 'fixtures', 'pdfs')
-      golden_file = File.join(pdf_fixtures_path, "#{grant_name}.txt")
+      golden_file = File.join(pdf_fixtures_path, "#{template_name}.txt")
       golden_text = File.open(golden_file, 'rb').read.strip
 
       pdf = GrantContract.new(
-        grant_name,
+        template_name,
         'SubmissionName',
         'ArtistName',
         'RequestedFundingDollars',
@@ -24,7 +24,7 @@ describe GrantContract do
     end
   end
 
-  described_class.grant_names.each do |grant_name|
-    include_examples 'generates expected grant document', grant_name
+  described_class.template_names.each do |template_name|
+    include_examples 'generates expected grant document', template_name
   end
 end
