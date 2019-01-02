@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181123144130) do
+ActiveRecord::Schema.define(version: 20190102183409) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "name"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20181123144130) do
     t.datetime "meeting_two"
     t.boolean  "hidden",             default: false
     t.string   "funding_levels_csv"
+    t.string   "contract_template"
   end
 
   create_table "grants_voters", force: :cascade do |t|

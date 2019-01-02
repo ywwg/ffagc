@@ -83,6 +83,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <% if current_admin %><th>Contract Template</th><% end %>
         <th>Funding Levels</th>
         <th>Submission Start</th>
         <th>Submission End</th>
@@ -100,9 +101,8 @@
     <tbody>
     <% @grants.each do |g| %>
     <tr>
-      <td>
-        <%= g.name %>
-      </td>
+      <td><%= g.name %></td>
+      <% if current_admin %><td><%= g.contract_template %></td><% end %>
       <td><%= funding_levels_pretty(g) %></td>
       <td>
         <%= Date::DAYNAMES[g.submit_start.wday] %>,

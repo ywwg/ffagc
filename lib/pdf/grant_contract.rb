@@ -1,9 +1,9 @@
 require 'erb'
 
 class GrantContract < Prawn::Document
-  def initialize(grant, project, artist, amount, date)
+  def initialize(template, project, artist, amount, date)
     super()
-    @grant = grant
+    @template = template
     @project = project
     @artist = artist
     @amount = amount
@@ -15,9 +15,7 @@ class GrantContract < Prawn::Document
     @values = YAML.load(File.open("#{Rails.root}/config/template_values.yml", "rb").read)
 
     begin
-      # XXX hardcoding alert! Template filename must be the same as the grant name,
-      # except all lowercase.
-      filename = File.join(GrantContract.template_dir, "#{@grant.downcase}.tmpl.erb")
+      filename = File.join(GrantContract.template_dir, "#{@template.downcase}.tmpl.erb")
       template = File.open(filename, "rb").read
       template.each_line do |line|
         write_templated_line line
@@ -142,7 +140,7 @@ class GrantContract < Prawn::Document
       Dir[File.join(template_dir, '*.tmpl.erb')]
     end
 
-    def grant_names
+    def template_names
       template_files.map do |f|
         /contract_templates\/(.*)\.tmpl/.match(f)[1]
       end
