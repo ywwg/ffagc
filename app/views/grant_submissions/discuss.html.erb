@@ -68,6 +68,7 @@
           <% end %>
         </div>
       </div>
+      <%# FIXME: This is an ugly ability spec line. Should be like, :view_others %>
       <% if can? :edit_questions, GrantSubmission or can? :vote, GrantSubmission %>
         <div class="panel panel-default">
           <div class="panel-heading">
