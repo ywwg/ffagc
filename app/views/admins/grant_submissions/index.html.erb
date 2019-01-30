@@ -108,7 +108,7 @@
   </tbody>
   <tfoot>
   <% unless @revealed %>
-  <% colspan = 5 + (@show_scores ? 5 : 0) + (@revealed ? 3 : 0) %>
+  <% colspan = 6 + (@show_scores ? 5 : 0) + (@revealed ? 3 : 0) %>
   <tr>
     <td colspan="<%= colspan %>" class="text-right">
       <form name="send_email_form">
