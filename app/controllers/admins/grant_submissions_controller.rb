@@ -22,7 +22,7 @@ class Admins::GrantSubmissionsController < ApplicationController
       return
     end
     @scope = params[:scope] || cookies[:scope] || 'active'
-    @grantscope = params[:grantscope] || cookies[:grantscope] || 'none'
+    @grantscope = params[:grantscope] || cookies[:grantscope] || 'all'
     @tagscope = params[:tagscope] || cookies[:tagscope] || 'any'
     if !params[:show_scores].to_s.empty?
       @show_scores = params[:show_scores] == 'true' || false
