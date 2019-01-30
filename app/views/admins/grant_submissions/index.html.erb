@@ -34,6 +34,7 @@
   <thead>
   <tr>
     <th>Name</th>
+    <th>Tags</th>
     <th>Grant</th>
     <th>Discussion</th>
     <% if @show_scores %>
@@ -72,6 +73,11 @@
           <% end %>
         </div>
       </div>
+    </td>
+    <td>
+      <h4><% gs.tags(can?(:view_hidden, Tag)).each do |tag| %>
+      <span class="label label-default label-thin"><%= tag %></span>
+      <% end %></h4>
     </td>
     <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
     <td><%= discussion_status(gs) %></td>
