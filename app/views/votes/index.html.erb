@@ -29,6 +29,7 @@
       <thead>
         <tr>
           <th>Project</th>
+          <th class="hide-mobile">Tags</th>
           <th class="hide-mobile">Grant</th>
           <th class="hide-mobile">Requested</th>
           <th class="hide-mobile">Proposal Document</th>
@@ -46,6 +47,9 @@
             <div class="grant-submission-name"><%= gs.name %></div>
             <div class="grant-submission-description">
               Submission: <strong><%= gs.name %></strong><br />
+              Tags: <h4><% gs.tags(can?(:view_hidden, Tag)).each do |tag| %>
+            <span class="label label-default label-thin"><%= tag %></span>
+            <% end %></h4>
               Grant: <%= gs.grant&.name || 'Unknown' %> for <%= funding_requests_pretty(gs) %><br />
               <%= link_to 'PDF Submission', gs.proposal_url, target: :blank %><br />
 
@@ -55,6 +59,11 @@
                 No discussion
               <% end %>
             </div>
+          </td>
+          <td class="hide-mobile">
+            <h4><% gs.tags(can?(:view_hidden, Tag)).each do |tag| %>
+            <span class="label label-default label-thin"><%= tag %></span>
+            <% end %></h4>
           </td>
           <td class="hide-mobile"><%= gs.grant&.name || 'Unknown' %></td>
           <td class="text-right hide-mobile"><%= funding_requests_pretty(gs) %></td>
