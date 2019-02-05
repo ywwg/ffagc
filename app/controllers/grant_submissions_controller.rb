@@ -113,6 +113,12 @@ class GrantSubmissionsController < ApplicationController
       @grant_change_disable = true
     end
 
+    # Change breadcrumb based on referer
+    @meeting_referer = false
+    if URI(request.referer).path == "/admins/grant_submissions"
+      @meeting_referer = true
+    end
+
     @proposal = Proposal.new
     initialize_other_submissions
     @request_levels = @grant_submission.funding_requests_as_list
