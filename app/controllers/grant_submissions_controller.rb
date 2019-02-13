@@ -85,24 +85,10 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def index
-    @grantscope = params[:grantscope] || 'all'
-    if @grantscope != 'all'
-      @grant_submissions = @grant_submissions.joins(:grant).where("grants.name = ?", @grantscope)
-    end
-
     @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
   end
 
   def show
-    initialize_other_submissions
-  end
-
-  def discuss
-    # TODO: should be handled by Ability somehow.
-    if voter_logged_in?
-      deny_access
-      return
-    end
     initialize_other_submissions
   end
 
