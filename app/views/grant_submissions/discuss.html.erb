@@ -16,7 +16,11 @@
     <div class="col-md-6">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Grant Submission</h3>
+          <h3 class="panel-title">Grant Submission Summary
+            <div class="btn-group pull-right">
+              <%= link_to "Edit Submission", edit_grant_submission_path(id: @grant_submission.id), class: 'btn btn-xs btn-default' %>
+            </div>
+          </h3>
         </div>
         <div class="panel-body">
           <dl>
@@ -32,54 +36,49 @@
             <span class="label label-default"><%= tag %></span>
             <% end %></h4>
             </dd>
-            <% if can? :grant, @grant_submission %>
-              <br/>
-              <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true, :input_html => {:maxlength => 5,:style=> 'width: 80px'}  %>
-              <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Funding Notes For Artist</h3>
-                </div>
-                <div class="panel-body">
-                  <div class="alert alert-warning">The text in the box below will be included in the notification email sent to the artist, whether they are funded or not. Linebreaks will be interpreted but no other formatting is recognized.</div>
-                  <%= f.text_area :public_funding_notes, class: 'form-control', rows: '5' %>
-                  </div>
-              </div>
+            <br/>
+            <dt>Documents</dt>
+            <dd>
+              <% if can? :edit_questions, GrantSubmission %>
+                <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
+              <% else %>
+                <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
+              <% end %>
+              <% if can? :edit_answers, GrantSubmission %>
+                <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
+                  <%= f_proposal.input :file, as: :file, label: 'Supplemental PDF', required: false %>
+                <% end %>
+              <% end %>
+            </dd>
+            <dt>Other Submissions By This Artist</dt>
+            <ul class="list-group">
+            <% if @other_submissions.length == 0 %>
+              <li class="list-group-item">None</li>
             <% end %>
+            <% @other_submissions.each do |s| %>
+              <li class="list-group-item"><%= s.name %> &mdash; <%= Grant.find(s.grant_id).name %></li>
+            <% end %>
+            </ul>
           </dl>
         </div>
       </div>
     </div>
     <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Documents</h3>
-        </div>
-        <div class="panel-body">
-          <% if can? :edit_questions, GrantSubmission %>
-            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission, show_actions: true } %>
-          <% else %>
-            <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
-          <% end %>
-          <% if can? :edit_answers, GrantSubmission %>
-            <%= f.simple_fields_for(:proposals_attributes) do |f_proposal| %>
-              <%= f_proposal.input :file, as: :file, label: 'Supplemental PDF', required: false %>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-      <% if can? :edit_questions, GrantSubmission or can? :vote, GrantSubmission %>
+      <% if can? :grant, @grant_submission %>
         <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Other Submissions by This Artist</h3>
+          <div class="panel-heading" role="button" data-toggle="collapse" data-target="#panel-body-funding"
+               aria-expanded="false" aria-controls="collapseExample">
+            <h3 class="panel-title"><i class="icon-chevron-right"></i><i class="icon-chevron-down"></i> Grant Funding</h3>
           </div>
-          <div class="panel-body">
+          <div class="panel-body collapse" id="panel-body-funding">
+            <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true, :input_html => {:maxlength => 5,:style=> 'width: 80px'}  %>
+            <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
             <dl>
-              <% @other_submissions.each do |s| %>
-                <% if s != @grant_submission %>
-                  <dd><%= s.name %> &mdash; <%= Grant.find(s.grant_id).name %></dd>
-                <% end %>
-              <% end %>
+              <dt>Funding Notes For Artist</dt>
+              <dd>
+                <div class="alert alert-warning">The text in the box below will be included in the notification email sent to the artist, whether they are funded or not. Linebreaks will be interpreted but no other formatting is recognized.</div>
+                <%= f.text_area :public_funding_notes, class: 'form-control', rows: '5' %>
+              </dd>
             </dl>
           </div>
         </div>

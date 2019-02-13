@@ -10,7 +10,9 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def initialize_other_submissions
-    @other_submissions = GrantSubmission.where(artist_id: @grant_submission.artist_id)
+    @other_submissions = GrantSubmission
+        .where(artist_id: @grant_submission.artist_id)
+        .where.not(id: @grant_submission.id)
   end
 
   def set_submission_tags(tag_id_list)
