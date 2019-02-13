@@ -117,7 +117,7 @@ class GrantSubmissionsController < ApplicationController
 
     # Change breadcrumb based on referer
     @meeting_referer = false
-    if URI(request.referer).path == "/admins/grant_submissions"
+    if request.referer && URI(request.referer).path == "/admins/grant_submissions"
       @meeting_referer = true
     end
 

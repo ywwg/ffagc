@@ -1,12 +1,12 @@
 <% unless grant_submission.proposals.empty? && grant_submission.proposal.nil? %>
   <ul class="list-group">
     <% if grant_submission.proposal.present? %>
-      <li class="list-group-item" id="grant_submission_proposal_original_doc">
+      <li class="list-group-item clearfix" id="grant_submission_proposal_original_doc">
         Original document: <%= link_to grant_submission.proposal_identifier, grant_submission.proposal_url, target: :blank %>
     </li>
     <% end %>
   <% grant_submission.proposals.each do |proposal| %>
-    <li class="list-group-item">
+    <li class="list-group-item clearfix">
       Supplemental: <%= link_to proposal.file_identifier, proposal.file_url, target: :blank %>
       <% if local_assigns[:show_actions] && can?(:delete, proposal) %>
         <%= link_to 'Delete', proposal_path(proposal), method: :delete, class: 'btn btn-danger btn-xs inline pull-right', data: { confirm: 'Are you sure?' } %>
