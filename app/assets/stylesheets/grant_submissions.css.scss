@@ -18,3 +18,10 @@
 .label-thin {
   padding: .1em .3em .1em;
 }
+
+div[class~="panel-heading"][aria-expanded=true] .icon-chevron-right {
+  display: none;
+}
+div[class~="panel-heading"][aria-expanded=false] .icon-chevron-down {
+  display: none;
+}

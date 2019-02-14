@@ -10,7 +10,9 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def initialize_other_submissions
-    @other_submissions = GrantSubmission.where(artist_id: @grant_submission.artist_id)
+    @other_submissions = GrantSubmission
+        .where(artist_id: @grant_submission.artist_id)
+        .where.not(id: @grant_submission.id)
   end
 
   def set_submission_tags(tag_id_list)
@@ -111,6 +113,12 @@ class GrantSubmissionsController < ApplicationController
     @grant_change_disable = false
     if @grant_submission.funding_decision && !admin_logged_in?
       @grant_change_disable = true
+    end
+
+    # Change breadcrumb based on referer
+    @meeting_referer = false
+    if request.referer && URI(request.referer).path == "/admins/grant_submissions"
+      @meeting_referer = true
     end
 
     @proposal = Proposal.new

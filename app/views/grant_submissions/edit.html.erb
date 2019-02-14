@@ -1,6 +1,10 @@
 <ol class="breadcrumb">
-  <li><%= link_to "Grant Submissions", grant_submissions_path %></li>
-  <li class="active">Submission</li>
+  <% if @meeting_referer %>
+    <li><%= link_to "Grant Meeting", admins_grant_submissions_path %></li>
+  <% else %>
+    <li><%= link_to "Grant Submissions", grant_submissions_path %></li>
+  <% end %>
+  <li class="active">Edit Submission</li>
 </ol>
 
 <div class="alert alert-info">
