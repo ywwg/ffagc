@@ -43,7 +43,7 @@ describe UserMailer do
     context 'without notes' do
       let!(:grant_submission) {
         FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000, granted_funding_dollars: 800) }
+          funding_requests_csv: "5000", granted_funding_dollars: 800) }
 
       subject { UserMailer.grant_funded(grant_submission, artist, grant, '2020') }
 
@@ -60,7 +60,7 @@ describe UserMailer do
     context 'with blank notes' do
       let!(:grant_submission) {
         FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000, granted_funding_dollars: 800,
+          funding_requests_csv: "5000", granted_funding_dollars: 800,
           public_funding_notes: "") }
 
       subject { UserMailer.grant_funded(grant_submission, artist, grant, '2020') }
@@ -80,7 +80,7 @@ describe UserMailer do
     context 'with notes' do
       let!(:grant_submission) {
         FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000, granted_funding_dollars: 800,
+          funding_requests_csv: "5000", granted_funding_dollars: 800,
           private_funding_notes: "NOTINCLUDED",
           public_funding_notes: "SOMENOTES") }
 
@@ -105,7 +105,7 @@ describe UserMailer do
     context 'without notes' do
       let!(:grant_submission) {
         FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000)
+          funding_requests_csv: "5000")
         }
 
       subject { UserMailer.grant_not_funded(grant_submission, artist, grant, '2020') }
@@ -122,7 +122,7 @@ describe UserMailer do
     context 'with notes' do
       let!(:grant_submission) {
         FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000, private_funding_notes: "NOTINCLUDED",
+          funding_requests_csv: "5000", private_funding_notes: "NOTINCLUDED",
           public_funding_notes: "SOMENOTES")
         }
 
