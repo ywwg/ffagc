@@ -83,19 +83,17 @@
           </div>
         </div>
       <% end %>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Private Funding Notes</h3>
+      <% if can? :edit_questions, @grant_submission %>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Private Funding Notes</h3>
+          </div>
+          <div class="panel-body">
+            <div class="alert alert-warning">These notes will only be visible to admins and voters.</div>
+              <%= f.text_area :private_funding_notes, class: 'form-control', rows: '10' %>
+          </div>
         </div>
-        <div class="panel-body">
-          <div class="alert alert-warning">These notes will only be visible to admins and voters.</div>
-          <% if can? :edit_questions, @grant_submission %>
-            <%= f.text_area :private_funding_notes, class: 'form-control', rows: '10' %>
-          <% else %>
-            <%= render partial: 'safe_blockquote', locals: { text: @grant_submission.private_funding_notes } %>
-          <% end %>
-        </div>
-      </div>
+      <% end %>
     </div>
   </div>
 
