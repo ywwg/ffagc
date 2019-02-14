@@ -60,7 +60,7 @@ class Ability
         can :manage, Vote, voter_id: user.id
         # TODO: should voters be able to change their 'GrantVoter`s?
         # A: No, these are assigned by the system.
-        can [:vote, :read, :discuss], GrantSubmission
+        can [:vote, :read], GrantSubmission
         can :read, VoterSubmissionAssignment, voter_id: user.id
       end
     end

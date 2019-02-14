@@ -92,6 +92,10 @@ class GrantSubmissionsController < ApplicationController
     initialize_other_submissions
   end
 
+  def discuss
+    initialize_other_submissions
+  end
+
   def edit
     # Don't allow an artist to decide post-decision that they want a different
     # grant category.
