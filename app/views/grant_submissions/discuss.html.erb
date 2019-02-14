@@ -1,9 +1,7 @@
 <ol class="breadcrumb">
   <%# Sigh, we need a way to do this better %>
   <% if admin_logged_in? %>
-    <li><%= link_to "Grant Meeting", admins_grant_submissions_path %></li>
-  <% elsif voter_logged_in? %>
-    <li><%= link_to "Voting", votes_path %></li>
+    <li><%= link_to "Submissions", admins_grant_submissions_path %></li>
   <% elsif artist_logged_in? %>
     <li><%= link_to "My Submissions", grant_submissions_path %></li>
   <% end %>
