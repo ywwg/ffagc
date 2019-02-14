@@ -34,7 +34,7 @@ shared_examples 'sessions create endpoint' do |type_name, session_key, redirect_
       context 'with unverified user' do
         it 'show unverified screen' do
           expect { go! unverified_user }.to change { session[session_key] }.from(nil)
-          expect(response).to redirect_to('/sessions/voters/unverified')
+          expect(response).to redirect_to(unverified_sessions_voter_path)
         end
       end
     end

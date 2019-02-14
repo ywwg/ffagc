@@ -20,7 +20,7 @@ class GrantSubmission < ActiveRecord::Base
 
   validates :grant, presence: true
 
-  validate :funding_requests_syntax
+  validate :funding_requests_syntax, :validate_funding_levels
 
   # This is supposed to check size before upload but I don't think it does.
   # It does validate after upload, though, so it's not DDOS-proof but it will
@@ -109,6 +109,35 @@ class GrantSubmission < ActiveRecord::Base
         Integer(token)
       rescue ArgumentError
         errors.add(:funding_requests_csv, errmsg)
+      end
+    end
+  end
+
+  def validate_funding_levels
+    levels_array = []
+    grant.funding_levels_csv.split(',').each do |token|
+      limits = token.split("-")
+      if limits.length == 1
+        limit = Integer(limits[0])
+        levels_array.append([limit, limit])
+      elsif limits.length == 2
+        lower = Integer(limits[0])
+        upper = Integer(limits[1])
+        levels_array.append([lower, upper])
+      end
+    end
+
+    funding_requests_csv.split(',').each do |req|
+      req_val = Integer(req)
+      valid = false
+      levels_array.each do |range|
+        if req_val >= range[0] && req_val <= range[1]
+          valid = true
+          break
+        end
+      end
+      if not valid
+        errors.add(:funding_requests_csv, "funding requests match no available levels")
       end
     end
   end

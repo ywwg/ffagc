@@ -42,6 +42,7 @@
           <%= render partial: 'files_list', locals: { grant_submission: @grant_submission } %>
         </div>
       </div>
+      <%# FIXME: same ugly cancan line as the other one %>
       <% if can? :edit_questions, GrantSubmission or can? :vote, GrantSubmission %>
         <div class="panel panel-default">
           <div class="panel-heading">

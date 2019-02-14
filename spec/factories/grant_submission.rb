@@ -4,7 +4,6 @@ FactoryGirl.define do
     description { Faker::Hipster.sentence }
     grant
     artist
-    requested_funding_dollars { 1_000 }
     funding_requests_csv "1000"
 
     trait :funded do
