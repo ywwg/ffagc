@@ -1,5 +1,9 @@
 <ol class="breadcrumb">
-  <li><%= link_to 'Voters', voters_path %></li>
+  <% if admin_logged_in? %>
+    <li><%= link_to 'Voters', voters_path %></li>
+  <% elsif voter_logged_in? %>
+    <li><%= link_to 'Voting', votes_path %></li>
+  <% end %>
   <li class="active"><%= @voter.name %></li>
 </ol>
 

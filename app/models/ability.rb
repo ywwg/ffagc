@@ -27,6 +27,7 @@ class Ability
       can :manage, :all
       can [:grant, :edit_questions, :edit], GrantSubmission
       cannot [:vote, :edit_answers], GrantSubmission
+      cannot :index, Vote
       can :all, GrantsVoter
       can [:all, :view_hidden], Tag
     end

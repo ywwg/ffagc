@@ -24,5 +24,13 @@ describe VotesController do
 
       it { get 'index'; expect(response).to be_forbidden }
     end
+
+    context 'with admin signed in' do
+      let!(:admin) { FactoryGirl.create(:admin) }
+
+      before { sign_in admin }
+
+      it { get 'index'; is_expected.to be_forbidden }
+    end
   end
 end
