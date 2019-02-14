@@ -85,11 +85,11 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def index
-    @grantscope = params[:grantscope] || 'all'
-    if @grantscope != 'all'
-      @grant_submissions = @grant_submissions.joins(:grant).where("grants.name = ?", @grantscope)
+    # Voters and admins can look at individual grants (show), but they shouldn't
+    # be able to look at the index.
+    if !artist_logged_in?
+      deny_access
     end
-
     @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
   end
 
@@ -98,11 +98,6 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def discuss
-    # TODO: should be handled by Ability somehow.
-    if voter_logged_in?
-      deny_access
-      return
-    end
     initialize_other_submissions
   end
 

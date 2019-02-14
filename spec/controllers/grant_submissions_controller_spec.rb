@@ -87,11 +87,11 @@ describe GrantSubmissionsController do
       context 'with valid grant_submission' do
         render_views
 
-        it 'shows discussion page' do
+        it 'is not allowed to see discussion page' do
           # "Discussion" now refers to granting/funding, which is led by the
           # admin, so voters are not allowed.
           go! grant_submission.id
-          is_expected.not_to be_ok
+          is_expected.to be_forbidden
         end
       end
 
