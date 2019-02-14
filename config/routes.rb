@@ -65,7 +65,11 @@ Rails.application.routes.draw do
   namespace :sessions do
     resource :admin, only: [:new, :create, :destroy]
     resource :artist, only: [:new, :create, :destroy]
-    resource :voter, only: [:new, :create, :destroy]
+    resource :voter, only: [:new, :create, :destroy] do
+      member do
+        get 'unverified'
+      end
+    end
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
