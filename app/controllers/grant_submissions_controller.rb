@@ -85,6 +85,11 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def index
+    # Voters and admins can look at individual grants (show), but they shouldn't
+    # be able to look at the index.
+    if !artist_logged_in?
+      deny_access
+    end
     @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
   end
 

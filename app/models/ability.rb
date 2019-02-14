@@ -61,6 +61,9 @@ class Ability
         can :manage, Vote, voter_id: user.id
         # TODO: should voters be able to change their 'GrantVoter`s?
         # A: No, these are assigned by the system.
+        # Note that artists can't ":discuss" -- this means they can't see the
+        # discussion/funding page, but they can index a grant submission and
+        # see the read-only discussion that way.
         can [:vote, :read], GrantSubmission
         can :read, VoterSubmissionAssignment, voter_id: user.id
       end
