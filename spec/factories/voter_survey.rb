@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :voter_survey do
     has_attended_firefly { Faker::Boolean.boolean }
     not_applying_this_year { Faker::Boolean.boolean }

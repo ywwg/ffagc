@@ -1,7 +1,7 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :grant do
     name { Faker::Hipster.sentence }
-    hidden false
+    hidden { false }
     funding_levels_csv { "1000,5000" }
     submit_start { Date.today }
     submit_end { 1.week.from_now }

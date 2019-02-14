@@ -1,7 +1,7 @@
 describe AccountActivationsController do
   describe '#show' do
     context 'with inactive user' do
-      let(:artist) { FactoryGirl.create(:artist) }
+      let(:artist) { FactoryBot.create(:artist) }
 
       context 'with correct token' do
         def go!
@@ -25,7 +25,7 @@ describe AccountActivationsController do
     end
 
     context 'with activated user' do
-      let(:artist) { FactoryGirl.create(:artist, :activated) }
+      let(:artist) { FactoryBot.create(:artist, :activated) }
 
       context 'with correct token' do
         def go!
@@ -63,7 +63,7 @@ describe AccountActivationsController do
     end
 
     context 'with incorrect email' do
-      let(:artist) { FactoryGirl.create(:artist) }
+      let(:artist) { FactoryBot.create(:artist) }
 
       context 'with incorrect email' do
         it 'shows failure' do
@@ -105,7 +105,7 @@ describe AccountActivationsController do
     end
 
     context 'when artist signed in' do
-      let(:user) { FactoryGirl.create(:artist) }
+      let(:user) { FactoryBot.create(:artist) }
 
       before { sign_in user }
 
@@ -114,14 +114,14 @@ describe AccountActivationsController do
       end
 
       context 'with activated user' do
-        let(:user) { FactoryGirl.create(:artist, :activated) }
+        let(:user) { FactoryBot.create(:artist, :activated) }
 
         it_behaves_like 'shows already activated message'
       end
     end
 
     context 'when voter signed in' do
-      let(:user) { FactoryGirl.create(:voter) }
+      let(:user) { FactoryBot.create(:voter) }
 
       before { sign_in user }
 
@@ -130,7 +130,7 @@ describe AccountActivationsController do
       end
 
       context 'with activated user' do
-        let(:user) { FactoryGirl.create(:artist, :activated) }
+        let(:user) { FactoryBot.create(:artist, :activated) }
 
         it_behaves_like 'shows already activated message'
       end

@@ -9,7 +9,7 @@ describe ArtistsController do
     it { go!; is_expected.to be_forbidden }
 
     context 'when admin signed in' do
-      let!(:admin) { FactoryGirl.create(:admin) }
+      let!(:admin) { FactoryBot.create(:admin) }
 
       before do
         sign_in admin
@@ -39,8 +39,8 @@ describe ArtistsController do
       post :create, artist_params
     end
 
-    let(:artist_attributes) { FactoryGirl.attributes_for(:artist) }
-    let(:artist_survey_attributes) { FactoryGirl.attributes_for(:artist_survey) }
+    let(:artist_attributes) { FactoryBot.attributes_for(:artist) }
+    let(:artist_survey_attributes) { FactoryBot.attributes_for(:artist_survey) }
     let(:artist_params) do
       {
         artist: artist_attributes.merge(artist_survey_attributes: artist_survey_attributes)
@@ -61,7 +61,7 @@ describe ArtistsController do
     end
 
     context 'with invalid params' do
-      let(:artist_attributes) { FactoryGirl.attributes_for(:artist, email: '') }
+      let(:artist_attributes) { FactoryBot.attributes_for(:artist, email: '') }
 
       it 'displays form' do
         expect { go! }.not_to change { Admin.count }

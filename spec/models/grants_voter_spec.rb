@@ -1,5 +1,5 @@
 describe GrantsVoter do
-  subject { FactoryGirl.build(:grants_voter) }
+  subject { FactoryBot.build(:grants_voter) }
 
   # smoke test
   its(:valid?) { is_expected.to be(true) }

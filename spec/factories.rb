@@ -1,11 +1,11 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :submission_tag do
-    tag nil
-    grant_submissions nil
+    tag { nil }
+    grant_submissions { nil }
   end
   factory :tag do
-    name "MyString"
-    description "MyText"
+    name { "MyString" }
+    description { "MyText" }
   end
   sequence :email do |n|
     "email-#{n}@example.com"

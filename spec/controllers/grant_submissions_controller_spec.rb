@@ -1,7 +1,7 @@
 describe GrantSubmissionsController do
-  let!(:grant) { FactoryGirl.create(:grant) }
-  let!(:artist) { FactoryGirl.create(:artist, :activated) }
-  let!(:grant_submission) { FactoryGirl.create(:grant_submission, artist: artist, grant: grant) }
+  let!(:grant) { FactoryBot.create(:grant) }
+  let!(:artist) { FactoryBot.create(:artist, :activated) }
+  let!(:grant_submission) { FactoryBot.create(:grant_submission, artist: artist, grant: grant) }
 
   describe '#destroy' do
     def go!(id)
@@ -30,7 +30,7 @@ describe GrantSubmissionsController do
       end
 
       context 'with grant_submission id for another artist' do
-        let!(:another_grant_submission) { FactoryGirl.create(:grant_submission) }
+        let!(:another_grant_submission) { FactoryBot.create(:grant_submission) }
 
         it 'does not delete any submissions' do
           expect { go! another_grant_submission.id }.not_to change { GrantSubmission.count }
@@ -71,7 +71,7 @@ describe GrantSubmissionsController do
       end
 
       context 'with grant_submission id for another artist' do
-        let!(:another_grant_submission) { FactoryGirl.create(:grant_submission) }
+        let!(:another_grant_submission) { FactoryBot.create(:grant_submission) }
 
         before { go! another_grant_submission.id }
 
@@ -80,7 +80,7 @@ describe GrantSubmissionsController do
     end
 
     context 'voter signed in' do
-      let(:voter) { FactoryGirl.create(:voter, :verified, :activated) }
+      let(:voter) { FactoryBot.create(:voter, :verified, :activated) }
 
       before { sign_in voter }
 
@@ -101,7 +101,7 @@ describe GrantSubmissionsController do
     end
 
     context 'admin signed in' do
-      let(:admin) { FactoryGirl.create(:admin, :activated) }
+      let(:admin) { FactoryBot.create(:admin, :activated) }
 
       before { sign_in admin }
 

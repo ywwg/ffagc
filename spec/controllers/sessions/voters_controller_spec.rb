@@ -1,7 +1,7 @@
 describe Sessions::VotersController do
-  let!(:user) { FactoryGirl.create(:voter, :activated, :verified) }
-  let!(:unverified_user) { FactoryGirl.create(:voter, :activated) }
-  let!(:inactive_user) { FactoryGirl.create(:voter) }
+  let!(:user) { FactoryBot.create(:voter, :activated, :verified) }
+  let!(:unverified_user) { FactoryBot.create(:voter, :activated) }
+  let!(:inactive_user) { FactoryBot.create(:voter) }
 
   describe '#new' do
     it_behaves_like 'sessions new endpoint'

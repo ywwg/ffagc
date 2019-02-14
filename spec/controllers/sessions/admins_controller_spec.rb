@@ -1,6 +1,6 @@
 describe Sessions::AdminsController do
-  let!(:user) { FactoryGirl.create(:admin, :activated) }
-  let!(:inactive_user) { FactoryGirl.create(:admin) }
+  let!(:user) { FactoryBot.create(:admin, :activated) }
+  let!(:inactive_user) { FactoryBot.create(:admin) }
 
   describe '#new' do
     it_behaves_like 'sessions new endpoint'

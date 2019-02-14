@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :artist do
     name { Faker::Name.name }
     email

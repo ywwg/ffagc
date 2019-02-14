@@ -9,7 +9,7 @@ describe VotersController do
     it { go!; is_expected.to be_forbidden }
 
     context 'with admin signed in' do
-      let!(:admin) { FactoryGirl.create(:admin) }
+      let!(:admin) { FactoryBot.create(:admin) }
 
       before { sign_in admin }
 
@@ -25,7 +25,7 @@ describe VotersController do
   end
 
   describe '#show' do
-    let!(:voter) { FactoryGirl.create(:voter, :activated) }
+    let!(:voter) { FactoryBot.create(:voter, :activated) }
 
     def go!(id)
       get :show, id: id
@@ -39,14 +39,14 @@ describe VotersController do
       it { go! voter.id; is_expected.to be_ok }
 
       context 'for another voter' do
-        let!(:another_voter) { FactoryGirl.create(:voter) }
+        let!(:another_voter) { FactoryBot.create(:voter) }
 
         it { go! another_voter.id; is_expected.to be_forbidden }
       end
     end
 
     context 'with user who cannot a voter' do
-      let!(:user) { FactoryGirl.create(:artist) }
+      let!(:user) { FactoryBot.create(:artist) }
 
       before do
         sign_in user
@@ -57,9 +57,9 @@ describe VotersController do
   end
 
   describe '#create' do
-    let(:voter_attributes) { FactoryGirl.attributes_for(:voter) }
-    let(:voter_survey_attributes) { FactoryGirl.attributes_for(:voter_survey) }
-    let(:grants_voter_attributes) { FactoryGirl.attributes_for(:grants_voter) }
+    let(:voter_attributes) { FactoryBot.attributes_for(:voter) }
+    let(:voter_survey_attributes) { FactoryBot.attributes_for(:voter_survey) }
+    let(:grants_voter_attributes) { FactoryBot.attributes_for(:grants_voter) }
     let(:params) do
       {
         voter: voter_attributes.merge(voter_survey_attributes: voter_survey_attributes),
@@ -91,7 +91,7 @@ describe VotersController do
     end
 
     context 'with existing voter email' do
-      let!(:existing_voter) { FactoryGirl.create(:voter, :activated) }
+      let!(:existing_voter) { FactoryBot.create(:voter, :activated) }
 
       it 'returns an error' do
         post 'create', voter: { email: existing_voter.email }
@@ -101,9 +101,9 @@ describe VotersController do
   end
 
   describe '#update' do
-    let!(:voter) { FactoryGirl.create(:voter) }
-    let!(:grant_1) { FactoryGirl.create(:grant) }
-    let!(:grant_2) { FactoryGirl.create(:grant) }
+    let!(:voter) { FactoryBot.create(:voter) }
+    let!(:grant_1) { FactoryBot.create(:grant) }
+    let!(:grant_2) { FactoryBot.create(:grant) }
 
     let(:grants_voters_params) do
       [
@@ -121,13 +121,13 @@ describe VotersController do
     end
 
     context 'when voter signed in' do
-      let!(:user) { FactoryGirl.create(:voter) }
+      let!(:user) { FactoryBot.create(:voter) }
 
       it { go!; is_expected.to be_forbidden }
     end
 
     context 'when admin logged in' do
-      let!(:user) { FactoryGirl.create(:admin) }
+      let!(:user) { FactoryBot.create(:admin) }
 
       it 'creates new grants_voters' do
         go!
@@ -135,7 +135,7 @@ describe VotersController do
       end
 
       context 'with existing grants_voter' do
-        let!(:grants_voter) { FactoryGirl.create(:grants_voter, grant_id: 1, voter: voter) }
+        let!(:grants_voter) { FactoryBot.create(:grants_voter, grant_id: 1, voter: voter) }
 
         it 'deletes' do
           go!
@@ -146,7 +146,7 @@ describe VotersController do
   end
 
   describe '#verify' do
-    let!(:voter) { FactoryGirl.create(:voter) }
+    let!(:voter) { FactoryBot.create(:voter) }
 
     before { sign_in user }
 
@@ -161,7 +161,7 @@ describe VotersController do
     end
 
     context 'when admin logged in' do
-      let!(:user) { FactoryGirl.create(:admin) }
+      let!(:user) { FactoryBot.create(:admin) }
 
       it 'verifies voter' do
         expect { go! }.to change { voter.reload.verified }.to true

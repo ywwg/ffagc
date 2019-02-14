@@ -1,6 +1,6 @@
 describe Sessions::ArtistsController do
-  let!(:user) { FactoryGirl.create(:artist, :activated) }
-  let!(:inactive_user) { FactoryGirl.create(:artist) }
+  let!(:user) { FactoryBot.create(:artist, :activated) }
+  let!(:inactive_user) { FactoryBot.create(:artist) }
 
   describe '#new' do
     it_behaves_like 'sessions new endpoint'

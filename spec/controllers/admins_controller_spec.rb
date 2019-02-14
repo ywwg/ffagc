@@ -14,7 +14,7 @@ describe AdminsController do
       end
 
       context 'when an Admin already exists' do
-        let!(:admin) { FactoryGirl.create(:admin) }
+        let!(:admin) { FactoryBot.create(:admin) }
 
         it { go!; is_expected.to be_forbidden}
 
@@ -48,7 +48,7 @@ describe AdminsController do
       post :create, admin: admin_params
     end
 
-    let(:admin_params) { FactoryGirl.attributes_for(:admin) }
+    let(:admin_params) { FactoryBot.attributes_for(:admin) }
 
     it 'creates Admin' do
       expect { go! }.to change { Admin.count }.by(1)
@@ -57,7 +57,7 @@ describe AdminsController do
     end
 
     context 'when an Admin already exists' do
-      let!(:admin) { FactoryGirl.create(:admin) }
+      let!(:admin) { FactoryBot.create(:admin) }
 
       it { go!; is_expected.to be_forbidden }
 
@@ -75,7 +75,7 @@ describe AdminsController do
     end
 
     context 'with invalid params' do
-      let(:admin_params) { FactoryGirl.attributes_for(:admin, email: nil) }
+      let(:admin_params) { FactoryBot.attributes_for(:admin, email: nil) }
 
       it 'displays form' do
         expect { go! }.not_to change { Admin.count }

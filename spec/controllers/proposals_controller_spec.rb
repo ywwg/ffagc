@@ -1,7 +1,7 @@
 describe ProposalsController do
-  let!(:artist) { FactoryGirl.create(:artist, :activated) }
-  let!(:grant_submission) { FactoryGirl.create(:grant_submission, artist: artist) }
-  let!(:proposal) { FactoryGirl.create(:proposal, grant_submission: grant_submission) }
+  let!(:artist) { FactoryBot.create(:artist, :activated) }
+  let!(:grant_submission) { FactoryBot.create(:grant_submission, artist: artist) }
+  let!(:proposal) { FactoryBot.create(:proposal, grant_submission: grant_submission) }
 
   describe '#destroy' do
     def go!(id)
@@ -30,7 +30,7 @@ describe ProposalsController do
       end
 
       context 'with proposal id for another artist' do
-        let!(:another_proposal) { FactoryGirl.create(:proposal) }
+        let!(:another_proposal) { FactoryBot.create(:proposal) }
 
         it 'does not delete any submissions' do
           expect { go! another_proposal.id }.not_to change { Proposal.count }
@@ -39,7 +39,7 @@ describe ProposalsController do
     end
 
     context 'voter signed in' do
-      let!(:voter) { FactoryGirl.create(:voter, :activated) }
+      let!(:voter) { FactoryBot.create(:voter, :activated) }
 
       before { sign_in voter }
 

@@ -13,17 +13,17 @@ describe GrantsController do
     before { go! }
 
     context 'with an admin' do
-      let!(:user) { FactoryGirl.create(:admin) }
+      let!(:user) { FactoryBot.create(:admin) }
       it { is_expected.to be_ok }
     end
 
     context 'with an artist' do
-      let!(:user) { FactoryGirl.create(:artist, :activated) }
+      let!(:user) { FactoryBot.create(:artist, :activated) }
       it { is_expected.to be_ok }
     end
 
     context 'with a voter' do
-      let!(:user) { FactoryGirl.create(:voter, :activated) }
+      let!(:user) { FactoryBot.create(:voter, :activated) }
       it { is_expected.to be_ok }
     end
   end
@@ -36,23 +36,23 @@ describe GrantsController do
     before { go! }
 
     context 'with an admin' do
-      let!(:user) { FactoryGirl.create(:admin) }
+      let!(:user) { FactoryBot.create(:admin) }
       it { is_expected.to be_ok }
     end
 
     context 'with an artist' do
-      let!(:user) { FactoryGirl.create(:artist, :activated) }
+      let!(:user) { FactoryBot.create(:artist, :activated) }
       it { is_expected.to be_forbidden }
     end
 
     context 'with a voter' do
-      let!(:user) { FactoryGirl.create(:voter, :activated) }
+      let!(:user) { FactoryBot.create(:voter, :activated) }
       it { is_expected.to be_forbidden }
     end
   end
 
   describe '#create' do
-    let(:resource_params) { FactoryGirl.attributes_for(:grant) }
+    let(:resource_params) { FactoryBot.attributes_for(:grant) }
 
     def go!
       post 'create', grant: resource_params
@@ -61,23 +61,23 @@ describe GrantsController do
     before { go! }
 
     context 'with an admin' do
-      let!(:user) { FactoryGirl.create(:admin) }
+      let!(:user) { FactoryBot.create(:admin) }
       it { is_expected.to redirect_to(grants_path) }
     end
 
     context 'with an artist' do
-      let!(:user) { FactoryGirl.create(:artist, :activated) }
+      let!(:user) { FactoryBot.create(:artist, :activated) }
       it { is_expected.to be_forbidden }
     end
 
     context 'with a voter' do
-      let!(:user) { FactoryGirl.create(:voter, :activated) }
+      let!(:user) { FactoryBot.create(:voter, :activated) }
       it { is_expected.to be_forbidden }
     end
   end
 
   describe '#edit' do
-    let!(:grant) { FactoryGirl.create(:grant) }
+    let!(:grant) { FactoryBot.create(:grant) }
 
     def go!
       get 'edit', id: grant.id
@@ -86,7 +86,7 @@ describe GrantsController do
     before { go! }
 
     context 'with an admin' do
-      let!(:user) { FactoryGirl.create(:admin) }
+      let!(:user) { FactoryBot.create(:admin) }
       it { is_expected.to render_template('new') }
 
       context 'with id that does not exist' do
@@ -99,18 +99,18 @@ describe GrantsController do
     end
 
     context 'with an artist' do
-      let!(:user) { FactoryGirl.create(:artist, :activated) }
+      let!(:user) { FactoryBot.create(:artist, :activated) }
       it { is_expected.to be_forbidden }
     end
 
     context 'with a voter' do
-      let!(:user) { FactoryGirl.create(:voter, :activated) }
+      let!(:user) { FactoryBot.create(:voter, :activated) }
       it { is_expected.to be_forbidden }
     end
   end
 
   describe '#update' do
-    let!(:grant) { FactoryGirl.create(:grant) }
+    let!(:grant) { FactoryBot.create(:grant) }
     let(:resource_params) do
       {
         name: 'Creativity'
@@ -124,7 +124,7 @@ describe GrantsController do
     before { go! }
 
     context 'with an admin' do
-      let!(:user) { FactoryGirl.create(:admin) }
+      let!(:user) { FactoryBot.create(:admin) }
 
       it 'updates grant' do
         expect(grant.reload.name).to eq(resource_params[:name])
@@ -145,12 +145,12 @@ describe GrantsController do
     end
 
     context 'with an artist' do
-      let!(:user) { FactoryGirl.create(:artist, :activated) }
+      let!(:user) { FactoryBot.create(:artist, :activated) }
       it { is_expected.to be_forbidden }
     end
 
     context 'with a voter' do
-      let!(:user) { FactoryGirl.create(:voter, :activated) }
+      let!(:user) { FactoryBot.create(:voter, :activated) }
       it { is_expected.to be_forbidden }
     end
   end

@@ -3,7 +3,7 @@ describe VotesController do
 
   describe '#index' do
     context 'with activated and verified voter' do
-      let!(:voter) { FactoryGirl.create(:voter, :activated, :verified) }
+      let!(:voter) { FactoryBot.create(:voter, :activated, :verified) }
 
       before do
         sign_in voter
@@ -16,7 +16,7 @@ describe VotesController do
     end
 
     context 'with user who cannot vote' do
-      let!(:user) { FactoryGirl.create(:artist) }
+      let!(:user) { FactoryBot.create(:artist) }
 
       before do
         sign_in user
@@ -26,7 +26,7 @@ describe VotesController do
     end
 
     context 'with admin signed in' do
-      let!(:admin) { FactoryGirl.create(:admin) }
+      let!(:admin) { FactoryBot.create(:admin) }
 
       before { sign_in admin }
 

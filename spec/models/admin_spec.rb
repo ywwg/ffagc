@@ -1,10 +1,10 @@
 describe Admin do
-  subject { FactoryGirl.build(:admin) }
+  subject { FactoryBot.build(:admin) }
 
   include_examples 'password reset model', 'admins'
 
   context 'before_validation' do
-    subject { FactoryGirl.build(:admin, email: '  UPPERCASE@example.com ') }
+    subject { FactoryBot.build(:admin, email: '  UPPERCASE@example.com ') }
 
     it 'normalizes email' do
       expect { subject.save! }.to change { subject.email }
@@ -17,7 +17,7 @@ describe Admin do
     end
 
     context 'nil email' do
-      subject { FactoryGirl.build(:admin, email: nil) }
+      subject { FactoryBot.build(:admin, email: nil) }
       its(:valid?) { is_expected.to eq(false) }
     end
   end

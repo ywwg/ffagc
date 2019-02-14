@@ -9,7 +9,7 @@ describe Admins::GrantSubmissionsController do
     it { go!; is_expected.to be_forbidden }
 
     context 'when admin signed in' do
-      let!(:admin) { FactoryGirl.create(:admin) }
+      let!(:admin) { FactoryBot.create(:admin) }
 
       before { sign_in admin }
 
@@ -34,7 +34,7 @@ describe Admins::GrantSubmissionsController do
     end
 
     context 'logged in' do
-      let!(:admin) { FactoryGirl.create(:admin) }
+      let!(:admin) { FactoryBot.create(:admin) }
 
       before do
         sign_in_admin(admin.id)
@@ -58,7 +58,7 @@ describe Admins::GrantSubmissionsController do
     end
 
     context 'logged in' do
-      let!(:admin) { FactoryGirl.create(:admin) }
+      let!(:admin) { FactoryBot.create(:admin) }
 
       before do
         sign_in_admin(admin.id)

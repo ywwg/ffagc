@@ -35,18 +35,18 @@ class UserMailerPreview < ActionMailer::Preview
   private
 
   def artist
-    @artist ||= Artist.first || FactoryGirl.create(:artist, :activated)
+    @artist ||= Artist.first || FactoryBot.create(:artist, :activated)
   end
 
   def voter
-    @voter ||= Voter.first || FactoryGirl.create(:voter, :activated)
+    @voter ||= Voter.first || FactoryBot.create(:voter, :activated)
   end
 
   def grant_submission
-    @grant_submission ||= GrantSubmission.first || FactoryGirl.create(:grant_submission)
+    @grant_submission ||= GrantSubmission.first || FactoryBot.create(:grant_submission)
   end
 
   def grant
-    @grant ||= Grant.first || FactoryGirl.create(:grant)
+    @grant ||= Grant.first || FactoryBot.create(:grant)
   end
 end

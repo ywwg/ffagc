@@ -1,19 +1,19 @@
 describe GrantSubmission do
-  let!(:grant) { FactoryGirl.create(:grant) }
-  subject { FactoryGirl.create(:grant_submission, grant: grant) }
+  let!(:grant) { FactoryBot.create(:grant) }
+  subject { FactoryBot.create(:grant_submission, grant: grant) }
 
   describe '#funded?' do
-    subject { FactoryGirl.create(:grant_submission, funding_decision: false, granted_funding_dollars: nil) }
+    subject { FactoryBot.create(:grant_submission, funding_decision: false, granted_funding_dollars: nil) }
 
     it { is_expected.not_to be_funded }
 
     context 'with funding_decision' do
-      subject { FactoryGirl.create(:grant_submission, funding_decision: true, granted_funding_dollars: nil) }
+      subject { FactoryBot.create(:grant_submission, funding_decision: true, granted_funding_dollars: nil) }
 
       it { is_expected.not_to be_funded }
 
       context 'with granted_funding_dollars' do
-        subject { FactoryGirl.create(:grant_submission, funding_decision: true, granted_funding_dollars: 1_00) }
+        subject { FactoryBot.create(:grant_submission, funding_decision: true, granted_funding_dollars: 1_00) }
 
         it { is_expected.to be_funded }
       end
@@ -21,36 +21,36 @@ describe GrantSubmission do
   end
 
   describe '#has_questions?' do
-    subject { FactoryGirl.create(:grant_submission, questions: nil) }
+    subject { FactoryBot.create(:grant_submission, questions: nil) }
 
     it { is_expected.not_to have_questions }
 
     context 'with blank questions' do
-      subject { FactoryGirl.create(:grant_submission, questions: '       ') }
+      subject { FactoryBot.create(:grant_submission, questions: '       ') }
 
       it { is_expected.not_to have_questions }
     end
 
     context 'with questions' do
-      subject { FactoryGirl.create(:grant_submission, questions: 'Fake questions') }
+      subject { FactoryBot.create(:grant_submission, questions: 'Fake questions') }
 
       it { is_expected.to have_questions }
     end
   end
 
   describe '#has_answers?' do
-    subject { FactoryGirl.create(:grant_submission, answers: nil) }
+    subject { FactoryBot.create(:grant_submission, answers: nil) }
 
     it { is_expected.not_to have_answers }
 
     context 'with blank answers' do
-      subject { FactoryGirl.create(:grant_submission, answers: '       ') }
+      subject { FactoryBot.create(:grant_submission, answers: '       ') }
 
       it { is_expected.not_to have_answers }
     end
 
     context 'with answers' do
-      subject { FactoryGirl.create(:grant_submission, answers: 'Fake answers') }
+      subject { FactoryBot.create(:grant_submission, answers: 'Fake answers') }
 
       it { is_expected.to have_answers }
     end
@@ -59,7 +59,7 @@ describe GrantSubmission do
   # TODO: need to add a test for comparing csv of requests with csv levels
   context 'validations' do
     context 'with funding_requests_csv greater than grant limit' do
-      subject { FactoryGirl.create(:grant_submission) }
+      subject { FactoryBot.create(:grant_submission) }
 
       it 'is not valid' do
          subject.funding_requests_csv = "5001"

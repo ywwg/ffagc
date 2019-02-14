@@ -1,6 +1,6 @@
 describe PasswordResetsController do
-  let!(:artist) { FactoryGirl.create(:artist, :activated) }
-  let!(:inactive_artist) { FactoryGirl.create(:artist) }
+  let!(:artist) { FactoryBot.create(:artist, :activated) }
+  let!(:inactive_artist) { FactoryBot.create(:artist) }
 
   before do
     artist.create_reset_digest
